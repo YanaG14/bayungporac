@@ -132,13 +132,13 @@ position:absolute;
           </ul>
             <?php 
 
-             require_once("include/connection.php");
+             require_once("../include/connection.php");
 
 
                $id = mysqli_real_escape_string($conn,$_SESSION['admin_user']);
 
 
-              $r = mysqli_query($conn,"SELECT * FROM admin_Log in where id = '$id'") or die (mysqli_error($con));
+              $r = mysqli_query($conn,"SELECT * FROM admin_login where id = '$id'") or die (mysqli_error($con));
 
               $row = mysqli_fetch_array($r);
 
@@ -150,7 +150,7 @@ position:absolute;
 
           <!-- Right -->
           <ul class="navbar-nav nav-flex-icons">
-                <li style="margin-top: 10px;">Welcome!,</font> <?php echo ucwords(htmlentities($id)); ?></li>
+                <li style="margin-top: 10px;">Welcome,</font> <?php echo ucwords(htmlentities($id)); ?></li>
             <li class="nav-item">
               <a href="#" class="nav-link waves-effect" target="_blank">
                 <i class="fab fa-facebook-f"></i>
@@ -351,9 +351,9 @@ position:absolute;
     <tr>
         <?php 
    
-        require_once("include/connection.php");
+        require_once("../include/connection.php");
 
-      $query = mysqli_query($conn,"SELECT DISTINCT ID,NAME,SIZE,EMAIL,ADMIN_STATUS,TIMERS,DOWNLOAD FROM upload_files group by NAME DESC") or die (mysqli_error($con));
+      $query = mysqli_query($conn,"SELECT DISTINCT ID,NAME,SIZE,EMAIL,ADMIN_STATUS,TIMERS,DOWNLOAD FROM upload_files group by NAME DESC") or die (mysqli_error($conn));
       while($file=mysqli_fetch_array($query)){
          $id =  $file['ID'];
          $name =  $file['NAME'];

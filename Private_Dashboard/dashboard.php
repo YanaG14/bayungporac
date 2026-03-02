@@ -58,6 +58,18 @@ position:absolute;
         background: url('img/lg.flip-book-loader.gif') 50% 50% no-repeat rgb(249,249,249);
         opacity: 1;
     }
+
+    .square-logo {
+     width: 180px;
+    height: 500px;
+    object-fit: cover;
+    transform: scale(1.2);  /* increase zoom */
+
+    .img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+}
   </style>
 
     <script src="jquery.min.js"></script>
@@ -124,7 +136,7 @@ position:absolute;
                $id = mysqli_real_escape_string($conn,$_SESSION['admin_user']);
 
 
-              $r = mysqli_query($conn,"SELECT * FROM admin_Log in where id = '$id'") or die (mysqli_error($conn));
+              $r = mysqli_query($conn,"SELECT * FROM admin_login where id = '$id'") or die (mysqli_error($conn));
 
               $row = mysqli_fetch_array($r);
 
@@ -136,8 +148,8 @@ position:absolute;
 
           <!-- Right -->
           <ul class="navbar-nav nav-flex-icons">
-                  <li style="margin-top: 10px;">Welcome!,</font> <?php echo ucwords(htmlentities($id)); ?></li>
-            <li class="nav-item">
+                  <li style="margin-top: 10px;">Welcome,</font> <?php echo ucwords(htmlentities($id)); ?></li>
+            <!-- <li class="nav-item">
               <a href="#" class="nav-link waves-effect" target="_blank">
                 <i class="fab fa-facebook-f"></i>
               </a>
@@ -146,11 +158,11 @@ position:absolute;
               <a href="#" class="nav-link waves-effect" target="_blank">
                 <i class="fab fa-twitter"></i>
               </a>
-            </li>
+            </li> -->
 
             <li class="nav-item">
               <a href="logout.php" class="nav-link border border-light rounded waves-effect">
-               <i class="far fa-user-circle"></i>SignOut
+               <i class="far fa-user-circle"></i> Log out
               </a>
             </li>
           </ul>
@@ -165,9 +177,8 @@ position:absolute;
     <div class="sidebar-fixed position-fixed">
 
       <a class="logo-wrapper waves-effect">
-      
-        <img src="img/images.jpg" width="150px" height="200px;" class="img-fluid" alt="">
-      </a>
+    <img src="img/municipalLogo.png" class="square-logo img-fluid" alt="">
+</a>
 
       <div class="list-group list-group-flush">
         <a href="dashboard.php" class="list-group-item active waves-effect">

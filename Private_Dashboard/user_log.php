@@ -150,7 +150,7 @@ position:absolute;
 
           <!-- Right -->
           <ul class="navbar-nav nav-flex-icons">
-                <li style="margin-top: 10px;">Welcome!,</font> <?php echo ucwords(htmlentities($id)); ?></li>
+                <li style="margin-top: 10px;">Welcome,</font> <?php echo ucwords(htmlentities($id)); ?></li>
             <li class="nav-item">
               <a href="#" class="nav-link waves-effect" target="_blank">
                 <i class="fab fa-facebook-f"></i>

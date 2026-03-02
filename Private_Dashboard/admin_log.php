@@ -16,6 +16,7 @@ header('Location: index.html');
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Bayung Porac Archive</title>
+  <link rel="icon" type="image/png" href="js/img/municipalLogo.png">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
   <!-- Bootstrap core CSS -->
@@ -132,13 +133,13 @@ position:absolute;
           </ul>
             <?php 
 
-             require_once("include/connection.php");
+             require_once("../include/connection.php");
 
 
                $id = mysqli_real_escape_string($conn,$_SESSION['admin_user']);
 
 
-              $r = mysqli_query($conn,"SELECT * FROM admin_Log in where id = '$id'") or die (mysqli_error($con));
+              $r = mysqli_query($conn,"SELECT * FROM admin_login where id = '$id'") or die (mysqli_error($conn));
 
               $row = mysqli_fetch_array($r);
 
@@ -150,7 +151,7 @@ position:absolute;
 
           <!-- Right -->
           <ul class="navbar-nav nav-flex-icons">
-                <li style="margin-top: 10px;">Welcome!,</font> <?php echo ucwords(htmlentities($id)); ?></li>
+                <li style="margin-top: 10px;">Welcome,</font> <?php echo ucwords(htmlentities($id)); ?></li>
             <li class="nav-item">
               <a href="#" class="nav-link waves-effect" target="_blank">
                 <i class="fab fa-facebook-f"></i>
@@ -163,7 +164,7 @@ position:absolute;
             </li>
             <li class="nav-item">
               <a href="logout.php" class="nav-link border border-light rounded waves-effect">
-               <i class="far fa-user-circle"></i>SignOut
+               <i class="far fa-user-circle"></i> Log out
               </a>
             </li>
           </ul>
@@ -353,7 +354,7 @@ position:absolute;
     <tr>
         <?php 
    
-        require_once("include/connection.php");
+        require_once("../include/connection.php");
 
       $query = mysqli_query($conn,"SELECT * from history_log1") or die (mysqli_error($conn));
       while($file=mysqli_fetch_array($query)){
@@ -362,7 +363,7 @@ position:absolute;
          $ip =  $file['ip'];
          $host =  $file['host'];
          $action =  $file['action'];
-         $Log intime =  $file['Log in_time'];
+         $logintime =  $file['login_time'];
          $actions =  $file['actions'];
          $logouttime =  $file['logout_time'];
       
@@ -374,7 +375,7 @@ position:absolute;
        <td><?php echo $ip; ?></td>
       <td><?php echo $host; ?></td>
       <td><?php echo $action; ?></td>
-      <td><?php echo $Log intime; ?></td>
+      <td><?php echo $logintime; ?></td>
       <td><?php echo $actions; ?></td>
       <td><?php echo $logouttime; ?></td>
 

@@ -17,7 +17,7 @@ if(isset($_POST["adminlog"])){
 
 
 
-$query=mysqli_query($conn,"SELECT * FROM admin_Log in WHERE admin_user = '$username'")or die(mysqli_error($conn));
+$query=mysqli_query($conn,"SELECT * FROM admin_login WHERE admin_user = '$username'")or die(mysqli_error($conn));
 		$row=mysqli_fetch_array($query);
            $id=$row['id'];
             $admin=$row['admin_user'];
@@ -57,10 +57,10 @@ $query=mysqli_query($conn,"SELECT * FROM admin_Log in WHERE admin_user = '$usern
 
 			
                        $remarks="Has LoggedIn the system at";  
-                       mysqli_query($conn,"INSERT INTO history_log1(id,admin_user,action,ip,host,Log in_time) VALUES('$id','$admin','$remarks','$ip','$host','$date')")or die(mysqli_error($conn));
+                       mysqli_query($conn,"INSERT INTO history_log1(id,admin_user,action,ip,host,login_time) VALUES('$id','$admin','$remarks','$ip','$host','$date')")or die(mysqli_error($conn));
     
                  
-			  	echo "<script type='text/javascript'>document.location='dashboard.php'</script>";  
+			  	echo "<script type='text/javascript'>document.location='add_document.php'</script>";  
 			  }
 	    }
    }
