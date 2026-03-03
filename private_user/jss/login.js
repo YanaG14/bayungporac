@@ -2,7 +2,7 @@ $(document).ready(function(){
 	$error_result = $('<center><label class = "text-danger">Invalid username or password</label></center>');
 	$error_result2 = $('<center><label class = "text-danger">Please complete the required field</label></center>');
 	$loading = $('<center><img src = "images/preloader3.gif" height = "200px"/></center>');
-	$('#Log in_admin').click(function(){
+	$('#login_admin').click(function(){
 		$error_result.remove();
 		$("#username").focus(function(){
 			$("#username_warning").removeClass('has-feedback has-error');
@@ -26,13 +26,13 @@ $(document).ready(function(){
 			$error_result2.remove();
 			setTimeout(function(){
 				$loading.remove();
-				$.post('Log in.php', {username: $username, password: $password},
+				$.post('login.php', {username: $username, password: $password},
 					function(result){
 						if(result == 'success'){
 							window.location = 'home.php';
 						}else{
 							$error_result.fadeIn().appendTo('#result');
-							$('#Log in_admin').removeAttr('disabled');
+							$('#login_admin').removeAttr('disabled');
 						}
 					}
 				);

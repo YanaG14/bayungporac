@@ -17,7 +17,7 @@ $_SESSION = [];
 session_unset();
 session_destroy();
 
-echo "<script type='text/javascript'>alert('LogOut Successfully!');
+echo "<script type='text/javascript'>alert('Logged out successfully!');
 				  document.location='index.html'</script>";
 
 ?>

@@ -1,7 +1,7 @@
 
 <?php
 
-require_once("include/connection.php");
+require_once("../include/connection.php");
 // this is logout page when user click button logout in system page
 
 session_start();
@@ -19,7 +19,7 @@ session_unset();
 session_destroy();
 
 echo "<script type='text/javascript'>alert('LogOut Successfully!');
-				  document.location='../Log in.html'</script>";
+				  document.location='../login.html'</script>";
 
 ?>
 

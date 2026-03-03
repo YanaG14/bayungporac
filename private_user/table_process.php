@@ -1,7 +1,7 @@
 
 <?php
 	//include connection file 
-	require_once("./include/connection.php");
+	require_once("../include/connection.php");
 	 
 	// initilize all variable
 	$params = $columns = $totalRecords = $data = array();

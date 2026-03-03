@@ -1,6 +1,6 @@
 <?php
 
- require_once("include/connection.php");
+ require_once("../include/connection.php");
 
 $id = mysqli_real_escape_string($conn,$_GET['ID']);
 

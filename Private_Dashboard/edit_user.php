@@ -1,5 +1,5 @@
 <?php
- require_once("include/connection.php");
+ require_once("../include/connection.php");
 
 
  if(isset($_POST['edit'])){
@@ -12,7 +12,7 @@
 	// 	$salt="a1Bz20ydqelm8m1wql";
 	// 	$password=$salt.$pass;
 
-      $q_checkadmin = $conn->query("SELECT * FROM `Log in_user` WHERE `email_address` = '$email_address'") or die(mysqli_error());
+      $q_checkadmin = $conn->query("SELECT * FROM `login_user` WHERE `email_address` = '$email_address'") or die(mysqli_error());
 		$v_checkadmin = $q_checkadmin->num_rows;
 		if($v_checkadmin == 1){
 			echo '
@@ -22,7 +22,7 @@
 				</script>
 			';
 		}else{
-			$conn->query("UPDATE `Log in_user` SET `name` = '$user_name', `email_address` = '$email_address', `user_password` = '$user_password', `user_status` = '$user_status' WHERE `id` = '$_REQUEST[id]'") or die(mysqli_error());
+			$conn->query("UPDATE `login_user` SET `name` = '$user_name', `email_address` = '$email_address', `user_password` = '$user_password', `user_status` = '$user_status' WHERE `id` = '$_REQUEST[id]'") or die(mysqli_error());
 			// echo '
 			// 	<script type = "text/javascript">
 			// 		alert("Successfully Edited");

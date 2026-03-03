@@ -5,11 +5,11 @@
 // Inialize session
 session_start();
 error_reporting(0);
-   require_once("include/connection.php");
+   require_once("../include/connection.php");
   $id = mysqli_real_escape_string($conn,$_GET['id']);
 
 
-// Check, if username session is NOT set then this page will jump to Log in page
+// Check, if username session is NOT set then this page will jump to login page
 if (!isset($_SESSION['admin_user'])) {
 header('Location: index.html');
 }
@@ -23,6 +23,7 @@ else{
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Bayung Porac Archive</title>
+  <link rel="icon" type="image/png" href="js/img/municipalLogo.png">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
   <!-- Bootstrap core CSS -->
@@ -78,6 +79,17 @@ position:absolute;
         background: url('img/lg.flip-book-loader.gif') 50% 50% no-repeat rgb(249,249,249);
         opacity: 1;
     }
+
+    .square-logo {
+    width: 300px;
+    height: auto;
+    object-fit: contain;
+}
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
   </style>
 
     <script src="jquery.min.js"></script>
@@ -138,13 +150,13 @@ position:absolute;
           </ul>
             <?php 
 
-             require_once("include/connection.php");
+             require_once("../include/connection.php");
 
 
                $id = mysqli_real_escape_string($conn,$_SESSION['admin_user']);
 
 
-              $r = mysqli_query($conn,"SELECT * FROM admin_Log in where id = '$id'") or die (mysqli_error($con));
+              $r = mysqli_query($conn,"SELECT * FROM admin_login where id = '$id'") or die (mysqli_error($conn));
 
               $row = mysqli_fetch_array($r);
 
@@ -157,7 +169,8 @@ position:absolute;
           <!-- Right -->
           <ul class="navbar-nav nav-flex-icons">
                 <li style="margin-top: 10px;">Welcome,</font> <?php echo ucwords(htmlentities($id)); ?></li>
-            <li class="nav-item">
+            
+            <!--    <li class="nav-item">
               <a href="#" class="nav-link waves-effect" target="_blank">
                 <i class="fab fa-facebook-f"></i>
               </a>
@@ -166,10 +179,11 @@ position:absolute;
               <a href="#" class="nav-link waves-effect" target="_blank">
                 <i class="fab fa-twitter"></i>
               </a>
-            </li>
+            </li> -->
+            
             <li class="nav-item">
               <a href="logout.php" class="nav-link border border-light rounded waves-effect">
-               <i class="far fa-user-circle"></i>SignOut
+               <i class="far fa-user-circle"></i> Log out
               </a>
             </li>
           </ul>
@@ -184,9 +198,8 @@ position:absolute;
     <div class="sidebar-fixed position-fixed">
 
       <a class="logo-wrapper waves-effect">
-      
-        <img src="img/images.jpg" width="150px" height="200px;" class="img-fluid" alt="">
-      </a>
+    <img src="js/img/municipalLogo.png" class="square-logo img-fluid" alt="">
+</a>
           <div class="list-group list-group-flush">
         <a href="dashboard.php" class="list-group-item active waves-effect">
           <i class="fas fa-chart-pie mr-3"></i>Dashboard
@@ -343,9 +356,9 @@ position:absolute;
           </thead><br /><br />
           <tbody>
      <?php
-         require_once("include/connection.php");
+         require_once("../include/connection.php");
 
-            $query="SELECT * FROM admin_Log in";
+            $query="SELECT * FROM admin_login";
             $result=mysqli_query($conn,$query);
             while($rs=mysqli_fetch_array($result)){
               $id =  $rs['id'];
@@ -409,9 +422,9 @@ position:absolute;
   aria-hidden="true">
     <?php 
 
-require_once("include/connection.php");
+require_once("../include/connection.php");
   
-$q = mysqli_query($conn,"select * from admin_Log in where id = '$id'") or die (mysqli_error($conn));
+$q = mysqli_query($conn,"select * from admin_login where id = '$id'") or die (mysqli_error($conn));
  $rs1 = mysqli_fetch_array($q);
  
                $id1=$rs1['id'];
@@ -468,7 +481,7 @@ $q = mysqli_query($conn,"select * from admin_Log in where id = '$id'") or die (m
   <!--modal--->
  <?php 
 
- require_once("include/connection.php");
+ require_once("../include/connection.php");
 
   
  if(isset($_POST['edit2'])){
@@ -477,7 +490,7 @@ $q = mysqli_query($conn,"select * from admin_Log in where id = '$id'") or die (m
          $admin_password = password_hash($_POST['admin_password'], PASSWORD_DEFAULT, array('cost' => 12));  
        //  $user_status = mysqli_real_escape_string($conn,$_POST['status']);
 
-     mysqli_query($conn,"UPDATE `admin_Log in` SET `name` = '$user_name', `admin_user` = '$admin_user', `admin_password` = '$admin_password' where id='$id'") or die (mysqli_error($conn));
+     mysqli_query($conn,"UPDATE `admin_login` SET `name` = '$user_name', `admin_user` = '$admin_user', `admin_password` = '$admin_password' where id='$id'") or die (mysqli_error($conn));
   
   echo "<script type = 'text/javascript'>alert('Success Edit User/Employee!!!');document.location='view_admin.php'</script>";
 

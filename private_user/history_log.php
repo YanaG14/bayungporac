@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-// include('Private_Dashboard/include/connection.php');
+// include('Private_Dashboard/../include/connection.php');
 session_start();
 if(!isset($_SESSION["email_address"])){
-    header("location:../Log in.html");
+    header("location:../login.html");
 
 } 
 
@@ -13,12 +13,12 @@ if(!isset($_SESSION["email_address"])){
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Bayung Porac Archive</title>
+  <title>Material Design Bootstrap</title>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
   <!-- Bootstrap core CSS -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bayung Porac Archive -->
+  <!-- Material Design Bootstrap -->
   <link href="css/mdb.min.css" rel="stylesheet">
   <!-- Your custom styles (optional) -->
   <link href="css/style.css" rel="stylesheet">
@@ -93,13 +93,13 @@ if(!isset($_SESSION["email_address"])){
 <body style="padding:0px; margin:0px; background-color:#fff;font-family:arial,helvetica,sans-serif,verdana,'Open Sans'">
   <?php 
 
-     require_once("include/connection.php");
+     require_once("../include/connection.php");
 
 
    $id = mysqli_real_escape_string($conn,$_SESSION['email_address']);
 
 
-  $r = mysqli_query($conn,"SELECT * FROM Log in_user where id = '$id'") or die (mysqli_error($con));
+  $r = mysqli_query($conn,"SELECT * FROM login_user where id = '$id'") or die (mysqli_error($conn));
 
   $row = mysqli_fetch_array($r);
 
@@ -128,7 +128,7 @@ if(!isset($_SESSION["email_address"])){
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
-           <font color="black">Welcome,</font> <?php echo ucwords(htmlentities($id)); ?> <i class="fas fa-user-circle"></i> Log in </a>
+           <font color="black">Welcome,</font> <?php echo ucwords(htmlentities($id)); ?> <i class="fas fa-user-circle"></i> Login </a>
         <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
            <a class="dropdown-item" href="history_log.php"> <i class="fas fa-chalkboard-teacher"></i> User Logged</a>
           <a class="dropdown-item" href="Logout.php"><i class="fas fa-sign-in-alt"></i> LogOut</a>
@@ -170,7 +170,7 @@ if(!isset($_SESSION["email_address"])){
     <tr>
         <?php 
    
-        require_once("include/connection.php");
+        require_once("../include/connection.php");
 
       $query = mysqli_query($conn,"SELECT * from history_log") or die (mysqli_error($conn));
       while($file=mysqli_fetch_array($query)){
@@ -179,7 +179,7 @@ if(!isset($_SESSION["email_address"])){
          $ip =  $file['ip'];
          $host =  $file['host'];
          $action =  $file['action'];
-         $Log intime =  $file['Log in_time'];
+         $logintime =  $file['login_time'];
          $actions =  $file['actions'];
          $logouttime =  $file['logout_time'];
       
@@ -191,7 +191,7 @@ if(!isset($_SESSION["email_address"])){
        <td><?php echo $ip; ?></td>
       <td><?php echo $host; ?></td>
       <td><?php echo $action; ?></td>
-      <td><?php echo $Log intime; ?></td>
+      <td><?php echo $logintime; ?></td>
       <td><?php echo $actions; ?></td>
       <td><?php echo $logouttime; ?></td>
 

@@ -1,6 +1,6 @@
 <?php
 // connect to the database
-require_once("include/connection.php");
+require_once("../include/connection.php");
 
 // Uploads files
 if (isset($_POST['save'])) { // if save button on the form is clicked

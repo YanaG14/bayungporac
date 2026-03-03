@@ -2,7 +2,7 @@
 // Inialize session
 session_start();
 
-// Check, if username session is NOT set then this page will jump to Log in page
+// Check, if username session is NOT set then this page will jump to login page
 if (!isset($_SESSION['username'])) {
 header('Location: filter.php');
 }
@@ -61,7 +61,7 @@ else{
            
 	    </ul>
 	       <a class="btn btn-primary pull-right" href="logout.php" title="Click to logout"><i class="icon-off"></i>LogOut</a>&nbsp;&nbsp;&nbsp;
-          <p class="btn btn-default pull-right"><b><font color="black">Welcome,</b></font><font color="red"><?=$_SESSION['username']?></font></p>
+          <p class="btn btn-default pull-right"><b><font color="black">Welcome!,</b></font><font color="red"><?=$_SESSION['username']?></font></p>
           </div><!--/.nav-collapse -->
         </div>
       </div>

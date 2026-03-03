@@ -15,6 +15,7 @@ if (!isset($_SESSION['admin_user'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Bayung Porac Archive</title>
+  <link rel="icon" type="image/png" href="js/img/municipalLogo.png">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
   <!-- Bootstrap core CSS -->
@@ -78,6 +79,15 @@ input[type=file] {
         opacity: 1;
     }
 
+    .square-logo {
+    width: 300px;
+    height: auto;
+    object-fit: contain;
+}
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
 }
   </style>
 
@@ -121,13 +131,13 @@ input[type=file] {
           </ul>
               <?php 
 
-             require_once("include/connection.php");
+             require_once("../include/connection.php");
 
 
                $id = mysqli_real_escape_string($conn,$_SESSION['admin_user']);
 
 
-              $r = mysqli_query($conn,"SELECT * FROM admin_Log in where id = '$id'") or die (mysqli_error($con));
+              $r = mysqli_query($conn,"SELECT * FROM admin_login where id = '$id'") or die (mysqli_error($conn));
 
               $row = mysqli_fetch_array($r);
 
@@ -141,7 +151,8 @@ input[type=file] {
           <!-- Right -->
           <ul class="navbar-nav nav-flex-icons">
             <li style="margin-top: 10px;">Welcome,</font> <?php echo ucwords(htmlentities($id)); ?></li>
-            <li class="nav-item">
+            
+            <!-- <li class="nav-item">
               <a href="#" class="nav-link waves-effect" target="_blank">
                 <i class="fab fa-facebook-f"></i>
               </a>
@@ -150,7 +161,7 @@ input[type=file] {
               <a href="#" class="nav-link waves-effect" target="_blank">
                 <i class="fab fa-twitter"></i>
               </a>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a href="logout.php" class="nav-link border border-light rounded waves-effect">
                <i class="far fa-user-circle"></i>SignOut
@@ -168,10 +179,8 @@ input[type=file] {
     <div class="sidebar-fixed position-fixed">
 
       <a class="logo-wrapper waves-effect">
-      
-        <img src="img/images.jpg" width="150px" height="200px;" class="img-fluid" alt="">
-      </a>
-
+    <img src="js/img/municipalLogo.png" class="square-logo img-fluid" alt="">
+</a>
          <div class="list-group list-group-flush">
         <a href="dashboard.php" class="list-group-item active waves-effect">
           <i class="fas fa-chart-pie mr-3"></i>Dashboard
@@ -393,7 +402,7 @@ input[type=file] {
   </div>
 </div>
 
-<!-- Material form Log in -->
+<!-- Material form login -->
    <Br><br>
 </div></div>
  </center>

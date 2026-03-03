@@ -1,6 +1,6 @@
 <?php
 // connect to the database
-require_once("include/connection.php");
+require_once("../include/connection.php");
 
 // Uploads files
 if (isset($_POST['save'])) { // if save button on the form is clicked
@@ -55,7 +55,7 @@ if (isset($_POST['save'])) { // if save button on the form is clicked
 // session_start();
 
 
-//          $query2=mysqli_query($conn,"SELECT * FROM `Log in_user` WHERE `email_address` = 'email_address'")or die(mysqli_error($conn));
+//          $query2=mysqli_query($conn,"SELECT * FROM `login_user` WHERE `email_address` = 'email_address'")or die(mysqli_error($conn));
 //            $rows=mysqli_num_rows($query2);
 //            $user = $_SESSION['email_address'];
 

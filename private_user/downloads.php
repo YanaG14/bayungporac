@@ -1,6 +1,6 @@
 <?php 
 
-require_once("include/connection.php");
+require_once("../include/connection.php");
 
 if (isset($_GET['file_id'])) {
     $id = mysqli_real_escape_string($conn,$_GET['file_id']);

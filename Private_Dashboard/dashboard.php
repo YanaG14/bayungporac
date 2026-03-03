@@ -15,6 +15,7 @@ if(!isset($_SESSION["admin_user"])){
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Bayung Porac Archive</title>
+  <link rel="icon" type="image/png" href="js/img/municipalLogo.png">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
   <!-- Bootstrap core CSS -->
@@ -60,15 +61,14 @@ position:absolute;
     }
 
     .square-logo {
-     width: 180px;
-    height: 500px;
-    object-fit: cover;
-    transform: scale(1.2);  /* increase zoom */
+    width: 300px;
+    height: auto;
+    object-fit: contain;
+}
 
-    .img-fluid {
+.img-fluid {
     max-width: 100%;
     height: auto;
-}
 }
   </style>
 
@@ -135,7 +135,6 @@ position:absolute;
 
                $id = mysqli_real_escape_string($conn,$_SESSION['admin_user']);
 
-
               $r = mysqli_query($conn,"SELECT * FROM admin_login where id = '$id'") or die (mysqli_error($conn));
 
               $row = mysqli_fetch_array($r);
@@ -177,7 +176,7 @@ position:absolute;
     <div class="sidebar-fixed position-fixed">
 
       <a class="logo-wrapper waves-effect">
-    <img src="img/municipalLogo.png" class="square-logo img-fluid" alt="">
+    <img src="js/img/municipalLogo.png" class="square-logo img-fluid" alt="">
 </a>
 
       <div class="list-group list-group-flush">
