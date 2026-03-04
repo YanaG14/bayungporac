@@ -13,12 +13,13 @@ if(!isset($_SESSION["email_address"])){
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Material Design Bootstrap</title>
+  <title>Bayung Porac Archive</title>
+  <link rel="icon" type="image/png" href="img/municipalLogo.png">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
   <!-- Bootstrap core CSS -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
-  <!-- Material Design Bootstrap -->
+  <!-- Bayung Porac Archive -->
   <link href="css/mdb.min.css" rel="stylesheet">
   <!-- Your custom styles (optional) -->
   <link href="css/style.css" rel="stylesheet">
@@ -96,22 +97,21 @@ if(!isset($_SESSION["email_address"])){
      require_once("../include/connection.php");
 
 
-   $id = mysqli_real_escape_string($conn,$_SESSION['email_address']);
+   $user_id = $_SESSION['user_no'];
 
+$stmt = $conn->prepare("SELECT email_address FROM login_user WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
 
-  $r = mysqli_query($conn,"SELECT * FROM login_user where id = '$id'") or die (mysqli_error($conn));
-
-  $row = mysqli_fetch_array($r);
-
-   $id=$row['email_address'];
-   // $fname=$row['fname'];
-   // $lname=$row['lname'];
+$email = $row['email_address'];
 
 ?>
   <!-- Start your project here-->
 <!--Navbar -->
-<nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color fixed-top">
-    <a class="navbar-brand" href="#"><img src="js/img/Files_Download.png" width="33px" height="33px"> <font color="#F0B56F">F</font>ile <font color="#F0B56F">M</font>anagement <font color="#F0B56F">S</font>ystem</a>
+<nav class="mb-1 navbar navbar-expand-lg navbar-dark btn-success fixed-top">
+    <a class="navbar-brand" href="#"><img src="js/img/municipalLogo.png" width="33px" height="33px"> Bayung Porac Archive</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
     aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -128,10 +128,11 @@ if(!isset($_SESSION["email_address"])){
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
-           <font color="black">Welcome,</font> <?php echo ucwords(htmlentities($id)); ?> <i class="fas fa-user-circle"></i> Login </a>
+           <font color="black">Welcome, </font> 
+<?php echo ucwords(htmlentities($_SESSION["email_address"])); ?> <i class="fas fa-user-circle"></i> Log in</a>
         <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-           <a class="dropdown-item" href="history_log.php"> <i class="fas fa-chalkboard-teacher"></i> User Logged</a>
-          <a class="dropdown-item" href="Logout.php"><i class="fas fa-sign-in-alt"></i> LogOut</a>
+           <a class="dropdown-item" href="history_log.php"> <i class="fas fa-chalkboard-teacher"></i> User Log</a>
+          <a class="dropdown-item" href="Logout.php"><i class="fas fa-sign-in-alt"></i> Log out</a>
 
         </div>
       </li>
@@ -147,14 +148,14 @@ if(!isset($_SESSION["email_address"])){
      <div class="col-md-9">
     <div class="">
     <!--   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalRegisterForm">Add File</button> -->
-    <a href="home.php"><button type="button" class="btn btn-info"><i class="fas fa-chevron-circle-left"></i>  Home</button></a>
+    <a href="home.php"><button type="button" class="btn btn-info"><i class="fas fa-chevron-circle-left"></i> Home</button></a>
     </div>
 <hr>
   <table id="dtable" class = "table table-striped" style="">
      <thead>
 
     <!-- <th>ID</th> -->
-    <th>USER LOGGED</th>    
+    <th>USER LOG</th>    
      <th>YOUR IP</th>
      <th>HOST</th>
      <th>ACTION</th> 
@@ -223,19 +224,20 @@ if(!isset($_SESSION["email_address"])){
 </ul>
 <div class="tab-content pt-2 pl-1" id="pills-tabContent">
   <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-    <img src="img/nel.jpg" class="rounded" alt="..."><hr>
+    <img src="img/municipalLogo.png" class="rounded img-fluid" style="max-width:150px;" alt="Logo">
+<hr>
     <div class="">
      
-     <div class=""><p><b style="font-size: 1.1em">Full Name:</b>Toledo, Junil A.</p></div>
-     <div class=""><p><b style="font-size: 1.1em">Position:</b>Software Engineer</p></div>
+     <div class=""><p><b style="font-size: 1.1em">Full Name:</b>Sample Name</p></div>
+     <div class=""><p><b style="font-size: 1.1em">Position:</b>Admin Staff</p></div>
 
   </div>
   <hr>
   </div>
   <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-   <h6 style="font-size: 1.1em">file management system (fMS)</h6><Hr>
+   <h6 style="font-size: 1.1em">File Management System (FMS)</h6><Hr>
   is a system (based on computer programs in the case of the management of digital documents) used to track, manage and store documents and reduce paper. Most are capable of keeping a record of the various versions created and modified by different users (history tracking).</div>
-  <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab"><h6 style="font-size: 1.1em">Contact Number</h6><Hr><br><div class=""><p><b style="font-size: 1.1em">Cellphone #:</b>09991050748</p></div><p><b style="font-size: 1.1em">Address :</b>Antipolo City</p>
+  <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab"><h6 style="font-size: 1.1em">Contact Number</h6><Hr><br><div class=""><p><b style="font-size: 1.1em">Cellphone #:</b>09876543210</p></div><p><b style="font-size: 1.1em">Address :</b>Porac, Pampanga</p>
 </div><hr><br>
 <!--   <div class="card">
   <ul class="list-group list-group-flush">

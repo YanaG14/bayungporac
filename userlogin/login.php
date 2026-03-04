@@ -1,65 +1,81 @@
-<?php 
-
-require_once("../include/connection.php");
+<?php
+// Show errors during development (REMOVE in production)
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 session_start();
+require_once("../include/connection.php");
 
-if(isset($_POST["logIn"])){
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["login"])) {
 
-  date_default_timezone_set("asia/manila");
-  $date = date("M-d-Y h:i A",strtotime("+0 HOURS"));
+    // Validate input
+    if (empty($_POST["email_address"]) || empty($_POST["user_password"])) {
+        header("Location: ../login.html?error=empty");
+        exit();
+    }
 
- $username = mysqli_real_escape_string($conn, $_POST["email_address"]);  
- $password = mysqli_real_escape_string($conn, $_POST["user_password"]);
+    $email = trim($_POST["email_address"]);
+    $password = $_POST["user_password"];
 
-// $pass=sha1($pass1);
-// $salt="a1Bz20ydqelm8m1nel";
-// $pass1=$salt.$pass;
+    // Prepare statement (PREVENTS SQL INJECTION)
+    $stmt = $conn->prepare("SELECT id, email_address, user_password FROM login_user WHERE email_address = ? LIMIT 1");
 
-$query=mysqli_query($conn,"SELECT * FROM  login_user WHERE email_address = '$username'")or die(mysqli_error($conn));
-		$row=mysqli_fetch_array($query);
-           $id=$row['id'];
-           $user=$row['email_address'];
+    if (!$stmt) {
+        die("Prepare failed: " . $conn->error);
+    }
 
-           $_SESSION["user_no"] = $row["id"];
-		   $_SESSION["email_address"] = $row["email_address"];
-    
-           $counter=mysqli_num_rows($query);
-            
-		  	if ($counter == 0) 
-			  {	
-				  echo "<script type='text/javascript'>alert('Invalid Email Address or Password,Please try again!');
-				  document.location='../login.html'</script>";
-			  } 
-			  else
-			  {
-			  if(password_verify($password, $row["user_password"]))  
-                 {
-				  $_SESSION['email_address']=$id;	
-			
-                        if (!empty($_SERVER["HTTP_CLIENT_IP"]))
-							{
-							 $ip = $_SERVER["HTTP_CLIENT_IP"];
-							}
-							elseif (!empty($_SERVER["HTTP_X_FORWARDED_FOR"]))
-							{
-							 $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
-							}
-							else
-							{
-							 $ip = $_SERVER["REMOTE_ADDR"];
-							}
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
 
-							$host = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+    $result = $stmt->get_result();
 
+    if ($result->num_rows === 1) {
 
-                           $remarks="Has LoggedIn the system at";  
-                      
-                          mysqli_query($conn,"INSERT INTO history_log(id,email_address,action,ip,host,login_time) VALUES('$id','$user','$remarks','$ip','$host','$date')")or die(mysqli_error($conn));
-                 
-			  	echo "<script type='text/javascript'>document.location='../private_user/home.php'</script>";  
-		 }
-	  }
-   }
-?>
+        $user = $result->fetch_assoc();
 
+        // Verify hashed password
+        if (password_verify($password, $user["user_password"])) {
+
+            // Regenerate session ID (PREVENT SESSION FIXATION)
+            session_regenerate_id(true);
+
+            $_SESSION["user_no"] = $user["id"];
+            $_SESSION["email_address"] = $user["email_address"];
+
+            // Optional: Log login history
+            date_default_timezone_set("Asia/Manila");
+            $date = date("M-d-Y h:i A");
+
+            $ip = $_SERVER["REMOTE_ADDR"];
+            $host = gethostbyaddr($ip);
+            $remarks = "Has LoggedIn the system at";
+
+            $logStmt = $conn->prepare("INSERT INTO history_log (id, email_address, action, ip, host, login_time) VALUES (?, ?, ?, ?, ?, ?)");
+
+            if ($logStmt) {
+                $logStmt->bind_param("isssss", $user["id"], $user["email_address"], $remarks, $ip, $host, $date);
+                $logStmt->execute();
+                $logStmt->close();
+            }
+
+            $stmt->close();
+            $conn->close();
+
+            header("Location: ../private_user/home.php");
+            exit();
+
+        } else {
+            header("Location: ../login.html?error=invalid");
+            exit();
+        }
+
+    } else {
+        header("Location: ../login.html?error=invalid");
+        exit();
+    }
+
+} else {
+    // If accessed directly
+    header("Location: ../login.html");
+    exit();
+}
