@@ -17,7 +17,8 @@ $query = mysqli_query($conn,"SELECT * FROM departments
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Archived Departments</title>
+<title>Bayung Porac Archive</title>
+<link rel="icon" type="image/png" href="js/img/municipalLogo.png">
 
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/mdb.min.css" rel="stylesheet">
