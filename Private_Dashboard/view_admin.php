@@ -189,7 +189,7 @@ position:absolute;
 
           <!-- Right -->
           <ul class="navbar-nav nav-flex-icons">
-                <li style="margin-top: 10px;">Welcome,</font> <?php echo ucwords(htmlentities($id)); ?></li>
+                <li style="margin-top: 10px;">Welcome, </font> <?php echo ucwords(htmlentities($id)); ?></li>
             
             <!--    <li class="nav-item">
               <a href="#" class="nav-link waves-effect" target="_blank">
@@ -222,26 +222,31 @@ position:absolute;
     <img src="js/img/municipalLogo.png" class="square-logo img-fluid" alt="">
 </a>
           <div class="list-group list-group-flush">
-        <a href="dashboard.php" class="list-group-item active waves-effect">
+            <a href="add_document.php" class="list-group-item list-group-item-action waves-effect">
+          <i class="fas fa-file-medical"></i> Information Management</a>
+
+          <a href="department_management.php" class="list-group-item list-group-item-action waves-effect">
+            <i class="fas fa-building"></i> Department Management
+        </a>
+         <!-- <a href="dashboard.php" class="list-group-item active waves-effect">
           <i class="fas fa-chart-pie mr-3"></i>Dashboard
         </a>
-         <a href="#" class="list-group-item list-group-item-action waves-effect"  data-toggle="modal" data-target="#modalRegisterForm">
-          <i class="fas fa-user mr-3"></i>Add Admin</a>
-            <a href="view_admin.php" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-users"></i> View Admin</a>
-        <a href="#" class="list-group-item list-group-item-action waves-effect" data-toggle="modal" data-target="#modalRegisterForm2">
-          <i class="fas fa-user mr-3"></i>Add User</a>
+           <a href="#" class="list-group-item list-group-item-action waves-effect"  data-toggle="modal" data-target="#modalRegisterForm">
+          <i class="fas fa-user mr-3"></i>Add Admin</a> -->
+            <a href="view_admin.php" class="list-group-item active">
+          <i class="fas fa-users"></i> Admin Accounts</a>
+        <!-- <a href="#" class="list-group-item list-group-item-action waves-effect" data-toggle="modal" data-target="#modalRegisterForm2">
+          <i class="fas fa-user mr-3"></i>Add User</a> -->
            <a href="view_user.php" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-users"></i>  View User</a>
-        <a href="add_document.php" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-file-medical"></i> Add Document</a>
-        <a href="view_userfile.php" class="list-group-item list-group-item-action waves-effect">
+          <i class="fas fa-users"></i> User Accounts</a>
+        
+        <!-- <a href="view_userfile.php" class="list-group-item list-group-item-action waves-effect">
           <i class="fas fa-folder-open"></i> View User File</a>
             <a href="admin_log.php" class="list-group-item list-group-item-action waves-effect">
           <i class="fas fa-chalkboard-teacher"></i> Admin logged</a>
               <a href="user_log.php" class="list-group-item list-group-item-action waves-effect">
           <i class="fas fa-chalkboard-teacher"></i> User logged</a>
-    <!--     <a href="#" class="list-group-item list-group-item-action waves-effect">
+         <a href="#" class="list-group-item list-group-item-action waves-effect">
           <i class="fas fa-money-bill-alt mr-3"></i>Orders</a> -->
       </div>
 
@@ -323,7 +328,7 @@ position:absolute;
 
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button class="btn btn-info" name="reguser">Sign up</button>
+        <button class="btn btn-info" name="reguser">Register</button>
       </div>
     </div>
   </div>
@@ -346,9 +351,8 @@ position:absolute;
         <div class="card-body d-sm-flex justify-content-between">
 
           <h4 class="mb-2 mb-sm-0 pt-1">
-            <a href="dashboard.php">Home Page</a>
-            <span>/</span>
-            <span>Dashboard</span>
+            <a href="dashboard.php">Admin Account Management</a>
+            
           </h4>
 <!-- 
           <form class="d-flex justify-content-center">
@@ -363,7 +367,13 @@ position:absolute;
         </div>
 
       </div>
-<div class="">
+<div class="mb-3 text-left">
+    <button type="button" 
+            class="btn btn-info waves-effect" 
+            data-toggle="modal" 
+            data-target="#modalRegisterForm">
+        <i class="fas fa-user-plus"></i> Add Admin
+    </button>
   
  <table id="dtable" class="table table-striped">
 <thead>

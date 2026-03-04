@@ -60,7 +60,7 @@ $query=mysqli_query($conn,"SELECT * FROM admin_login WHERE admin_user = '$userna
                        mysqli_query($conn,"INSERT INTO history_log1(id,admin_user,action,ip,host,login_time) VALUES('$id','$admin','$remarks','$ip','$host','$date')")or die(mysqli_error($conn));
     
                  
-			  	echo "<script type='text/javascript'>document.location='dashboard.php'</script>";  
+			  	echo "<script type='text/javascript'>document.location='add_document.php'</script>";  
 			  }
 	    }
    }

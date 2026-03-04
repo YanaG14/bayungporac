@@ -228,7 +228,7 @@ $email = $row['email_address'];
   <hr>
   </div>
   <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-   <h6 style="font-size: 1.1em">File Management System (fMS)</h6><Hr>
+   <h6 style="font-size: 1.1em">File Management System (FMS)</h6><Hr>
   is a system (based on computer programs in the case of the management of digital documents) used to track, manage and store documents and reduce paper. Most are capable of keeping a record of the various versions created and modified by different users (history tracking).</div>
   <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab"><h6 style="font-size: 1.1em">Contact Number</h6><Hr><br><div class=""><p><b style="font-size: 1.1em">Cellphone #:</b>09876543210</p></div><p><b style="font-size: 1.1em">Address:</b>Porac, Pampanga</p>
 </div><hr><br>
