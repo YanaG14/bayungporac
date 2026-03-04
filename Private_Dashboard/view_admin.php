@@ -1,21 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-
-// Inialize session
 session_start();
 error_reporting(0);
-   require_once("../include/connection.php");
-  $id = mysqli_real_escape_string($conn,$_GET['id']);
+require_once("../include/connection.php");
 
-
-// Check, if username session is NOT set then this page will jump to login page
 if (!isset($_SESSION['admin_user'])) {
-header('Location: index.html');
+    header('Location: index.html');
+    exit();
 }
-else{
-    $uname=$_SESSION['admin_user'];
-  //  $desired_dir="user_data/$uname/";
+
+/* =========================
+   GET EDIT ID
+========================= */
+$edit_id = '';
+if (isset($_GET['id'])) {
+    $edit_id = mysqli_real_escape_string($conn, $_GET['id']);
+}
+
+/* =========================
+   HANDLE UPDATE (FIXED)
+========================= */
+if (isset($_POST['edit_publish'])) {
+
+    $id_post = mysqli_real_escape_string($conn, $_POST['idtoy']);
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $admin_user = mysqli_real_escape_string($conn, $_POST['admin_user']);
+    $admin_password = password_hash($_POST['admin_password'], PASSWORD_DEFAULT);
+
+    mysqli_query($conn, "UPDATE admin_login 
+        SET name='$name',
+            admin_user='$admin_user',
+            admin_password='$admin_password'
+        WHERE id='$id_post'") 
+    or die(mysqli_error($conn));
+
+    echo "<script>alert('Admin updated successfully'); window.location='view_admin.php';</script>";
+    exit();
 }
 ?>
 <head>
@@ -344,44 +365,40 @@ position:absolute;
       </div>
 <div class="">
   
- <table id="dtable" class = "table table-striped">
+ <table id="dtable" class="table table-striped">
+<thead>
+<tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Status</th>
+    <th>Action</th>
+</tr>
+</thead>
+<tbody>
 
+<?php
+$query = "SELECT * FROM admin_login";
+$result = mysqli_query($conn, $query);
 
-          <thead>
-              <th>Name</th>
-              <th>Admin User</th>
-              <th>Admin Password</th>
-              <th>Status</th>
-               <th>Action</th>
-          </thead><br /><br />
-          <tbody>
-     <?php
-         require_once("../include/connection.php");
+while ($row = mysqli_fetch_assoc($result)) {
+?>
+<tr>
+    <td><?php echo htmlspecialchars($row['name']); ?></td>
+    <td><?php echo htmlspecialchars($row['admin_user']); ?></td>
+    <td><?php echo htmlspecialchars($row['admin_status']); ?></td>
+    <td align="center">
+        <a href="view_admin.php?id=<?php echo $row['id']; ?>">
+            <i class="fas fa-user-edit"></i>
+        </a> |
+        <a href="delete_admin.php?id=<?php echo $row['id']; ?>">
+            <i class="far fa-trash-alt"></i>
+        </a>
+    </td>
+</tr>
+<?php } ?>
 
-            $query="SELECT * FROM admin_login";
-            $result=mysqli_query($conn,$query);
-            while($rs=mysqli_fetch_array($result)){
-              $id =  $rs['id'];
-               $fname=$rs['name'];
-               $admin=$rs['admin_user'];
-               $pass=$rs['admin_password'];
-               $status=$rs['admin_status'];
-           
-          ?>       
-    
-           <tr>
-               <td width='10%'><?php echo $fname; ?></td>
-               <td align='center'><?php echo $admin; ?></td>
-               <td align='center' width="20%"><?php echo $pass; ?></td>
-               <td align='center'><?php echo $status; ?></td>
-               <td align='center'><a href="#modalRegisterFormsss?id=<?php echo $id;?>">
-                <i class="fas fa-user-edit" data-toggle="modal" data-target="#modalRegisterFormsss"></i> </a> | <a href="delete_admin.php?id=<?php echo htmlentities($rs['id']); ?>"><i class='far fa-trash-alt'></i></a></td>
-            
-           </tr>
-       
-    <?php  } ?>
-       </tbody>
-   </table>
+</tbody>
+</table>
 
     <hr></div>
     <div class="footer-copyright py-3">
@@ -410,6 +427,64 @@ position:absolute;
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/1.0.3/css/dataTables.responsive.css">
 <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/responsive/1.0.3/js/dataTables.responsive.js"></script>
 
+<?php
+if ($edit_id != '') {
+
+    $query_edit = mysqli_query($conn, "SELECT * FROM admin_login WHERE id='$edit_id'");
+    $edit_row = mysqli_fetch_assoc($query_edit);
+?>
+    
+<div class="modal fade" id="editModal" tabindex="-1">
+<div class="modal-dialog">
+<div class="modal-content">
+
+<form method="POST">
+
+<div class="modal-header">
+    <h5 class="modal-title">Edit Admin</h5>
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+
+<div class="modal-body">
+
+    <input type="hidden" name="idtoy" value="<?php echo $edit_row['id']; ?>">
+
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="name" class="form-control"
+            value="<?php echo htmlspecialchars($edit_row['name']); ?>" required>
+    </div>
+
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="admin_user" class="form-control"
+            value="<?php echo htmlspecialchars($edit_row['admin_user']); ?>" required>
+    </div>
+
+    <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="admin_password" class="form-control" required>
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <button type="submit" name="edit_publish" class="btn btn-primary">Update</button>
+</div>
+
+</form>
+
+</div>
+</div>
+</div>
+
+<script>
+$(document).ready(function(){
+    $('#editModal').modal('show');
+});
+</script>
+
+<?php } ?>
 </body>
   <!--modal--->
 
@@ -485,15 +560,21 @@ $q = mysqli_query($conn,"select * from admin_login where id = '$id'") or die (my
 
   
  if(isset($_POST['edit2'])){
-         $user_name = mysqli_real_escape_string($conn,$_POST['name']);
-         $admin_user = mysqli_real_escape_string($conn,$_POST['admin_user']);
-         $admin_password = password_hash($_POST['admin_password'], PASSWORD_DEFAULT, array('cost' => 12));  
-       //  $user_status = mysqli_real_escape_string($conn,$_POST['status']);
 
-     mysqli_query($conn,"UPDATE `admin_login` SET `name` = '$user_name', `admin_user` = '$admin_user', `admin_password` = '$admin_password' where id='$id'") or die (mysqli_error($conn));
+    $id_post = mysqli_real_escape_string($conn,$_POST['id']);
+    $user_name = mysqli_real_escape_string($conn,$_POST['name']);
+    $admin_user = mysqli_real_escape_string($conn,$_POST['admin_user']);
+    $admin_password = password_hash($_POST['admin_password'], PASSWORD_DEFAULT);
+
+    mysqli_query($conn,"UPDATE admin_login 
+        SET name='$user_name',
+            admin_user='$admin_user',
+            admin_password='$admin_password'
+        WHERE id='$id_post'") 
+    or die(mysqli_error($conn));
   
-  echo "<script type = 'text/javascript'>alert('Success Edit User/Employee!!!');document.location='view_admin.php'</script>";
-
+    echo "<script>alert('Success Edit User/Employee!!!');document.location='view_admin.php'</script>";
+    exit();
 }
 
 ?>

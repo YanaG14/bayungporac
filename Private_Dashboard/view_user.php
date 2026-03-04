@@ -6,7 +6,10 @@
 session_start();
 error_reporting(0);
         require_once("../include/connection.php");
-  $id = mysqli_real_escape_string($conn,$_GET['id']);
+  $edit_id = '';
+if(isset($_GET['id'])){
+    $edit_id = mysqli_real_escape_string($conn,$_GET['id']);
+}
 
 
 // Check, if username session is NOT set then this page will jump to login page
@@ -374,7 +377,14 @@ position:absolute;
                <td align='center'><?php echo $admin; ?></td>
                <td align='center'><?php echo $pass; ?></td>
                <td align='center'><?php echo $status; ?></td>
-               <td align='center'><a href="#modalRegisterFormss?id=<?php echo $id;?>"><i class="fas fa-user-edit" data-toggle="modal" data-target="#modalRegisterFormss"></i></a>  <a href="delete_user.php?id=<?php echo htmlentities($rs['id']); ?>"><i class='far fa-trash-alt'></i></a></td>
+               <td align='center'>
+    <a href="view_user.php?id=<?php echo $rs['id']; ?>">
+        <i class="fas fa-user-edit"></i>
+    </a>  
+    <a href="delete_user.php?id=<?php echo htmlentities($rs['id']); ?>">
+        <i class='far fa-trash-alt'></i>
+    </a>
+</td>
             
            </tr>
        
@@ -427,7 +437,7 @@ position:absolute;
 
 require_once("../include/connection.php");
   
-$q = mysqli_query($conn,"select * from login_user where id = '$id'") or die (mysqli_error($conn));
+$q = mysqli_query($conn,"select * from login_user where id = '$edit_id'") or die (mysqli_error($conn));
  $rs1 = mysqli_fetch_array($q);
  
                $id1=$rs1['id'];
@@ -486,17 +496,31 @@ $q = mysqli_query($conn,"select * from login_user where id = '$id'") or die (mys
  require_once("../include/connection.php");
 
   
- if(isset($_POST['edit'])){
-         $user_name = mysqli_real_escape_string($conn,$_POST['name']);
-         $email_address = mysqli_real_escape_string($conn,$_POST['email_address']);
-         $user_password = password_hash($_POST['user_password'], PASSWORD_DEFAULT, array('cost' => 12));  
-       //  $user_status = mysqli_real_escape_string($conn,$_POST['status']);
+if(isset($_POST['edit'])){
 
-     mysqli_query($conn,"UPDATE `login_user` SET `name` = '$user_name', `email_address` = '$email_address', `user_password` = '$user_password' where id='$id'") or die (mysqli_error($conn));
-  
-  echo "<script type = 'text/javascript'>alert('Success Edit User/Employee!!!');document.location='view_user.php'</script>";
+    $id_post = mysqli_real_escape_string($conn,$_POST['id']);
+    $user_name = mysqli_real_escape_string($conn,$_POST['name']);
+    $email_address = mysqli_real_escape_string($conn,$_POST['email_address']);
+    $user_password = password_hash($_POST['user_password'], PASSWORD_DEFAULT);
 
+    mysqli_query($conn,"UPDATE login_user 
+        SET name='$user_name',
+            email_address='$email_address',
+            user_password='$user_password'
+        WHERE id='$id_post'") 
+    or die(mysqli_error($conn));
+
+    echo "<script>alert('Success Edit User/Employee!!!');document.location='view_user.php'</script>";
+    exit();
 }
 
 ?>
+
+<?php if($edit_id != '') { ?>
+<script>
+$(document).ready(function(){
+    $('#modalRegisterFormss').modal('show');
+});
+</script>
+<?php } ?>
 </html>
