@@ -364,10 +364,10 @@ position:absolute;
 
 
           <thead>
-              <th>Name</th>
+              <th>Full Name</th>
               <th>Admin User</th>
-              <th>Admin Password</th>
-              <th>Status</th>
+              <!-- <th>Admin Password</th>
+              <th>Status</th> -->
                <th>Action</th>
           </thead><br /><br />
           <tbody>
@@ -388,8 +388,8 @@ position:absolute;
            <tr>
                <td width='10%'><?php echo  $fname; ?></td>
                <td align='center'><?php echo $admin; ?></td>
-               <td align='center'><?php echo $pass; ?></td>
-               <td align='center'><?php echo $status; ?></td>
+               <!-- <td align='center'><?php echo $pass; ?></td>
+               <td align='center'><?php echo $status; ?></td> -->
                <td align='center'>
     <a href="view_user.php?id=<?php echo $rs['id']; ?>">
         <i class="fas fa-user-edit"></i>

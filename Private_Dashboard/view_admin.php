@@ -378,9 +378,9 @@ position:absolute;
  <table id="dtable" class="table table-striped">
 <thead>
 <tr>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Status</th>
+    <th>Full Name</th>
+    <th>Email Address</th>
+    <!-- <th>Status</th> -->
     <th>Action</th>
 </tr>
 </thead>
@@ -395,7 +395,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 <tr>
     <td><?php echo htmlspecialchars($row['name']); ?></td>
     <td><?php echo htmlspecialchars($row['admin_user']); ?></td>
-    <td><?php echo htmlspecialchars($row['admin_status']); ?></td>
+    <!-- <td><?php echo htmlspecialchars($row['admin_status']); ?></td> -->
     <td align="center">
         <a href="view_admin.php?id=<?php echo $row['id']; ?>">
             <i class="fas fa-user-edit"></i>

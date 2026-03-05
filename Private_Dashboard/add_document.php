@@ -356,7 +356,7 @@ position:absolute;
     <th>Filename</th>
     <th>FileSize</th>
     <th>Uploader</th>
-     <th>Status</th>   
+     <th>Role</th>   
     <th>Date/Time Upload</th>
     <th>Downloads</th>
     <th>Action</th>
