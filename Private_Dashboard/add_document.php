@@ -196,6 +196,10 @@ position:absolute;
 </a>
 
          <div class="list-group list-group-flush">
+
+          <a href="folder_management.php" class="list-group-item list-group-item-action waves-effect">
+          <i class="fas fa-file-medical"></i> Folder Management</a>
+
           <a href="add_document.php" class="list-group-item active">
           <i class="fas fa-file-medical"></i> Information Management</a>
           
