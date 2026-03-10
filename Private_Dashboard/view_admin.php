@@ -5,6 +5,22 @@ session_start();
 error_reporting(0);
 require_once("../include/connection.php");
 
+// Archive admin
+if(isset($_GET['archive_id'])){
+    $archive_id = mysqli_real_escape_string($conn, $_GET['archive_id']);
+    mysqli_query($conn, "UPDATE admin_login SET admin_status='Archived' WHERE id='$archive_id'") or die(mysqli_error($conn));
+    echo "<script>alert('Admin Archived Successfully!'); window.location='view_admin.php';</script>";
+    exit();
+}
+
+// Unarchive admin
+if(isset($_GET['unarchive_id'])){
+    $unarchive_id = mysqli_real_escape_string($conn, $_GET['unarchive_id']);
+    mysqli_query($conn, "UPDATE admin_login SET admin_status='' WHERE id='$unarchive_id'") or die(mysqli_error($conn));
+    echo "<script>alert('Admin Unarchived Successfully!'); window.location='view_admin.php';</script>";
+    exit();
+}
+
 $edit_id = '';
 if(isset($_GET['id'])){
     $edit_id = mysqli_real_escape_string($conn,$_GET['id']);
@@ -112,12 +128,17 @@ if (isset($_POST['edit_publish'])) {
   <!-- MAIN CONTENT -->
   <div class="w-3/4 flex-1">
     <div class="bg-white rounded-xl shadow-md p-6 h-full">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold text-gray-700 flex items-center gap-2"><i class="fas fa-users"></i> Admin Accounts</h2>
-        <button onclick="$('#modalAddAdmin').removeClass('hidden');" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-2">
-          <i class="fas fa-user-plus"></i> Add Admin
-        </button>
-      </div>
+      
+
+      <div class="flex justify-end items-center gap-2">
+    <button onclick="$('#modalAddAdmin').removeClass('hidden');" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-2">
+      <i class="fas fa-user-plus"></i> Add Admin
+    </button>
+
+    <button onclick="$('#modalArchivedAdmins').removeClass('hidden');" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 flex items-center gap-2">
+      <i class="fas fa-archive"></i> View Archived Admins
+    </button>
+</div>
 
       <!-- TABLE -->
       <div class="overflow-x-auto">
@@ -131,7 +152,7 @@ if (isset($_POST['edit_publish'])) {
           </thead>
           <tbody class="text-gray-700">
           <?php
-            $query = "SELECT * FROM admin_login";
+            $query = "SELECT * FROM admin_login WHERE admin_status != 'Archived'";
             $result = mysqli_query($conn, $query);
             while($row = mysqli_fetch_assoc($result)){
           ?>
@@ -140,7 +161,7 @@ if (isset($_POST['edit_publish'])) {
               <td class="px-4 py-2"><?php echo htmlspecialchars($row['admin_user']); ?></td>
               <td class="px-4 py-2 text-center space-x-2">
                 <a href="view_admin.php?id=<?php echo $row['id']; ?>" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"><i class="fas fa-edit"></i></a>
-                <a href="delete_admin.php?id=<?php echo $row['id']; ?>" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="return confirm('Archive this department?');"><i class="fas fa-archive"></i></a>
+                <a href="view_admin.php?archive_id=<?php echo $row['id']; ?>" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="return confirm('Archive this admin?');"><i class="fas fa-archive"></i></a>
               </td>
               </td>
             </tr>
@@ -194,6 +215,40 @@ if($edit_id != ''){
   </div>
 </div>
 <?php } ?>
+
+<!-- ARCHIVED ADMINS MODAL -->
+<div id="modalArchivedAdmins" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div class="bg-white rounded-xl shadow-lg w-11/12 max-w-4xl p-6 relative">
+    <button onclick="$('#modalArchivedAdmins').addClass('hidden');" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">&times;</button>
+    <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-archive"></i> Archived Admins</h3>
+    
+    <div class="overflow-x-auto">
+      <table class="min-w-full border border-gray-200">
+        <thead class="bg-gray-700 text-white">
+          <tr>
+            <th class="px-4 py-2">Full Name</th>
+            <th class="px-4 py-2">Email</th>
+            <th class="px-4 py-2 text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700">
+        <?php
+          $archived = mysqli_query($conn,"SELECT * FROM admin_login WHERE admin_status='Archived'");
+          while($a = mysqli_fetch_assoc($archived)){
+        ?>
+          <tr class="border-b hover:bg-gray-50">
+            <td class="px-4 py-2"><?php echo htmlspecialchars($a['name']); ?></td>
+            <td class="px-4 py-2"><?php echo htmlspecialchars($a['admin_user']); ?></td>
+            <td class="px-4 py-2 text-center">
+              <a href="view_admin.php?unarchive_id=<?php echo $a['id']; ?>" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600" onclick="return confirm('Unarchive this admin?');"><i class="fas fa-undo"></i> Unarchive</a>
+            </td>
+          </tr>
+        <?php } ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 <!-- Footer -->
 <footer class="mt-8 text-center text-gray-600">

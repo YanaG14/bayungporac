@@ -85,9 +85,9 @@ $(document).ready(function(){
   <aside class="w-1/4">
     <div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-green-600 flex flex-col items-center space-y-4 h-full">
       <img src="js/img/municipalLogo.png" class="square-logo mb-4">
-      <a href="folder_management.php" class="w-full px-4 py-2 bg-green-600 text-white rounded flex items-center gap-2"><i class="fas fa-folder"></i> Folder Management</a>
+      <a href="folder_management.php" class="w-full px-4 py-2 bg-green-600 text-white rounded flex items-center gap-2"><i class="fas fa-folder"></i> Folders</a>
       <!--<a href="add_document.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-file-medical"></i> Information Management</a>-->
-      <a href="department_management.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-building"></i> Department Management</a>
+      <a href="department_management.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-building"></i> Departments</a>
       <a href="view_admin.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-users"></i> Admin Accounts</a>
       <a href="view_user.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-users"></i> Employee Accounts</a>
     </div>
@@ -97,7 +97,7 @@ $(document).ready(function(){
   <div class="w-3/4 flex-1">
     <div class="bg-white rounded-xl shadow-md p-6 h-full">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold text-gray-700 flex items-center gap-2"><i class="fas fa-folder"></i> Folder Management</h2>
+        <h2 class="text-xl font-semibold text-gray-700 flex items-center gap-2"><i class="fas fa-folder"></i> Folders</h2>
         <div class="flex gap-2">
           <button onclick="$('#modalAddFolder').removeClass('hidden');" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-2"><i class="fas fa-plus"></i> Add Folder</button>
           <button onclick="openArchivedFolders();" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition-colors duration-300">
@@ -120,14 +120,14 @@ $(document).ready(function(){
           <tbody class="text-gray-700">
           <?php while($row=mysqli_fetch_array($query)){ ?>
             <tr class="border-b hover:bg-gray-50">
-              <td class="px-4 py-2">
+              <td class="px-4 py-2 text-center space-x-2">
   <a href="add_document.php?folder_id=<?php echo $row['folder_id']; ?>" class="flex items-center gap-2 text-gray-800 hover:text-green-700">
-    <i class="fas fa-folder text-yellow-500"></i>
+    <!-- <i class="fas fa-folder text-yellow-500"></i> -->
     <b><?php echo $row['folder_name']; ?></b>
   </a>
 </td>
-              <td class="px-4 py-2"><?php echo $row['departments']; ?></td>
-              <td class="px-4 py-2"><?php echo $row['created_at']; ?></td>
+              <td class="px-4 py-2 text-center space-x-2"><?php echo $row['departments']; ?></td>
+              <td class="px-4 py-2 text-center space-x-2"><?php echo $row['created_at']; ?></td>
               <td class="px-4 py-2 text-center space-x-2">
                 <button onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').removeClass('hidden');" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"><i class="fas fa-edit"></i></button>
                 <a href="archive_folder.php?id=<?php echo $row['folder_id']; ?>" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="return confirm('Archive this department?');"><i class="fas fa-archive"></i></a>

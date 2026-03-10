@@ -6,6 +6,7 @@
     
         
          $user_name = mysqli_real_escape_string($conn,$_POST['name']);
+		 $department_id = mysqli_real_escape_string($conn,$_POST['department_id']);
          $email_address = mysqli_real_escape_string($conn,$_POST['email_address']);
          $user_password = password_hash($_POST['user_password'], PASSWORD_DEFAULT, array('cost' => 12));  //PASSWORD_ARGON2I//PASSWORD_ARGON2ID
          $user_status = mysqli_real_escape_string($conn,$_POST['user_status']);
@@ -20,7 +21,11 @@
 				</script>
 			';
 		}else{
-			$conn->query("INSERT INTO `login_user` VALUES('','$user_name', '$email_address', '$user_password', '$user_status')") or die(mysqli_error());
+			$conn->query("INSERT INTO login_user 
+(name,email_address,user_password,user_status,department_id)
+VALUES
+('$user_name','$email_address','$user_password','$user_status','$department_id')")
+or die(mysqli_error($conn));
 			echo '
 				<script type = "text/javascript">
 					alert("Saved Employee Info");window.location = "view_user.php";

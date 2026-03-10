@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["login"])) {
     $password = $_POST["user_password"];
 
     // Prepare statement (PREVENTS SQL INJECTION)
-    $stmt = $conn->prepare("SELECT id, email_address, user_password FROM login_user WHERE email_address = ? LIMIT 1");
+    $stmt = $conn->prepare("SELECT id, email_address, user_password, user_status FROM login_user WHERE email_address = ? LIMIT 1");
 
     if (!$stmt) {
         die("Prepare failed: " . $conn->error);
@@ -26,12 +26,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["login"])) {
 
     $stmt->bind_param("s", $email);
     $stmt->execute();
-
     $result = $stmt->get_result();
 
     if ($result->num_rows === 1) {
 
         $user = $result->fetch_assoc();
+
+        // Check if user is archived
+        // Check if user is archived
+if (strtolower($user['user_status']) === 'archived') {
+    echo "<script>
+            alert('Your account has been archived. You cannot login.');
+            window.location.href='../login.html';
+          </script>";
+    exit();
+}
 
         // Verify hashed password
         if (password_verify($password, $user["user_password"])) {
