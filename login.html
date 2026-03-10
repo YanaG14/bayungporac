@@ -18,12 +18,12 @@ top:0;
 width:100%;
 height:100%;
 z-index:9999;
-background:url('img/loading.gif') 50% 50% no-repeat #f9f9f9;
+
 }
 </style>
 
 </head>
-<body class="bg-[url('img/pic1.jpg')] bg-cover bg-center min-h-screen"></body>
+<body class="bg-[url('img/pic1.jpg')] bg-cover bg-center h-screen flex flex-col font-sans overflow-hidden">
 <body class="bg-gray-100 font-sans">
 
 <div id="loader"></div>
@@ -105,7 +105,7 @@ background:url('img/loading.gif') 50% 50% no-repeat #f9f9f9;
 </style>
 
 
-<div class="flex items-center justify-center min-h-screen px-4">
+<div class="flex-1 flex items-center justify-center px-4">
 
 <div class="login-card w-full max-w-md bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl shadow-xl p-8">
   
@@ -154,7 +154,7 @@ name="login"
 id="login"
 class="w-full bg-yellow-500/90 hover:bg-yellow-400 text-white font-semibold py-3 rounded-lg border border-white-300 transition duration-300 shadow-md">
 
-Login
+Log in
 
 </button>
 
@@ -167,8 +167,8 @@ Login
 <!-- Footer -->
 <footer class="text-center py-4">
 
-<p class="text-gray-600">
-All right Reserved &copy; <?php echo date('Y');?> Created By: PSU IT Interns
+<p class="text-gray-200">
+&#169; All Rights Reserved. Developed by the PSU IT Interns.
 </p>
 
 </footer>

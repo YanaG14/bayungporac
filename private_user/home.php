@@ -1,296 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-// include('Private_Dashboard/../include/connection.php');
 session_start();
 if(!isset($_SESSION["email_address"])){
     header("location:../login.html");
-
-} 
-
+}
 ?>
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Bayung Porac Archive</title>
-  <link rel="icon" type="image/png" href="img/municipalLogo.png">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-  <!-- Bootstrap core CSS -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bayung Porac Archive -->
-  <link href="css/mdb.min.css" rel="stylesheet">
-  <!-- Your custom styles (optional) -->
-  <link href="css/style.css" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bayung Porac Archive</title>
 
+<link rel="icon" type="image/png" href="img/municipalLogo.png">
 
-<!-- 
-<link href="css/addons/datatables.min.css" rel="stylesheet">
-<script href="js/addons/datatables.min.js" rel="stylesheet"></script>
-<link href="css/addons/datatables-select.min.css" rel="stylesheet">
-<script href="js/addons/datatables-select.min.js" rel="stylesheet"></script> -->
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
 
+<!-- jQuery + DataTables -->
+<script src="js/jquery-1.8.3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="media/css/dataTable.css" />
+<script src="media/js/jquery.dataTables.js"></script>
 
-<!-- <link rel="stylesheet" id="font-awesome-style-css" href="http://phpflow.com/code/css/bootstrap3.min.css" type="text/css" media="all">
-<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.1.min.js"></script> -->
-    <script src="js/jquery-1.8.3.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="media/css/dataTable.css" />
-    <script src="media/js/jquery.dataTables.js" type="text/javascript"></script>
-    <!-- end table-->
-    <script type="text/javascript" charset="utf-8">
-  $(document).ready(function(){
-      $('#dtable').dataTable({
-                "aLengthMenu": [[5, 10, 15, 25, 50, 100 , -1], [5, 10, 15, 25, 50, 100, "All"]],
-                "iDisplayLength": 10
-                //"destroy":true;
-            });
-  })
-    </script>
-    <style type="text/css">
-      select[multiple], select[size] {
-    height: auto;
-    width: 20px;
+<script>
+$(document).ready(function(){
+    $('#dtable').dataTable({
+        "aLengthMenu": [[5,10,15,25,50,100,-1],[5,10,15,25,50,100,"All"]],
+        "iDisplayLength": 10
+    });
+});
+</script>
+
+<style>
+#loader{
+position:fixed;
+left:0;
+top:0;
+width:100%;
+height:100%;
+z-index:9999;
+background:url('img/lg.flip-book-loader.gif') 50% 50% no-repeat #f9f9f9;
 }
-.pull-right {
-    float: right;
-    margin: 2px !important;
-}
-    #loader{
-        position: fixed;
-        left: 0px;
-        top: 0px;
-        width: 100%;
-        height: 100%;
-        z-index: 9999;
-        background: url('img/lg.flip-book-loader.gif') 50% 50% no-repeat rgb(249,249,249);
-        opacity: 1;
-    }
- /*   #dtable{
- display: block;
+</style>
 
-  overflow-x: scroll;
-  width: 600px;
-    }*/
-
-
-
-  </style>
-
-    <script src="jquery.min.js"></script>
-<script type="text/javascript">
-  $(window).on('load', function(){
-    //you remove this timeout
-    setTimeout(function(){
-          $('#loader').fadeOut('slow');  
-      });
-      //remove the timeout
-      //$('#loader').fadeOut('slow'); 
-  });
+<script>
+$(window).on('load',function(){
+setTimeout(function(){
+$('#loader').fadeOut('slow');
+});
+});
 </script>
 
 </head>
 
-<body style="padding:0px; margin:0px; background-color:#fff;font-family:arial,helvetica,sans-serif,verdana,'Open Sans'">
-  <?php 
+<body class="bg-gray-100 font-sans">
 
-     require_once("../include/connection.php");
+<?php
+require_once("../include/connection.php");
 
+$user_id = $_SESSION['user_no'];
 
-   $user_id = $_SESSION['user_no'];
-
-$stmt = $conn->prepare("SELECT email_address FROM login_user WHERE id = ?");
-$stmt->bind_param("i", $user_id);
+$stmt = $conn->prepare("SELECT name FROM login_user WHERE id = ?");
+$stmt->bind_param("i",$user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $row = $result->fetch_assoc();
-
-$email = $row['email_address'];
-
+$name = $row['name'];
 ?>
-  <!-- Start your project here-->
-<!--Navbar -->
-<nav class="mb-1 navbar navbar-expand-lg navbar-dark btn-success fixed-top">
-    <a class="navbar-brand" href="#"><img src="js/img/municipalLogo.png" width="33px" height="33px"> Bayung Porac Archive</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
-    aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
-    <ul class="navbar-nav ml-auto">
-      <!-- <li class="nav-item active">
-        <a class="nav-link" href="#">
-          <i class="fab fa-facebook-f"></i> Facebook
-          <span class="sr-only">(current)</span>
-        </a>
-      </li>-->
-   
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
-           <font color="black">Welcome, </font> 
-<?php echo ucwords(htmlentities($_SESSION["email_address"])); ?> <i class="fas fa-user-circle"></i> Login </a>
-        <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-          <a class="dropdown-item" href="history_log.php"> <i class="fas fa-chalkboard-teacher"></i> User Logged</a>
-          <a class="dropdown-item" href="Logout.php"><i class="fas fa-sign-in-alt"></i> Log out</a>
 
-        </div>
-      </li>
-    </ul>
+<!-- NAVBAR -->
+<nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
+  <div class="flex justify-between items-center h-16 px-4">
+    <!-- Left side: logo + title -->
+    <div class="flex items-center space-x-3">
+      <img src="img/municipalLogo.png" class="w-10">
+      <h1 class="text-white font-semibold text-lg">
+        Bayung Porac Archive
+      </h1>
+    </div>
+
+    <!-- Right side: welcome text + logout button -->
+    <div class="flex items-center text-white font-medium space-x-4">
+      <span>Welcome, <?php echo ucwords(htmlentities($name)) . "!"; ?></span>
+      <a href="Logout.php" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
+        Log out
+      </a>
+    </div>
   </div>
 </nav>
-<br>
-<!--/.Navbar -->
-<br><Br><br>
-<!-- Card -->
-<div class="container">
-  <div class="row">
-     <div class="col-md-9">
 
-<hr>
-  <table id="dtable" class = "table table-striped" style="">
-     <thead>
-
-    <th>Filename</th>
-    <th>FileSize</th>
-    <th>Uploader</th>  
-    <th>Status</th> 
-     <th>Date/Time Upload</th>
-     <th>Downloads</th>
-    <th>Action</th>
-
-</thead>
-<tbody>
-
-    
-    <tr>
-        <?php 
-   
-        require_once("../include/connection.php");
-
-      $query = mysqli_query($conn,"SELECT ID,NAME,SIZE,EMAIL,ADMIN_STATUS,TIMERS,DOWNLOAD FROM upload_files group by NAME DESC") or die (mysqli_error($conn));
-      while($file=mysqli_fetch_array($query)){
-         $id =  $file['ID'];
-         $name =  $file['NAME'];
-         $size =  $file['SIZE'];
-         $uploads =  $file['EMAIL'];
-          $status =  $file['ADMIN_STATUS'];
-         $time =  $file['TIMERS'];
-         $download =  $file['DOWNLOAD'];
-    
-      ?>
-     
-      <td width="17%"><?php echo  $name; ?></td>
-      <td><?php echo floor($size / 1000) . ' KB'; ?></td>
-      <td><?php echo $uploads; ?></td>
-      <td><?php echo $status; ?></td>
-      <td><?php echo $time; ?></td>
-      <td><?php echo $download; ?></td>
-
-
-        <td style=""><a href='downloads.php?file_id=<?php echo $id; ?>'><img src="img/698569-icon-57-document-download-128.png" width="30px" height="30px" title="Download File"></a> </td>
-    </tr>
-<?php } ?>
-</tbody>
-   </table>
-    </div>
+<!-- MAIN CONTENT -->
+<!-- Adjust px-4 below to increase/decrease left-right spacing -->
+<!-- Example: px-2 for smaller padding, px-6 for more padding -->
+<div class="mt-24 w-full px-8">
  
+<div class="grid grid-cols-12 gap-6">
 
+<!-- SIDEBAR -->
+<div class="col-span-3">
+  <!-- Admin Profile Card -->
+  <div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-green-600 mb-6">
+    <div class="flex flex-col items-center">
+      <img src="img/municipalLogo.png" class="w-28 mb-3">
+      <h2 class="text-lg font-semibold text-gray-700">Admin Profile</h2>
+    </div>
 
-</script>
+    <hr class="my-4">
 
-
- <div class="col-md-3" style="border-top: 4px solid #17a2b8;border-radius: 4px;  box-shadow: 0px 1px 1px 0px  #6c757d;"><br>
-  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-  <li class="nav-item">
-    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
-      aria-controls="pills-home" aria-selected="true">Profile</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab"
-      aria-controls="pills-profile" aria-selected="false">About</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab"
-      aria-controls="pills-contact" aria-selected="false">Contact</a>
-  </li>
-</ul>
-<div class="tab-content pt-2 pl-1" id="pills-tabContent">
-  <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-    <img src="img/municipalLogo.png" class="rounded img-fluid" style="max-width:150px;" alt="Logo">
-<hr>
-    <div class="">
-     
-     <div class=""><p><b style="font-size: 1.1em">Full Name:</b>Sample Name</p></div>
-     <div class=""><p><b style="font-size: 1.1em">Position:</b>Admin Staff</p></div>
-
-  </div>
-  <hr>
-  </div>
-  <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-   <h6 style="font-size: 1.1em">File Management System (FMS)</h6><Hr>
-  is a system (based on computer programs in the case of the management of digital documents) used to track, manage and store documents and reduce paper. Most are capable of keeping a record of the various versions created and modified by different users (history tracking).</div>
-  <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab"><h6 style="font-size: 1.1em">Contact Number</h6><Hr><br><div class=""><p><b style="font-size: 1.1em">Cellphone #:</b>09876543210</p></div><p><b style="font-size: 1.1em">Address:</b>Porac, Pampanga</p>
-</div><hr><br>
-<!--   <div class="card">
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">Cras justo odio</li>
-    <li class="list-group-item">Dapibus ac facilisis in</li>
-    <li class="list-group-item">Vestibulum at eros</li>
-  </ul>
-</div><br> -->
-   <!-- Card -->
-<div class="card" style="border-top: 4px solid #17a2b8;border-radius: 4px;">
-
-  <!-- Card image -->
-  <div class="view overlay">
-
-      <div class="mask rgba-white-slight"></div>
-    </a>
+    <p class="text-sm"><b>Full Name:</b> <?php echo $name; ?></p>
+    <p class="text-sm"><b>Position:</b> Admin Staff</p>
   </div>
 
-  <!-- Card content -->
-  <div class="card-body">
+  <!-- File Document Card -->
+  <div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-green-600">
+    <h3 class="font-semibold text-lg mb-3 text-gray-700">
+      File Document
+    </h3>
 
-    <!-- Title -->
-    <h4 class="card-title">File Document</h4><hr>
-    <!-- Text -->
-
-    <ul>
-      <li> <p>Ensuring changes and revisions are clearly identified</p></li>
-      <li> <p>Ensuring that documents remain legible and identifiable</p></li>
-      <li> <p>Preventing “unintended” use of obsolete documents</p></li>
+    <ul class="text-sm list-disc ml-5 space-y-1 text-gray-600">
+      <li>Ensuring revisions are identified</li>
+      <li>Documents remain legible</li>
+      <li>Prevent unintended use of obsolete documents</li>
     </ul>
-    <!-- Button -->
-<!--     <a href="#" class="btn btn-primary">Button</a> -->
-
   </div>
-
-</div>
-<!-- Card -->
-
- </div>
-</div>
 </div>
 
+<!-- TABLE SECTION -->
+<div class="col-span-9">
 
-<!-- Card -->
-  <!-- /Start your project here-->
+<div class="bg-white shadow-md rounded-xl p-6">
 
-  <!-- SCRIPTS -->
-  <!-- JQuery -->
-  <script type="text/javascript" src="js/jquery-3.4.0.min.js"></script>
+<h2 class="text-xl font-semibold text-gray-700 mb-4">
+Uploaded Files
+</h2>
 
-  <script type="text/javascript" src="js/popper.min.js"></script>
+<div class="overflow-x-auto">
 
-  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<table id="dtable" class="min-w-full border border-gray-200">
 
-  <script type="text/javascript" src="js/mdb.min.js"></script>
+<thead class="bg-green-700 text-white">
+<tr>
+<th class="px-4 py-2">Filename</th>
+<th class="px-4 py-2">FileSize</th>
+<th class="px-4 py-2">Uploader</th>
+<th class="px-4 py-2">Status</th>
+<th class="px-4 py-2">Upload Date</th>
+<th class="px-4 py-2">Downloads</th>
+<th class="px-4 py-2">Action</th>
+</tr>
+</thead>
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css"/>   
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/1.0.3/css/dataTables.responsive.css">
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/responsive/1.0.3/js/dataTables.responsive.js"></script>
+<tbody class="text-gray-700">
+
+<?php
+
+$query = mysqli_query($conn,"
+SELECT id,name,size,email,admin_status,timers,download
+FROM upload_files
+WHERE status='Active'
+ORDER BY id DESC
+");
+
+while($file=mysqli_fetch_array($query)){
+
+$id=$file['id'];
+$name=$file['name'];
+$size=$file['size'];
+$uploads=$file['email'];
+$status=$file['admin_status'];
+$time=$file['timers'];
+$download=$file['download'];
+
+?>
+
+<tr class="border-b hover:bg-gray-50">
+
+<td class="px-4 py-2"><?php echo $name; ?></td>
+<td class="px-4 py-2"><?php echo floor($size/1000)." KB"; ?></td>
+<td class="px-4 py-2"><?php echo $uploads; ?></td>
+<td class="px-4 py-2"><?php echo $status; ?></td>
+<td class="px-4 py-2"><?php echo $time; ?></td>
+<td class="px-4 py-2"><?php echo $download; ?></td>
+<td class="px-4 py-2">
+
+<a href="downloads.php?file_id=<?php echo $id; ?>" 
+   class="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-5 py-3 rounded-full flex items-center gap-2 hover:from-blue-600 hover:to-blue-800 transition" 
+   title="Download">
+   <i class="fas fa-download"></i> Download
+</a>
+
+</td>
+
+</tr>
+
+<?php } ?>
+
+</tbody>
+</table>
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+<!-- Footer -->
+<footer class="mt-8 text-center text-gray-600">
+  <p>All right Reserved &copy; <?php echo date('Y');?> Created By: PSU IT Interns</p>
+</footer>
 
 </body>
 </html>

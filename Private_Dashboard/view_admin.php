@@ -5,24 +5,18 @@ session_start();
 error_reporting(0);
 require_once("../include/connection.php");
 
+$edit_id = '';
+if(isset($_GET['id'])){
+    $edit_id = mysqli_real_escape_string($conn,$_GET['id']);
+}
+
 if (!isset($_SESSION['admin_user'])) {
     header('Location: index.html');
     exit();
 }
 
-/* =========================
-   GET EDIT ID
-========================= */
-$edit_id = '';
-if (isset($_GET['id'])) {
-    $edit_id = mysqli_real_escape_string($conn, $_GET['id']);
-}
-
-/* =========================
-   HANDLE UPDATE (FIXED)
-========================= */
+// EDIT ADMIN FUNCTIONALITY (unchanged)
 if (isset($_POST['edit_publish'])) {
-
     $id_post = mysqli_real_escape_string($conn, $_POST['idtoy']);
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $admin_user = mysqli_real_escape_string($conn, $_POST['admin_user']);
@@ -32,8 +26,7 @@ if (isset($_POST['edit_publish'])) {
         SET name='$name',
             admin_user='$admin_user',
             admin_password='$admin_password'
-        WHERE id='$id_post'") 
-    or die(mysqli_error($conn));
+        WHERE id='$id_post'") or die(mysqli_error($conn));
 
     echo "<script>alert('Admin updated successfully'); window.location='view_admin.php';</script>";
     exit();
@@ -41,552 +34,171 @@ if (isset($_POST['edit_publish'])) {
 ?>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bayung Porac Archive</title>
   <link rel="icon" type="image/png" href="js/img/municipalLogo.png">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-  <!-- Bootstrap core CSS -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bayung Porac Archive -->
-  <link href="css/mdb.min.css" rel="stylesheet">
-  <!-- Your custom styles (optional) -->
-  <link href="css/style.min.css" rel="stylesheet">
 
-    <script src="js/jquery-1.8.3.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="medias/css/dataTable.css" />
-    <script src="medias/js/jquery.dataTables.js" type="text/javascript"></script>
-    <!-- end table-->
-    <script type="text/javascript" charset="utf-8">
-  $(document).ready(function(){
-      $('#dtable').dataTable({
-                "aLengthMenu": [[5, 10, 15, 25, 50, 100 , -1], [5, 10, 15, 25, 50, 100, "All"]],
-                "iDisplayLength": 10
-            });
-  })
-    </script>
+  <!-- JQuery & DataTables -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
+  <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+  <!-- TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-          select[multiple], select[size] {
-    height: auto;
-    width: 20px;
-}
-.pull-right {
-    float: right;
-    margin: 2px !important;
-}
-
-    .map-container{
-overflow:hidden;
-padding-bottom:56.25%;
-position:relative;
-height:0;
-}
-.map-container iframe{
-left:0;
-top:0;
-height:100%;
-width:100%;
-position:absolute;
-}
-#loader{
-        position: fixed;
-        left: 0px;
-        top: 0px;
-        width: 100%;
-        height: 100%;
-        z-index: 9999;
-        background: url('img/lg.flip-book-loader.gif') 50% 50% no-repeat rgb(249,249,249);
-        opacity: 1;
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: url('img/lg.flip-book-loader.gif') center/50px no-repeat #f9f9f9;
     }
-
-    .square-logo {
-    width: 300px;
-    height: auto;
-    object-fit: contain;
-}
-
-.img-fluid {
-    max-width: 100%;
-    height: auto;
-}
+    .square-logo { width: 180px; object-fit: contain; }
+    .sidebar-link:hover { @apply bg-gray-100; }
   </style>
 
-    <script src="jquery.min.js"></script>
-<script type="text/javascript">
-  $(window).on('load', function(){
-    //you remove this timeout
-    setTimeout(function(){
-          $('#loader').fadeOut('slow');  
+  <script>
+    $(document).ready(function(){
+      $('#dtable').DataTable({
+        "pageLength": 10
       });
-      //remove the timeout
-      //$('#loader').fadeOut('slow'); 
-  });
-</script>
+
+      $(window).on('load', function(){ $('#loader').fadeOut('slow'); });
+
+      <?php if($edit_id != '') { ?>
+        $('#modalEditAdmin').removeClass('hidden');
+      <?php } ?>
+    });
+  </script>
 </head>
 
-<body class="grey lighten-3">
+<body class="bg-gray-100 font-sans">
 
-  <!--Main Navigation-->
-  <header>
+<div id="loader"></div>
 
-    <!-- Navbar -->
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
-      <div class="container-fluid">
-
-        <!-- Brand -->
-        <a class="navbar-brand waves-effect" href="#">
-          <strong class="blue-text"></strong>
-        </a>
-
-        <!-- Collapse -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Links -->
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-          <!-- Left -->
-          <ul class="navbar-nav mr-auto">
-          <!--   <li class="nav-item active">
-              <a class="nav-link waves-effect" href="#">Home
-                <span class="sr-only">(current)</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link waves-effect" href="#">About
-                MDB</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link waves-effect" href="#">Free
-                download</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link waves-effect" href="#">Free
-                tutorials</a>
-            </li> -->
-          </ul>
-            <?php 
-
-             require_once("../include/connection.php");
-
-
-               $id = mysqli_real_escape_string($conn,$_SESSION['admin_user']);
-
-
-              $r = mysqli_query($conn,"SELECT * FROM admin_login where id = '$id'") or die (mysqli_error($conn));
-
-              $row = mysqli_fetch_array($r);
-
-               $id=$row['admin_user'];
-               // $fname=$row['fname'];
-               // $lname=$row['lname'];
-
-            ?>
-
-          <!-- Right -->
-          <ul class="navbar-nav nav-flex-icons">
-                <li style="margin-top: 10px;">Welcome, </font> <?php echo ucwords(htmlentities($id)); ?></li>
-            
-            <!--    <li class="nav-item">
-              <a href="#" class="nav-link waves-effect" target="_blank">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link waves-effect" target="_blank">
-                <i class="fab fa-twitter"></i>
-              </a>
-            </li> -->
-            
-            <li class="nav-item">
-              <a href="logout.php" class="nav-link border border-light rounded waves-effect">
-               <i class="far fa-user-circle"></i> Log out
-              </a>
-            </li>
-          </ul>
-
-        </div>
-
-      </div>
-    </nav>
-    <!-- Navbar -->
-
-    <!-- Sidebar -->
-    <div class="sidebar-fixed position-fixed">
-
-      <a class="logo-wrapper waves-effect">
-    <img src="js/img/municipalLogo.png" class="square-logo img-fluid" alt="">
-</a>
-          <div class="list-group list-group-flush">
-            <a href="add_document.php" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-file-medical"></i> Information Management</a>
-
-          <a href="department_management.php" class="list-group-item list-group-item-action waves-effect">
-            <i class="fas fa-building"></i> Department Management
-        </a>
-         <!-- <a href="dashboard.php" class="list-group-item active waves-effect">
-          <i class="fas fa-chart-pie mr-3"></i>Dashboard
-        </a>
-           <a href="#" class="list-group-item list-group-item-action waves-effect"  data-toggle="modal" data-target="#modalRegisterForm">
-          <i class="fas fa-user mr-3"></i>Add Admin</a> -->
-            <a href="view_admin.php" class="list-group-item active">
-          <i class="fas fa-users"></i> Admin Accounts</a>
-        <!-- <a href="#" class="list-group-item list-group-item-action waves-effect" data-toggle="modal" data-target="#modalRegisterForm2">
-          <i class="fas fa-user mr-3"></i>Add User</a> -->
-           <a href="view_user.php" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-users"></i> User Accounts</a>
-        
-        <!-- <a href="view_userfile.php" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-folder-open"></i> View User File</a>
-            <a href="admin_log.php" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-chalkboard-teacher"></i> Admin logged</a>
-              <a href="user_log.php" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-chalkboard-teacher"></i> User logged</a>
-         <a href="#" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-money-bill-alt mr-3"></i>Orders</a> -->
-      </div>
-
+<!-- NAVBAR -->
+<nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
+  <div class="flex justify-between items-center h-16 px-6">
+    <div class="flex items-center space-x-3">
+      <img src="js/img/municipalLogo.png" class="w-10 h-10 object-contain" alt="Logo">
+      <h1 class="text-white font-semibold text-lg">Bayung Porac Archive</h1>
     </div>
-  <!--Add admin-->
-   <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
-  <form action="create_Admin.php" method="POST">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold"><i class="fas fa-user-plus"></i> Add Admin</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+    <div class="flex items-center space-x-4 text-white">
+      <span>Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_user'])); ?></span>
+      <a href="Logout.php" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
+        Log out
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN LAYOUT -->
+<div class="mt-24 px-6 flex gap-6">
+
+  <!-- SIDEBAR -->
+  <aside class="w-1/4">
+    <div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-green-600 flex flex-col items-center space-y-4 h-full">
+      <img src="js/img/municipalLogo.png" class="square-logo mb-4">
+      <a href="add_document.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-file-medical"></i> Information Management</a>
+      <a href="department_management.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-building"></i> Department Management</a>
+      <a href="view_admin.php" class="w-full px-4 py-2 bg-green-600 text-white rounded flex items-center gap-2"><i class="fas fa-users"></i> Admin Accounts</a>
+      <a href="view_user.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-users"></i> Employee Accounts</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="w-3/4 flex-1">
+    <div class="bg-white rounded-xl shadow-md p-6 h-full">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold text-gray-700 flex items-center gap-2"><i class="fas fa-users"></i> Admin Accounts</h2>
+        <button onclick="$('#modalAddAdmin').removeClass('hidden');" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-2">
+          <i class="fas fa-user-plus"></i> Add Admin
         </button>
       </div>
-      <div class="modal-body mx-3">
-           <div class="md-form mb-5">
-          <input type="hidden" id="orangeForm-name" name="status" value = "Admin" class="form-control validate">
-        </div>
-        <div class="md-form mb-5">
-          <i class="fas fa-user prefix grey-text"></i>
-          <input type="text" id="orangeForm-name" name="name" class="form-control validate" required="">
-          <label data-error="wrong" data-success="right" for="orangeForm-name">Your name</label>
-        </div>
-        <div class="md-form mb-5">
-          <i class="fas fa-envelope prefix grey-text"></i>
-          <input type="email" id="orangeForm-email" name="admin_user" class="form-control validate" required="">
-          <label data-error="wrong" data-success="right" for="orangeForm-email">Your email</label>
-        </div>
 
-        <div class="md-form mb-4">
-          <i class="fas fa-lock prefix grey-text"></i>
-          <input type="password" id="orangeForm-pass" name="admin_password" class="form-control validate" required="">
-          <label data-error="wrong" data-success="right" for="orangeForm-pass">Your password</label>
-        </div>
-
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button class="btn btn-info" name="reg">Sign up</button>
+      <!-- TABLE -->
+      <div class="overflow-x-auto">
+        <table id="dtable" class="min-w-full border border-gray-200">
+          <thead class="bg-green-700 text-white">
+            <tr>
+              <th class="px-4 py-2">Full Name</th>
+              <th class="px-4 py-2">Email Address</th>
+              <th class="px-4 py-2 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+          <?php
+            $query = "SELECT * FROM admin_login";
+            $result = mysqli_query($conn, $query);
+            while($row = mysqli_fetch_assoc($result)){
+          ?>
+            <tr class="border-b hover:bg-gray-50">
+              <td class="px-4 py-2"><?php echo htmlspecialchars($row['name']); ?></td>
+              <td class="px-4 py-2"><?php echo htmlspecialchars($row['admin_user']); ?></td>
+              <td class="px-4 py-2 text-center space-x-2">
+                <a href="view_admin.php?id=<?php echo $row['id']; ?>" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"><i class="fas fa-edit"></i></a>
+                <a href="delete_admin.php?id=<?php echo $row['id']; ?>" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="return confirm('Archive this department?');"><i class="fas fa-archive"></i></a>
+              </td>
+              </td>
+            </tr>
+          <?php } ?>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
+
 </div>
-</form>
-<!--end modaladmin-->
-  <!--Add user-->
-   <div class="modal fade" id="modalRegisterForm2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
-  <form action="create_user.php" method="POST">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold"><i class="fas fa-user-plus"></i> Add User Employee</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-           <div class="md-form mb-5">
-          <input type="hidden" id="orangeForm-name" name="status" value = "Employee" class="form-control validate" required="">
-        </div>
-        <div class="md-form mb-5">
-          <i class="fas fa-user prefix grey-text"></i>
-          <input type="text" id="orangeForm-name" name="name" class="form-control validate">
-          <label data-error="wrong" data-success="right" for="orangeForm-name">Your name</label>
-        </div>
-        <div class="md-form mb-5">
-          <i class="fas fa-envelope prefix grey-text"></i>
-          <input type="email" id="orangeForm-email" name="email_address" class="form-control validate" required="">
-          <label data-error="wrong" data-success="right" for="orangeForm-email">Your email</label>
-        </div>
 
-        <div class="md-form mb-4">
-          <i class="fas fa-lock prefix grey-text"></i>
-          <input type="password" id="orangeForm-pass" name="user_password" class="form-control validate" required="">
-          <label data-error="wrong" data-success="right" for="orangeForm-pass">Your password</label>
-        </div>
-
+<!-- ADD ADMIN MODAL -->
+<div id="modalAddAdmin" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div class="bg-white rounded-xl shadow-lg w-96 p-6 relative">
+    <button onclick="$('#modalAddAdmin').addClass('hidden');" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">&times;</button>
+    <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-user-plus"></i> Add Admin</h3>
+    <form action="create_Admin.php" method="POST" class="flex flex-col gap-4">
+      <input type="hidden" name="status" value="Admin">
+      <input type="text" name="name" placeholder="Full Name" class="border rounded px-3 py-2" required>
+      <input type="email" name="admin_user" placeholder="Email Address" class="border rounded px-3 py-2" required>
+      <input type="password" name="admin_password" placeholder="Password" class="border rounded px-3 py-2" required>
+      <div class="flex justify-end gap-2">
+        <button type="submit" name="reg" class="bg-green-700 text-white rounded px-4 py-2 hover:bg-green-800">Save</button>
+        <button type="button" onclick="$('#modalAddAdmin').addClass('hidden');" class="bg-gray-300 rounded px-4 py-2 hover:bg-gray-400">Close</button>
       </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button class="btn btn-info" name="reguser">Register</button>
-      </div>
-    </div>
+    </form>
   </div>
 </div>
-</form>
-<!--end modaluser-->
-    <!-- Sidebar -->
 
-  </header>
-  <!--Main Navigation-->
- <div id="loader"></div>
-  <!--Main layout-->
-  <main class="pt-5 mx-lg-5">
-    <div class="container-fluid mt-5">
-
-      <!-- Heading -->
-      <div class="card mb-4 wow fadeIn">
-
-        <!--Card content-->
-        <div class="card-body d-sm-flex justify-content-between">
-
-          <h4 class="mb-2 mb-sm-0 pt-1">
-            <a href="dashboard.php">Admin Account Management</a>
-            
-          </h4>
-<!-- 
-          <form class="d-flex justify-content-center">
-       
-            <input type="search" placeholder="Type your query" aria-label="Search" class="form-control">
-            <button class="btn btn-primary btn-sm my-0 p" type="submit">
-              <i class="fas fa-search"></i>
-            </button>
-
-          </form> -->
-
-        </div>
-
+<!-- EDIT ADMIN MODAL -->
+<?php 
+if($edit_id != ''){
+    $q = mysqli_query($conn,"SELECT * FROM admin_login WHERE id='$edit_id'");
+    $rs = mysqli_fetch_assoc($q);
+?>
+<div id="modalEditAdmin" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div class="bg-white rounded-xl shadow-lg w-96 p-6 relative">
+    <button onclick="$('#modalEditAdmin').addClass('hidden');" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">&times;</button>
+    <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-user-edit"></i> Edit Admin</h3>
+    <form method="POST" class="flex flex-col gap-4">
+      <input type="hidden" name="idtoy" value="<?php echo $rs['id']; ?>">
+      <input type="text" name="name" value="<?php echo htmlspecialchars($rs['name']); ?>" class="border rounded px-3 py-2">
+      <input type="email" name="admin_user" value="<?php echo htmlspecialchars($rs['admin_user']); ?>" class="border rounded px-3 py-2">
+      <input type="password" name="admin_password" placeholder="Password" class="border rounded px-3 py-2">
+      <div class="flex justify-end gap-2">
+        <button type="submit" name="edit_publish" class="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700">Update</button>
+        <button type="button" onclick="$('#modalEditAdmin').addClass('hidden');" class="bg-gray-300 rounded px-4 py-2 hover:bg-gray-400">Close</button>
       </div>
-<div class="mb-3 text-left">
-    <button type="button" 
-            class="btn btn-info waves-effect" 
-            data-toggle="modal" 
-            data-target="#modalRegisterForm">
-        <i class="fas fa-user-plus"></i> Add Admin
-    </button>
-  
- <table id="dtable" class="table table-striped">
-<thead>
-<tr>
-    <th>Full Name</th>
-    <th>Email Address</th>
-    <!-- <th>Status</th> -->
-    <th>Action</th>
-</tr>
-</thead>
-<tbody>
-
-<?php
-$query = "SELECT * FROM admin_login";
-$result = mysqli_query($conn, $query);
-
-while ($row = mysqli_fetch_assoc($result)) {
-?>
-<tr>
-    <td><?php echo htmlspecialchars($row['name']); ?></td>
-    <td><?php echo htmlspecialchars($row['admin_user']); ?></td>
-    <!-- <td><?php echo htmlspecialchars($row['admin_status']); ?></td> -->
-    <td align="center">
-        <a href="view_admin.php?id=<?php echo $row['id']; ?>">
-            <i class="fas fa-user-edit"></i>
-        </a> |
-        <a href="delete_admin.php?id=<?php echo $row['id']; ?>">
-            <i class="far fa-trash-alt"></i>
-        </a>
-    </td>
-</tr>
+    </form>
+  </div>
+</div>
 <?php } ?>
 
-</tbody>
-</table>
+<!-- Footer -->
+<footer class="mt-8 text-center text-gray-600">
+  <p>All right Reserved &copy; <?php echo date('Y');?> Created By: PSU IT Interns</p>
+</footer>
 
-    <hr></div>
-    <div class="footer-copyright py-3">
-     <p>All right Reserved &copy; <?php echo date('Y');?> Created By: PSU IT Interns</p>
-    </div>
-    <!--/.Copyright-->
-
-  </footer>
-  <!--/.Footer-->
-
-<!-- Card -->
-  <!-- /Start your project here-->
-
-  <!-- SCRIPTS -->
-  <!-- JQuery -->
-  <script type="text/javascript" src="js/jquery-3.4.0.min.js"></script>
-
-  <script type="text/javascript" src="js/popper.min.js"></script>
-
-  <script type="text/javascript" src="js/bootstrap.min.js"></script>
-
-  <script type="text/javascript" src="js/mdb.min.js"></script>
-
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css"/>   
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/1.0.3/css/dataTables.responsive.css">
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/responsive/1.0.3/js/dataTables.responsive.js"></script>
-
-<?php
-if ($edit_id != '') {
-
-    $query_edit = mysqli_query($conn, "SELECT * FROM admin_login WHERE id='$edit_id'");
-    $edit_row = mysqli_fetch_assoc($query_edit);
-?>
-    
-<div class="modal fade" id="editModal" tabindex="-1">
-<div class="modal-dialog">
-<div class="modal-content">
-
-<form method="POST">
-
-<div class="modal-header">
-    <h5 class="modal-title">Edit Admin</h5>
-    <button type="button" class="close" data-dismiss="modal">&times;</button>
-</div>
-
-<div class="modal-body">
-
-    <input type="hidden" name="idtoy" value="<?php echo $edit_row['id']; ?>">
-
-    <div class="form-group">
-        <label>Name</label>
-        <input type="text" name="name" class="form-control"
-            value="<?php echo htmlspecialchars($edit_row['name']); ?>" required>
-    </div>
-
-    <div class="form-group">
-        <label>Email</label>
-        <input type="email" name="admin_user" class="form-control"
-            value="<?php echo htmlspecialchars($edit_row['admin_user']); ?>" required>
-    </div>
-
-    <div class="form-group">
-        <label>Password</label>
-        <input type="password" name="admin_password" class="form-control" required>
-    </div>
-
-</div>
-
-<div class="modal-footer">
-    <button type="submit" name="edit_publish" class="btn btn-primary">Update</button>
-</div>
-
-</form>
-
-</div>
-</div>
-</div>
-
-<script>
-$(document).ready(function(){
-    $('#editModal').modal('show');
-});
-</script>
-
-<?php } ?>
 </body>
-  <!--modal--->
-
-
-
-
-
-
-<div class="modal fade" id="modalRegisterFormsss" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
-    <?php 
-
-require_once("../include/connection.php");
-  
-$q = mysqli_query($conn,"select * from admin_login where id = '$id'") or die (mysqli_error($conn));
- $rs1 = mysqli_fetch_array($q);
- 
-               $id1=$rs1['id'];
-               $fname1=$rs1['name'];
-               $admin1=$rs1['admin_user'];
-               $pass1=$rs1['admin_password'];
-               $status=$rs1['admin_status'];
-?>
-  <div class="modal-dialog" role="document">
-    <form method="POST">
-    
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold"><i class="fas fa-user-edit"></i> Edit User</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-        <div class="modal-body mx-3">
-           <div class="md-form mb-5">
-            <input type="hidden" class="form-control" name="id" value="<?php echo $id1;?>"><br>
-        </div>
-        <div class="md-form mb-5">
-          <i class="fas fa-user prefix grey-text"></i>
-          <input type="text" id="orangeForm-name" name="name" value="<?php echo $fname1;?>" class="form-control validate">
-          <label data-error="wrong" data-success="right" for="orangeForm-name">Your name</label>
-        </div>
-        <div class="md-form mb-5">
-          <i class="fas fa-envelope prefix grey-text"></i>
-          <input type="email" id="orangeForm-email" name="admin_user" value="<?php echo $admin1;?>" class="form-control validate">
-          <label data-error="wrong" data-success="right" for="orangeForm-email">Your email</label>
-        </div>
-
-        <div class="md-form mb-4">
-          <i class="fas fa-lock prefix grey-text"></i>
-          <input type="password" id="orangeForm-pass" name="admin_password" value="<?php echo $pass1;?>" class="form-control validate">
-          <label data-error="wrong" data-success="right" for="orangeForm-pass">Your password</label>
-        </div>
-          <div class="md-form mb-4">
-          <i class="fas fa-user prefix grey-text"></i>
-          <input type="text" id="orangeForm-pass" name="status" value = "Employee" class="form-control validate" readonly="">
-          <label data-error="wrong" data-success="right" for="orangeForm-pass">User Status</label>
-        </div>
-      
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button class="btn btn-primary" name="edit2">UPDATE</button>
-      </div>
-    </div>
-  </div>
-</div>
-</form>
-
-  <!--modal--->
- <?php 
-
- require_once("../include/connection.php");
-
-  
- if(isset($_POST['edit2'])){
-
-    $id_post = mysqli_real_escape_string($conn,$_POST['id']);
-    $user_name = mysqli_real_escape_string($conn,$_POST['name']);
-    $admin_user = mysqli_real_escape_string($conn,$_POST['admin_user']);
-    $admin_password = password_hash($_POST['admin_password'], PASSWORD_DEFAULT);
-
-    mysqli_query($conn,"UPDATE admin_login 
-        SET name='$user_name',
-            admin_user='$admin_user',
-            admin_password='$admin_password'
-        WHERE id='$id_post'") 
-    or die(mysqli_error($conn));
-  
-    echo "<script>alert('Success Edit User/Employee!!!');document.location='view_admin.php'</script>";
-    exit();
-}
-
-?>
-
 </html>

@@ -1,171 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <?php
 session_start();
 if (!isset($_SESSION['admin_user'])) {
-header('Location: index.html');
+    header('Location: index.html');
+    exit();
 }
 require_once("../include/connection.php");
-?>
 
-<head>
-
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-<title>Bayung Porac Archive</title>
-
-<link rel="icon" type="image/png" href="js/img/municipalLogo.png">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-<link href="css/bootstrap.min.css" rel="stylesheet">
-<link href="css/mdb.min.css" rel="stylesheet">
-<link href="css/style.min.css" rel="stylesheet">
-
-<link rel="stylesheet" href="medias/css/dataTable.css"/>
-
-<style>
-
-.square-logo{
-width:300px;
-height:auto;
-object-fit:contain;
-}
-
-#loader{
-position:fixed;
-left:0;
-top:0;
-width:100%;
-height:100%;
-z-index:9999;
-background:url('img/lg.flip-book-loader.gif') 50% 50% no-repeat rgb(249,249,249);
-}
-
-</style>
-
-</head>
-
-
-<body class="grey lighten-3">
-
-<div id="loader"></div>
-
-<header>
-
-<!-- NAVBAR -->
-
-<nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
-<div class="container-fluid">
-
-<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
-<span class="navbar-toggler-icon"></span>
-</button>
-
-<div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-<ul class="navbar-nav mr-auto"></ul>
-
-<?php
-
-$id = mysqli_real_escape_string($conn,$_SESSION['admin_user']);
-$r = mysqli_query($conn,"SELECT * FROM admin_login WHERE id='$id'");
-$row = mysqli_fetch_array($r);
-$id=$row['admin_user'];
-
-?>
-
-<ul class="navbar-nav nav-flex-icons">
-
-<li style="margin-top:10px;">
-Welcome, <?php echo ucwords(htmlentities($id)); ?>
-</li>
-
-<li class="nav-item">
-<a href="logout.php" class="nav-link border border-light rounded waves-effect">
-<i class="far fa-user-circle"></i> Log out
-</a>
-</li>
-
-</ul>
-
-</div>
-</div>
-</nav>
-
-<!-- SIDEBAR -->
-
-<div class="sidebar-fixed position-fixed">
-
-<a class="logo-wrapper waves-effect">
-<img src="js/img/municipalLogo.png" class="square-logo img-fluid">
-</a>
-
-<div class="list-group list-group-flush">
-
-<a href="folder_management.php" class="list-group-item active waves-effect">
-<i class="fas fa-folder"></i> Folder Management
-</a>
-
-<a href="add_document.php" class="list-group-item list-group-item-action waves-effect">
-<i class="fas fa-file-medical"></i> Information Management
-</a>
-
-<a href="department_management.php" class="list-group-item list-group-item-action waves-effect">
-<i class="fas fa-building"></i> Department Management
-</a>
-
-<a href="view_admin.php" class="list-group-item list-group-item-action waves-effect">
-<i class="fas fa-users"></i> Admin Accounts
-</a>
-
-<a href="view_user.php" class="list-group-item list-group-item-action waves-effect">
-<i class="fas fa-users"></i> User Accounts
-</a>
-
-</div>
-</div>
-
-</header>
-
-<main class="pt-5 mx-lg-5">
-
-<div class="container-fluid mt-5">
-
-<div class="card mb-4">
-<div class="card-body d-sm-flex justify-content-between">
-
-<h4>Folder Management</h4>
-
-</div>
-</div>
-
-<button class="btn btn-success" data-toggle="modal" data-target="#addFolder">
-<i class="fas fa-folder-plus"></i> Add Folder
-</button>
-
-<button class="btn btn-warning" data-toggle="modal" data-target="#archivedFolders">
-<i class="fas fa-archive"></i> View Archived Folders
-</button>
-
-<hr>
-
-<table id="dtable" class="table table-striped">
-
-<thead>
-<tr>
-<th>Folder Name</th>
-<th>Departments</th>
-<th>Date Created</th>
-<th>Action</th>
-</tr>
-</thead>
-
-<tbody>
-
-<?php
-
+// Fetch active folders
 $query = mysqli_query($conn,"
 SELECT 
 f.folder_id,
@@ -179,269 +22,202 @@ WHERE f.folder_status='Active'
 GROUP BY f.folder_id
 ORDER BY f.folder_name ASC
 ");
-
-while($row=mysqli_fetch_array($query)){
-
 ?>
 
-<tr>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bayung Porac Archive</title>
+<link rel="icon" type="image/png" href="js/img/municipalLogo.png">
 
-<td>
-<a href="add_document.php?folder_id=<?php echo $row['folder_id']; ?>">
-<b><?php echo $row['folder_name']; ?></b>
-</a>
-</td>
+<!-- JQuery & DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
-<td><?php echo $row['departments']; ?></td>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
-<td><?php echo $row['created_at']; ?></td>
+<!-- TailwindCSS -->
+<script src="https://cdn.tailwindcss.com"></script>
 
-<td>
+<style>
+#loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: url('img/lg.flip-book-loader.gif') center/50px no-repeat #f9f9f9;
+}
+.square-logo { width: 180px; object-fit: contain; }
+</style>
 
-<button class="btn btn-sm btn-primary"
-data-toggle="modal"
-data-target="#editFolder<?php echo $row['folder_id']; ?>">
+<script>
+$(document).ready(function(){
+    $('#dtable').DataTable({ "pageLength": 10 });
+    $(window).on('load', function(){ $('#loader').fadeOut('slow'); });
+});
+</script>
+</head>
 
-<i class="fa fa-edit"></i>
+<body class="bg-gray-100 font-sans">
+<div id="loader"></div>
 
+<!-- NAVBAR -->
+<nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
+  <div class="flex justify-between items-center h-16 px-6">
+    <div class="flex items-center space-x-3">
+      <img src="js/img/municipalLogo.png" class="w-10 h-10 object-contain">
+      <h1 class="text-white font-semibold text-lg">Bayung Porac Archive</h1>
+    </div>
+    <div class="flex items-center space-x-4 text-white">
+      <span>Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_user'])); ?></span>
+      <a href="Logout.php" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
+        Log out
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN LAYOUT -->
+<div class="mt-24 px-6 flex gap-6">
+
+  <!-- SIDEBAR -->
+  <aside class="w-1/4">
+    <div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-green-600 flex flex-col items-center space-y-4 h-full">
+      <img src="js/img/municipalLogo.png" class="square-logo mb-4">
+      <a href="folder_management.php" class="w-full px-4 py-2 bg-green-600 text-white rounded flex items-center gap-2"><i class="fas fa-folder"></i> Folder Management</a>
+      <!--<a href="add_document.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-file-medical"></i> Information Management</a>-->
+      <a href="department_management.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-building"></i> Department Management</a>
+      <a href="view_admin.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-users"></i> Admin Accounts</a>
+      <a href="view_user.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-users"></i> Employee Accounts</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="w-3/4 flex-1">
+    <div class="bg-white rounded-xl shadow-md p-6 h-full">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold text-gray-700 flex items-center gap-2"><i class="fas fa-folder"></i> Folder Management</h2>
+        <div class="flex gap-2">
+          <button onclick="$('#modalAddFolder').removeClass('hidden');" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-2"><i class="fas fa-plus"></i> Add Folder</button>
+          <button onclick="openArchivedFolders();" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition-colors duration-300">
+    <i class="fas fa-archive"></i> View Archived Folders
 </button>
+        </div>
+      </div>
 
-<a href="archive_folder.php?id=<?php echo $row['folder_id']; ?>"
-class="btn btn-sm btn-danger">
-
-<i class="fa fa-archive"></i>
-
-</a>
-
+      <!-- TABLE -->
+      <div class="overflow-x-auto">
+        <table id="dtable" class="min-w-full border border-gray-200">
+          <thead class="bg-green-700 text-white">
+            <tr>
+              <th class="px-4 py-2">Folder Name</th>
+              <th class="px-4 py-2">Departments</th>
+              <th class="px-4 py-2">Date Created</th>
+              <th class="px-4 py-2 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+          <?php while($row=mysqli_fetch_array($query)){ ?>
+            <tr class="border-b hover:bg-gray-50">
+              <td class="px-4 py-2">
+  <a href="add_document.php?folder_id=<?php echo $row['folder_id']; ?>" class="flex items-center gap-2 text-gray-800 hover:text-green-700">
+    <i class="fas fa-folder text-yellow-500"></i>
+    <b><?php echo $row['folder_name']; ?></b>
+  </a>
 </td>
+              <td class="px-4 py-2"><?php echo $row['departments']; ?></td>
+              <td class="px-4 py-2"><?php echo $row['created_at']; ?></td>
+              <td class="px-4 py-2 text-center space-x-2">
+                <button onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').removeClass('hidden');" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"><i class="fas fa-edit"></i></button>
+                <a href="archive_folder.php?id=<?php echo $row['folder_id']; ?>" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="return confirm('Archive this department?');"><i class="fas fa-archive"></i></a>
+              </td>
+            </tr>
 
-</tr>
+            <!-- EDIT FOLDER MODAL -->
+            <div id="modalEditFolder<?php echo $row['folder_id']; ?>" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+              <div class="bg-white rounded-xl shadow-lg w-96 p-6 relative">
+                <button onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').addClass('hidden');" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">&times;</button>
+                <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-edit"></i> Edit Folder</h3>
+                <form method="POST" action="update_folder.php" class="flex flex-col gap-4">
+                  <input type="hidden" name="folder_id" value="<?php echo $row['folder_id']; ?>">
+                  <input type="text" name="folder_name" value="<?php echo $row['folder_name']; ?>" class="border rounded px-3 py-2" required>
+                  <label>Assign Departments</label>
+                  <?php
+                  $dept = mysqli_query($conn,"SELECT * FROM departments");
+                  while($d=mysqli_fetch_array($dept)){
+                    $check = mysqli_query($conn,"SELECT * FROM folder_departments WHERE folder_id='".$row['folder_id']."' AND department_id='".$d['department_id']."'");
+                    $checked = mysqli_num_rows($check)>0 ? "checked" : "";
+                  ?>
+                  <div><input type="checkbox" name="departments[]" value="<?php echo $d['department_id']; ?>" <?php echo $checked; ?>> <?php echo $d['department_name']; ?></div>
+                  <?php } ?>
+                  <div class="flex justify-end gap-2">
+                    <button type="submit" name="update" class="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700">Update Folder</button>
+                    <button type="button" onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').addClass('hidden');" class="bg-gray-300 rounded px-4 py-2 hover:bg-gray-400">Close</button>
+                  </div>
+                </form>
+              </div>
+            </div>
 
-<!-- EDIT FOLDER MODAL -->
+          <?php } ?>
+          </tbody>
+        </table>
+      </div>
 
-<div class="modal fade" id="editFolder<?php echo $row['folder_id']; ?>">
-
-<div class="modal-dialog">
-<div class="modal-content">
-
-<form method="POST" action="update_folder.php">
-
-<div class="modal-header">
-<h4 class="modal-title">Edit Folder</h4>
-<button type="button" class="close" data-dismiss="modal">&times;</button>
-</div>
-
-<div class="modal-body">
-
-<input type="hidden" name="folder_id" value="<?php echo $row['folder_id']; ?>">
-
-<div class="form-group">
-
-<label>Folder Name</label>
-
-<input type="text"
-name="folder_name"
-class="form-control"
-value="<?php echo $row['folder_name']; ?>"
-required>
-
-</div>
-
-<label>Assign Departments</label>
-
-<?php
-
-$dept = mysqli_query($conn,"SELECT * FROM departments");
-
-while($d=mysqli_fetch_array($dept)){
-
-$check = mysqli_query($conn,"
-SELECT * FROM folder_departments
-WHERE folder_id='".$row['folder_id']."'
-AND department_id='".$d['department_id']."'
-");
-
-$checked = mysqli_num_rows($check)>0 ? "checked" : "";
-
-?>
-
-<div>
-
-<input type="checkbox"
-name="departments[]"
-value="<?php echo $d['department_id']; ?>"
-<?php echo $checked; ?>>
-
-<?php echo $d['department_name']; ?>
+    </div>
+  </div>
 
 </div>
-
-<?php } ?>
-
-</div>
-
-<div class="modal-footer">
-
-<button class="btn btn-primary" name="update">
-Update Folder
-</button>
-
-</div>
-
-</form>
-
-</div>
-</div>
-
-</div>
-
-<?php } ?>
-
-</tbody>
-</table>
-
-</div>
-</main>
-
 
 <!-- ADD FOLDER MODAL -->
-
-<div class="modal fade" id="addFolder">
-
-<div class="modal-dialog">
-<div class="modal-content">
-
-<form method="POST" action="save_folder.php">
-
-<div class="modal-header">
-<h4>Add Folder</h4>
-<button class="close" data-dismiss="modal">&times;</button>
+<div id="modalAddFolder" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div class="bg-white rounded-xl shadow-lg w-96 p-6 relative">
+    <button onclick="$('#modalAddFolder').addClass('hidden');" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">&times;</button>
+    <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-plus"></i> Add Folder</h3>
+    <form method="POST" action="save_folder.php" class="flex flex-col gap-4">
+      <input type="text" name="folder_name" placeholder="Folder Name" class="border rounded px-3 py-2" required>
+      <label>Assign Departments</label>
+      <?php
+      $dept = mysqli_query($conn,"SELECT * FROM departments");
+      while($d=mysqli_fetch_array($dept)){
+      ?>
+      <div><input type="checkbox" name="departments[]" value="<?php echo $d['department_id']; ?>"> <?php echo $d['department_name']; ?></div>
+      <?php } ?>
+      <div class="flex justify-end gap-2">
+        <button type="submit" name="save" class="bg-green-700 text-white rounded px-4 py-2 hover:bg-green-800">Create Folder</button>
+        <button type="button" onclick="$('#modalAddFolder').addClass('hidden');" class="bg-gray-300 rounded px-4 py-2 hover:bg-gray-400">Close</button>
+      </div>
+    </form>
+  </div>
 </div>
-
-<div class="modal-body">
-
-<label>Folder Name</label>
-<input type="text" name="folder_name" class="form-control" required>
-
-<br>
-
-<label>Assign Departments</label>
-
-<?php
-
-$dept = mysqli_query($conn,"SELECT * FROM departments");
-
-while($d=mysqli_fetch_array($dept)){
-?>
-
-<div>
-<input type="checkbox" name="departments[]" value="<?php echo $d['department_id']; ?>">
-<?php echo $d['department_name']; ?>
-</div>
-
-<?php } ?>
-
-</div>
-
-<div class="modal-footer">
-
-<button class="btn btn-success" name="save">
-Create Folder
-</button>
-
-</div>
-
-</form>
-
-</div>
-</div>
-</div>
-
 
 <!-- ARCHIVED FOLDERS MODAL -->
-
-<div class="modal fade" id="archivedFolders">
-
-<div class="modal-dialog modal-lg modal-dialog-scrollable">
-<div class="modal-content">
-
-<div class="modal-header">
-
-<h4 class="modal-title">Archived Folders</h4>
-
-<button type="button" class="close" data-dismiss="modal">&times;</button>
-
+<div id="modalArchivedFolders" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div class="bg-white rounded-xl shadow-lg w-3/4 max-h-[80vh] p-6 overflow-auto relative">
+    <button onclick="$('#modalArchivedFolders').addClass('hidden');" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">&times;</button>
+    <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-archive"></i> Archived Folders</h3>
+    <div id="archivedContent" class="overflow-auto">
+      Loading archived folders...
+    </div>
+  </div>
 </div>
 
-<div class="modal-body">
+<script>
+function openArchivedFolders() {
+    // Show modal
+    $('#modalArchivedFolders').removeClass('hidden');
+    
+    // Load archived folders via AJAX
+    $('#archivedContent').html('Loading archived folders...');
+    $('#archivedContent').load('load_archived_folders.php');
+}
+</script>
 
-<div id="archivedContent">
-
-Loading archived folders...
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-
-
-<footer>
-
-<hr>
-
-<div class="footer-copyright text-center py-3">
-<p>All right Reserved © <?php echo date('Y');?> Created By: PSU IT Interns</p>
-</div>
-
+<!-- Footer -->
+<footer class="mt-8 text-center text-gray-600">
+  <p>All right Reserved &copy; <?php echo date('Y');?> Created By: PSU IT Interns</p>
 </footer>
 
-
-<!-- SCRIPTS -->
-
-<script src="js/jquery-3.4.0.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/mdb.min.js"></script>
-
-<script src="medias/js/jquery.dataTables.js"></script>
-
-<script>
-
-$(document).ready(function(){
-
-$('#dtable').DataTable({
-"aLengthMenu":[[5,10,15,25,50,100,-1],[5,10,15,25,50,100,"All"]],
-"iDisplayLength":10
-});
-
-$('#archivedFolders').on('show.bs.modal', function () {
-
-$("#archivedContent").load("load_archived_folders.php");
-
-});
-
-});
-
-</script>
-
-
-<script>
-
-$(window).on('load',function(){
-
-setTimeout(function(){
-
-$('#loader').fadeOut('slow');
-
-},500);
-
-});
-
-</script>
 
 </body>
 </html>
