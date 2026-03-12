@@ -101,9 +101,9 @@ if (!isset($_SESSION['admin_user'])) {
   <!-- SIDEBAR -->
   <aside class="w-1/4">
     <div id="sidebar" class="bg-white rounded-xl shadow-md p-6 border-t-4 border-green-600 flex flex-col items-center space-y-4 h-full">
-      <img src="js/img/municipalLogo.png" class="square-logo mb-4">
-      <a href="add_document.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-file-medical"></i> Information Management</a>
-      <a href="department_management.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-building"></i> Department Management</a>
+      <img src="img/adminLogo.png" class="square-logo mb-4">
+      <a href="add_document.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-folder"></i> Folders</a>
+      <a href="department_management.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-building"></i> Departments</a>
       <a href="view_admin.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-users"></i> Admin Accounts</a>
       <a href="view_user.php" class="w-full px-4 py-2 bg-green-600 text-white rounded flex items-center gap-2"><i class="fas fa-users"></i> Employee Accounts</a>
     </div>
@@ -119,13 +119,13 @@ if (!isset($_SESSION['admin_user'])) {
       <i class="fas fa-user-plus"></i> Add Employee
     </button>
 
-    <button onclick="$('#modalArchivedUsers').removeClass('hidden');" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 flex items-center gap-2">
+    <button onclick="$('#modalArchivedUsers').removeClass('hidden');" class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 flex items-center gap-2">
       <i class="fas fa-archive"></i> View Archived Users
     </button>
 </div>
 
       <!-- TABLE -->
-      <div class="overflow-x-auto">
+      <div class="overflow-x-none">
         <table id="dtable" class="min-w-full border border-gray-200">
           <thead class="bg-green-700 text-white">
             <tr>
@@ -170,92 +170,149 @@ if (!isset($_SESSION['admin_user'])) {
 </div>
 
 <!-- ADD EMPLOYEE MODAL -->
-<div id="modalRegisterForm2" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-  <div class="bg-white rounded-xl shadow-lg w-96 p-6 relative">
-    <button onclick="$('#modalRegisterForm2').addClass('hidden');" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">&times;</button>
-    <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-user-plus"></i> Add Employee</h3>
+<!-- Add Employee Modal -->
+<div id="modalRegisterForm2" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
+  <!-- Modal Card -->
+  <div class="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-[90%] max-w-md p-6 relative animate-fadeIn">
+
+    <!-- Close Button -->
+    <button onclick="document.getElementById('modalRegisterForm2').classList.add('hidden');" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+
+    <!-- Modal Title -->
+    <h3 class="text-2xl font-semibold mb-5 flex items-center gap-2 text-gray-800">
+      <i class="fas fa-user-plus text-green-600"></i> Add Employee
+    </h3>
+
+    <!-- Form -->
     <form action="create_user.php" method="POST" class="flex flex-col gap-4">
       <input type="hidden" name="status" value="Employee">
-      <input type="text" name="name" placeholder="Full Name" class="border rounded px-3 py-2" required>
 
-      <select name="department_id" class="border rounded px-3 py-2" required>
-  <option value="">Select Department</option>
-  <?php
-  $dept = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='Active'");
-  while($d = mysqli_fetch_array($dept)){
-  ?>
-    <option value="<?php echo $d['department_id']; ?>">
-      <?php echo $d['department_name']; ?>
-    </option>
-  <?php } ?>
-</select>
+      <input type="text" name="name" placeholder="Full Name" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none transition" required>
 
-      <input type="email" name="email_address" placeholder="Email Address" class="border rounded px-3 py-2" required>
-      <input type="password" name="user_password" placeholder="Password" class="border rounded px-3 py-2" required>
-      <div class="flex justify-end gap-2">
-        <button type="submit" name="reguser" class="bg-green-700 text-white rounded px-4 py-2 hover:bg-green-800">Save</button>
-        <button type="button" onclick="$('#modalRegisterForm2').addClass('hidden');" class="bg-gray-300 rounded px-4 py-2 hover:bg-gray-400">Close</button>
+      <select name="department_id" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none transition" required>
+        <option value="">Select Department</option>
+        <?php
+        $dept = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='Active'");
+        while($d = mysqli_fetch_array($dept)){
+        ?>
+          <option value="<?php echo $d['department_id']; ?>">
+            <?php echo htmlspecialchars($d['department_name'], ENT_QUOTES); ?>
+          </option>
+        <?php } ?>
+      </select>
+
+      <input type="email" name="email_address" placeholder="Email Address" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none transition" required>
+      <input type="password" name="user_password" placeholder="Password" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none transition" required>
+
+      <!-- Buttons -->
+      <div class="flex justify-end gap-3 mt-4">
+        <button type="submit" name="reguser" class="bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg px-5 py-2 shadow-md transition duration-200">Save</button>
+        <button type="button" onclick="document.getElementById('modalRegisterForm2').classList.add('hidden');" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg px-5 py-2 transition duration-200">Close</button>
       </div>
     </form>
   </div>
 </div>
 
+<!-- Tailwind Keyframe Animation -->
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+  }
+</style>
+
 <!-- EDIT EMPLOYEE MODAL -->
 <?php 
-  if($edit_id != ''){
-    $q = mysqli_query($conn,"select * from login_user where id = '$edit_id'") or die (mysqli_error($conn));
-    $rs1 = mysqli_fetch_array($q);
-    $id1 = $rs1['id'];
-    $fname1 = $rs1['name'];
-    $admin1 = $rs1['email_address'];
-    $pass1 = $rs1['user_password'];
+if($edit_id != ''){
+  $q = mysqli_query($conn,"SELECT * FROM login_user WHERE id = '$edit_id'") or die(mysqli_error($conn));
+  $rs1 = mysqli_fetch_array($q);
+  $id1 = $rs1['id'];
+  $fname1 = htmlspecialchars($rs1['name'], ENT_QUOTES);
+  $admin1 = htmlspecialchars($rs1['email_address'], ENT_QUOTES);
+  $pass1 = htmlspecialchars($rs1['user_password'], ENT_QUOTES);
 ?>
-<div id="modalRegisterFormss" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-  <div class="bg-white rounded-xl shadow-lg w-96 p-6 relative">
-    <button onclick="$('#modalRegisterFormss').addClass('hidden');" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">&times;</button>
-    <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-user-edit"></i> Edit Employee</h3>
+<!-- Edit Employee Modal -->
+<div id="modalRegisterFormss" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
+  <!-- Modal Card -->
+  <div class="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-[90%] max-w-md p-6 relative animate-fadeIn">
+
+    <!-- Close Button -->
+    <button onclick="document.getElementById('modalRegisterFormss').classList.add('hidden');" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+
+    <!-- Modal Title -->
+    <h3 class="text-2xl font-semibold mb-5 flex items-center gap-2 text-gray-800">
+      <i class="fas fa-user-edit text-blue-600"></i> Edit Employee
+    </h3>
+
+    <!-- Form -->
     <form method="POST" class="flex flex-col gap-4">
-      <input type="hidden" name="id" value="<?php echo $id1;?>">
-      <input type="text" name="name" value="<?php echo $fname1;?>" class="border rounded px-3 py-2">
+      <input type="hidden" name="id" value="<?php echo $id1; ?>">
 
-      <select name="department_id" class="border rounded px-3 py-2">
-  <option value="">Select Department</option>
-  <?php
-  $dept = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='Active'");
-  while($d = mysqli_fetch_array($dept)){
-      $selected = ($rs1['department_id'] == $d['department_id']) ? "selected" : "";
-  ?>
-    <option value="<?php echo $d['department_id']; ?>" <?php echo $selected; ?>>
-      <?php echo $d['department_name']; ?>
-    </option>
-  <?php } ?>
-</select>
+      <input type="text" name="name" value="<?php echo $fname1; ?>" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
 
-      <input type="email" name="email_address" value="<?php echo $admin1;?>" class="border rounded px-3 py-2">
-      <input type="password" name="user_password" value="<?php echo $pass1;?>" class="border rounded px-3 py-2">
-      <input type="text" name="status" value="Employee" class="border rounded px-3 py-2" readonly>
-      <div class="flex justify-end gap-2">
-        <button type="submit" name="edit" class="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700">Update</button>
-        <button type="button" onclick="$('#modalRegisterFormss').addClass('hidden');" class="bg-gray-300 rounded px-4 py-2 hover:bg-gray-400">Close</button>
+      <select name="department_id" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
+        <option value="">Select Department</option>
+        <?php
+        $dept = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='Active'");
+        while($d = mysqli_fetch_array($dept)){
+            $selected = ($rs1['department_id'] == $d['department_id']) ? "selected" : "";
+        ?>
+          <option value="<?php echo $d['department_id']; ?>" <?php echo $selected; ?>>
+            <?php echo htmlspecialchars($d['department_name'], ENT_QUOTES); ?>
+          </option>
+        <?php } ?>
+      </select>
+
+      <input type="email" name="email_address" value="<?php echo $admin1; ?>" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
+      <input type="password" name="user_password" value="<?php echo $pass1; ?>" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+      <input type="text" name="status" value="Employee" class="border border-gray-300 rounded-lg px-4 py-2 bg-gray-100" readonly>
+
+      <!-- Buttons -->
+      <div class="flex justify-end gap-3 mt-4">
+        <button type="submit" name="edit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-5 py-2 shadow-md transition duration-200">Update</button>
+        <button type="button" onclick="document.getElementById('modalRegisterFormss').classList.add('hidden');" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg px-5 py-2 transition duration-200">Close</button>
       </div>
     </form>
   </div>
 </div>
 <?php } ?>
 
+<!-- Tailwind Keyframe Animation -->
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+  }
+</style>
+
 <!-- ARCHIVED USERS MODAL -->
-<div id="modalArchivedUsers" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-  <div class="bg-white rounded-xl shadow-lg w-11/12 max-w-4xl p-6 relative">
-    <button onclick="$('#modalArchivedUsers').addClass('hidden');" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">&times;</button>
-    <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-archive"></i> Archived Users</h3>
-    
-    <div class="overflow-x-auto">
+<!-- Archived Users Modal -->
+<div id="modalArchivedUsers" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
+  <!-- Modal Card -->
+  <div class="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-11/12 max-w-4xl p-6 relative animate-fadeIn">
+
+    <!-- Close Button -->
+    <button onclick="document.getElementById('modalArchivedUsers').classList.add('hidden');" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+
+    <!-- Modal Title -->
+    <h3 class="text-2xl font-semibold mb-5 flex items-center gap-2 text-gray-800">
+      <i class="fas fa-archive text-gray-700"></i> Archived Users
+    </h3>
+
+    <!-- Table Content -->
+    <div class="overflow-x-auto max-h-[60vh]">
       <table class="min-w-full border border-gray-200">
         <thead class="bg-gray-700 text-white">
           <tr>
-            <th class="px-4 py-2">Full Name</th>
-            <th class="px-4 py-2">Department</th>
-            <th class="px-4 py-2">Email</th>
+            <th class="px-4 py-2 text-left">Full Name</th>
+            <th class="px-4 py-2 text-left">Department</th>
+            <th class="px-4 py-2 text-left">Email</th>
             <th class="px-4 py-2 text-center">Action</th>
           </tr>
         </thead>
@@ -269,11 +326,13 @@ if (!isset($_SESSION['admin_user'])) {
           while($a = mysqli_fetch_array($archived)){
         ?>
           <tr class="border-b hover:bg-gray-50">
-            <td class="px-4 py-2"><?php echo $a['name']; ?></td>
-            <td class="px-4 py-2"><?php echo ($a['department_name'] != '') ? $a['department_name'] : 'No Department'; ?></td>
-            <td class="px-4 py-2"><?php echo $a['email_address']; ?></td>
+            <td class="px-4 py-2"><?php echo htmlspecialchars($a['name'], ENT_QUOTES); ?></td>
+            <td class="px-4 py-2"><?php echo ($a['department_name'] != '') ? htmlspecialchars($a['department_name'], ENT_QUOTES) : 'No Department'; ?></td>
+            <td class="px-4 py-2"><?php echo htmlspecialchars($a['email_address'], ENT_QUOTES); ?></td>
             <td class="px-4 py-2 text-center">
-              <a href="view_user.php?unarchive_id=<?php echo $a['id']; ?>" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600" onclick="return confirm('Unarchive this user?');"><i class="fas fa-undo"></i> Unarchive</a>
+              <a href="view_user.php?unarchive_id=<?php echo $a['id']; ?>" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600" onclick="return confirm('Unarchive this user?');">
+                <i class="fas fa-undo"></i> Unarchive
+              </a>
             </td>
           </tr>
         <?php } ?>
@@ -282,6 +341,17 @@ if (!isset($_SESSION['admin_user'])) {
     </div>
   </div>
 </div>
+
+<!-- Tailwind Keyframe Animation -->
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+  }
+</style>
 
 <!-- Edit Employee POST -->
 <?php

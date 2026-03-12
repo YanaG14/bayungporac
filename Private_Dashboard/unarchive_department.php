@@ -7,5 +7,5 @@ mysqli_query($conn,"UPDATE departments
                     SET department_status='Active' 
                     WHERE department_id='$id'");
 
-header("Location: department_archive.php");
+header("Location: department_management.php");
 ?>
