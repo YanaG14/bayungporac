@@ -30,7 +30,7 @@ if (!isset($_SESSION['admin_user'])) {
     header('Location: index.html');
     exit();
 }
-
+$adminName = $_SESSION['admin_name'];
 // EDIT ADMIN FUNCTIONALITY (unchanged)
 if (isset($_POST['edit_publish'])) {
     $id_post = mysqli_real_escape_string($conn, $_POST['idtoy']);
@@ -103,7 +103,7 @@ if (isset($_POST['edit_publish'])) {
       <h1 class="text-white font-semibold text-lg">Bayung Porac Archive</h1>
     </div>
     <div class="flex items-center space-x-4 text-white">
-      <span>Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_user'])); ?></span>
+      <span>Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></span>
       <a href="Logout.php" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
         Log out
       </a>

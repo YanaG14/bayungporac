@@ -31,6 +31,8 @@ if (!isset($_SESSION['admin_user'])) {
 } else {
     $uname=$_SESSION['admin_user'];
 }
+
+$adminName = $_SESSION['admin_name'];
 ?>
 <head>
   <meta charset="utf-8">
@@ -83,11 +85,11 @@ if (!isset($_SESSION['admin_user'])) {
 <nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
   <div class="flex justify-between items-center h-16 px-6">
     <div class="flex items-center space-x-3">
-      <img src="js/img/municipalLogo.png" class="w-10 h-10 object-contain" alt="Logo">
+      <img src="js/img/municipalLogo.png" class="w-10 h-10 object-contain">
       <h1 class="text-white font-semibold text-lg">Bayung Porac Archive</h1>
     </div>
     <div class="flex items-center space-x-4 text-white">
-      <span>Welcome, <?php echo ucwords(htmlentities($uname)); ?></span>
+      <span>Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></span>
       <a href="Logout.php" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
         Log out
       </a>

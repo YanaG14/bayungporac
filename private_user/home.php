@@ -13,12 +13,30 @@ $user_id = $_SESSION['user_no'];
 $user_department = $_SESSION['department_id'];
 
 // Get user name
-$stmt = $conn->prepare("SELECT name FROM login_user WHERE id = ?");
-$stmt->bind_param("i",$user_id);
+$stmt = $conn->prepare("
+SELECT login_user.name, departments.department_img
+FROM login_user
+JOIN departments 
+ON login_user.department_id = departments.department_id
+WHERE login_user.id = ?
+");
+
+$stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $row = $result->fetch_assoc();
+
 $name = $row['name'];
+$department_img = $row['department_img'];
+
+
+// Get department image
+$stmt = $conn->prepare("SELECT department_img FROM departments WHERE department_id = ?");
+$stmt->bind_param("i", $user_department);
+$stmt->execute();
+$result = $stmt->get_result();
+$dept = $result->fetch_assoc();
+$department_image = $dept['department_img'];
 
 // Check if a folder is clicked
 $selected_folder = isset($_GET['folder_id']) ? intval($_GET['folder_id']) : 0;
@@ -33,6 +51,9 @@ $selected_folder = isset($_GET['folder_id']) ? intval($_GET['folder_id']) : 0;
 
 <!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <!-- jQuery + DataTables -->
 <script src="js/jquery-1.8.3.min.js"></script>
@@ -97,7 +118,7 @@ $('#loader').fadeOut('slow');
 <div class="col-span-3">
   <div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-green-600 mb-6">
     <div class="flex flex-col items-center">
-      <img src="img/municipalLogo.png" class="w-28 mb-3">
+     <img src="../Private_dashboard/department_images/<?php echo $department_img; ?>" class="w-28 mb-3">
       <h2 class="text-lg font-semibold text-gray-700">Admin Profile</h2>
     </div>
     <hr class="my-4">
@@ -137,9 +158,13 @@ if ($selected_folder === 0):
 <h2 class="text-xl font-semibold text-gray-700 mb-4">Folders</h2>
 <div class="grid grid-cols-3 gap-4">
 <?php while($folder = $folders->fetch_assoc()): ?>
-    <a href="?folder_id=<?php echo $folder['folder_id']; ?>" class="p-4 bg-white rounded shadow hover:bg-green-100 transition">
-        <?php echo htmlentities($folder['folder_name']); ?>
-    </a>
+   <a href="?folder_id=<?php echo $folder['folder_id']; ?>" 
+   class="flex items-center gap-2 p-4 bg-white rounded shadow hover:bg-green-100 transition">
+
+   <i class="fas fa-folder text-yellow-500"></i>
+   <?php echo htmlentities($folder['folder_name']); ?>
+
+</a>
 <?php endwhile; ?>
 </div>
 

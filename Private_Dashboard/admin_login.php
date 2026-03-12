@@ -38,6 +38,7 @@ if(isset($_POST["adminlog"])){
 
     // All good, login admin
     $_SESSION['admin_user'] = $row['id'];
+    $_SESSION['admin_name'] = $row['name'];  
 
     // Get IP and host
     if (!empty($_SERVER["HTTP_CLIENT_IP"])) {
