@@ -31,7 +31,7 @@ ORDER BY f.folder_name ASC
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bayung Porac Archive</title>
 <link rel="icon" type="image/png" href="js/img/municipalLogo.png">
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- JQuery & DataTables -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -132,7 +132,11 @@ $(document).ready(function(){
               <td class="px-4 py-2 text-center space-x-2"><?php echo $row['created_at']; ?></td>
               <td class="px-4 py-2 text-center space-x-2">
                 <button onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').removeClass('hidden');" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"><i class="fas fa-edit"></i></button>
-                <a href="archive_folder.php?id=<?php echo $row['folder_id']; ?>" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="return confirm('Archive this department?');"><i class="fas fa-archive"></i></a>
+                <a href="#" 
+class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+onclick="confirmArchive(<?php echo $row['folder_id']; ?>)">
+<i class="fas fa-archive"></i>
+</a>
               </td>
             </tr>
 
@@ -214,28 +218,28 @@ $(document).ready(function(){
     </h3>
     
     <!-- Form -->
-    <form method="POST" action="save_folder.php" class="flex flex-col gap-4">
-      <input type="text" name="folder_name" placeholder="Folder Name" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none transition" required>
-      
-      <label class="font-medium text-gray-700">Assign Departments</label>
-      <div class="flex flex-col gap-2 max-h-40 overflow-y-auto">
-        <?php
-        $dept = mysqli_query($conn,"SELECT * FROM departments");
-        while($d=mysqli_fetch_array($dept)){
-        ?>
-        <label class="flex items-center gap-2">
-          <input type="checkbox" name="departments[]" value="<?php echo $d['department_id']; ?>" class="accent-green-600">
-          <?php echo $d['department_name']; ?>
-        </label>
-        <?php } ?>
-      </div>
+    <form id="addFolderForm" method="POST" class="flex flex-col gap-4">
+  <input type="text" name="folder_name" id="folder_name_input" placeholder="Folder Name" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none transition" required>
+  <p id="folderError" class="text-red-600 text-sm mt-1 hidden">Folder already exists!</p>
 
-      <!-- Buttons -->
-      <div class="flex justify-end gap-3 mt-4">
-        <button type="submit" name="save" class="bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg px-5 py-2 shadow-md transition duration-200">Create Folder</button>
-        <button type="button" onclick="closeModal('modalAddFolder')" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg px-5 py-2 transition duration-200">Close</button>
-      </div>
-    </form>
+  <label class="font-medium text-gray-700">Assign Departments</label>
+  <div class="flex flex-col gap-2 max-h-40 overflow-y-auto">
+    <?php
+    $dept = mysqli_query($conn,"SELECT * FROM departments");
+    while($d=mysqli_fetch_array($dept)){
+    ?>
+    <label class="flex items-center gap-2">
+      <input type="checkbox" name="departments[]" value="<?php echo $d['department_id']; ?>" class="accent-green-600">
+      <?php echo $d['department_name']; ?>
+    </label>
+    <?php } ?>
+  </div>
+
+  <div class="flex justify-end gap-3 mt-4">
+    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg px-5 py-2 shadow-md transition duration-200">Create Folder</button>
+    <button type="button" onclick="closeModal('modalAddFolder')" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg px-5 py-2 transition duration-200">Close</button>
+  </div>
+</form>
   </div>
 </div>
 
@@ -302,6 +306,99 @@ function openArchivedFolders() {
     $('#archivedContent').html('Loading archived folders...');
     $('#archivedContent').load('load_archived_folders.php');
 }
+</script>
+
+<script>
+function confirmArchive(id){
+
+Swal.fire({
+    title: 'Archive Folder?',
+    text: 'This folder will be moved to archive.',
+    icon: null,
+    width: '350px',
+    showCancelButton: true,
+    confirmButtonText: 'Archive',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#dc2626',
+    cancelButtonColor: '#6b7280',
+    showClass: {
+        popup: ''
+    },
+    hideClass: {
+        popup: ''
+    }
+}).then((result) => {
+
+    if (result.isConfirmed) {
+        window.location = "archive_folder.php?id=" + id;
+    }
+
+});
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+<?php if(isset($_SESSION['success'])): ?>
+Swal.fire({
+    toast: true,
+    position: 'top',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: false,
+    icon: 'success',
+    title: '<?php echo $_SESSION['success']; ?>'
+});
+<?php unset($_SESSION['success']); endif; ?>
+
+<?php if(isset($_SESSION['error'])): ?>
+Swal.fire({
+    toast: true,
+    position: 'top',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: false,
+    icon: 'error',
+    title: '<?php echo $_SESSION['error']; ?>'
+});
+<?php unset($_SESSION['error']); endif; ?>
+</script>
+
+
+
+<script>
+$(document).ready(function() {
+  $('#addFolderForm').on('submit', function(e) {
+    e.preventDefault(); // prevent normal form submission
+
+    var folderName = $('#folder_name_input').val();
+    var departments = [];
+    $('input[name="departments[]"]:checked').each(function() {
+      departments.push($(this).val());
+    });
+
+    $.ajax({
+      url: 'save_folder.php',
+      type: 'POST',
+      data: {
+        folder_name: folderName,
+        departments: departments
+      },
+      success: function(response) {
+
+        if (response.trim() === 'exists') {
+          $('#folderError').removeClass('hidden'); // show error
+        } 
+        
+        else if (response.trim() === 'success') {
+          $('#folderError').addClass('hidden');
+          location.reload(); // reload so your SESSION success toast appears
+        }
+
+      }
+    });
+  });
+});
 </script>
 
 <!-- Footer -->

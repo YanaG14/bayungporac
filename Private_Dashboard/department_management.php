@@ -18,14 +18,14 @@ if(isset($_POST['save'])){
 
     $check = mysqli_query($conn,"SELECT * FROM departments WHERE department_name='$name'");
     if(mysqli_num_rows($check) > 0){
-        echo "<script>alert('Department name already exists!');</script>";
+        $_SESSION['duplicate'] = "Department name already exist!";
     } else {
         if(!is_dir("department_images")){
             mkdir("department_images");
         }
         move_uploaded_file($tmp,"department_images/".$img);
         mysqli_query($conn,"INSERT INTO departments (department_name, department_img) VALUES ('$name','$img')");
-        echo "<script>alert('Department Added Successfully!');</script>";
+        $_SESSION['added'] = "Department Successfully Added!";
     }
 }
 
@@ -40,7 +40,7 @@ if(isset($_POST['update_department'])){
                                  AND department_id != '$id'");
 
     if(mysqli_num_rows($check) > 0){
-        echo "<script>alert('Department name already exists!');</script>";
+        $_SESSION['duplicate'] = "Department name already exist!";
     } else {
         if(!empty($_FILES['department_img']['name'])){
             $img = $_FILES['department_img']['name'];
@@ -56,8 +56,9 @@ if(isset($_POST['update_department'])){
                                 WHERE department_id='$id'");
         }
 
-        echo "<script>alert('Department Updated Successfully!'); 
-              window.location='department_management.php';</script>";
+       $_SESSION['success'] = "Department Updated Successfully!";
+header("Location: department_management.php");
+exit();
     }
 }
 
@@ -76,6 +77,7 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
   <title>Bayung Porac Archive</title>
   <link rel="icon" type="image/png" href="js/img/municipalLogo.png">
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- JQuery & DataTables -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -186,7 +188,11 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
         class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
   <i class="fas fa-edit"></i>
 </button>
-                <a href="archive_department.php?id=<?php echo $row['department_id']; ?>" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="return confirm('Archive this department?');"><i class="fas fa-archive"></i></a>
+                <a href="#" 
+class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" 
+onclick="confirmArchiveDepartment(<?php echo $row['department_id']; ?>)">
+<i class="fas fa-archive"></i>
+</a>
               </td>
             </tr>
             <?php } ?>
@@ -306,11 +312,11 @@ while($row_edit = mysqli_fetch_assoc($query)) { ?>
             </td>
             <td class="px-4 py-2"><?php echo $row['department_status']; ?></td>
             <td class="px-4 py-2 text-center">
-              <a href="unarchive_department.php?id=<?php echo $row['department_id']; ?>" 
-                 class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                 onclick="return confirm('Unarchive this department?');">
-                 <i class="fas fa-undo"></i>
-              </a>
+              <a href="#"
+class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+onclick="confirmUnarchiveDepartment(<?php echo $row['department_id']; ?>)">
+<i class="fas fa-undo"></i>
+</a>
             </td>
           </tr>
           <?php } ?>
@@ -338,6 +344,139 @@ while($row_edit = mysqli_fetch_assoc($query)) { ?>
     animation: fadeIn 0.3s ease-out;
   }
 </style>
+
+<!-- NOTIFICATION -->
+ <!-- update -->
+<?php if(isset($_SESSION['success'])){ ?>
+echo "<script>
+const Toast = Swal.mixin({
+  toast: true,
+ position: 'top',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: false,
+  showClass: {
+    popup: ''
+  },
+  hideClass: {
+    popup: ''
+  }
+});
+
+Toast.fire({
+  icon: 'success',
+  title: 'Department Updated Successfully'
+});
+</script>";
+<?php unset($_SESSION['success']); } ?>
+
+<!-- duplicate -->
+<?php if(isset($_SESSION['duplicate'])){ ?>
+echo "<script>
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: false,
+  showClass: {
+    popup: ''
+  },
+  hideClass: {
+    popup: ''
+  }
+});
+
+Toast.fire({
+  icon: 'error',
+  title: 'Department name already exist'
+});
+</script>";
+<?php unset($_SESSION['duplicate']); } ?>
+
+<!-- add -->
+<?php if(isset($_SESSION['added'])){ ?>
+echo "<script>
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: false,
+  showClass: {
+    popup: ''
+  },
+  hideClass: {
+    popup: ''
+  }
+});
+
+Toast.fire({
+  icon: 'success',
+  title: 'Department Successfully Added'
+});
+</script>";
+<?php unset($_SESSION['added']); } ?>
+<!-- NOTIFICATION END -->
+
+<script>
+function confirmArchiveDepartment(id){
+
+Swal.fire({
+    title: 'Archive Folder?',
+    text: 'This folder will be moved to archive.',
+    icon: null,
+    width: '350px',
+    showCancelButton: true,
+    confirmButtonText: 'Archive',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#dc2626',
+    cancelButtonColor: '#6b7280',
+    showClass: {
+        popup: ''
+    },
+    hideClass: {
+        popup: ''
+    }
+}).then((result) => {
+
+    if (result.isConfirmed) {
+        window.location = "archive_department.php?id=" + id;
+    }
+
+});
+
+}
+</script>
+
+<script>
+function confirmUnarchiveDepartment(id){
+
+Swal.fire({
+    title: 'Unarchive Department?',
+    text: 'This department will be restored.',
+    icon: null,
+    width: '350px',
+    showCancelButton: true,
+    confirmButtonText: 'Unarchive',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#16a34a',
+    cancelButtonColor: '#6b7280',
+    showClass: {
+        popup: ''
+    },
+    hideClass: {
+        popup: ''
+    }
+}).then((result) => {
+
+    if (result.isConfirmed) {
+        window.location = "unarchive_department.php?id=" + id;
+    }
+
+});
+}
+</script>
 
 <!-- Footer -->
 <footer class="mt-8 text-center text-gray-600">

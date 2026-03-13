@@ -5,11 +5,14 @@ session_start();
 error_reporting(0);
 require_once("../include/connection.php");
 
-// Archive admin
+/// Archive admin
 if(isset($_GET['archive_id'])){
     $archive_id = mysqli_real_escape_string($conn, $_GET['archive_id']);
     mysqli_query($conn, "UPDATE admin_login SET admin_status='Archived' WHERE id='$archive_id'") or die(mysqli_error($conn));
-    echo "<script>alert('Admin Archived Successfully!'); window.location='view_admin.php';</script>";
+    
+    // Set a toast session
+    $_SESSION['toast'] = 'Admin Archived Successfully!';
+    header('Location: view_admin.php');
     exit();
 }
 
@@ -17,7 +20,10 @@ if(isset($_GET['archive_id'])){
 if(isset($_GET['unarchive_id'])){
     $unarchive_id = mysqli_real_escape_string($conn, $_GET['unarchive_id']);
     mysqli_query($conn, "UPDATE admin_login SET admin_status='' WHERE id='$unarchive_id'") or die(mysqli_error($conn));
-    echo "<script>alert('Admin Unarchived Successfully!'); window.location='view_admin.php';</script>";
+    
+    // Set a toast session
+    $_SESSION['toast'] = 'Admin Unarchived Successfully!';
+    header('Location: view_admin.php');
     exit();
 }
 
@@ -36,16 +42,32 @@ if (isset($_POST['edit_publish'])) {
     $id_post = mysqli_real_escape_string($conn, $_POST['idtoy']);
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $admin_user = mysqli_real_escape_string($conn, $_POST['admin_user']);
-    $admin_password = password_hash($_POST['admin_password'], PASSWORD_DEFAULT);
+    $admin_password_raw = $_POST['admin_password'];
 
-    mysqli_query($conn, "UPDATE admin_login 
-        SET name='$name',
-            admin_user='$admin_user',
-            admin_password='$admin_password'
-        WHERE id='$id_post'") or die(mysqli_error($conn));
+    // Password validation regex
+    $pattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/';
 
-    echo "<script>alert('Admin updated successfully'); window.location='view_admin.php';</script>";
-    exit();
+    // Build the query
+    $update_query = "UPDATE admin_login SET name='$name', admin_user='$admin_user'";
+
+    // Only update password if it's not empty
+    if (!empty($admin_password_raw)) {
+        if (!preg_match($pattern, $admin_password_raw)) {
+            echo "<script>alert('Password must be at least 8 characters, include uppercase, lowercase, number, and a symbol.'); window.history.back();</script>";
+            exit();
+        }
+        $admin_password_hashed = password_hash($admin_password_raw, PASSWORD_DEFAULT);
+        $update_query .= ", admin_password='$admin_password_hashed'";
+    }
+
+    $update_query .= " WHERE id='$id_post'";
+
+    mysqli_query($conn, $update_query) or die(mysqli_error($conn));
+
+ // Set a toast session
+$_SESSION['toast'] = 'Admin updated successfully!';
+header('Location: view_admin.php');
+exit();
 }
 ?>
 <head>
@@ -161,7 +183,11 @@ if (isset($_POST['edit_publish'])) {
               <td class="px-4 py-2"><?php echo htmlspecialchars($row['admin_user']); ?></td>
               <td class="px-4 py-2 text-center space-x-2">
                 <a href="view_admin.php?id=<?php echo $row['id']; ?>" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"><i class="fas fa-edit"></i></a>
-                <a href="view_admin.php?archive_id=<?php echo $row['id']; ?>" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="return confirm('Archive this admin?');"><i class="fas fa-archive"></i></a>
+               <a href="#" 
+   class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" 
+   onclick="confirmArchiveAdmin(<?php echo $row['id']; ?>)">
+   <i class="fas fa-archive"></i>
+</a>
               </td>
               </td>
             </tr>
@@ -194,7 +220,32 @@ if (isset($_POST['edit_publish'])) {
 
       <input type="text" name="name" placeholder="Full Name" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none transition" required>
       <input type="email" name="admin_user" placeholder="Email Address" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none transition" required>
-      <input type="password" name="admin_password" placeholder="Password" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none transition" required>
+     <input type="password" 
+       id="admin_password" 
+       name="admin_password" 
+       placeholder="Password" 
+       class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}"
+       title="Password must be at least 8 characters, include uppercase, lowercase, number and a symbol">
+
+<!-- Inline validation message -->
+<p id="passwordHelp" class="text-red-600 text-sm mt-1 hidden">
+  Password must be at least 8 characters, include uppercase, lowercase, number, and a symbol.
+</p>
+
+<script>
+const passwordInput = document.getElementById('admin_password');
+const passwordHelp = document.getElementById('passwordHelp');
+
+passwordInput.addEventListener('input', function() {
+    const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
+    if (passwordInput.value === "" || pattern.test(passwordInput.value)) {
+        passwordHelp.classList.add('hidden'); // hide message if valid or empty
+    } else {
+        passwordHelp.classList.remove('hidden'); // show message if invalid
+    }
+});
+</script>
 
       <!-- Buttons -->
       <div class="flex justify-end gap-3 mt-4">
@@ -236,14 +287,26 @@ if($edit_id != ''){
     </h3>
 
     <!-- Form -->
-    <form method="POST" class="flex flex-col gap-4">
+  <form method="POST" class="flex flex-col gap-4">
       <input type="hidden" name="idtoy" value="<?php echo $rs['id']; ?>">
 
       <input type="text" name="name" value="<?php echo htmlspecialchars($rs['name']); ?>" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
       <input type="email" name="admin_user" value="<?php echo htmlspecialchars($rs['admin_user']); ?>" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
-      <input type="password" name="admin_password" placeholder="Password" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
 
-      <!-- Buttons -->
+      <!-- Password Field with Validation -->
+      <input type="password" 
+       name="admin_password" 
+       id="edit_admin_password" 
+       placeholder="Password" 
+       class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}"
+       title="Password must be at least 8 characters, include uppercase, lowercase, number and a symbol">
+      
+      <!-- Inline validation message -->
+      <p id="editPasswordHelp" class="text-red-600 text-sm mt-1 hidden">
+        Password must be at least 8 characters, include uppercase, lowercase, number, and a symbol.
+      </p>
+
       <div class="flex justify-end gap-3 mt-4">
         <button type="submit" name="edit_publish" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-5 py-2 shadow-md transition duration-200">Update</button>
         <button type="button" onclick="document.getElementById('modalEditAdmin').classList.add('hidden');" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg px-5 py-2 transition duration-200">Close</button>
@@ -251,7 +314,19 @@ if($edit_id != ''){
     </form>
   </div>
 </div>
+<script>
+const editPasswordInput = document.getElementById('edit_admin_password');
+const editPasswordHelp = document.getElementById('editPasswordHelp');
 
+editPasswordInput.addEventListener('input', function() {
+    const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
+    if (editPasswordInput.value === "" || pattern.test(editPasswordInput.value)) {
+        editPasswordHelp.classList.add('hidden'); // hide message if valid or empty
+    } else {
+        editPasswordHelp.classList.remove('hidden'); // show message if invalid
+    }
+});
+</script>
 <!-- Tailwind Keyframe Animation -->
 <style>
   @keyframes fadeIn {
@@ -297,9 +372,11 @@ if($edit_id != ''){
             <td class="px-4 py-2"><?php echo htmlspecialchars($a['name']); ?></td>
             <td class="px-4 py-2"><?php echo htmlspecialchars($a['admin_user']); ?></td>
             <td class="px-4 py-2 text-center">
-              <a href="view_admin.php?unarchive_id=<?php echo $a['id']; ?>" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600" onclick="return confirm('Unarchive this admin?');">
-                <i class="fas fa-undo"></i> Unarchive
-              </a>
+              <a href="#" 
+   class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600" 
+   onclick="confirmUnarchiveAdmin(<?php echo $a['id']; ?>)">
+   <i class="fas fa-undo"></i> Unarchive
+</a>
             </td>
           </tr>
         <?php } ?>
@@ -320,6 +397,72 @@ if($edit_id != ''){
   }
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+<?php if(isset($_SESSION['toast'])): ?>
+Swal.fire({
+    toast: true,
+    position: 'top',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: false,
+    icon: 'success',
+    title: '<?php echo $_SESSION['toast']; ?>'
+});
+<?php unset($_SESSION['toast']); endif; ?>
+</script>
+
+
+<script>
+function confirmArchiveAdmin(id) {
+    Swal.fire({
+        title: 'Archive Admin?',
+        text: 'This admin will be moved to archive.',
+        icon: null, // you can change to 'warning' or 'info' for a nicer look
+        width: '350px',
+        showCancelButton: true,
+        confirmButtonText: 'Archive',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        showClass: {
+            popup: ''
+        },
+        hideClass: {
+            popup: ''
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location = "view_admin.php?archive_id=" + id;
+        }
+    });
+}
+</script>
+<script>
+function confirmUnarchiveAdmin(id) {
+    Swal.fire({
+        title: 'Unarchive Admin?',
+        text: 'This admin will be restored from archive.',
+        icon: null, // can be 'success' or 'info' for better visual
+        width: '350px',
+        showCancelButton: true,
+        confirmButtonText: 'Unarchive',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#16a34a', // Tailwind green-600
+        cancelButtonColor: '#6b7280',
+        showClass: {
+            popup: ''
+        },
+        hideClass: {
+            popup: ''
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location = "view_admin.php?unarchive_id=" + id;
+        }
+    });
+}
+</script>
 <!-- Footer -->
 <footer class="mt-8 text-center text-gray-600">
   <p>All right Reserved &copy; <?php echo date('Y');?> Created By: PSU IT Interns</p>

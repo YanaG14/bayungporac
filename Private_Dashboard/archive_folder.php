@@ -1,6 +1,6 @@
 <?php
-
 require_once("../include/connection.php");
+session_start();
 
 $id = $_GET['id'];
 
@@ -10,6 +10,9 @@ SET folder_status='Archived'
 WHERE folder_id='$id'
 ");
 
-header("Location: folder_management.php");
+//toast message
+$_SESSION['success'] = "Folder archived successfully!";
 
+header("Location: folder_management.php");
+exit();
 ?>

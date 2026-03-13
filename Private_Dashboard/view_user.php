@@ -9,7 +9,8 @@ require_once("../include/connection.php");
 if(isset($_GET['archive_id'])){
     $archive_id = mysqli_real_escape_string($conn, $_GET['archive_id']);
     mysqli_query($conn, "UPDATE login_user SET user_status='Archived' WHERE id='$archive_id'") or die(mysqli_error($conn));
-    echo "<script>alert('User Archived Successfully!'); window.location='view_user.php';</script>";
+    $_SESSION['toast'] = 'User Archived Successfully!';
+    header('Location: view_user.php');
     exit();
 }
 
@@ -17,7 +18,8 @@ if(isset($_GET['archive_id'])){
 if(isset($_GET['unarchive_id'])){
     $unarchive_id = mysqli_real_escape_string($conn, $_GET['unarchive_id']);
     mysqli_query($conn, "UPDATE login_user SET user_status='' WHERE id='$unarchive_id'") or die(mysqli_error($conn));
-    echo "<script>alert('User Unarchived Successfully!'); window.location='view_user.php';</script>";
+    $_SESSION['toast'] = 'User Unarchived Successfully!';
+    header('Location: view_user.php');
     exit();
 }
 
@@ -39,7 +41,7 @@ $adminName = $_SESSION['admin_name'];
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bayung Porac Archive</title>
   <link rel="icon" type="image/png" href="js/img/municipalLogo.png">
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- JQuery & DataTables -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -159,7 +161,9 @@ $adminName = $_SESSION['admin_name'];
   <td class="px-4 py-2"><?php echo $admin; ?></td>
               <td class="px-4 py-2 text-center space-x-2">
                 <a href="view_user.php?id=<?php echo $rs['id']; ?>" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"><i class="fas fa-edit"></i></a>
-                <a href="view_user.php?archive_id=<?php echo htmlentities($rs['id']); ?>" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="return confirm('Archive this user?');"><i class="fas fa-archive"></i></a>
+                <button onclick="confirmArchive(<?php echo $rs['id']; ?>)" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+    <i class="fas fa-archive"></i>
+</button>
               </td>
             </tr>
           <?php } ?>
@@ -332,9 +336,10 @@ if($edit_id != ''){
             <td class="px-4 py-2"><?php echo ($a['department_name'] != '') ? htmlspecialchars($a['department_name'], ENT_QUOTES) : 'No Department'; ?></td>
             <td class="px-4 py-2"><?php echo htmlspecialchars($a['email_address'], ENT_QUOTES); ?></td>
             <td class="px-4 py-2 text-center">
-              <a href="view_user.php?unarchive_id=<?php echo $a['id']; ?>" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600" onclick="return confirm('Unarchive this user?');">
-                <i class="fas fa-undo"></i> Unarchive
-              </a>
+              <button onclick="confirmUnarchive(<?php echo $a['id']; ?>)" 
+        class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+    <i class="fas fa-undo"></i> Unarchive
+</button>
             </td>
           </tr>
         <?php } ?>
@@ -372,10 +377,59 @@ SET name='$user_name',
 WHERE id='$id_post'")
 or die(mysqli_error($conn));
 
-    echo "<script>alert('Success Edit User/Employee!!!');document.location='view_user.php'</script>";
+      $_SESSION['toast'] = 'User Updated Successfully!';
+    header('Location: view_user.php');
     exit();
 }
 ?>
+
+
+<script>
+<?php if(isset($_SESSION['toast'])): ?>
+Swal.fire({
+    toast: true,
+    position: 'top',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: false,
+    icon: 'success',
+    title: '<?php echo $_SESSION['toast']; ?>'
+});
+<?php unset($_SESSION['toast']); endif; ?>
+</script>
+
+<script>
+function confirmArchive(id){
+    Swal.fire({
+        title: 'Archive this user?',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Archive',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+    }).then((result) => {
+        if(result.isConfirmed){
+            window.location.href = 'view_user.php?archive_id=' + id;
+        }
+    });
+}
+
+function confirmUnarchive(id){
+    Swal.fire({
+        title: 'Unarchive this user?',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Unarchive',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#16a34a',
+        cancelButtonColor: '#6b7280',
+    }).then((result) => {
+        if(result.isConfirmed){
+            window.location.href = 'view_user.php?unarchive_id=' + id;
+        }
+    });
+}
+</script>
+
 
 <!-- Footer -->
 <footer class="mt-8 text-center text-gray-600">
