@@ -116,6 +116,8 @@ Log into Bayung Porac Archive
 
 <form action="userlogin/login.php" method="POST">
 
+
+
 <!-- Email -->
 <div class="mb-5">
 
@@ -147,7 +149,28 @@ class="w-full px-4 py-3 bg-black/30 border border-white/50 rounded-lg text-white
 placeholder="Enter your password">
 
 </div>
-
+<!-- Error Message -->
+<?php
+$error = '';
+if(isset($_GET['error'])){
+    switch($_GET['error']){
+        case 'empty':
+            $error = 'Please fill in all fields.';
+            break;
+        case 'invalid':
+            $error = 'Invalid email or password.';
+            break;
+        case 'archived':
+            $error = 'Your account has been archived. You cannot login.';
+            break;
+    }
+}
+?>
+<?php if($error != ''): ?>
+<div class="mb-5 p-3 text-white text-center rounded">
+    <?= htmlspecialchars($error) ?>
+</div>
+<?php endif; ?>
 <button
 type="submit"
 name="login"

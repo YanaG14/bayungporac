@@ -3,7 +3,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['admin_user'])) {
-    header('Location: index.html');
+    header('Location: index.php');
     exit();
 }
 
@@ -137,9 +137,9 @@ window.addEventListener("load", function() {
     </div>
     <div class="flex items-center space-x-4 text-white">
       <span>Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></span>
-      <a href="Logout.php" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
-        Log out
-      </a>
+     <a href="#" onclick="confirmLogout(this)" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
+  Log out
+</a>
     </div>
   </div>
 </nav>
@@ -433,30 +433,52 @@ function openArchivedFolders() {
 
 <script>
 function confirmArchive(id){
+    Swal.fire({
+        title: 'Archive Folder?', // one line title
+        html: '<p style="font-size: 0.9rem; margin: 0;">This folder will be moved to archive.</p>',
+        icon: null,
+        width: '350px',
+        showCancelButton: true,
+        confirmButtonText: 'Archive',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        customClass: {
+            popup: 'swal-custom-popup',
+            title: 'swal-title-nowrap'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location = "archive_folder.php?id=" + id;
+        }
+    });
+}
 
-Swal.fire({
-    title: 'Archive Folder?',
-    text: 'This folder will be moved to archive.',
-    icon: null,
-    width: '350px',
-    showCancelButton: true,
-    confirmButtonText: 'Archive',
-    cancelButtonText: 'Cancel',
-    confirmButtonColor: '#dc2626',
-    cancelButtonColor: '#6b7280',
-    showClass: {
-        popup: ''
-    },
-    hideClass: {
-        popup: ''
-    }
-}).then((result) => {
-
-    if (result.isConfirmed) {
-        window.location = "archive_folder.php?id=" + id;
-    }
-
-});
+function confirmLogout(el) {
+    Swal.fire({
+        title: 'Are you sure you want to logout?', // one line
+        html: '<p style="font-size: 0.9rem; margin: 0;">You will be logged out of your account.</p>',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Logout',
+        cancelButtonText: 'Cancel',
+        backdrop: `
+            rgba(0,0,0,0.4)
+            url("img/lg.flip-book-loader.gif") 
+            center top
+            no-repeat
+            blur(3px)
+        `,
+        customClass: {
+            popup: 'swal-custom-popup',
+            title: 'swal-title-nowrap'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'Logout.php';
+        }
+    });
 }
 </script>
 
@@ -523,6 +545,36 @@ $(document).ready(function() {
   });
 });
 </script>
+
+<script>
+function confirmLogout(el) {
+    // Get button position (optional for toast positioning)
+    const rect = el.getBoundingClientRect();
+
+    Swal.fire({
+        title: 'Are you sure you want to logout?',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Logout',
+        cancelButtonText: 'Cancel',
+        backdrop: `
+            rgba(0,0,0,0.4)
+            url("img/lg.flip-book-loader.gif") 
+            center top
+            no-repeat
+            blur(3px)
+        `
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Redirect to logout.php
+            window.location.href = 'Logout.php';
+        }
+    });
+}
+</script>
+
+
 
 <!-- Footer -->
 <footer class="mt-8 text-center text-gray-600">

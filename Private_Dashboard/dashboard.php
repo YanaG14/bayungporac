@@ -4,7 +4,7 @@
 
 session_start();
 if(!isset($_SESSION["admin_user"])){
-    header("location:index.html");
+    header("location:index.php");
 
 } else{
     $uname = $_SESSION['admin_user'];

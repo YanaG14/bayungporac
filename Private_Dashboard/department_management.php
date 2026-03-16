@@ -5,7 +5,7 @@ session_start();
 require_once("../include/connection.php");
 
 if (!isset($_SESSION['admin_user'])) {
-    header('Location: index.html');
+    header('Location: index.php');
     exit();
 }
 $adminName = $_SESSION['admin_name'];
@@ -156,9 +156,9 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
     </div>
     <div class="flex items-center space-x-4 text-white">
       <span>Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></span>
-      <a href="Logout.php" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
-        Log out
-      </a>
+      <a href="#" onclick="confirmLogout(this)" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
+  Log out
+</a>
     </div>
   </div>
 </nav>
@@ -488,62 +488,143 @@ Toast.fire({
 
 <script>
 function confirmArchiveDepartment(id){
-
-Swal.fire({
-    title: 'Archive Folder?',
-    text: 'This folder will be moved to archive.',
-    icon: null,
-    width: '350px',
-    showCancelButton: true,
-    confirmButtonText: 'Archive',
-    cancelButtonText: 'Cancel',
-    confirmButtonColor: '#dc2626',
-    cancelButtonColor: '#6b7280',
-    showClass: {
-        popup: ''
-    },
-    hideClass: {
-        popup: ''
-    }
-}).then((result) => {
-
-    if (result.isConfirmed) {
-        window.location = "archive_department.php?id=" + id;
-    }
-
-});
-
+    Swal.fire({
+        title: 'Archive Folder?', 
+        html: '<p style="font-size: 0.9rem; margin: 0;">This folder will be moved to archive.</p>',
+        icon: null,
+        width: '350px',
+        showCancelButton: true,
+        confirmButtonText: 'Archive',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        customClass: {
+            popup: 'swal-custom-popup',
+            title: 'swal-title-nowrap'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location = "archive_department.php?id=" + id;
+        }
+    });
 }
 </script>
+
+<style>
+.swal-title-nowrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    font-size: 1.2rem; 
+    text-align: center;
+}
+.swal2-popup.swal-custom-popup {
+    padding: 1.5rem 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.swal2-html-container {
+    line-height: 1.3;
+}
+</style>
 
 <script>
-function confirmUnarchiveDepartment(id){
-
-Swal.fire({
-    title: 'Unarchive Department?',
-    text: 'This department will be restored.',
-    icon: null,
-    width: '350px',
-    showCancelButton: true,
-    confirmButtonText: 'Unarchive',
-    cancelButtonText: 'Cancel',
-    confirmButtonColor: '#16a34a',
-    cancelButtonColor: '#6b7280',
-    showClass: {
-        popup: ''
-    },
-    hideClass: {
-        popup: ''
-    }
-}).then((result) => {
-
-    if (result.isConfirmed) {
-        window.location = "unarchive_department.php?id=" + id;
-    }
-
-});
+function confirmUnarchiveDepartment(id) {
+    Swal.fire({
+        title: 'Unarchive Department?', 
+        html: '<p style="font-size: 0.9rem; margin: 0;">This department will be restored.</p>',
+        icon: null,
+        width: 350,
+        showCancelButton: true,
+        confirmButtonText: 'Unarchive',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#16a34a',
+        cancelButtonColor: '#6b7280',
+        customClass: {
+            popup: 'swal-custom-popup',
+            title: 'swal-title-nowrap'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location = "unarchive_department.php?id=" + id;
+        }
+    });
 }
 </script>
+
+<style>
+.swal-title-nowrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-align: center;
+}
+.swal2-popup.swal-custom-popup {
+    padding: 1.5rem 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.swal2-html-container {
+    line-height: 1.3;
+}
+</style>
+
+<script>
+function confirmLogout(el) {
+    Swal.fire({
+        title: 'Are you sure you want to logout?', 
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Logout',
+        cancelButtonText: 'Cancel',
+        backdrop: `
+            rgba(0,0,0,0.4)
+            url("img/lg.flip-book-loader.gif") 
+            center top
+            no-repeat
+            blur(3px)
+        `,
+        customClass: {
+            popup: 'swal-custom-popup',
+            title: 'swal-title-nowrap'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'Logout.php';
+        }
+    });
+}
+</script>
+
+<style>
+.swal-title-nowrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    font-size: 1.4rem; 
+    text-align: center;
+}
+.swal2-popup.swal-custom-popup {
+    padding: 1.5rem 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.swal2-html-container {
+    line-height: 1.3;
+}
+</style>
 
 <!-- Footer -->
 <footer class="mt-8 text-center text-gray-600">
