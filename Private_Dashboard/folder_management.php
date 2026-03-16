@@ -518,7 +518,9 @@ $(document).ready(function() {
 
     var folderName = $('#folder_name_input').val();
     var departments = [];
-    $('input[name="departments[]"]:checked').each(function() {
+
+    // Only checkboxes inside Add Folder form
+    $('#addFolderForm input[name="departments[]"]:checked').each(function() {
       departments.push($(this).val());
     });
 
@@ -530,16 +532,12 @@ $(document).ready(function() {
         departments: departments
       },
       success: function(response) {
-
         if (response.trim() === 'exists') {
           $('#folderError').removeClass('hidden'); // show error
-        } 
-        
-        else if (response.trim() === 'success') {
+        } else if (response.trim() === 'success') {
           $('#folderError').addClass('hidden');
-          location.reload(); // reload so your SESSION success toast appears
+          location.reload();
         }
-
       }
     });
   });
