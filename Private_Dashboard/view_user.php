@@ -92,9 +92,9 @@ $adminName = $_SESSION['admin_name'];
     </div>
     <div class="flex items-center space-x-4 text-white">
       <span>Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></span>
-      <a href="Logout.php" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
-        Log out
-      </a>
+     <a href="#" onclick="confirmLogout(this)" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
+  Log out
+</a>
     </div>
   </div>
 </nav>
@@ -430,6 +430,33 @@ function confirmUnarchive(id){
 }
 </script>
 
+<script>
+function confirmLogout(el) {
+    // Get button position (optional for toast positioning)
+    const rect = el.getBoundingClientRect();
+
+    Swal.fire({
+        title: 'Are you sure you want to logout?',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Logout',
+        cancelButtonText: 'Cancel',
+        backdrop: `
+            rgba(0,0,0,0.4)
+            url("img/lg.flip-book-loader.gif") 
+            center top
+            no-repeat
+            blur(3px)
+        `
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Redirect to logout.php
+            window.location.href = 'Logout.php';
+        }
+    });
+}
+</script>
 
 <!-- Footer -->
 <footer class="mt-8 text-center text-gray-600">
