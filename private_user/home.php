@@ -12,15 +12,14 @@ require_once("../include/connection.php");
 $user_id = $_SESSION['user_no'];
 $user_department = $_SESSION['department_id'];
 
-// Get user name
+// Get user name and department image
 $stmt = $conn->prepare("
-SELECT login_user.name, departments.department_img
-FROM login_user
-JOIN departments 
-ON login_user.department_id = departments.department_id
-WHERE login_user.id = ?
+    SELECT login_user.name, departments.department_img
+    FROM login_user
+    JOIN departments 
+    ON login_user.department_id = departments.department_id
+    WHERE login_user.id = ?
 ");
-
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -28,15 +27,6 @@ $row = $result->fetch_assoc();
 
 $name = $row['name'];
 $department_img = $row['department_img'];
-
-
-// Get department image
-$stmt = $conn->prepare("SELECT department_img FROM departments WHERE department_id = ?");
-$stmt->bind_param("i", $user_department);
-$stmt->execute();
-$result = $stmt->get_result();
-$dept = $result->fetch_assoc();
-$department_image = $dept['department_img'];
 
 // Check if a folder is clicked
 $selected_folder = isset($_GET['folder_id']) ? intval($_GET['folder_id']) : 0;
@@ -62,48 +52,74 @@ $selected_folder = isset($_GET['folder_id']) ? intval($_GET['folder_id']) : 0;
 
 <script>
 $(document).ready(function(){
-    $('#dtable').dataTable({
-        "aLengthMenu": [[5,10,15,25,50,100,-1],[5,10,15,25,50,100,"All"]],
-        "iDisplayLength": 10
+    $('#dtable').DataTable({
+        "lengthMenu": [[5,10,15,25,50,100,-1],[5,10,15,25,50,100,"All"]],
+        "pageLength": 10
     });
 });
 </script>
 
 <style>
-#loader{
-position:fixed;
-left:0;
-top:0;
-width:100%;
-height:100%;
-z-index:9999;
-background:url('img/lg.flip-book-loader.gif') 50% 50% no-repeat #f9f9f9;
+#loader {
+  position: fixed;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  z-index: 9999;
+
 }
 </style>
 
 <script>
-$(window).on('load',function(){
-setTimeout(function(){
-$('#loader').fadeOut('slow');
-});
+$(window).on('load', function(){
+    setTimeout(function(){
+        $('#loader').fadeOut('slow');
+    }, 300);
 });
 </script>
 
 </head>
 
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-50 font-sans">
+
+<div id="loader" class="fixed inset-0 bg-white flex justify-center items-center z-50 transition-opacity duration-500">
+  <div class="flex space-x-2">
+    <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full"></span>
+    <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full animation-delay-100"></span>
+    <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full animation-delay-200"></span>
+  </div>
+</div>
+
+<!-- Page Content -->
+<div id="page-content" class="opacity-0 transition-opacity duration-500">
+  <!-- your full page content here -->
+</div>
+
+<style>
+/* Bounce animation */
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+}
+
+.dot {
+  display: inline-block;
+  animation: bounce 1s infinite ease-in-out;
+}
+
+.animation-delay-100 { animation-delay: 0.1s; }
+.animation-delay-200 { animation-delay: 0.2s; }
+</style>
 
 <!-- NAVBAR -->
-<nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
-  <div class="flex justify-between items-center h-16 px-4">
+<nav class="fixed top-0 w-full bg-green-700 shadow-md z-50">
+  <div class="flex justify-between items-center h-16 px-6">
     <div class="flex items-center space-x-3">
-      <img src="img/municipalLogo.png" class="w-10">
-      <h1 class="text-white font-semibold text-lg">Bayung Porac Archive</h1>
+      <img src="img/municipalLogo.png" class="w-12 rounded-full border-2 border-white">
+      <h1 class="text-white font-bold text-lg md:text-xl">Bayung Porac Archive</h1>
     </div>
-
-    <div class="flex items-center text-white font-medium space-x-4">
-      <span>Welcome, <?php echo ucwords(htmlentities($name)) . "!"; ?></span>
-      <a href="Logout.php" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
+    <div class="flex items-center space-x-4 text-white">
+      <span class="hidden sm:inline-block">Welcome, <b><?php echo ucwords(htmlentities($name)); ?></b>!</span>
+      <a href="Logout.php" class="px-4 py-2 rounded-lg border border-white hover:bg-white hover:text-green-700 transition-all duration-300">
         Log out
       </a>
     </div>
@@ -111,127 +127,119 @@ $('#loader').fadeOut('slow');
 </nav>
 
 <!-- MAIN CONTENT -->
-<div class="mt-24 w-full px-8">
-<div class="grid grid-cols-12 gap-6">
+<div class="mt-24 px-6 md:px-12">
+  <div class="grid grid-cols-12 gap-6">
 
-<!-- SIDEBAR -->
-<div class="col-span-3">
-  <div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-green-600 mb-6">
-    <div class="flex flex-col items-center">
-     <img src="../Private_dashboard/department_images/<?php echo $department_img; ?>" class="w-28 mb-3">
-      <h2 class="text-lg font-semibold text-gray-700">Admin Profile</h2>
+    <!-- SIDEBAR -->
+    <aside class="col-span-12 md:col-span-3 space-y-6">
+      <div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-6 border-t-4 border-green-600 hover:scale-[1.02] transition-transform duration-300">
+        <div class="flex flex-col items-center">
+          <img src="../Private_dashboard/department_images/<?php echo $department_img; ?>" class="w-28 h-28 rounded-full shadow-md mb-3">
+          <h2 class="text-lg font-semibold text-gray-700">Admin Profile</h2>
+        </div>
+        <hr class="my-4 border-gray-300">
+        <p class="text-sm"><b>Full Name:</b> <?php echo $name; ?></p>
+        <p class="text-sm"><b>Position:</b> Admin Staff</p>
+      </div>
+
+      <div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-6 border-t-4 border-green-600 hover:scale-[1.02] transition-transform duration-300">
+        <h3 class="font-semibold text-lg mb-3 text-gray-700">File Document Guidelines</h3>
+        <ul class="text-sm list-disc ml-5 space-y-1 text-gray-600">
+          <li>Ensure revisions are clearly identified</li>
+          <li>Documents remain legible</li>
+          <li>Prevent unintended use of obsolete documents</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- MAIN TABLE/FOLDER SECTION -->
+    <main class="col-span-12 md:col-span-9">
+
+    <div class="bg-white/90 backdrop-blur-md shadow-lg rounded-2xl p-6 hover:shadow-xl transition-shadow duration-300">
+
+    <?php if ($selected_folder === 0): 
+        // Show folders assigned to department
+        $stmt = $conn->prepare("
+            SELECT f.folder_id, f.folder_name
+            FROM folders f
+            JOIN folder_departments fd ON f.folder_id = fd.folder_id
+            WHERE fd.department_id = ? AND f.folder_status='Active'
+            ORDER BY f.folder_name ASC
+        ");
+        $stmt->bind_param("i", $user_department);
+        $stmt->execute();
+        $folders = $stmt->get_result();
+    ?>
+      <h2 class="text-xl md:text-2xl font-bold text-gray-700 mb-6">Folders</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <?php while($folder = $folders->fetch_assoc()): ?>
+          <a href="?folder_id=<?php echo $folder['folder_id']; ?>" 
+             class="flex items-center gap-3 p-4 bg-white rounded-xl shadow-md hover:bg-green-50 hover:scale-[1.02] transition-transform duration-300">
+            <i class="fas fa-folder text-yellow-500 text-2xl"></i>
+            <span class="font-medium text-gray-700"><?php echo htmlentities($folder['folder_name']); ?></span>
+          </a>
+        <?php endwhile; ?>
+      </div>
+
+    <?php else: 
+        // Show files in selected folder
+        $stmt = $conn->prepare("
+            SELECT uf.id, uf.name, uf.size, uf.email, uf.admin_status, uf.timers, uf.download
+            FROM upload_files uf
+            JOIN file_departments fd ON uf.id = fd.file_id
+            WHERE uf.folder_id = ? AND fd.department_id = ? AND uf.status='Active'
+            ORDER BY uf.id DESC
+        ");
+        $stmt->bind_param("ii", $selected_folder, $user_department);
+        $stmt->execute();
+        $files = $stmt->get_result();
+    ?>
+      <h2 class="text-xl md:text-2xl font-bold text-gray-700 mb-4">Files in Folder</h2>
+      <div class="overflow-x-auto rounded-xl shadow-inner">
+        <table id="dtable" class="min-w-full border border-gray-200">
+          <thead class="bg-green-700 text-white">
+            <tr>
+              <th class="px-4 py-3 text-left">Filename</th>
+              <th class="px-4 py-3 text-left">Size</th>
+              <th class="px-4 py-3 text-left">Uploader</th>
+              <th class="px-4 py-3 text-left">Status</th>
+              <th class="px-4 py-3 text-left">Upload Date</th>
+              <th class="px-4 py-3 text-left">Downloads</th>
+              <th class="px-4 py-3 text-left">Action</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <?php while($file = $files->fetch_assoc()): ?>
+            <tr class="border-b hover:bg-green-50 transition-colors duration-200">
+              <td class="px-4 py-2"><?php echo htmlentities($file['name']); ?></td>
+              <td class="px-4 py-2"><?php echo floor($file['size']/1000)." KB"; ?></td>
+              <td class="px-4 py-2"><?php echo htmlentities($file['email']); ?></td>
+              <td class="px-4 py-2"><?php echo htmlentities($file['admin_status']); ?></td>
+              <td class="px-4 py-2"><?php echo htmlentities($file['timers']); ?></td>
+              <td class="px-4 py-2"><?php echo $file['download']; ?></td>
+              <td class="px-4 py-2">
+                <a href="downloads.php?file_id=<?php echo $file['id']; ?>" 
+                   class="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-full flex items-center gap-2 hover:from-blue-600 hover:to-blue-800 transition-all duration-300" 
+                   title="Download">
+                   <i class="fas fa-download"></i> Download
+                </a>
+              </td>
+            </tr>
+            <?php endwhile; ?>
+          </tbody>
+        </table>
+      </div>
+      <a href="home.php" class="mt-5 inline-block bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">Back to Folders</a>
+    <?php endif; ?>
+
     </div>
-    <hr class="my-4">
-    <p class="text-sm"><b>Full Name:</b> <?php echo $name; ?></p>
-    <p class="text-sm"><b>Position:</b> Admin Staff</p>
+    </main>
   </div>
-
-  <div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-green-600">
-    <h3 class="font-semibold text-lg mb-3 text-gray-700">File Document</h3>
-    <ul class="text-sm list-disc ml-5 space-y-1 text-gray-600">
-      <li>Ensuring revisions are identified</li>
-      <li>Documents remain legible</li>
-      <li>Prevent unintended use of obsolete documents</li>
-    </ul>
-  </div>
-</div>
-
-<!-- TABLE / FOLDERS SECTION -->
-<div class="col-span-9">
-<div class="bg-white shadow-md rounded-xl p-6">
-
-<?php
-if ($selected_folder === 0):
-    // SHOW FOLDERS ASSIGNED TO USER'S DEPARTMENT
-    $stmt = $conn->prepare("
-        SELECT f.folder_id, f.folder_name
-        FROM folders f
-        JOIN folder_departments fd ON f.folder_id = fd.folder_id
-        WHERE fd.department_id = ? AND f.folder_status='Active'
-        ORDER BY f.folder_name ASC
-    ");
-    $stmt->bind_param("i", $user_department);
-    $stmt->execute();
-    $folders = $stmt->get_result();
-?>
-
-<h2 class="text-xl font-semibold text-gray-700 mb-4">Folders</h2>
-<div class="grid grid-cols-3 gap-4">
-<?php while($folder = $folders->fetch_assoc()): ?>
-   <a href="?folder_id=<?php echo $folder['folder_id']; ?>" 
-   class="flex items-center gap-2 p-4 bg-white rounded shadow hover:bg-green-100 transition">
-
-   <i class="fas fa-folder text-yellow-500"></i>
-   <?php echo htmlentities($folder['folder_name']); ?>
-
-</a>
-<?php endwhile; ?>
-</div>
-
-<?php
-else:
-    // SHOW FILES IN SELECTED FOLDER ASSIGNED TO USER'S DEPARTMENT
-    $stmt = $conn->prepare("
-        SELECT uf.id, uf.name, uf.size, uf.email, uf.admin_status, uf.timers, uf.download
-        FROM upload_files uf
-        JOIN file_departments fd ON uf.id = fd.file_id
-        WHERE uf.folder_id = ? AND fd.department_id = ? AND uf.status='Active'
-        ORDER BY uf.id DESC
-    ");
-    $stmt->bind_param("ii", $selected_folder, $user_department);
-    $stmt->execute();
-    $files = $stmt->get_result();
-?>
-
-<h2 class="text-xl font-semibold text-gray-700 mb-4">Files in Folder</h2>
-<div class="overflow-x-auto">
-<table id="dtable" class="min-w-full border border-gray-200">
-<thead class="bg-green-700 text-white">
-<tr>
-<th class="px-4 py-2">Filename</th>
-<th class="px-4 py-2">FileSize</th>
-<th class="px-4 py-2">Uploader</th>
-<th class="px-4 py-2">Status</th>
-<th class="px-4 py-2">Upload Date</th>
-<th class="px-4 py-2">Downloads</th>
-<th class="px-4 py-2">Action</th>
-</tr>
-</thead>
-<tbody class="text-gray-700">
-<?php while($file = $files->fetch_assoc()): ?>
-<tr class="border-b hover:bg-gray-50">
-<td class="px-4 py-2"><?php echo htmlentities($file['name']); ?></td>
-<td class="px-4 py-2"><?php echo floor($file['size']/1000)." KB"; ?></td>
-<td class="px-4 py-2"><?php echo htmlentities($file['email']); ?></td>
-<td class="px-4 py-2"><?php echo htmlentities($file['admin_status']); ?></td>
-<td class="px-4 py-2"><?php echo htmlentities($file['timers']); ?></td>
-<td class="px-4 py-2"><?php echo $file['download']; ?></td>
-<td class="px-4 py-2">
-<a href="downloads.php?file_id=<?php echo $file['id']; ?>" 
-   class="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-5 py-3 rounded-full flex items-center gap-2 hover:from-blue-600 hover:to-blue-800 transition" 
-   title="Download">
-   <i class="fas fa-download"></i> Download
-</a>
-</td>
-</tr>
-<?php endwhile; ?>
-</tbody>
-</table>
-</div>
-
-<a href="home.php" class="mt-4 inline-block bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">Back to Folders</a>
-
-<?php endif; ?>
-
-</div>
-</div>
-
-</div>
 </div>
 
 <!-- Footer -->
-<footer class="mt-8 text-center text-gray-600">
-  <p>All right Reserved &copy; <?php echo date('Y');?> Created By: PSU IT Interns</p>
+<footer class="mt-12 text-center text-gray-500 text-sm">
+  <p>All Rights Reserved &copy; <?php echo date('Y'); ?> | Created by PSU IT Interns</p>
 </footer>
 
 </body>

@@ -6,7 +6,7 @@ session_start();
 require_once("../include/connection.php");
 
 if(!isset($_SESSION['admin_user'])){
-    header("Location: index.html");
+    header("Location: index.php");
 }
 
 if(!isset($_GET['folder_id'])){

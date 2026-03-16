@@ -11,7 +11,7 @@ if(isset($_GET['id'])){
 }
 
 if (!isset($_SESSION['admin_user'])) {
-    header('Location: index.html');
+    header('Location: index.php');
 } else {
     $uname=$_SESSION['admin_user'];
 }

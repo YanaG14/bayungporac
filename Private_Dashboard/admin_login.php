@@ -1,11 +1,11 @@
 <?php
 require_once("../include/connection.php");
-session_start();
+session_start(); // Start session at the top
 
 if(isset($_POST["adminlog"])){
 
     date_default_timezone_set("Asia/Manila");
-    $date = date("M-d-Y h:i A", strtotime("+0 HOURS"));
+    $date = date("M-d-Y h:i A");
 
     $username = mysqli_real_escape_string($conn, $_POST["admin_user"]);  
     $password = mysqli_real_escape_string($conn, $_POST["admin_password"]);
@@ -16,27 +16,28 @@ if(isset($_POST["adminlog"])){
     $row = mysqli_fetch_array($query);
     $counter = mysqli_num_rows($query);
 
+    // Default error
+    $error_msg = "Invalid Email Address or Password, Please try again!";
+
     if ($counter == 0) {
-        echo "<script>alert('Invalid Email Address or Password, Please try again!');
-              document.location='index.html';</script>";
+        $_SESSION['error_msg'] = $error_msg;
+        header("Location: index.php");
         exit();
     }
 
-    // Check password
     if (!password_verify($password, $row["admin_password"])) {
-        echo "<script>alert('Invalid Email Address or Password, Please try again!');
-              document.location='index.html';</script>";
+        $_SESSION['error_msg'] = $error_msg;
+        header("Location: index.php");
         exit();
     }
 
-    // Check admin_status
     if (strtolower($row['admin_status']) === 'archived') {
-        echo "<script>alert('Your account has been archived. You cannot login.');
-              document.location='index.html';</script>";
+        $_SESSION['error_msg'] = "Your account has been archived. You cannot login.";
+        header("Location: index.php");
         exit();
     }
 
-    // All good, login admin
+    // Login success
     $_SESSION['admin_user'] = $row['id'];
     $_SESSION['admin_name'] = $row['name'];  
 
@@ -57,7 +58,7 @@ if(isset($_POST["adminlog"])){
         or die(mysqli_error($conn));
 
     // Redirect to folder management
-    echo "<script>document.location='folder_management.php';</script>";
+    header("Location: folder_management.php");
     exit();
 }
 ?>

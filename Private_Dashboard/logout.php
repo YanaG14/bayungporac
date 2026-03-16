@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
         icon: 'success',
         title: 'Logged out successfully!'
     }).then(() => {
-        window.location.href = 'index.html';
+        window.location.href = 'index.php';
     });
 });
 </script>
