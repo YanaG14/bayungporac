@@ -151,7 +151,7 @@ exit();
 .animation-delay-200 {
   animation-delay: 0.2s;
 }
-</style>
+</style> 
 
 <!-- NAVBAR -->
 <nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
@@ -289,14 +289,23 @@ exit();
 
       <input type="text" name="name" placeholder="Full Name" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none transition" required>
       <input type="email" name="admin_user" placeholder="Email Address" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none transition" required>
-     <input type="password" 
-       id="admin_password" 
-       name="admin_password" 
-       placeholder="Password" 
-       class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}"
-       title="Password must be at least 8 characters, include uppercase, lowercase, number and a symbol">
+    <div class="relative">
+<input type="password" 
+id="admin_password" 
+name="admin_password" 
+placeholder="Password"
+class="border border-gray-300 rounded-lg px-4 py-2 pr-10 w-full focus:ring-2 focus:ring-green-500 focus:outline-none transition"
+pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}"
+title="Password must be at least 8 characters, include uppercase, lowercase, number and a symbol">
 
+<button type="button"
+onclick="togglePassword('admin_password','toggleIconAdd')"
+class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800">
+
+<i id="toggleIconAdd" class="fas fa-eye"></i>
+
+</button>
+</div>
 <!-- Inline validation message -->
 <p id="passwordHelp" class="text-red-600 text-sm mt-1 hidden">
   Password must be at least 8 characters, include uppercase, lowercase, number, and a symbol.
@@ -363,14 +372,23 @@ if($edit_id != ''){
       <input type="email" name="admin_user" value="<?php echo htmlspecialchars($rs['admin_user']); ?>" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
 
       <!-- Password Field with Validation -->
-      <input type="password" 
-       name="admin_password" 
-       id="edit_admin_password" 
-       placeholder="Password" 
-       class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}"
-       title="Password must be at least 8 characters, include uppercase, lowercase, number and a symbol">
-      
+      <div class="relative">
+<input type="password" 
+name="admin_password" 
+id="edit_admin_password" 
+placeholder="Password"
+class="border border-gray-300 rounded-lg px-4 py-2 pr-10 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}"
+title="Password must be at least 8 characters, include uppercase, lowercase, number and a symbol">
+
+<button type="button"
+onclick="togglePassword('edit_admin_password','toggleIconEdit')"
+class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800">
+
+<i id="toggleIconEdit" class="fas fa-eye"></i>
+
+</button>
+</div>
       <!-- Inline validation message -->
       <p id="editPasswordHelp" class="text-red-600 text-sm mt-1 hidden">
         Password must be at least 8 characters, include uppercase, lowercase, number, and a symbol.
@@ -560,8 +578,24 @@ function confirmLogout(el) {
     });
 }
 </script>
+<script>
+  function togglePassword(fieldId, iconId){
 
+const passwordField = document.getElementById(fieldId);
+const icon = document.getElementById(iconId);
 
+if(passwordField.type === "password"){
+    passwordField.type = "text";
+    icon.classList.remove("fa-eye");
+    icon.classList.add("fa-eye-slash");
+}else{
+    passwordField.type = "password";
+    icon.classList.remove("fa-eye-slash");
+    icon.classList.add("fa-eye");
+}
+
+}
+</script>
 
 <!-- Footer -->
 <footer class="mt-8 text-center text-gray-600">

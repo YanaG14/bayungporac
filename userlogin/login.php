@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["login"])) {
 
     // Validate input
     if (empty($_POST["email_address"]) || empty($_POST["user_password"])) {
-        header("Location: ../login.html?error=empty");
+        header("Location: ../login.php?error=empty");
         exit();
     }
 
@@ -33,13 +33,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["login"])) {
         $user = $result->fetch_assoc();
 
         // Check if user is archived
-        if (strtolower($user['user_status']) === 'archived') {
-            echo "<script>
-                    alert('Your account has been archived. You cannot login.');
-                    window.location.href='../login.html';
-                  </script>";
-            exit();
-        }
+       if (strtolower($user['user_status']) === 'archived') {
+    header("Location: ../login.php?error=archived");
+    exit();
+}
 
         // Verify hashed password
         if (password_verify($password, $user["user_password"])) {
@@ -76,17 +73,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["login"])) {
             exit();
 
         } else {
-            header("Location: ../login.html?error=invalid");
+            header("Location: ../login.php?error=invalid");
             exit();
         }
 
     } else {
-        header("Location: ../login.html?error=invalid");
+        header("Location: ../login.php?error=invalid");
         exit();
     }
 
 } else {
     // If accessed directly
-    header("Location: ../login.html");
+    header("Location: ../login.phphtml");
     exit();
 }

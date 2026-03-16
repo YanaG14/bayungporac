@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="js/img/municipalLogo.png">
 
 <script src="https://cdn.tailwindcss.com"></script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 
 #loader{
@@ -106,16 +106,33 @@ MUNICIPALITY OF PORAC
                     placeholder="Enter your email">
             </div>
 
-            <!-- Password -->
-            <div class="mb-5">
-                <label class="block text-white mb-2">Password</label>
-                <input
-                    type="password"
-                    id="materialFormCardPasswordEx"
-                    name="admin_password"
-                    class="w-full px-4 py-3 bg-black/30 border border-white/50 rounded-lg text-white placeholder-white placeholder:text-sm outline-none transition duration-300 hover:bg-white/20 hover:border-white-400 focus:ring-2 focus:ring-green-500"
-                    placeholder="Enter your password">
-            </div>
+         <div class="mb-5">
+<label class="block text-white mb-2">
+Password
+</label>
+
+<div class="relative">
+
+<input
+type="password"
+id="materialFormCardPasswordEx"
+name="admin_password"
+class="w-full px-4 py-3 pr-12 bg-black/30 border border-white/50 rounded-lg text-white placeholder-white placeholder:text-sm outline-none transition duration-300 hover:bg-white/20 hover:border-white-400 focus:ring-2 focus:ring-green-500"
+placeholder="Enter your password">
+
+<button
+type="button"
+onclick="togglePassword()"
+class="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300">
+
+<i id="toggleIcon" class="fa-solid fa-eye"></i>
+
+</button>
+
+</div>
+</div>
+
+
   <!-- Inline Error Message Above Button -->
       <?php if(isset($_SESSION['error_msg']) && $_SESSION['error_msg'] !== ""): ?>
         <div class="bg-red-100 text-red-600 p-3 rounded mb-4 text-center">
@@ -208,6 +225,25 @@ $('#loader').fadeOut('slow');
 },1000);
 
 });
+
+
+function togglePassword(){
+
+const passwordField = document.getElementById("materialFormCardPasswordEx");
+const icon = document.getElementById("toggleIcon");
+
+if(passwordField.type === "password"){
+    passwordField.type = "text";
+    icon.classList.remove("fa-eye");
+    icon.classList.add("fa-eye-slash");
+}else{
+    passwordField.type = "password";
+    icon.classList.remove("fa-eye-slash");
+    icon.classList.add("fa-eye");
+}
+
+}
+
 
 </script>
 
