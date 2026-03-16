@@ -3,6 +3,12 @@
 
 <?php
 session_start();
+if (!isset($_SESSION['admin_user'])) {
+    header('Location: index.php');
+    exit();
+}
+
+$adminName = $_SESSION['admin_name'];
 require_once("../include/connection.php");
 
 if(!isset($_SESSION['admin_user'])){
@@ -70,7 +76,7 @@ document.getElementById(id).classList.add("hidden");
 </div>
 
 <div class="flex items-center space-x-6">
-<span>Welcome, <?php echo $_SESSION['admin_user']; ?></span>
+<span>Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></span>
 
 <a href="logout.php"
 class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white text-sm">
