@@ -201,7 +201,7 @@ window.addEventListener("load", function() {
       <div class="flex justify-between items-center mb-4">
         <!-- Title -->
         <h2 class="text-xl font-semibold text-gray-700 flex items-center gap-2">
-          <i class="fas fa-folder text-green-600"></i> Folders
+          <i class=""></i> Folders
         </h2>
 
         <!-- Action Buttons -->
