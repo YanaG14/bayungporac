@@ -94,7 +94,7 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
       position: fixed;
       inset: 0;
       z-index: 9999;
-      background: url('img/lg.flip-book-loader.gif') center/50px no-repeat #f9f9f9;
+     
     }
     .square-logo { width: 180px; object-fit: contain; }
   </style>
@@ -109,7 +109,43 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
 
 <body class="bg-gray-100 font-sans">
 
-<div id="loader"></div>
+<div id="loader" class="fixed inset-0 bg-white flex justify-center items-center z-50">
+  <div class="flex space-x-2">
+    <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full"></span>
+    <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full animation-delay-100"></span>
+    <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full animation-delay-200"></span>
+  </div>
+</div>
+
+<!-- Page Content -->
+<div id="page-content" class="opacity-0 transition-opacity duration-500">
+  <!-- your full page content here -->
+</div>
+
+<style>
+/* Bounce animation */
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px); /* Slightly less bounce */
+  }
+}
+
+.dot {
+  display: inline-block;
+  animation: bounce 1s infinite ease-in-out;
+}
+
+.animation-delay-100 {
+  animation-delay: 0.1s;
+}
+
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+</style>
 
 <!-- NAVBAR -->
 <nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
@@ -132,37 +168,68 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
 
   <!-- SIDEBAR -->
   <aside class="w-1/4">
-    <div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-green-600 flex flex-col items-center space-y-4 h-full">
-      <img src="img/adminLogo.png" class="square-logo mb-4">
-      <a href="folder_management.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-folder"></i> Folders</a>
-      <a href="department_management.php" class="w-full px-4 py-2 bg-green-600 text-white rounded flex items-center gap-2"><i class="fas fa-building"></i> Departments</a>
-      <a href="view_admin.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-users"></i> Admin Accounts</a>
-      <a href="view_user.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-users"></i> Employee Accounts</a>
+    <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-full">
+
+      <!-- Logo -->
+      <img src="img/adminLogo.png" class="square-logo mb-6 transition-transform duration-300 hover:scale-105">
+
+      <!-- Menu -->
+      <nav class="w-full space-y-2">
+        <a href="folder_management.php" 
+        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-folder text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <span class="font-medium tracking-wide">Folders</span>
+        </a>
+
+        <a href="department_management.php" 
+   class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
+          bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
+          transition-all duration-300">
+  <i class="fas fa-building text-green-600"></i>
+  <span class="font-medium tracking-wide">Departments</span>
+</a>
+
+        <a href="view_admin.php" 
+        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <span class="font-medium tracking-wide">Admin Accounts</span>
+        </a>
+
+        <a href="view_user.php" 
+        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <span class="font-medium tracking-wide">Employee Accounts</span>
+        </a>
+      </nav>
+
     </div>
   </aside>
 
   <!-- MAIN CONTENT -->
   <div class="w-3/4 flex-1">
-  <div class="bg-white rounded-xl shadow-md p-6 h-full">
-    <div class="flex justify-between items-center mb-4">
-      
-      <!-- Title -->
-      <h2 class="text-xl font-semibold text-gray-700 flex items-center gap-2">
-        <i class="fas fa-building"></i> Active Departments
-      </h2>
+    <div class="bg-white rounded-2xl shadow-lg p-6 h-full transition-all duration-300 hover:shadow-xl">
 
-      <!-- Buttons grouped with gap -->
-      <div class="flex items-center gap-3">
-        <button onclick="document.getElementById('modalAddDepartment').classList.remove('hidden');" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-2">
-          <i class="fas fa-plus"></i> Add Department
-        </button>
-        <button onclick="document.getElementById('modalArchivedDepartments').classList.remove('hidden');" 
-        class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 flex items-center gap-2">
-  <i class="fas fa-archive"></i> Archived Departments
-</button>
+      <div class="flex justify-between items-center mb-4">
+        
+        <!-- Title -->
+        <h2 class="text-xl font-semibold text-gray-700 flex items-center gap-2">
+          <i class="fas fa-building text-green-600"></i> Active Departments
+        </h2>
+
+        <!-- Buttons grouped with gap -->
+        <div class="flex items-center gap-3">
+          <button onclick="document.getElementById('modalAddDepartment').classList.remove('hidden');" 
+          class="bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300">
+            <i class="fas fa-plus"></i> Add Department
+          </button>
+
+          <button onclick="document.getElementById('modalArchivedDepartments').classList.remove('hidden');" 
+          class="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300">
+            <i class="fas fa-archive"></i> Archived Departments
+          </button>
+        </div>
+
       </div>
-
-    </div>
 
       <!-- TABLE -->
       <div class="overflow-x-none">

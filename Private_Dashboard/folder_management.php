@@ -44,14 +44,15 @@ ORDER BY f.folder_name ASC
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-#loader {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: url('img/lg.flip-book-loader.gif') center/50px no-repeat #f9f9f9;
-}
-.square-logo { width: 180px; object-fit: contain; }
-</style>
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+     
+    }
+    .square-logo { width: 180px; object-fit: contain; }
+  </style>
+
 
 <script>
 $(document).ready(function(){
@@ -62,7 +63,70 @@ $(document).ready(function(){
 </head>
 
 <body class="bg-gray-100 font-sans">
-<div id="loader"></div>
+<!-- LOADER -->
+<!-- Loader -->
+<!-- Loader -->
+<!-- Loader -->
+<div id="loader" class="fixed inset-0 bg-white flex justify-center items-center z-50 transition-opacity duration-500">
+  <div class="flex space-x-2">
+    <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full"></span>
+    <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full animation-delay-100"></span>
+    <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full animation-delay-200"></span>
+  </div>
+</div>
+
+<!-- Page Content -->
+<div id="page-content" class="opacity-0 transition-opacity duration-500">
+  <!-- your full page content here -->
+</div>
+
+<style>
+/* Bounce animation */
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+}
+
+.dot {
+  display: inline-block;
+  animation: bounce 1s infinite ease-in-out;
+}
+
+.animation-delay-100 { animation-delay: 0.1s; }
+.animation-delay-200 { animation-delay: 0.2s; }
+</style>
+
+<script>
+  window.addEventListener('load', function() {
+    const loader = document.getElementById('loader');
+    const pageContent = document.getElementById('page-content');
+
+    // Start fade out
+    loader.style.opacity = '0';
+
+    // Wait for transition to finish
+    setTimeout(() => {
+      loader.style.display = 'none';
+      pageContent.style.opacity = '1'; // Reveal page content
+    }, 500); // matches transition duration
+  });
+</script>
+
+<script>
+// Wait for the page to fully load
+window.addEventListener("load", function() {
+  const loader = document.getElementById("loader");
+  const content = document.getElementById("page-content");
+
+  loader.classList.add("opacity-0"); // fade out loader
+  setTimeout(() => {
+    loader.style.display = "none"; // remove loader
+    content.classList.remove("opacity-0"); // show page content
+  }, 500); // match transition duration
+});
+</script>
+
+
 
 <!-- NAVBAR -->
 <nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
@@ -85,31 +149,77 @@ $(document).ready(function(){
 
   <!-- SIDEBAR -->
   <aside class="w-1/4">
-    <div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-green-600 flex flex-col items-center space-y-4 h-full">
-      <img src="img/adminLogo.png" class="square-logo mb-4">
-      <a href="folder_management.php" class="w-full px-4 py-2 bg-green-600 text-white rounded flex items-center gap-2"><i class="fas fa-folder"></i> Folders</a>
-      <!--<a href="add_document.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-file-medical"></i> Information Management</a>-->
-      <a href="department_management.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-building"></i> Departments</a>
-      <a href="view_admin.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-users"></i> Admin Accounts</a>
-      <a href="view_user.php" class="w-full px-4 py-2 rounded hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-users"></i> Employee Accounts</a>
+    <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-full">
+
+      <!-- Logo -->
+      <img src="img/adminLogo.png" class="square-logo mb-6 transition-transform duration-300 hover:scale-105">
+
+      <!-- Menu -->
+      <nav class="w-full space-y-2">
+
+        <!-- Active: Folders -->
+        <a href="folder_management.php"
+   class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
+          bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
+          transition-all duration-300">
+  <i class="fas fa-folder text-green-600"></i>
+  <span class="font-medium tracking-wide">Folders</span>
+</a>
+
+        <!--<a href="add_document.php"
+           class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-file-medical text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <span>Information Management</span>
+        </a>-->
+
+        <a href="department_management.php"
+           class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-building text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <span class="font-medium">Departments</span>
+        </a>
+
+        <a href="view_admin.php"
+           class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <span class="font-medium">Admin Accounts</span>
+        </a>
+
+        <a href="view_user.php"
+           class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <span class="font-medium">Employee Accounts</span>
+        </a>
+
+      </nav>
     </div>
   </aside>
 
   <!-- MAIN CONTENT -->
   <div class="w-3/4 flex-1">
-    <div class="bg-white rounded-xl shadow-md p-6 h-full">
+    <div class="bg-white rounded-2xl shadow-lg p-6 h-full transition-all duration-300 hover:shadow-xl">
+
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold text-gray-700 flex items-center gap-2"><i class="fas fa-folder"></i> Folders</h2>
-        <div class="flex gap-2">
-          <button onclick="$('#modalAddFolder').removeClass('hidden');" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-2"><i class="fas fa-plus"></i> Add Folder</button>
-          <button onclick="openArchivedFolders();" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition-colors duration-300">
-    <i class="fas fa-archive"></i> View Archived Folders
-</button>
+        <!-- Title -->
+        <h2 class="text-xl font-semibold text-gray-700 flex items-center gap-2">
+          <i class="fas fa-folder text-green-600"></i> Folders
+        </h2>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-3">
+          <button onclick="$('#modalAddFolder').removeClass('hidden');" 
+                  class="bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300">
+            <i class="fas fa-plus"></i> Add Folder
+          </button>
+
+          <button onclick="openArchivedFolders();" 
+                  class="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg transition-all duration-300 flex items-center gap-2">
+            <i class="fas fa-archive"></i> View Archived Folders
+          </button>
         </div>
       </div>
 
       <!-- TABLE -->
-      <div class="overflow-x-none">
+      <div class="w-full overflow-x-hidden">
         <table id="dtable" class="min-w-full border border-gray-200">
           <thead class="bg-green-700 text-white">
             <tr>
@@ -122,26 +232,36 @@ $(document).ready(function(){
           <tbody class="text-gray-700">
           <?php while($row=mysqli_fetch_array($query)){ ?>
             <tr class="border-b hover:bg-gray-50">
+              
               <td class="px-4 py-2 text-center space-x-2">
-  <a href="add_document.php?folder_id=<?php echo $row['folder_id']; ?>" class="flex items-center gap-2 text-gray-800 hover:text-green-700">
-    <i class="fas fa-folder text-yellow-500"></i>
-    <b><?php echo $row['folder_name']; ?></b>
-  </a>
-</td>
-              <td class="px-4 py-2 text-center space-x-2"><?php echo $row['departments']; ?></td>
-              <td class="px-4 py-2 text-center space-x-2"><?php echo $row['created_at']; ?></td>
-              <td class="px-4 py-2 text-center space-x-2">
-                <button onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').removeClass('hidden');" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"><i class="fas fa-edit"></i></button>
-                <a href="#" 
-class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-onclick="confirmArchive(<?php echo $row['folder_id']; ?>)">
-<i class="fas fa-archive"></i>
-</a>
+                <a href="add_document.php?folder_id=<?php echo $row['folder_id']; ?>" class="flex items-center gap-2 text-gray-800 hover:text-green-700">
+                  <i class="fas fa-folder text-yellow-500"></i>
+                  <b><?php echo $row['folder_name']; ?></b>
+                </a>
               </td>
+
+              <!-- RESPONSIVE DEPARTMENTS COLUMN -->
+              <td class="px-4 py-2 text-center text-xs sm:text-sm md:text-base break-words max-w-[220px]">
+                <?php echo $row['departments']; ?>
+              </td>
+
+              <td class="px-4 py-2 text-center space-x-2"><?php echo $row['created_at']; ?></td>
+
+              <td class="px-4 py-2 text-center space-x-2">
+                <button onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').removeClass('hidden');" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                  <i class="fas fa-edit"></i>
+                </button>
+
+                <a href="#"
+                class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                onclick="confirmArchive(<?php echo $row['folder_id']; ?>)">
+                <i class="fas fa-archive"></i>
+                </a>
+              </td>
+
             </tr>
 
-            <!-- EDIT FOLDER MODAL -->
-           <!-- EDIT FOLDER MODAL -->
+<!-- EDIT FOLDER MODAL -->
 <div id="modalEditFolder<?php echo $row['folder_id']; ?>" class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
   <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl w-105 p-6 relative">
     
@@ -160,9 +280,9 @@ onclick="confirmArchive(<?php echo $row['folder_id']; ?>)">
 
       <!-- Folder Name -->
       <input type="text" name="folder_name" value="<?php echo $row['folder_name']; ?>" placeholder="Folder Name" 
-             class=" w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
+             class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
 
-      <!-- Assign Departments (moved below text field) -->
+      <!-- Assign Departments -->
       <div class="mt-2">
         <label class="font-medium text-gray-700 mb-1 block">Assign Departments</label>
         <div class="flex flex-col gap-2 max-h-40 overflow-y-auto p-2 border rounded-lg">
@@ -185,14 +305,17 @@ onclick="confirmArchive(<?php echo $row['folder_id']; ?>)">
         <button type="submit" name="update" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-5 py-2 shadow-md transition duration-200">
           Update Folder
         </button>
+
         <button type="button" onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').addClass('hidden');" 
                 class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg px-5 py-2 transition duration-200">
           Close
         </button>
       </div>
+
     </form>
   </div>
 </div>
+
           <?php } ?>
           </tbody>
         </table>
