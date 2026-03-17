@@ -12,7 +12,7 @@ if(isset($_GET['archive_id'])){
     
     // Set a toast session
     $_SESSION['toast'] = 'Admin Archived Successfully!';
-    header('Location: view_admin.php');
+    header('Location: system-administrator.php');
     exit();
 }
 
@@ -23,7 +23,7 @@ if(isset($_GET['unarchive_id'])){
     
     // Set a toast session
     $_SESSION['toast'] = 'Admin Unarchived Successfully!';
-    header('Location: view_admin.php');
+    header('Location: system-administrator.php');
     exit();
 }
 
@@ -67,7 +67,7 @@ if (isset($_POST['edit_publish'])) {
 
  // Set a toast session
 $_SESSION['toast'] = 'Admin updated successfully!';
-header('Location: view_admin.php');
+header('Location: system-administrator.php');
 exit();
 }
 ?>
@@ -201,18 +201,18 @@ exit();
         </a>
 
         <a href="view_admin.php" 
+        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <span class="font-medium tracking-wide">Records Administrators</span>
+        </a>
+
+        <a href="system-administrator.php" 
    class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
           bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
           transition-all duration-300">
   <i class="fas fa-users text-green-600"></i>
-  <span class="font-medium tracking-wide">Records Administrators</span>
+  <span class="font-medium tracking-wide">System Administrators</span>
 </a>
-
-<a href="system-administrator.php" 
-        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
-          <span class="font-medium tracking-wide">System Administrators</span>
-        </a>
         
       </nav>
 
@@ -253,7 +253,7 @@ exit();
           <?php
             $query = "SELECT * FROM admin_login 
           WHERE admin_status != 'Archived' 
-          AND role = 'Records Administrator'";
+          AND role = 'System Administrator'";
             $result = mysqli_query($conn, $query);
             while($row = mysqli_fetch_assoc($result)){
           ?>
@@ -261,7 +261,7 @@ exit();
               <td class="px-4 py-2"><?php echo htmlspecialchars($row['name']); ?></td>
               <td class="px-4 py-2"><?php echo htmlspecialchars($row['admin_user']); ?></td>
               <td class="px-4 py-2 text-center space-x-2">
-                <a href="view_admin.php?id=<?php echo $row['id']; ?>" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"><i class="fas fa-edit"></i></a>
+                <a href="system-administrator.php?id=<?php echo $row['id']; ?>" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"><i class="fas fa-edit"></i></a>
                <a href="#" 
    class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" 
    onclick="confirmArchiveAdmin(<?php echo $row['id']; ?>)">
@@ -294,7 +294,7 @@ exit();
     </h3>
 
     <!-- Form -->
-    <form action="create_Admin.php" method="POST" class="flex flex-col gap-4">
+    <form action="add-system-administrator.php" method="POST" class="flex flex-col gap-4">
       <input type="hidden" name="status" value="Admin">
 
       <input type="text" name="name" placeholder="Full Name" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none transition" required>
@@ -530,7 +530,7 @@ function confirmArchiveAdmin(id) {
         }
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location = "view_admin.php?archive_id=" + id;
+            window.location = "system-administrator.php?archive_id=" + id;
         }
     });
 }
@@ -555,7 +555,7 @@ function confirmUnarchiveAdmin(id) {
         }
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location = "view_admin.php?unarchive_id=" + id;
+            window.location = "system-administrator.php?unarchive_id=" + id;
         }
     });
 }

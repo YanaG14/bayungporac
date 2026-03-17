@@ -198,19 +198,19 @@ window.addEventListener("load", function() {
     <a href="department_management.php"
        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
       <i class="fas fa-building text-gray-600 group-hover:text-green-600 transition-colors"></i>
-      <span class="font-medium text-sm sm:text-base">Departments</span>
+      <span class="font-medium text-sm sm:text-base">Offices</span>
     </a>
 
     <a href="view_admin.php"
        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
       <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
-      <span class="font-medium text-sm sm:text-base">Admin Accounts</span>
+      <span class="font-medium text-sm sm:text-base">Records Administrators</span>
     </a>
 
     <a href="view_user.php"
        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
       <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
-      <span class="font-medium text-sm sm:text-base">Employee Accounts</span>
+      <span class="font-medium text-sm sm:text-base">Employees</span>
     </a>
 
   </nav>

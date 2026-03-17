@@ -58,7 +58,7 @@ if(isset($_POST["adminlog"])){
         or die(mysqli_error($conn));
 
     // Redirect to folder management
-    header("Location: folder_management.php");
+    header("Location: department_management.php");
     exit();
 }
 ?>

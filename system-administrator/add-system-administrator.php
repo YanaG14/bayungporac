@@ -8,7 +8,7 @@ if(isset($_POST['reg'])){
     $user_password_raw = $_POST['admin_password'];  // raw password
     $user_status = mysqli_real_escape_string($conn,$_POST['status']); // changed to match your form
     // Insert into database with fixed role
-$fixed_role = "Records Administrator";
+$fixed_role = "System Administrator";
 
     // Password validation regex
     $pattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/';
@@ -33,7 +33,7 @@ $fixed_role = "Records Administrator";
         echo '
         <script type="text/javascript">
             alert("Email Address already taken");
-            window.location = "view_admin.php";
+            window.location = "system-administrator.php";
         </script>
         ';
         exit();
@@ -47,7 +47,7 @@ $fixed_role = "Records Administrator";
     echo '
     <script type="text/javascript">
         alert("Saved Admin Info");
-        window.location = "view_admin.php";
+        window.location = "system-administrator.php";
     </script>
     ';
 }

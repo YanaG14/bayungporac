@@ -147,22 +147,16 @@ $adminName = $_SESSION['admin_name'];
 
       <!-- Menu -->
       <nav class="w-full space-y-2">
-        <a href="add_document.php" 
+        <!-- <a href="add_document.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
           <i class="fas fa-folder text-gray-600 group-hover:text-green-600 transition-colors"></i>
           <span class="font-medium tracking-wide">Folders</span>
-        </a>
+        </a> -->
 
         <a href="department_management.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
           <i class="fas fa-building text-gray-600 group-hover:text-green-600 transition-colors"></i>
-          <span class="font-medium tracking-wide">Departments</span>
-        </a>
-
-        <a href="view_admin.php" 
-        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
-          <span class="font-medium tracking-wide">Admin Accounts</span>
+          <span class="font-medium tracking-wide">Offices</span>
         </a>
 
         <a href="view_user.php" 
@@ -170,8 +164,21 @@ $adminName = $_SESSION['admin_name'];
           bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
           transition-all duration-300">
   <i class="fas fa-users text-green-600"></i>
-  <span class="font-medium tracking-wide">Employee Accounts</span>
+  <span class="font-medium tracking-wide">Employees</span>
 </a>
+
+        <a href="view_admin.php" 
+        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <span class="font-medium tracking-wide">Records Administrators</span>
+        </a>
+
+        <a href="system-administrator.php" 
+        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <span class="font-medium tracking-wide">System Administrators</span>
+        </a>
+        
       </nav>
 
     </div>
