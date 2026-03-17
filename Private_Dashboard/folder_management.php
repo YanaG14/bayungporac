@@ -172,21 +172,21 @@ window.addEventListener("load", function() {
     </button>
 </div>
 
-  <!-- SIDEBAR -->
+  <!-- SIDEBAR 
  <aside id="sidebar" 
        class="fixed top-20 left-0 z-50 w-64 bg-white/80 backdrop-blur-lg shadow-xl p-4 sm:p-6 border border-gray-200 flex flex-col items-center h-[calc(100vh-6rem)] transform -translate-x-full transition-transform duration-300 lg:translate-x-0 lg:relative lg:flex">
   
-  <!-- Close button for mobile -->
+  
   <button id="sidebarClose" class="lg:hidden self-end mb-4 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
 
-  <!-- Logo -->
+  
   <img src="img/adminLogo.png" 
        class="square-logo mb-6 max-w-[120px] sm:max-w-[150px] transition-transform duration-300 hover:scale-105">
 
-  <!-- Menu -->
+  
   <nav class="w-full space-y-2">
 
-    <!-- Active: Folders -->
+    
     <a href="folder_management.php"
        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
               bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
@@ -214,7 +214,7 @@ window.addEventListener("load", function() {
     </a>
 
   </nav>
-</aside>
+</aside> -->
 
   <!-- MAIN CONTENT -->
   <div class="w-full lg:w-3/4 flex-1 lg:ml-0">
