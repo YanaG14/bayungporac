@@ -349,15 +349,17 @@ if($edit_id != ''){
       </select>
 
       <input type="email" name="email_address" value="<?php echo $admin1; ?>" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
+      
       <div class="relative">
-  <input type="password" name="user_password" id="edit_user_password" value="<?php echo $pass1; ?>"
+  <input type="password" name="user_password" id="edit_user_password" placeholder="Password"
     class="border border-gray-300 rounded-lg px-4 py-2 pr-10 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
   <button type="button" onclick="togglePassword('edit_user_password','toggleIconEditUser')"
     class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800">
     <i id="toggleIconEditUser" class="fas fa-eye"></i>
   </button>
 </div>
-      <input type="text" name="status" value="Employee" class="border border-gray-300 rounded-lg px-4 py-2 bg-gray-100" readonly>
+
+      <input type="hidden" name="status" value="Employee">
 
       <!-- Buttons -->
       <div class="flex justify-end gap-3 mt-4">
