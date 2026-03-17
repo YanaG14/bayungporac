@@ -27,11 +27,11 @@ document.addEventListener('DOMContentLoaded', function() {
         position: 'top',
         showConfirmButton: false,
         timer: 800,
-        timerProgressBar: false,
+        timerProgressBar: false, 
         icon: 'success',
         title: 'Logged out successfully!'
     }).then(() => {
-        window.location.href = 'index.php';
+        window.location.href = '../Private_Dashboard/index.php';
     });
 });
 </script>

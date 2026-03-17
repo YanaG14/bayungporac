@@ -1,6 +1,6 @@
 <?php
 require_once("../include/connection.php");
-session_start(); // Start session at the top
+session_start();
 
 if(isset($_POST["adminlog"])){
 
@@ -10,55 +10,118 @@ if(isset($_POST["adminlog"])){
     $username = mysqli_real_escape_string($conn, $_POST["admin_user"]);  
     $password = mysqli_real_escape_string($conn, $_POST["admin_password"]);
 
-    // Fetch admin by email
-    $query = mysqli_query($conn, "SELECT * FROM admin_login WHERE admin_user = '$username'") 
-        or die(mysqli_error($conn));
-    $row = mysqli_fetch_array($query);
-    $counter = mysqli_num_rows($query);
-
-    // Default error
     $error_msg = "Invalid Email Address or Password, Please try again!";
 
-    if ($counter == 0) {
-        $_SESSION['error_msg'] = $error_msg;
-        header("Location: index.php");
-        exit();
-    }
-
-    if (!password_verify($password, $row["admin_password"])) {
-        $_SESSION['error_msg'] = $error_msg;
-        header("Location: index.php");
-        exit();
-    }
-
-    if (strtolower($row['admin_status']) === 'archived') {
-        $_SESSION['error_msg'] = "Your account has been archived. You cannot login.";
-        header("Location: index.php");
-        exit();
-    }
-
-    // Login success
-    $_SESSION['admin_user'] = $row['id'];
-    $_SESSION['admin_name'] = $row['name'];  
-
-    // Get IP and host
-    if (!empty($_SERVER["HTTP_CLIENT_IP"])) {
-        $ip = $_SERVER["HTTP_CLIENT_IP"];
-    } elseif (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
-        $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
-    } else {
-        $ip = $_SERVER["REMOTE_ADDR"];
-    }
-
-    $host = gethostbyaddr($_SERVER['REMOTE_ADDR']);
-    $remarks = "Has LoggedIn the system at";
-
-    mysqli_query($conn, "INSERT INTO history_log1(id, admin_user, action, ip, host, login_time) 
-                         VALUES('$row[id]', '$username', '$remarks', '$ip', '$host', '$date')")
+    // =========================
+    // 🔴 CHECK ADMIN FIRST
+    // =========================
+    $query = mysqli_query($conn, "SELECT * FROM admin_login WHERE admin_user = '$username'") 
         or die(mysqli_error($conn));
 
-    // Redirect to folder management
-    header("Location: folder_management.php");
-    exit();
+    if(mysqli_num_rows($query) > 0){
+
+        $row = mysqli_fetch_array($query);
+
+        if (!password_verify($password, $row["admin_password"])) {
+            $_SESSION['error_msg'] = $error_msg;
+            header("Location: index.php");
+            exit();
+        }
+
+        if (strtolower($row['admin_status']) === 'archived') {
+            $_SESSION['error_msg'] = "Your account has been archived. You cannot login.";
+            header("Location: index.php");
+            exit();
+        }
+
+        // ✅ ADMIN LOGIN SUCCESS
+        $_SESSION['admin_user'] = $row['id'];
+        $_SESSION['admin_name'] = $row['name'];  
+        $_SESSION['admin_role'] = $row['role'];
+
+        // Log
+        $ip = $_SERVER["REMOTE_ADDR"];
+        $host = gethostbyaddr($ip);
+        $remarks = "Has LoggedIn the system at";
+
+        mysqli_query($conn, "INSERT INTO history_log1(id, admin_user, action, ip, host, login_time) 
+            VALUES('$row[id]', '$username', '$remarks', '$ip', '$host', '$date')")
+            or die(mysqli_error($conn));
+
+        // Role Redirect
+        if ($row['role'] === "Records Administrator") {
+            header("Location: folder_management.php");
+
+        } elseif ($row['role'] === "System Administrator") {
+            header("Location: ../system-administrator/department_management.php");
+        
+
+        } else {
+            $_SESSION['error_msg'] = "Unauthorized role access.";
+            header("Location: index.php");
+        }
+
+        exit();
+    }
+
+    // =========================
+    // 🔵 IF NOT ADMIN → CHECK USER
+    // =========================
+    $stmt = $conn->prepare("SELECT id, name, email_address, user_password, user_status, department_id FROM login_user WHERE email_address = ? LIMIT 1");
+
+    if (!$stmt) {
+        die("Prepare failed: " . $conn->error);
+    }
+
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 1){
+
+        $user = $result->fetch_assoc();
+
+        if (strtolower($user['user_status']) === 'archived') {
+            $_SESSION['error_msg'] = "User account is archived.";
+            header("Location: index.php");
+            exit();
+        }
+
+        if (password_verify($password, $user["user_password"])) {
+
+            session_regenerate_id(true);
+
+            $_SESSION["user_no"] = $user["id"];
+            $_SESSION["email_address"] = $user["email_address"];
+            $_SESSION["department_id"] = $user["department_id"];
+
+            // Log user login
+            $ip = $_SERVER["REMOTE_ADDR"];
+            $host = gethostbyaddr($ip);
+            $remarks = "Has LoggedIn the system at";
+
+            $logStmt = $conn->prepare("INSERT INTO history_log (id, email_address, action, ip, host, login_time) VALUES (?, ?, ?, ?, ?, ?)");
+
+            if ($logStmt) {
+                $logStmt->bind_param("isssss", $user["id"], $user["email_address"], $remarks, $ip, $host, $date);
+                $logStmt->execute();
+                $logStmt->close();
+            }
+
+            // ✅ REDIRECT TO USER SYSTEM
+            header("Location: ../private_user/home.php");
+            exit();
+
+        } else {
+            $_SESSION['error_msg'] = $error_msg;
+            header("Location: index.php");
+            exit();
+        }
+
+    } else {
+        $_SESSION['error_msg'] = $error_msg;
+        header("Location: index.php");
+        exit();
+    }
 }
 ?>

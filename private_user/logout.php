@@ -19,7 +19,7 @@ session_unset();
 session_destroy();
 
 echo "<script type='text/javascript'>alert('LogOut Successfully!');
-				  document.location='../login.php'</script>";
+				 document.location='../Private_Dashboard/index.php';</script>";
 
 ?>
 
