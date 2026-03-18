@@ -130,7 +130,7 @@ $(window).on('load', function(){
 <div class="mt-24 px-6 md:px-12">
   <div class="grid grid-cols-12 gap-6">
 
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR 
     <aside class="col-span-12 md:col-span-3 space-y-6">
       <div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-6 border-t-4 border-green-600 hover:scale-[1.02] transition-transform duration-300">
         <div class="flex flex-col items-center">
@@ -150,7 +150,7 @@ $(window).on('load', function(){
           <li>Prevent unintended use of obsolete documents</li>
         </ul>
       </div>
-    </aside>
+    </aside> -->
 
     <!-- MAIN TABLE/FOLDER SECTION -->
     <main class="col-span-12 md:col-span-9">
