@@ -218,7 +218,7 @@ class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white text-sm">
         $filename_no_ext = $file_parts['filename'];
         $extension = $file_parts['extension'];
         ?>
-        <label>File Name (without extension)</label>
+        <label>File Name</label>
         <input type="text" name="file_name" class="w-full border p-2 rounded mt-2" value="<?php echo htmlentities($filename_no_ext); ?>" required>
         <span class="text-gray-500 text-sm">File extension: .<?php echo $extension; ?></span>
 
