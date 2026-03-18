@@ -105,7 +105,7 @@ class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white text-sm">
 <div class="flex items-center justify-between mb-4">
 
   <h4 class="text-2xl font-semibold text-gray-700 text-left">
-    Information Management
+    Records Management
   </h4>
 
   <div class="flex gap-3">
@@ -128,9 +128,10 @@ class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white text-sm">
     <thead class="bg-green-600 text-white">
       <tr>
         <th class="p-3">Filename</th>
-        <th class="p-3">Size</th>
+        <!-- <th class="p-3">Size</th> -->
+         <th class="p-3">Departments</th>
         <th class="p-3">Uploader</th>
-        <th class="p-3">Role</th>
+        <!-- <th class="p-3">Role</th> -->
         <th class="p-3">Date Uploaded</th>
         <th class="p-3">Downloads</th>
         <th class="p-3">Action</th>
@@ -160,29 +161,95 @@ class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white text-sm">
       ?>
 
       <tr class="border-b">
-        <td class="p-3"><?php echo htmlentities($name); ?></td>
-        <td class="p-3"><?php echo floor($size/1000).' KB'; ?></td>
-        <td class="p-3"><?php echo htmlentities($uploads); ?></td>
-        <td class="p-3"><?php echo htmlentities($status); ?></td>
-        <td class="p-3"><?php echo htmlentities($time); ?></td>
-        <td class="p-3"><?php echo htmlentities($download); ?></td>
-        <td class="p-3">
-          <div class="flex items-center gap-2 justify-center">
-            <a href="downloads.php?file_id=<?php echo $id; ?>"
-               class="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white w-8 h-8 rounded text-sm">
-              <i class="fa fa-download"></i>
-            </a>
-            <a href="<?php echo $filepath; ?>" target="_blank"
-               class="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 text-white w-8 h-8 rounded text-sm">
-              <i class="fa fa-eye"></i>
-            </a>
-            <a href="archive_file.php?file_id=<?php echo $id; ?>"
-               class="flex items-center justify-center bg-yellow-500 hover:bg-yellow-600 text-white w-8 h-8 rounded text-sm">
-              <i class="fa fa-archive"></i>
-            </a>
-          </div>
-        </td>
-      </tr>
+  <td class="p-3"><?php echo htmlentities($name); ?></td>
+  <td class="p-3"><?php 
+      // Fetch departments for this file
+      $dept_query = mysqli_query($conn,"
+  SELECT d.department_name 
+  FROM file_departments fd
+  JOIN departments d ON fd.department_id = d.department_id
+  WHERE fd.file_id = $id
+");
+      $dept_names = [];
+      while($dep = mysqli_fetch_array($dept_query)){
+          $dept_names[] = $dep['department_name'];
+      }
+      echo implode(', ', $dept_names);
+  ?></td>
+  <td class="p-3"><?php echo htmlentities($uploads); ?></td>
+  <td class="p-3"><?php echo htmlentities($time); ?></td>
+  <td class="p-3"><?php echo htmlentities($download); ?></td>
+  <td class="p-3">
+    <div class="flex items-center gap-2 justify-center">
+      <a href="downloads.php?file_id=<?php echo $id; ?>"
+         class="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white w-8 h-8 rounded text-sm">
+        <i class="fa fa-download"></i>
+      </a>
+      <a href="<?php echo $filepath; ?>" target="_blank"
+         class="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 text-white w-8 h-8 rounded text-sm">
+        <i class="fa fa-eye"></i>
+      </a>
+      <a href="archive_file.php?file_id=<?php echo $id; ?>"
+         class="flex items-center justify-center bg-yellow-500 hover:bg-yellow-600 text-white w-8 h-8 rounded text-sm">
+        <i class="fa fa-archive"></i>
+      </a>
+      <button onclick="openModal('editModal<?php echo $id; ?>')"
+        class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white w-8 h-8 rounded text-sm">
+        <i class="fa fa-edit"></i>
+      </button>
+    </div>
+  </td>
+</tr>
+
+<!-- EDIT MODAL FOR THIS FILE -->
+<div id="editModal<?php echo $id; ?>" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center hidden z-50">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md">
+    <div class="flex justify-between items-center border-b p-4">
+      <h4 class="font-semibold text-lg">Edit File</h4>
+      <button onclick="closeModal('editModal<?php echo $id; ?>')" class="text-gray-500">&times;</button>
+    </div>
+    <form method="POST" action="update_file.php">
+      <div class="p-6">
+        <input type="hidden" name="file_id" value="<?php echo $id; ?>">
+        <input type="hidden" name="folder_id" value="<?php echo $folder_id; ?>">
+
+        <?php 
+        $file_parts = pathinfo($file['name']);
+        $filename_no_ext = $file_parts['filename'];
+        $extension = $file_parts['extension'];
+        ?>
+        <label>File Name (without extension)</label>
+        <input type="text" name="file_name" class="w-full border p-2 rounded mt-2" value="<?php echo htmlentities($filename_no_ext); ?>" required>
+        <span class="text-gray-500 text-sm">File extension: .<?php echo $extension; ?></span>
+
+        <br><br>
+        <label>Assign Departments</label>
+        <?php
+        $departments = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='Active'");
+        // Get departments assigned to THIS file
+        $assigned = mysqli_query($conn,"SELECT department_id FROM file_departments WHERE file_id='$id'");
+        $assigned_dept = [];
+        while($ad=mysqli_fetch_array($assigned)){
+            $assigned_dept[] = $ad['department_id'];
+        }
+        while($d=mysqli_fetch_array($departments)){
+        ?>
+        <div class="mt-2">
+          <input type="checkbox" name="departments[]" value="<?php echo $d['department_id']; ?>" 
+            <?php echo in_array($d['department_id'],$assigned_dept)?'checked':''; ?>>
+          <?php echo htmlentities($d['department_name']); ?>
+        </div>
+        <?php } ?>
+      </div>
+
+      <div class="p-4 border-t text-right">
+        <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded" name="update_file">
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 
       <?php } ?>
     </tbody>
@@ -230,6 +297,8 @@ Upload File
 </form>
 </div>
 </div>
+
+
 
 <!-- ARCHIVED MODAL -->
 <div id="archiveModal"
