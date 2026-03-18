@@ -1,319 +1,630 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Bayung Porac Archive</title>
 
-<link rel="icon" type="image/png" href="js/img/municipalLogo.png">
+<link rel="icon" href="js/img/municipalLogo.png">
 
-<!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
-
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-
-<!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet">
-
-<!-- MDB -->
-<link href="css/mdb.min.css" rel="stylesheet">
-
-<link href="css/style.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-
+/* ===== LOADER (SMOOTHER + SCALE FADE OUT) ===== */
 #loader{
-position: fixed;
-left:0;
-top:0;
-width:100%;
-height:100%;
-z-index:9999;
-background:url('img/loading.gif') center no-repeat #f9f9f9;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    
+    transition: opacity 0.6s ease, visibility 0.6s ease, transform 0.6s ease;
 }
 
-/* Slider spin */
-
-.jssorl-009-spin img{
-animation-name:jssorl-009-spin;
-animation-duration:1.6s;
-animation-iteration-count:infinite;
-animation-timing-function:linear;
+#loader.hidden{
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.05);
 }
 
-@keyframes jssorl-009-spin{
-from{transform:rotate(0deg);}
-to{transform:rotate(360deg);}
+/* ===== MODERN SECTION ANIMATION (SMOOTHER + DEPTH) ===== */
+section{
+    opacity: 0;
+    transform: translateY(70px) scale(0.96);
+    filter: blur(8px);
+    transition: 
+        opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.8s ease;
+    will-change: transform, opacity;
 }
 
-p.aaa{
-text-indent:50px;
+section.active{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
 }
 
+/* ===== STAGGER CHILD ANIMATION (SMOOTHER CASCADE) ===== */
+section.active > *{
+    opacity: 0;
+    transform: translateY(25px);
+    animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+section.active > *:nth-child(1){ animation-delay: 0.1s; }
+section.active > *:nth-child(2){ animation-delay: 0.2s; }
+section.active > *:nth-child(3){ animation-delay: 0.3s; }
+section.active > *:nth-child(4){ animation-delay: 0.4s; }
+section.active > *:nth-child(5){ animation-delay: 0.5s; }
+
+@keyframes fadeUp{
+    from{
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== NAVBAR (GLASS + SMOOTH SHRINK EFFECT) ===== */
+nav{
+    transition: all 0.4s ease;
+    backdrop-filter: blur(0px);
+}
+
+nav.scrolled{
+    background: rgba(5, 46, 22, 0.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* ===== HOVER MICRO-INTERACTIONS (MORE PREMIUM) ===== */
+button, a{
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+button:hover, a:hover{
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* ===== BUTTON GLOW EFFECT ===== */
+button{
+    position: relative;
+    overflow: hidden;
+}
+
+button::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.35), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+button:hover::after{
+    opacity: 1;
+}
+
+/* ===== SCROLL PROGRESS BAR (TOP INDICATOR) ===== */
+body::before{
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: var(--scroll-width, 0%);
+    background: linear-gradient(to right, #10b981, #facc15);
+    z-index: 9999;
+    transition: width 0.2s ease;
+}
+
+/* ===== SMOOTH SCROLL ===== */
+html{
+    scroll-behavior: smooth;
+}/* ===== LOADER (SMOOTHER + SCALE FADE OUT) ===== */
+#loader{
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    
+    transition: opacity 0.6s ease, visibility 0.6s ease, transform 0.6s ease;
+}
+
+#loader.hidden{
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.05);
+}
+
+/* ===== MODERN SECTION ANIMATION (SMOOTHER + DEPTH) ===== */
+section{
+    opacity: 0;
+    transform: translateY(70px) scale(0.96);
+    filter: blur(8px);
+    transition: 
+        opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.8s ease;
+    will-change: transform, opacity;
+}
+
+section.active{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+}
+
+/* ===== STAGGER CHILD ANIMATION (SMOOTHER CASCADE) ===== */
+section.active > *{
+    opacity: 0;
+    transform: translateY(25px);
+    animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+section.active > *:nth-child(1){ animation-delay: 0.1s; }
+section.active > *:nth-child(2){ animation-delay: 0.2s; }
+section.active > *:nth-child(3){ animation-delay: 0.3s; }
+section.active > *:nth-child(4){ animation-delay: 0.4s; }
+section.active > *:nth-child(5){ animation-delay: 0.5s; }
+
+@keyframes fadeUp{
+    from{
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== NAVBAR (GLASS + SMOOTH SHRINK EFFECT) ===== */
+nav{
+    transition: all 0.4s ease;
+    backdrop-filter: blur(0px);
+}
+
+nav.scrolled{
+    background: rgba(5, 46, 22, 0.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* ===== HOVER MICRO-INTERACTIONS (MORE PREMIUM) ===== */
+button, a{
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+button:hover, a:hover{
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* ===== BUTTON GLOW EFFECT ===== */
+button{
+    position: relative;
+    overflow: hidden;
+}
+
+button::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.35), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+button:hover::after{
+    opacity: 1;
+}
+
+/* ===== SCROLL PROGRESS BAR (TOP INDICATOR) ===== */
+body::before{
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: var(--scroll-width, 0%);
+    background: linear-gradient(to right, #10b981, #facc15);
+    z-index: 9999;
+    transition: width 0.2s ease;
+}
+
+/* ===== SMOOTH SCROLL ===== */
+html{
+    scroll-behavior: smooth;
+}
+
+#intro {
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+#intro.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+@keyframes zoomFade {
+    from {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+#intro img {
+    animation: zoomFade 1s ease forwards;
+}
+
+#intro {
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+#intro.hide {
+    opacity: 0;
+    visibility: hidden;
+}
 </style>
-
-<script src="js/js/jssor.slider-27.5.0.min.js"></script>
-
-<script>
-jssor_1_slider_init = function(){
-
-var jssor_1_options = {
-$AutoPlay:1,
-$Idle:2000,
-$ArrowNavigatorOptions:{ $Class:$JssorArrowNavigator$ },
-$BulletNavigatorOptions:{ $Class:$JssorBulletNavigator$ }
-};
-
-var jssor_1_slider = new $JssorSlider$("jssor_1", jssor_1_options);
-
-var MAX_WIDTH = 980;
-
-function ScaleSlider(){
-var containerElement=jssor_1_slider.$Elmt.parentNode;
-var containerWidth=containerElement.clientWidth;
-
-if(containerWidth){
-var expectedWidth=Math.min(MAX_WIDTH || containerWidth, containerWidth);
-jssor_1_slider.$ScaleWidth(expectedWidth);
-}else{
-window.setTimeout(ScaleSlider,30);
-}
-}
-
-ScaleSlider();
-
-$Jssor$.$AddEvent(window,"load",ScaleSlider);
-$Jssor$.$AddEvent(window,"resize",ScaleSlider);
-$Jssor$.$AddEvent(window,"orientationchange",ScaleSlider);
-
-};
-</script>
 
 </head>
 
-<body class="bg-gradient-to-br from-green-50 via-white to-green-100 font-sans">
+<div id="intro" class="fixed inset-0 bg-white flex items-center justify-center z-[9999]">
+    <img src="js/img/municipalLogo.png" class="w-32 h-32">
+</div>
 
+<body class="bg-gradient-to-br from-green-50 via-white to-green-100 font-sans scroll-smooth">
+
+
+  
 <div id="loader"></div>
 
 <!-- NAVBAR -->
-
-<nav class="fixed top-0 w-full bg-gradient-to-r from-green-900 via-green-700 to-green-500 shadow-lg z-50">
-
+<nav id="navbar" class="fixed top-0 w-full bg-green-900/80 backdrop-blur z-50">
 <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
 <div class="flex items-center gap-3">
-
 <img src="js/img/municipalLogo.png" class="w-10 h-10">
+<h1 class="text-white font-semibold">Bayung Porac Archive</h1>
+</div>
 
-<span class="text-white text-xl font-semibold tracking-wide">
-Bayung Porac Archive
-</span>
+<div class="flex gap-4 items-center">
 
-<a href="Private_Dashboard/index.php" class="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white px-4 py-2 rounded-lg transition">
-  <i class="fas fa-user"></i>
-  Log in
+
+<a href="Private_Dashboard/index.php"
+class="bg-white text-green-800 px-4 py-2 rounded-full hover:bg-green-100 flex items-center gap-2">
+<i class="fas fa-user"></i> Login
 </a>
+</div>
 
+</div>
 </nav>
 
-<!-- HERO SLIDER -->
 
-<div class="max-w-6xl mx-auto pt-32 px-4">
 
-<div class="backdrop-blur-md bg-white/70 rounded-3xl shadow-2xl p-6 border border-white/40">
 
-<div id="jssor_1" style="position:relative;margin:0 auto;width:980px;height:380px;overflow:hidden;visibility:hidden;" class="rounded-2xl overflow-hidden">
+<section id="gallery" class="max-w-6xl mx-auto px-6 py-10 mt-20">
 
-<div data-u="loading" class="jssorl-009-spin" style="position:absolute;top:0;left:0;width:100%;height:100%;text-align:center;background-color:rgba(0,0,0,0.6);">
+<div class="grid md:grid-cols-2 gap-8 items-center">
 
-<img style="margin-top:-19px;position:relative;top:50%;width:38px;height:38px;" src="img/spin.svg"/>
+    <!-- LEFT SIDE -->
+    <div id="profileText" class="transition-opacity duration-700">
 
-</div>
+        <p id="role" class="text-lg md:text-xl font-semibold text-gray-600 uppercase tracking-wide">
+            Mayor
+        </p>
 
-<div data-u="slides" style="cursor:default;position:relative;width:980px;height:380px;overflow:hidden;">
+        <h2 id="name" class="text-4xl md:text-5xl font-bold text-green-700 mb-4">
+            Jaime V. Capil
+        </h2>
 
-<!-- Slide 1 -->
-<div class="relative">
+        <p id="description" class="text-gray-700 leading-relaxed">
+            Official leadership profile and background.
+        </p>
 
-<img data-u="image" src="js/img/pic1.jpg" class="w-full h-full object-cover"/>
+    </div>
 
-<div class="absolute bottom-0 w-full bg-gradient-to-t from-black/70 to-transparent p-6">
-<h2 class="text-white text-2xl font-semibold">
-Celebrating Women's Month
-</h2>
-</div>
-
-</div>
-
-<!-- Slide 2 -->
-<div class="relative">
-
-<img data-u="image" src="js/img/pic2.jpg" class="w-full h-full object-cover"/>
-
-<div class="absolute bottom-0 w-full bg-gradient-to-t from-black/70 to-transparent p-6">
-<h2 class="text-white text-2xl font-semibold">
-Kasalang Bayan
-</h2>
-</div>
+    <!-- RIGHT SIDE -->
+    <div class="flex justify-end">
+        <img id="profileImage"
+             src="js/img/pic6.jfif"
+             onclick="openModal(this)"
+             class="cursor-pointer rounded-lg w-full max-w-md shadow-lg transition-opacity duration-700">
+    </div>
 
 </div>
 
-<!-- Slide 3 -->
-<div class="relative">
+</section>
 
-<img data-u="image" src="js/img/pic3.jpg" class="w-full h-full object-cover"/>
+<!-- HERO -->
+<section id="hero" class="pt-28 pb-10 px-4">
+<div class="max-w-6xl mx-auto">
+<div class="relative rounded-3xl overflow-hidden shadow-2xl">
 
-<div class="absolute bottom-0 w-full bg-gradient-to-t from-black/70 to-transparent p-6">
-<h2 class="text-white text-2xl font-semibold">
-Basketball League
-</h2>
+<div class="relative h-[420px]">
+
+<img src="js/img/pic1.jpg" class="slide absolute inset-0 w-full h-full object-cover opacity-100 transition">
+<img src="js/img/pic2.jpg" class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition">
+<img src="js/img/pic3.jpg" class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition">
+
+<div class="absolute inset-0 bg-black/60"></div>
+
+<div class="absolute bottom-0 p-8 text-white">
+<h2 id="caption" class="text-3xl font-bold">Women's Month</h2>
+<p class="text-sm">Preserving history digitally</p>
 </div>
 
 </div>
+</div>
+</div>
+</section>
 
-<!-- Slide 4 -->
-<div class="relative">
+<!-- SEARCH -->
 
-<img data-u="image" src="js/img/pic4.jpg" class="w-full h-full object-cover"/>
 
-<div class="absolute bottom-0 w-full bg-gradient-to-t from-black/70 to-transparent p-6">
-<h2 class="text-white text-2xl font-semibold">
-Mutya Ning Porac
-</h2>
+<!-- FEATURED -->
+<section id="featured" class="max-w-6xl mx-auto px-6 py-10">
+<h2 class="text-2xl font-bold text-green-800 mb-6">Featured Collections</h2>
+
+<div class="grid md:grid-cols-3 gap-6">
+
+<div class="item bg-white rounded-2xl shadow p-4">
+<img src="js/img/pic1.jpg" class="h-40 w-full object-cover rounded">
+<p class="mt-2 font-semibold">Women's Month</p>
+</div>
+
+<div class="item bg-white rounded-2xl shadow p-4">
+<img src="js/img/pic2.jpg" class="h-40 w-full object-cover rounded">
+<p class="mt-2 font-semibold">Kasalang Bayan</p>
+</div>
+
+<div class="item bg-white rounded-2xl shadow p-4">
+<img src="js/img/pic3.jpg" class="h-40 w-full object-cover rounded">
+<p class="mt-2 font-semibold">Basketball League</p>
 </div>
 
 </div>
+</section>
 
-<!-- Slide 5 -->
-<div class="relative">
+<!-- EVENTS -->
+<section id="events" class="max-w-6xl mx-auto px-6 py-10">
+<h2 class="text-2xl font-bold text-green-800 mb-6">Events</h2>
 
-<img data-u="image" src="js/img/Cat1.jpg" class="w-full h-full object-cover"/>
+<div class="grid md:grid-cols-3 gap-6">
 
-<div class="absolute bottom-0 w-full bg-gradient-to-t from-black/70 to-transparent p-6">
-<h2 class="text-white text-2xl font-semibold">
-Zumba Time For Employees
-</h2>
+<div class="item bg-white p-5 rounded-2xl shadow">
+<h3 class="font-bold">Women's Month 2026</h3>
+<p class="text-sm text-gray-600 mt-2">Celebrating women's contributions.</p>
+</div>
+
+<div class="item bg-white p-5 rounded-2xl shadow">
+<h3 class="font-bold">Kasalang Bayan</h3>
+<p class="text-sm text-gray-600 mt-2">Mass wedding event.</p>
+</div>
+
+<div class="item bg-white p-5 rounded-2xl shadow">
+<h3 class="font-bold">Basketball League</h3>
+<p class="text-sm text-gray-600 mt-2">Community sports program.</p>
 </div>
 
 </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" class="max-w-6xl mx-auto px-6 py-10">
+
+
+<div class="grid md:grid-cols-2 gap-8 items-center">
+
+    <!-- LEFT SIDE: TEXT -->
+    <div>
+        <!-- BIG HIGHLIGHT NAME -->
+        <h2 class="text-4xl md:text-5xl font-bold text-green-700 mb-4">
+             Vice Mayor Trisha Angelie G. Capil
+        </h2>
+
+        <!-- INFORMATION BELOW -->
+        <p class="text-gray-700 leading-relaxed">
+            This is the sample description of the event. 
+            You can write detailed information here about 
+            the event, history, purpose, or any archive details.
+        </p>
+    </div>
+
+    <!-- RIGHT SIDE: IMAGE -->
+    <div class="flex justify-end">
+        <img src="js/img/pic5.jpg"
+             onclick="openModal(this)"
+             class="cursor-pointer rounded-lg hover:scale-105 transition w-full max-w-md shadow-lg">
+    </div>
 
 </div>
+</section>
 
+<!-- IMAGE MODAL -->
+<div id="modal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-50">
+<img id="modalImg" class="max-h-[80%] rounded-lg">
 </div>
 
-<script>jssor_1_slider_init();</script>
-
+<!-- ABOUT -->
+<section id="about" class="max-w-5xl mx-auto px-6 py-12">
+<div class="bg-green-700 text-white p-10 rounded-3xl">
+<h2 class="text-3xl font-bold mb-4">About</h2>
+<p>This archive system helps manage and access municipal records efficiently.</p>
 </div>
-
-</div>
-
-<!-- CONTENT SECTION -->
-
-<div class="max-w-5xl mx-auto mt-16 px-6">
-
-<div class="bg-white/80 backdrop-blur-md shadow-xl rounded-3xl p-12 border border-gray-100">
-
-<h3 class="text-3xl font-bold text-green-700 mb-6">
-Assign Responsibility
-</h3>
-
-<p class="aaa text-gray-700 leading-relaxed text-lg">
-
-One individual should be assigned the responsibility for developing and coordinating the new filing system. This task usually falls to the Records Coordinator. The Records Coordinator may work in conjunction with the Records Authority or with a committee established for that purpose. The Records Coordinator may implement the system or may supervise others in its implementation.
-
-<br><br>
-
-The first step in developing or improving a filing system is to gain the support of both the administration and the users of the system. Administrative support legitimizes the project and ensures the cooperation of all members of the office.
-
-<br><br>
-
-Every member of the office must understand the purpose and scope of the project. Everyone should be involved in the process. The creator of a record may provide important insight useful during the analysis of the records.
-
-</p>
-
-</div>
-
-</div>
+</section>
 
 <!-- FOOTER -->
-
-<footer class="mt-20 bg-gradient-to-r from-green-900 to-green-700 text-white text-center py-6">
-
-<p>
-&#169; All Rights Reserved. Developed by the PSU IT Interns.
-</p>
-
+<footer class="bg-green-900 text-white text-center py-6">
+<p>© 2026 Bayung Porac Archive</p>
 </footer>
 
-<!-- SCRIPTS -->
-
-<script src="js/jquery-3.4.0.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/mdb.min.js"></script>
-
 <script>
 
-$("#Register").on("click",function(){
+// Loader
+window.onload = () => document.getElementById("loader").style.display = "none";
 
-uservalidate();
-passvalidate();
+// Slider
+const slides = document.querySelectorAll(".slide");
+const captions = ["Women's Month","Kasalang Bayan","Basketball League"];
+let i = 0;
 
-if(uservalidate()===true && passvalidate()===true){}
+setInterval(()=>{
+slides[i].classList.replace("opacity-100","opacity-0");
+i = (i+1)%slides.length;
+slides[i].classList.replace("opacity-0","opacity-100");
+document.getElementById("caption").textContent = captions[i];
+},3000);
 
+// Smooth Scroll with Animation
+function smoothScroll(e,id){
+e.preventDefault();
+const target = document.getElementById(id);
+
+target.scrollIntoView({
+behavior:"smooth",
+block:"start"
 });
 
-function uservalidate(){
+setTimeout(()=>{
+document.querySelectorAll("section").forEach(sec=>{
+sec.classList.remove("active");
+});
+target.classList.add("active");
+},400);
+}
 
-if($('#materialFormCardNameEx').val()==''){
-$('#materialFormCardNameEx').css('border-color','#dc3545');
-return false;
+// Navbar scroll effect
+window.addEventListener("scroll",()=>{
+const nav = document.getElementById("navbar");
+if(window.scrollY > 50){
+nav.classList.add("scrolled");
 }else{
-$('#materialFormCardNameEx').css('border-color','#28a745');
-return true;
+nav.classList.remove("scrolled");
 }
-
-}
-
-function passvalidate(){
-
-if($('#materialFormCardEmailEx').val()==''){
-$('#materialFormCardEmailEx').css('border-color','#dc3545');
-return false;
-}else{
-$('#materialFormCardEmailEx').css('border-color','#28a745');
-return true;
-}
-
-}
-
-$(window).on('load',function(){
-setTimeout(function(){
-$('#loader').fadeOut('slow');
-});
 });
 
-</script>
+// Search
+function searchContent(){
+let input = document.getElementById("searchInput").value.toLowerCase();
+document.querySelectorAll(".item").forEach(el=>{
+el.style.display = el.innerText.toLowerCase().includes(input) ? "" : "none";
+});
+}
 
-<script>
-  const btn = document.getElementById('loginDropdownBtn');
-  const menu = document.getElementById('loginDropdownMenu');
+// Modal
+function openModal(img){
+let modal = document.getElementById("modal");
+let modalImg = document.getElementById("modalImg");
 
-  // Toggle dropdown on button click
-  btn.addEventListener('click', () => {
-    menu.classList.toggle('hidden');
-  });
+modal.classList.remove("hidden");
+modal.classList.add("flex");
+modalImg.src = img.src;
+}
 
-  // Close dropdown if clicking outside
-  window.addEventListener('click', (e) => {
-    if (!btn.contains(e.target) && !menu.contains(e.target)) {
-      menu.classList.add('hidden');
+document.getElementById("modal").onclick = function(){
+this.classList.add("hidden");
+};
+
+// Section Observer
+const observer = new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("active");
+}
+});
+},{threshold:0.2});
+
+document.querySelectorAll("section").forEach(sec=>{
+observer.observe(sec);
+});
+
+window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+}
+    
+
+window.addEventListener("load", function () {
+    setTimeout(function () {
+        const intro = document.getElementById("intro");
+        intro.classList.add("hide");
+
+        // Completely remove it after fade
+        setTimeout(() => {
+            intro.style.display = "none";
+        }, 600);
+
+    }, 1000); // 2 seconds
+});
+
+
+
+
+
+
+
+const profiles = [
+    {
+        role: "Mayor",
+        name: "Jaime V. Capil",
+        description: "Official leadership profile and public service background.",
+        image: "js/img/pic6.jfif"
+    },
+    {
+        role: "Vice Mayor",
+        name: "Trisha Angelie G. Capil",
+        description: "Community leadership and municipal contributions.",
+        image: "js/img/pic5.jpg"
     }
-  });
+];
+
+let current = 0;
+
+setInterval(() => {
+
+    const text = document.getElementById("profileText");
+    const image = document.getElementById("profileImage");
+
+    // Fade out
+    text.style.opacity = "0";
+    image.style.opacity = "0";
+
+    setTimeout(() => {
+
+        // Change content
+        current = (current + 1) % profiles.length;
+
+        document.getElementById("role").textContent = profiles[current].role;
+        document.getElementById("name").textContent = profiles[current].name;
+        document.getElementById("description").textContent = profiles[current].description;
+        image.src = profiles[current].image;
+
+        // Fade in
+        text.style.opacity = "1";
+        image.style.opacity = "1";
+
+    }, 500);
+
+}, 8000);
+
+
+
+
 </script>
 
 </body>
