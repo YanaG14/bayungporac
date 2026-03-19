@@ -270,6 +270,12 @@ window.addEventListener("load", function() {
         <i class="fas fa-archive"></i>
       </a>
 
+      <a href="download_folder.php?folder_id=<?php echo $row['folder_id']; ?>" 
+   class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 w-full sm:w-auto text-center
+          transform transition duration-200 hover:scale-105 hover:shadow-lg">
+   <i class="fas fa-download"></i>
+</a>
+
     </div>
   </td>
 

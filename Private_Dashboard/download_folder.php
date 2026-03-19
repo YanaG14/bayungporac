@@ -1,49 +1,63 @@
 <?php
 session_start();
+require_once("../include/connection.php");
+
 if (!isset($_SESSION['admin_user'])) {
-    header('Location: index.php');
+    header("Location: index.php");
     exit();
 }
 
-require_once("../include/connection.php");
-
-if(!isset($_GET['folder_id'])) {
-    die("Folder ID missing.");
+if (!isset($_GET['folder_id'])) {
+    die("Folder ID missing");
 }
 
 $folder_id = intval($_GET['folder_id']);
 
-// Fetch all active files in the folder
-$query = mysqli_query($conn, "SELECT name, file_path FROM upload_files WHERE folder_id='$folder_id' AND status='Active'");
+// Get folder name
+$folderQuery = mysqli_query($conn, "SELECT folder_name FROM folders WHERE folder_id='$folder_id'");
+$folderData = mysqli_fetch_assoc($folderQuery);
 
-if(mysqli_num_rows($query) == 0) {
-    die("No files in this folder.");
+if (!$folderData) {
+    die("Folder not found");
 }
 
-// Create a temporary ZIP
-$zipName = tempnam(sys_get_temp_dir(), 'zip');
+$folderName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $folderData['folder_name']);
+
+// Fetch files in folder
+$fileQuery = mysqli_query($conn, "
+    SELECT file_path, name 
+    FROM upload_files 
+    WHERE folder_id='$folder_id' AND status='Active'
+");
+
+// Create ZIP
 $zip = new ZipArchive();
+$zipFileName = $folderName . ".zip";
+$zipPath = sys_get_temp_dir() . "/" . $zipFileName;
 
-if ($zip->open($zipName, ZipArchive::OVERWRITE) !== TRUE) {
-    die("Cannot create ZIP file.");
+if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== TRUE) {
+    die("Cannot create ZIP file");
 }
 
-while($file = mysqli_fetch_assoc($query)) {
+// Add files to ZIP
+while ($file = mysqli_fetch_assoc($fileQuery)) {
     $filePath = "../uploads/" . $file['file_path'];
-    if(file_exists($filePath)) {
-        $zip->addFile($filePath, basename($filePath));
+
+    if (file_exists($filePath)) {
+        // Keep original filename inside ZIP
+        $zip->addFile($filePath, $folderName . "/" . basename($file['name']));
     }
 }
 
 $zip->close();
 
-// Download the ZIP
+// Force download
 header('Content-Type: application/zip');
-header('Content-Disposition: attachment; filename="folder_'.$folder_id.'.zip"');
-header('Content-Length: ' . filesize($zipName));
+header('Content-Disposition: attachment; filename="'.$zipFileName.'"');
+header('Content-Length: ' . filesize($zipPath));
+readfile($zipPath);
 
-readfile($zipName);
-
-// Delete temporary file
-unlink($zipName);
+// Delete temp file
+unlink($zipPath);
 exit();
+?>
