@@ -10,6 +10,7 @@ if (!isset($_SESSION['admin_user'])) {
 $adminName = $_SESSION['admin_name'];
 require_once("../include/connection.php");
 
+
 // Fetch active folders
 $query = mysqli_query($conn,"
 SELECT 
@@ -56,7 +57,11 @@ ORDER BY f.folder_name ASC
 
 <script>
 $(document).ready(function(){
-    $('#dtable').DataTable({ "pageLength": 10 });
+    $('#dtable').DataTable({
+    paging: false,        // ❌ remove pagination (Previous/Next)
+    info: false,          // ❌ remove "Showing 1 to X of X"
+    lengthChange: false   // ❌ removes "Show entries"
+});
     $(window).on('load', function(){ $('#loader').fadeOut('slow'); });
 });
 </script>
@@ -217,13 +222,13 @@ window.addEventListener("load", function() {
 </aside> -->
 
   <!-- MAIN CONTENT -->
-  <div class="w-full lg:w-3/4 flex-1 lg:ml-0">
+  <div class=" h-[655px] w-[1440px] lg:w-3/4 flex-1 lg:ml-0"> <!--container ito-->
     <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 h-full transition-all duration-300 hover:shadow-xl">
 
       <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4">
         <!-- Title -->
         <h2 class="text-lg sm:text-xl font-semibold text-gray-700 flex items-center gap-2 text-center sm:text-left">
-          <i class=""></i> Folders
+          <i class=""></i> POSTS
         </h2>
         <!-- Action Buttons -->
         <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
@@ -254,9 +259,9 @@ window.addEventListener("load", function() {
 </script>
 
       <!-- TABLE -->
-      <div class="w-full overflow-x-auto">
-  <table id="dtable" class="min-w-full border border-gray-200 table-auto">
-    <thead class="bg-green-700 text-white">
+      <div class="h-[560px] w-[1450px] overflow-y-auto overflow-x-hidden">
+  <table id="dtable" class="min-w-full border-gray-200 table-auto">
+    <thead class="bg-green-600 text-white">
       <tr>
         <th class="px-4 py-2 text-left">Folder Name</th>
         <th class="px-4 py-2 text-left">Departments</th>
@@ -266,39 +271,47 @@ window.addEventListener("load", function() {
     </thead>
     <tbody class="text-gray-700">
       <?php while($row=mysqli_fetch_array($query)){ ?>
-      <tr class="border-b hover:bg-gray-50">
+      <tr class="border-b hover:bg-green-50 hover:shadow-lg hover:-translate-y-1 transition-transform duration-300">
         
         <!-- Folder Name -->
-        <td class="px-4 py-2">
-          <a href="add_document.php?folder_id=<?php echo $row['folder_id']; ?>" 
-             class="flex items-center gap-2 text-gray-800 hover:text-green-700 truncate">
-            <i class="fas fa-folder text-yellow-500"></i>
-            <b class="truncate"><?php echo $row['folder_name']; ?></b>
-          </a>
-        </td>
+  <td class="px-4 py-2 align-middle">
+    <a href="add_document.php?folder_id=<?php echo $row['folder_id']; ?>" 
+       class="flex items-center gap-2 text-gray-800 hover:text-green-700 truncate">
+      <i class="fas fa-folder text-yellow-500"></i>
+      <b class="truncate"><?php echo $row['folder_name']; ?></b>
+    </a>
+  </td>
 
-        <!-- Departments -->
-        <td class="px-4 py-2 text-xs sm:text-sm md:text-base break-words max-w-[220px]">
-          <?php echo $row['departments']; ?>
-        </td>
+  <!-- Departments -->
+  <td class="px-4 py-2 align-middle text-xs sm:text-sm md:text-base break-words max-w-[220px]">
+    <?php echo $row['departments']; ?>
+  </td>
 
-        <!-- Date Created -->
-        <td class="px-4 py-2"><?php echo $row['created_at']; ?></td>
+  <!-- Date Created -->
+  <td class="px-4 py-2 align-middle">
+    <?php echo $row['created_at']; ?>
+  </td>
 
-        <!-- Action Buttons -->
-        <td class="px-4 py-2 flex flex-col sm:flex-row items-center justify-center gap-2">
-          <button onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').removeClass('hidden');" 
-                  class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 w-full sm:w-auto">
-            <i class="fas fa-edit"></i>
-          </button>
+  <!-- Action Buttons -->
+  <td class="px-4 py-2 align-middle">
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-2">
 
-          <a href="#" onclick="confirmArchive(<?php echo $row['folder_id']; ?>)" 
-             class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 w-full sm:w-auto text-center">
-            <i class="fas fa-archive"></i>
-          </a>
-        </td>
+      <button onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').removeClass('hidden');" 
+              class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 w-full sm:w-auto
+                     transform transition duration-200 hover:scale-105 hover:shadow-lg">
+        <i class="fas fa-edit"></i>
+      </button>
 
-      </tr>
+      <a href="#" onclick="confirmArchive(<?php echo $row['folder_id']; ?>)" 
+         class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 w-full sm:w-auto text-center
+                transform transition duration-200 hover:scale-105 hover:shadow-lg">
+        <i class="fas fa-archive"></i>
+      </a>
+
+    </div>
+  </td>
+
+</tr>
 
       <!-- EDIT FOLDER MODAL -->
       <div id="modalEditFolder<?php echo $row['folder_id']; ?>" 
@@ -342,7 +355,8 @@ window.addEventListener("load", function() {
 
             <!-- Buttons -->
             <div class="flex flex-col sm:flex-row justify-end gap-3 mt-3">
-              <button type="submit" name="update" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-5 py-2 shadow-md transition duration-200 w-full sm:w-auto">
+              <button type="submit" name="update" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-5 py-2 shadow-md transition duration-200 w-full sm:w-auto
+                      transform hover:scale-105">
                 Update Folder
               </button>
 
@@ -623,7 +637,7 @@ function confirmLogout(el) {
 
 
 <!-- Footer -->
-<footer class="mt-8 text-center text-gray-600">
+<footer class="mt-10 text-center text-gray-600">
   <p>All right Reserved &copy; <?php echo date('Y');?> Created By: PSU IT Interns</p>
 </footer>
 

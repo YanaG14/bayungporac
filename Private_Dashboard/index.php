@@ -168,6 +168,7 @@ if(isset($_SESSION['error_msg']) && $_SESSION['error_msg'] !== ""){
 &#169; All Rights Reserved. Developed by the PSU IT Interns.
 </p>
 
+
 </footer>
 
 

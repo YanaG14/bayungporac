@@ -167,6 +167,7 @@ $adminName = $_SESSION['admin_name'];
   <span class="font-medium tracking-wide">Employees</span>
 </a>
 
+
         <a href="view_admin.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
           <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
