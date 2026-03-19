@@ -156,7 +156,7 @@ $(window).on('load', function(){
     <!-- MAIN TABLE/FOLDER SECTION -->
     <main class="col-span-12 md:col-span-9">
 
-    <div class="bg-white/90 backdrop-blur-md shadow-lg rounded-2xl p-6 hover:shadow-xl transition-shadow duration-300">
+    <div class="bg-white/90 backdrop-blur-md shadow-lg  h-[650px] w-[1440px] rounded-2xl p-6 hover:shadow-xl transition-shadow duration-300"> <!--container ito-->
 
     <?php if ($selected_folder === 0): 
         // Show folders assigned to department
@@ -172,6 +172,7 @@ $(window).on('load', function(){
         $folders = $stmt->get_result();
     ?>
       <h2 class="text-xl md:text-2xl font-bold text-gray-700 mb-6">Folders</h2>
+       <div class="overflow-y-auto h-[550px] w-[1393px] p-4 rounded-xl shadow-inner"> <!--table ito-->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         <?php while($folder = $folders->fetch_assoc()): ?>
           <a href="?folder_id=<?php echo $folder['folder_id']; ?>" 
@@ -195,7 +196,7 @@ $(window).on('load', function(){
         $stmt->execute();
         $files = $stmt->get_result();
     ?>
-      <h2 class="text-xl md:text-2xl font-bold text-gray-700 mb-4">Files in Folder</h2>
+      <h2 class="text-xl md:text-2xl font-bold text-gray-700 mb-4">Documents</h2>
       <div class="overflow-x-auto rounded-xl shadow-inner">
         <table id="dtable" class="min-w-full border border-gray-200">
           <thead class="bg-green-700 text-white">
@@ -232,6 +233,7 @@ $(window).on('load', function(){
       </div>
       <a href="home.php" class="mt-5 inline-block bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">Back to Folders</a>
     <?php endif; ?>
+
 
     </div>
     </main>
@@ -291,8 +293,12 @@ function confirmUserLogout(el) {
 </style>
 
 <!-- Footer -->
-<footer class="mt-12 text-center text-gray-500 text-sm">
-  <p>All Rights Reserved &copy; <?php echo date('Y'); ?> | Created by PSU IT Interns</p>
+<footer class="mt-9 text-center text-gray-500 text-sm">
+
+  <p class="text-gray-500">
+&#169; All Rights Reserved. Developed by the PSU IT Interns.
+</p>
+
 </footer>
 
 </body>

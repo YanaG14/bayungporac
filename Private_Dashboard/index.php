@@ -200,6 +200,7 @@ window.onload = function(){
 &#169; All Rights Reserved. Developed by the PSU IT Interns.
 </p>
 
+
 </footer>
 
 

@@ -181,6 +181,7 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
           <span class="font-medium tracking-wide">Folders</span>
         </a> -->
 
+        
         <a href="department_management.php" 
    class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
           bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
@@ -633,8 +634,12 @@ function confirmLogout(el) {
 </style>
 
 <!-- Footer -->
-<footer class="mt-8 text-center text-gray-600">
-  <p>All right Reserved &copy; <?php echo date('Y');?> Created By: PSU IT Interns</p>
+<footer class="mt-9 text-center text-gray-500 text-sm">
+
+  <p class="text-gray-500">
+&#169; All Rights Reserved. Developed by the PSU IT Interns.
+</p>
+
 </footer>
 
 </body>
