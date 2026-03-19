@@ -177,50 +177,6 @@ window.addEventListener("load", function() {
     </button>
 </div>
 
-  <!-- SIDEBAR 
- <aside id="sidebar" 
-       class="fixed top-20 left-0 z-50 w-64 bg-white/80 backdrop-blur-lg shadow-xl p-4 sm:p-6 border border-gray-200 flex flex-col items-center h-[calc(100vh-6rem)] transform -translate-x-full transition-transform duration-300 lg:translate-x-0 lg:relative lg:flex">
-  
-  
-  <button id="sidebarClose" class="lg:hidden self-end mb-4 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-
-  
-  <img src="img/adminLogo.png" 
-       class="square-logo mb-6 max-w-[120px] sm:max-w-[150px] transition-transform duration-300 hover:scale-105">
-
-  
-  <nav class="w-full space-y-2">
-
-    
-    <a href="folder_management.php"
-       class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
-              bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
-              transition-all duration-300">
-      <i class="fas fa-folder text-green-600"></i>
-      <span class="font-medium tracking-wide text-sm sm:text-base">Folders</span>
-    </a>
-
-    <a href="department_management.php"
-       class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-      <i class="fas fa-building text-gray-600 group-hover:text-green-600 transition-colors"></i>
-      <span class="font-medium text-sm sm:text-base">Departments</span>
-    </a>
-
-    <a href="view_admin.php"
-       class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-      <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
-      <span class="font-medium text-sm sm:text-base">Admin Accounts</span>
-    </a>
-
-    <a href="view_user.php"
-       class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-      <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
-      <span class="font-medium text-sm sm:text-base">Employee Accounts</span>
-    </a>
-
-  </nav>
-</aside> -->
-
   <!-- MAIN CONTENT -->
   <div class=" h-[655px] w-[1440px] lg:w-3/4 flex-1 lg:ml-0"> <!--container ito-->
     <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 h-full transition-all duration-300 hover:shadow-xl">
