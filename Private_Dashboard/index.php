@@ -145,6 +145,13 @@ if(isset($_SESSION['error_msg']) && $_SESSION['error_msg'] !== ""){
     unset($_SESSION['error_msg']);
 }
 ?>
+<?php if(isset($_SESSION['show_otp_modal'])): ?>
+<script>
+window.onload = function(){
+    document.getElementById('otpModal').classList.remove('hidden');
+}
+</script>
+<?php unset($_SESSION['show_otp_modal']); endif; ?>
             <button
                 type="submit"
                 name="adminlog"
@@ -159,7 +166,32 @@ if(isset($_SESSION['error_msg']) && $_SESSION['error_msg'] !== ""){
 
 </div>
 
+<!-- OTP MODAL -->
+<div id="otpModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-6 w-[90%] max-w-sm text-center shadow-lg">
 
+    <h2 class="text-xl font-semibold mb-3 text-red-600">
+      Account Not Verified
+    </h2>
+
+    <p class="text-gray-600 mb-4">
+      Please enter the OTP sent to your email.
+    </p>
+
+    <form method="POST" action="verify_otp.php">
+      <input type="hidden" name="email" value="<?php echo $_SESSION['otp_email'] ?? ''; ?>">
+
+      <input type="text" name="otp" maxlength="6" required
+        class="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 text-center text-lg tracking-widest focus:ring-2 focus:ring-green-500">
+
+      <button type="submit" name="verify"
+        class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
+        Verify OTP
+      </button>
+    </form>
+
+  </div>
+</div>
 <!-- Footer -->
 
 <footer class="text-center py-4">
@@ -243,9 +275,28 @@ if(passwordField.type === "password"){
 }
 
 }
-
-
 </script>
 
+<?php if(isset($_SESSION['show_otp_modal'])): ?>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+    const modal = document.getElementById('otpModal');
+    if(modal){
+        modal.classList.remove('hidden');
+    }
+});
+</script>
+<?php unset($_SESSION['show_otp_modal']); endif; ?>
+
+<?php if(isset($_SESSION['show_otp_modal']) && $_SESSION['show_otp_modal'] === true): ?>
+<script>
+window.onload = function(){
+    const modal = document.getElementById('otpModal');
+    if(modal){
+        modal.classList.remove('hidden');
+    }
+};
+</script>
+<?php unset($_SESSION['show_otp_modal']); endif; ?>
 </body>
 </html>

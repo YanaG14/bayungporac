@@ -168,7 +168,7 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
 
   <!-- SIDEBAR -->
   <aside class="w-1/4">
-    <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-full">
+    <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-screen">
 
       <!-- Logo -->
       <img src="img/adminLogo.png" class="square-logo mb-6 transition-transform duration-300 hover:scale-105">
@@ -213,7 +213,7 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
 
   <!-- MAIN CONTENT -->
   <div class="w-3/4 flex-1">
-    <div class="bg-white rounded-2xl shadow-lg p-6 h-full transition-all duration-300 hover:shadow-xl">
+    <div class="bg-white rounded-2xl shadow-lg p-6 h-104 transition-all duration-300 hover:shadow-xl">
 
       <div class="flex justify-between items-center mb-4">
         

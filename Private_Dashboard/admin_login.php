@@ -29,11 +29,20 @@ if(isset($_POST["adminlog"])){
         }
 
         if (strtolower($row['admin_status']) === 'archived') {
-            $_SESSION['error_msg'] = "Your account has been archived. You cannot login.";
+            $_SESSION['error_msg'] = "Your account has been archived. Please contact your system administrator.";
             header("Location: index.php");
             exit();
         }
+   //  OTP not verified
+   // 🔐 OTP CHECK (ADD THIS)
+if ($row['otp_verified'] == 0) {
 
+    $_SESSION['otp_email'] = $row['admin_user'];
+    $_SESSION['show_otp_modal'] = true;
+
+    header("Location: index.php");
+    exit();
+}
         // ✅ ADMIN LOGIN SUCCESS
         $_SESSION['admin_user'] = $row['id'];
         $_SESSION['admin_name'] = $row['name'];  

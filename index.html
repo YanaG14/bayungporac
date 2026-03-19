@@ -10,7 +10,7 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ===== LOADER (SMOOTHER + SCALE FADE OUT) ===== */
 #loader{
@@ -197,10 +197,7 @@ nav.scrolled{
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
+  }
 /* ===== HOVER MICRO-INTERACTIONS (MORE PREMIUM) ===== */
 button, a{
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
@@ -295,68 +292,74 @@ html{
 <div id="loader"></div>
 
 <!-- NAVBAR -->
-<nav id="navbar" class="fixed top-0 w-full bg-green-900/80 backdrop-blur z-50">
-<div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+<nav id="navbar" class="fixed top-0 w-full bg-green-700/90 backdrop-blur z-50 transition-all duration-500 ease-in-out py-6">
+  <div class="max-w-7xl mx-auto px-6 flex justify-between items-center transition-all duration-500">
 
-<div class="flex items-center gap-3">
-<img src="js/img/municipalLogo.png" class="w-10 h-10">
-<h1 class="text-white font-semibold">Bayung Porac Archive</h1>
-</div>
+    <!-- Logo and Title -->
+    <div class="flex items-center gap-3 transition-all duration-500">
+      <img src="js/img/municipalLogo.png" id="logo" class="w-12 h-12 transition-all duration-500">
+      <h1 id="title" class="text-white font-semibold text-xl md:text-2xl transition-all duration-500">Bayung Porac Archive</h1>
+    </div>
 
-<div class="flex gap-4 items-center">
+    <!-- Login Button -->
+    <div class="flex gap-4 items-center">
+      <a href="Private_Dashboard/index.php"
+         class="bg-white text-green-800 px-4 py-2 rounded-full hover:bg-green-100 flex items-center gap-2 transition">
+        <i class="fas fa-user"></i> Login
+      </a>
+    </div>
 
-
-<a href="Private_Dashboard/index.php"
-class="bg-white text-green-800 px-4 py-2 rounded-full hover:bg-green-100 flex items-center gap-2">
-<i class="fas fa-user"></i> Login
-</a>
-</div>
-
-</div>
+  </div>
 </nav>
 
+<script>
+  const navbar = document.getElementById('navbar');
+  const logo = document.getElementById('logo');
+  const title = document.getElementById('title');
+
+  window.addEventListener('scroll', () => {
+    if(window.scrollY > 50){
+      navbar.classList.add('scrolled', 'py-2');
+      navbar.classList.remove('py-6');
+
+      logo.classList.add('w-8', 'h-8');
+      logo.classList.remove('w-12', 'h-12');
+
+      title.classList.add('text-lg');
+      title.classList.remove('text-xl', 'md:text-2xl');
+    } else {
+      navbar.classList.remove('scrolled', 'py-2');
+      navbar.classList.add('py-6');
+
+      logo.classList.remove('w-8', 'h-8');
+      logo.classList.add('w-12', 'h-12');
+
+      title.classList.remove('text-lg');
+      title.classList.add('text-xl', 'md:text-2xl');
+    }
+  });
+</script>
+
+<style>
+  nav.scrolled{
+    background: rgba(5, 46, 22, 0.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  }
+</style>
 
 
 
-<section id="gallery" class="max-w-6xl mx-auto px-6 py-10 mt-20">
 
-<div class="grid md:grid-cols-2 gap-8 items-center">
 
-    <!-- LEFT SIDE -->
-    <div id="profileText" class="transition-opacity duration-700">
-
-        <p id="role" class="text-lg md:text-xl font-semibold text-gray-600 uppercase tracking-wide">
-            Mayor
-        </p>
-
-        <h2 id="name" class="text-4xl md:text-5xl font-bold text-green-700 mb-4">
-            Jaime V. Capil
-        </h2>
-
-        <p id="description" class="text-gray-700 leading-relaxed">
-            Official leadership profile and background.
-        </p>
-
-    </div>
-
-    <!-- RIGHT SIDE -->
-    <div class="flex justify-end">
-        <img id="profileImage"
-             src="js/img/pic6.jfif"
-             onclick="openModal(this)"
-             class="cursor-pointer rounded-lg w-full max-w-md shadow-lg transition-opacity duration-700">
-    </div>
-
-</div>
-
-</section>
 
 <!-- HERO -->
 <section id="hero" class="pt-28 pb-10 px-4">
 <div class="max-w-6xl mx-auto">
-<div class="relative rounded-3xl overflow-hidden shadow-2xl">
+<div class="relative rounded-2xl overflow-hidden shadow-2xl">
 
-<div class="relative h-[420px]">
+<div class="relative h-[500px]">
 
 <img src="js/img/pic1.jpg" class="slide absolute inset-0 w-full h-full object-cover opacity-100 transition">
 <img src="js/img/pic2.jpg" class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition">
@@ -374,6 +377,38 @@ class="bg-white text-green-800 px-4 py-2 rounded-full hover:bg-green-100 flex it
 </div>
 </section>
 
+<section id="gallery" class="max-w-6xl mx-auto px-6 py-10 mt-20">
+
+<div class="grid md:grid-cols-2 gap-8 items-start">
+
+    <!-- LEFT SIDE -->
+    <div id="profileText" class="transition-opacity duration-700">
+
+        <p id="role" class="text-lg md:text-xl font-semibold text-dark-600 uppercase tracking-wide">
+            Officials of the Municipality of Porac, Pampanga
+        </p>
+
+       <h2 id="name" class="text-5xl md:text-6xl lg:text-7xl font-semibold text-green-700 mb-4 tracking-tight leading-tight font-[Inter]">
+    Jaime V. Capil
+</h2>
+
+        <p id="description" class="text-lg md:text-xl font-semibold text-dark-600 uppercase tracking-wide">
+    Mayor
+</p>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="flex justify-end">
+        <img id="profileImage"
+             src="js/img/pic6.jfif"
+             onclick="openModal(this)"
+             class="cursor-pointer rounded-lg w-full max-w-md shadow-lg transition-opacity duration-700">
+    </div>
+
+</div>
+
+</section>
 <!-- SEARCH -->
 
 
@@ -426,35 +461,7 @@ class="bg-white text-green-800 px-4 py-2 rounded-full hover:bg-green-100 flex it
 </section>
 
 <!-- GALLERY -->
-<section id="gallery" class="max-w-6xl mx-auto px-6 py-10">
 
-
-<div class="grid md:grid-cols-2 gap-8 items-center">
-
-    <!-- LEFT SIDE: TEXT -->
-    <div>
-        <!-- BIG HIGHLIGHT NAME -->
-        <h2 class="text-4xl md:text-5xl font-bold text-green-700 mb-4">
-             Vice Mayor Trisha Angelie G. Capil
-        </h2>
-
-        <!-- INFORMATION BELOW -->
-        <p class="text-gray-700 leading-relaxed">
-            This is the sample description of the event. 
-            You can write detailed information here about 
-            the event, history, purpose, or any archive details.
-        </p>
-    </div>
-
-    <!-- RIGHT SIDE: IMAGE -->
-    <div class="flex justify-end">
-        <img src="js/img/pic5.jpg"
-             onclick="openModal(this)"
-             class="cursor-pointer rounded-lg hover:scale-105 transition w-full max-w-md shadow-lg">
-    </div>
-
-</div>
-</section>
 
 <!-- IMAGE MODAL -->
 <div id="modal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-50">
@@ -469,9 +476,46 @@ class="bg-white text-green-800 px-4 py-2 rounded-full hover:bg-green-100 flex it
 </div>
 </section>
 
+ <section id="contact-location" class="py-24 bg-gray-50 px-6 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
+
+  <!-- Left: Google Map -->
+  <!-- Modern Map Card -->
+<div class="md:w-1/2 w-full h-96 rounded-2xl shadow-2xl overflow-hidden transform transition duration-500 hover:scale-105 hover:shadow-3xl" data-aos="fade-right">
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3860.418142922975!2d120.54818931441857!3d15.07447578127821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3396f4b9c835a37d%3A0x31f5e6ff1a63bf79!2sPorac%20Municipal%20Hall!5e0!3m2!1sen!2sph!4v1678958147269!5m2!1sen!2sph"
+    width="100%"
+    height="100%"
+    style="border:0;"
+    allowfullscreen=""
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+    class="w-full h-full rounded-2xl">
+  </iframe>
+</div>
+
+  <!-- Right: Contact Info -->
+  <div class="md:w-1/2 w-full space-y-6" data-aos="fade-left">
+    <h2 class="text-4xl md:text-5xl font-semibold text-green-700 mb-4">Contact Us</h2>
+    <p class="text-gray-700 text-lg">For inquiries and municipal services, please reach out to us using the contact details below. We are here to assist you!</p>
+
+    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1">
+      <h3 class="text-lg font-medium text-gray-800 mb-2">Email</h3>
+      <p class="text-gray-700 font-semibold text-lg">info@porac.gov.ph</p>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1">
+      <h3 class="text-lg font-medium text-gray-800 mb-2">Phone</h3>
+      <p class="text-gray-700 font-semibold text-lg">(045) 123-4567</p>
+    </div>
+
+    <p class="text-gray-600 mt-2 italic">Our offices is available Monday to Thursday, 7:30 AM – 6:30 PM.</p>
+  </div>
+
+</section>
+
 <!-- FOOTER -->
 <footer class="bg-green-900 text-white text-center py-6">
-<p>© 2026 Bayung Porac Archive</p>
+<p>All right Reserved &copy; <?php echo date('Y');?> Created By: PSU IT Interns</p>
 </footer>
 
 <script>
@@ -580,15 +624,15 @@ window.addEventListener("load", function () {
 
 const profiles = [
     {
-        role: "Mayor",
+        role: "Officials of the Municipality of Porac, Pampanga",
         name: "Jaime V. Capil",
-        description: "Official leadership profile and public service background.",
+        description: "Mayor.",
         image: "js/img/pic6.jfif"
     },
     {
-        role: "Vice Mayor",
+        role: "Officials of the Municipality of Porac, Pampanga",
         name: "Trisha Angelie G. Capil",
-        description: "Community leadership and municipal contributions.",
+        description: "Vice Mayor.",
         image: "js/img/pic5.jpg"
     }
 ];

@@ -119,9 +119,10 @@ $(window).on('load', function(){
     </div>
     <div class="flex items-center space-x-4 text-white">
       <span class="hidden sm:inline-block">Welcome, <b><?php echo ucwords(htmlentities($name)); ?></b>!</span>
-      <a href="Logout.php" class="px-4 py-2 rounded-lg border border-white hover:bg-white hover:text-green-700 transition-all duration-300">
-        Log out
-      </a>
+     <a href="#" onclick="confirmUserLogout(this)" 
+   class="px-4 py-2 rounded-lg border border-white hover:bg-white hover:text-green-700 transition-all duration-300">
+    Log out
+</a>
     </div>
   </div>
 </nav>
@@ -236,6 +237,58 @@ $(window).on('load', function(){
     </main>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+function confirmUserLogout(el) {
+    Swal.fire({
+      title: 'Are you sure you want to logout?', 
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Logout',
+        cancelButtonText: 'Cancel',
+        backdrop: `
+            rgba(0,0,0,0.4)
+            url("img/lg.flip-book-loader.gif") 
+            center top
+            no-repeat
+            blur(3px)
+        `,
+        customClass: {
+            popup: 'swal-custom-popup',
+            title: 'swal-title-nowrap'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'Logout.php';
+        }
+    });
+}
+
+</script>
+
+<style>
+.swal-title-nowrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    font-size: 1.4rem; 
+    text-align: center;
+}
+.swal2-popup.swal-custom-popup {
+    padding: 1.5rem 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.swal2-html-container {
+    line-height: 1.3;
+}
+</style>
 
 <!-- Footer -->
 <footer class="mt-12 text-center text-gray-500 text-sm">

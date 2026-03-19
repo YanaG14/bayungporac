@@ -170,6 +170,7 @@ window.addEventListener("load", function() {
     <button id="sidebarToggle" class="bg-green-700 text-white p-3 rounded-md text-lg">
         <i class="fas fa-bars"></i>
     </button>
+    
 </div>
 
   <!-- SIDEBAR 
@@ -619,7 +620,6 @@ function confirmLogout(el) {
     });
 }
 </script>
-
 
 
 <!-- Footer -->

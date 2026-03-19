@@ -14,7 +14,7 @@ if(isset($_GET['archive_id'])){
     $_SESSION['toast'] = 'Admin Archived Successfully!';
     header('Location: view_admin.php');
     exit();
-}
+} 
 
 // Unarchive admin
 if(isset($_GET['unarchive_id'])){
