@@ -96,11 +96,15 @@ $(document).ready(function(){
 
 <!-- NAVBAR -->
 <nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
-  <div class="flex flex-col sm:flex-row justify-between items-center px-4 sm:px-6 py-2 sm:py-0">
+  <div class="flex flex-col sm:flex-row justify-between items-center 
+              h-auto sm:h-16 px-4 sm:px-6 py-2 sm:py-0 gap-2 sm:gap-0">
 
+    <!-- Left: Logo + Title -->
     <div class="flex items-center space-x-3">
-      <img src="js/img/municipalLogo.png" class="w-10 h-10">
-      <h1 class="text-white font-semibold text-lg">Bayung Porac Archive</h1>
+      <img src="js/img/municipalLogo.png" class="w-8 h-8 sm:w-10 sm:h-10 object-contain">
+      <h1 class="text-white font-semibold text-base sm:text-lg text-center sm:text-left">
+        Bayung Porac Archive
+      </h1>
     </div>
 
     <div class="flex items-center gap-4 text-white text-sm sm:text-base">
@@ -115,8 +119,8 @@ $(document).ready(function(){
   </div>
 </nav>
 
-<!-- MAIN -->
-<div class="mt-24 px-4 sm:px-6">
+<!-- MAIN LAYOUT-->
+<div class="mt-20 px-4 sm:px-6">
 
 <!-- BACK BUTTON -->
 <a href="folder_management.php"
@@ -124,17 +128,21 @@ class="inline-block mb-4 bg-white px-4 py-2 rounded-xl shadow hover:bg-green-100
 <i class="fas fa-arrow-left"></i> Back
 </a>
 
-<div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 h-[700px] flex flex-col hover:shadow-xl transition">
+<!--CONTAINER-->
+<div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 h-[615px] flex flex-col hover:shadow-xl transition">
 
 <!-- HEADER -->
 <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4">
+<h4 class="text-lg sm:text-xl font-semibold flex items-center gap-2 text-gray-700">
+    <i class="fas fa-folder-open text-green-500"></i>
+    <span class="relative">
+      RECORDS MANAGEMENT
+      <span class="absolute left-0 -bottom-1 w-full h-1 bg-gradient-to-r from-green-500 to-emerald-600 rounded"></span>
+    </span>
+  </h4>
 
-<h4 class="text-lg sm:text-xl font-semibold text-gray-700">
-Records Management
-</h4>
-
+<!--ACTION BUTTONS-->
 <div class="flex gap-2">
-
 <button onclick="openModal('uploadModal')" 
 class="bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition">
 <i class="fas fa-file-upload"></i> Upload File
@@ -436,7 +444,10 @@ class="bg-green-500 text-white px-2 py-1 rounded">
 </div>
 </div>
 
-
+<!-- Footer -->
+<footer class="mt-6 text-center text-gray-600">
+  <p>All right Reserved &copy; <?php echo date('Y');?> Created By: PSU IT Interns</p>
+</footer>
 
 </body>
 </html>

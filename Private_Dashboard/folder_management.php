@@ -55,6 +55,7 @@ ORDER BY f.folder_name ASC
   </style>
 
 
+
 <script>
 $(document).ready(function(){
     $('#dtable').DataTable({
@@ -177,25 +178,30 @@ window.addEventListener("load", function() {
     </button>
 </div>
 
-  <!-- MAIN CONTENT -->
-  <div class=" h-[655px] w-[1440px] lg:w-3/4 flex-1 lg:ml-0"> <!--container ito-->
+  <!-- CONTAINER -->
+  <div class=" h-[655px] w-[1440px] lg:w-3/4 flex-1 lg:ml-0"> 
     <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 h-full transition-all duration-300 hover:shadow-xl">
-
       <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4">
-        <!-- Title -->
-        <h2 class="text-lg sm:text-xl font-semibold text-gray-700 flex items-center gap-2 text-center sm:text-left">
-          <i class=""></i> POSTS
-        </h2>
+
+        <!-- HEADER -->
+<h2 class="text-lg sm:text-xl font-semibold flex items-center gap-2 text-center sm:text-left">
+  <i class="fas fa-layer-group text-green-500"></i>
+  <span class="relative">
+    POSTS
+    <span class="absolute left-0 -bottom-1 w-full h-1 bg-gradient-to-r from-green-500 to-emerald-600 rounded"></span>
+  </span>
+</h2>
+
         <!-- Action Buttons -->
         <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
           <button onclick="$('#modalAddFolder').removeClass('hidden');" 
                   class="w-full sm:w-auto justify-center bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300">
-            <i class="fas fa-plus"></i> Add Folder
+            <i class="fas fa-plus"></i> Add Post
           </button>
 
           <button onclick="openArchivedFolders();" 
                   class="w-full sm:w-auto justify-center bg-gradient-to-r from-yellow-500 to-yellow-400 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg transition-all duration-300 flex items-center gap-2">
-            <i class="fas fa-archive"></i> View Archived Folders
+            <i class="fas fa-archive"></i> View Archived Post
           </button>
         </div>
       </div>
@@ -215,7 +221,7 @@ window.addEventListener("load", function() {
 </script>
 
       <!-- TABLE -->
-      <div class="h-[560px] w-[1450px] overflow-y-auto overflow-x-hidden">
+      <div class="h-[560px] w-[1440px] overflow-y-auto overflow-x-hidden">
   <table id="dtable" class="min-w-full border-gray-200 table-auto">
     <thead class="bg-green-600 text-white">
       <tr>
@@ -331,7 +337,7 @@ window.addEventListener("load", function() {
   </table>
 </div>
 
-<!-- ADD FOLDER MODAL -->
+<!-- ADD POST MODAL -->
 <!-- Modal Background -->
 <div id="modalAddFolder" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm p-4">
   <!-- Modal Card -->
@@ -343,7 +349,7 @@ window.addEventListener("load", function() {
 
     <!-- Modal Title -->
     <h3 class="text-xl sm:text-2xl font-semibold mb-5 flex items-center gap-2 text-gray-800">
-      <i class="fas fa-plus text-green-600"></i> Add Folder
+      <i class="fas fa-plus text-green-600"></i> Add Post
     </h3>
 
     <!-- Form -->
@@ -537,7 +543,7 @@ $(document).ready(function() {
     var folderName = $('#folder_name_input').val();
     var departments = [];
 
-    // Only checkboxes inside Add Folder form
+    // Only checkboxes inside Add Post form
     $('#addFolderForm input[name="departments[]"]:checked').each(function() {
       departments.push($(this).val());
     });
