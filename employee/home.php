@@ -174,14 +174,29 @@ $(window).on('load', function(){
       <h2 class="text-xl md:text-2xl font-bold text-gray-700 mb-6">Folders</h2>
        <div class="overflow-y-auto h-[550px] w-[1393px] p-4 rounded-xl shadow-inner"> <!--table ito-->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <?php while($folder = $folders->fetch_assoc()): ?>
-          <a href="?folder_id=<?php echo $folder['folder_id']; ?>" 
-             class="flex items-center gap-3 p-4 bg-white rounded-xl shadow-md hover:bg-green-50 hover:scale-[1.02] transition-transform duration-300">
-            <i class="fas fa-folder text-yellow-500 text-2xl"></i>
-            <span class="font-medium text-gray-700"><?php echo htmlentities($folder['folder_name']); ?></span>
-          </a>
-        <?php endwhile; ?>
-      </div>
+  <?php while($folder = $folders->fetch_assoc()): ?>
+    
+    <div class="flex flex-col gap-2 p-4 bg-white rounded-xl shadow-md hover:bg-green-50 hover:scale-[1.02] transition-transform duration-300">
+
+      <!-- Folder Link -->
+      <a href="?folder_id=<?php echo $folder['folder_id']; ?>" 
+         class="flex items-center gap-3">
+        <i class="fas fa-folder text-yellow-500 text-2xl"></i>
+        <span class="font-medium text-gray-700">
+          <?php echo htmlentities($folder['folder_name']); ?>
+        </span>
+      </a>
+
+      <!-- DOWNLOAD BUTTON -->
+      <a href="download_folder.php?folder_id=<?php echo $folder['folder_id']; ?>" 
+   class="bg-green-600 text-white px-3 py-2 rounded-lg text-center hover:bg-green-700 transition flex items-center justify-center gap-2">
+   <i class="fas fa-download"></i> Download Folder
+</a>
+
+    </div>
+
+  <?php endwhile; ?>
+</div>
 
     <?php else: 
         // Show files in selected folder
