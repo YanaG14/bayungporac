@@ -135,7 +135,7 @@ $(window).on('load', function(){
     <aside class="col-span-12 md:col-span-3 space-y-6">
       <div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-6 border-t-4 border-green-600 hover:scale-[1.02] transition-transform duration-300">
         <div class="flex flex-col items-center">
-          <img src="../Private_dashboard/department_images/<?php echo $department_img; ?>" class="w-28 h-28 rounded-full shadow-md mb-3">
+          <img src="../records-administrator/department_images/<?php echo $department_img; ?>" class="w-28 h-28 rounded-full shadow-md mb-3">
           <h2 class="text-lg font-semibold text-gray-700">Admin Profile</h2>
         </div>
         <hr class="my-4 border-gray-300">

@@ -118,7 +118,7 @@ if ($row['otp_verified'] == 0) {
             }
 
             // ✅ REDIRECT TO USER SYSTEM
-            header("Location: ../private_user/home.php");
+            header("Location: ../employee/home.php");
             exit();
 
         } else {

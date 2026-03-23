@@ -65,7 +65,7 @@ while($row = mysqli_fetch_assoc($events)){
     </div>
 
     <div class="flex gap-4 items-center">
-      <a href="Private_Dashboard/index.php"
+      <a href="records-administrator/index.php"
          class="bg-white text-green-800 px-4 py-2 rounded-full flex items-center gap-2">
         <i class="fas fa-user"></i> Login
       </a>

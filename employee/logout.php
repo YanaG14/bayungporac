@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         timerProgressBar: true
     }).then(() => {
         // Redirect to user login page
-        window.location.href = '../Private_Dashboard/index.php';
+        window.location.href = '../records-administrator/index.php';
     });
 });
 </script>

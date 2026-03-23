@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
         icon: 'success',
         title: 'Logged out successfully!'
     }).then(() => {
-        window.location.href = '../Private_Dashboard/index.php';
+        window.location.href = '../records-administrator/index.php';
     });
 });
 </script>
