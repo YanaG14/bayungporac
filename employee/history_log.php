@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-// include('Private_Dashboard/../include/connection.php');
+// include('records-administrator/../include/connection.php');
 session_start();
 if(!isset($_SESSION["email_address"])){
     header("location:../login.php");
