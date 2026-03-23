@@ -234,7 +234,7 @@ window.addEventListener("load", function() {
     </thead>
     <tbody class="text-gray-700">
       <?php while($row=mysqli_fetch_array($query)){ ?>
-      <tr class="border-b hover:bg-green-50 hover:shadow-lg hover:-translate-y-1 transition-transform duration-300">
+      <tr class="border-b">
         
         <!-- Folder Name -->
   <td class="px-4 py-2 align-middle">
@@ -257,28 +257,99 @@ window.addEventListener("load", function() {
 
   <!-- Action Buttons -->
   <td class="px-4 py-2 align-middle">
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-2">
+  <div class="flex justify-center relative">
 
-      <button onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').removeClass('hidden');" 
-              class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 w-full sm:w-auto
-                     transform transition duration-200 hover:scale-105 hover:shadow-lg">
-        <i class="fas fa-edit"></i>
+    <!-- 3 DOT BUTTON (HORIZONTAL) -->
+    <button onclick="toggleMenu(<?php echo $row['folder_id']; ?>)"
+      class="bg-gray-900 text-white px-3 py-2 rounded-xl hover:bg-gray-800 transition transform hover:scale-105 shadow-md">
+      <i class="fas fa-ellipsis-h"></i>
+    </button>
+
+    <!-- DROPDOWN MENU -->
+    <div id="menu-<?php echo $row['folder_id']; ?>"
+      class="hidden absolute top-full mt-2 right-0 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 z-50
+             transform scale-95 opacity-0 transition-all duration-200">
+
+      <!-- EDIT -->
+      <button onclick="openEditModal(<?php echo $row['folder_id']; ?>)"
+        class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2 rounded-t-2xl">
+        <i class="fas fa-edit text-blue-500"></i>
+        Edit
       </button>
 
-      <a href="#" onclick="confirmArchive(<?php echo $row['folder_id']; ?>)" 
-         class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 w-full sm:w-auto text-center
-                transform transition duration-200 hover:scale-105 hover:shadow-lg">
-        <i class="fas fa-archive"></i>
+      <!-- ARCHIVE -->
+      <button onclick="confirmArchive(<?php echo $row['folder_id']; ?>)"
+        class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2">
+        <i class="fas fa-archive text-red-500"></i>
+        Archive
+      </button>
+
+      <!-- DOWNLOAD -->
+      <a href="download_folder.php?folder_id=<?php echo $row['folder_id']; ?>"
+        class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2 rounded-b-2xl">
+        <i class="fas fa-download text-green-600"></i>
+        Download
       </a>
 
-      <a href="download_folder.php?folder_id=<?php echo $row['folder_id']; ?>" 
-   class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 w-full sm:w-auto text-center
-          transform transition duration-200 hover:scale-105 hover:shadow-lg">
-   <i class="fas fa-download"></i>
-</a>
-
     </div>
-  </td>
+
+  </div>
+</td>
+
+
+<script>
+  function toggleMenu(id) {
+    const menu = document.getElementById('menu-' + id);
+
+    // Close all other menus first
+    document.querySelectorAll('[id^="menu-"]').forEach(el => {
+      if (el !== menu) {
+        el.classList.add('hidden', 'scale-95', 'opacity-0');
+      }
+    });
+
+    // Toggle current menu
+    if (menu.classList.contains('hidden')) {
+      menu.classList.remove('hidden');
+
+      // Animate open
+      setTimeout(() => {
+        menu.classList.remove('scale-95', 'opacity-0');
+        menu.classList.add('scale-100', 'opacity-100');
+      }, 10);
+
+    } else {
+      closeMenu(id);
+    }
+  }
+
+  function closeMenu(id) {
+    const menu = document.getElementById('menu-' + id);
+
+    menu.classList.add('scale-95', 'opacity-0');
+
+    setTimeout(() => {
+      menu.classList.add('hidden');
+    }, 150);
+  }
+
+  function openEditModal(id) {
+    closeMenu(id);
+    $('#modalEditFolder' + id).removeClass('hidden');
+  }
+
+  // CLICK OUTSIDE CLOSE
+  document.addEventListener('click', function (event) {
+    document.querySelectorAll('[id^="menu-"]').forEach(menu => {
+      const button = menu.previousElementSibling;
+
+      if (!menu.contains(event.target) && !button.contains(event.target)) {
+        menu.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => menu.classList.add('hidden'), 150);
+      }
+    });
+  });
+</script>
 
 </tr>
 

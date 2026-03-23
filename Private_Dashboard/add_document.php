@@ -192,7 +192,7 @@ $download = $file['download'];
 $filepath = "../uploads/".$file['file_path'];
 ?>
 
-<tr class="border-b hover:bg-green-50 hover:shadow-lg hover:-translate-y-1 transition">
+<tr class="border-b">
 
 <td class="px-4 py-2"><?php echo htmlentities($name); ?></td>
 
@@ -217,30 +217,103 @@ echo implode(', ',$names);
 <td class="px-4 py-2"><?php echo htmlentities($download); ?></td>
 
 <td class="px-4 py-2">
-<div class="flex justify-center gap-2">
+  <div class="flex justify-center relative">
 
-<a href="downloads.php?file_id=<?php echo $id; ?>" 
-class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-<i class="fa fa-download"></i>
-</a>
+    <!-- 3 DOT BUTTON -->
+    <button onclick="toggleMenuFile(<?php echo $id; ?>)"
+      class="bg-gray-900 text-white px-3 py-2 rounded-xl hover:bg-gray-800 transition transform hover:scale-105 shadow-md">
+      <i class="fas fa-ellipsis-h"></i>
+    </button>
 
-<a href="<?php echo $filepath; ?>" target="_blank"
-class="bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600">
-<i class="fa fa-eye"></i>
-</a>
+    <!-- DROPDOWN -->
+    <div id="menu-file-<?php echo $id; ?>"
+      class="hidden absolute top-full mt-2 right-0 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 z-50
+             transform scale-95 opacity-0 transition-all duration-200">
 
-<a href="archive_file.php?file_id=<?php echo $id; ?>"
-class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-<i class="fa fa-archive"></i>
-</a>
+      <!-- DOWNLOAD -->
+      <a href="downloads.php?file_id=<?php echo $id; ?>"
+        class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2 rounded-t-2xl">
+        <i class="fa fa-download text-blue-500"></i>
+        Download
+      </a>
 
-<button onclick="openModal('editModal<?php echo $id; ?>')"
-class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
-<i class="fa fa-edit"></i>
-</button>
+      <!-- VIEW -->
+      <a href="<?php echo $filepath; ?>" target="_blank"
+        class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2">
+        <i class="fa fa-eye text-indigo-500"></i>
+        View
+      </a>
 
-</div>
+      <!-- ARCHIVE -->
+      <a href="archive_file.php?file_id=<?php echo $id; ?>"
+        class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2">
+        <i class="fa fa-archive text-red-500"></i>
+        Archive
+      </a>
+
+      <!-- EDIT -->
+      <button onclick="openModal('editModal<?php echo $id; ?>')"
+        class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2 rounded-b-2xl">
+        <i class="fa fa-edit text-green-500"></i>
+        Edit
+      </button>
+
+    </div>
+
+  </div>
 </td>
+
+<script>
+  function toggleMenuFile(id) {
+    const menu = document.getElementById('menu-file-' + id);
+
+    // Close other menus
+    document.querySelectorAll('[id^="menu-file-"]').forEach(el => {
+      if (el !== menu) {
+        el.classList.add('hidden', 'scale-95', 'opacity-0');
+      }
+    });
+
+    // Toggle current
+    if (menu.classList.contains('hidden')) {
+      menu.classList.remove('hidden');
+
+      setTimeout(() => {
+        menu.classList.remove('scale-95', 'opacity-0');
+        menu.classList.add('scale-100', 'opacity-100');
+      }, 10);
+
+    } else {
+      closeMenuFile(id);
+    }
+  }
+
+  function closeMenuFile(id) {
+    const menu = document.getElementById('menu-file-' + id);
+
+    menu.classList.add('scale-95', 'opacity-0');
+
+    setTimeout(() => {
+      menu.classList.add('hidden');
+    }, 150);
+  }
+
+  function openModal(id) {
+    document.getElementById(id).classList.remove('hidden');
+  }
+
+  // Click outside to close
+  document.addEventListener('click', function (event) {
+    document.querySelectorAll('[id^="menu-file-"]').forEach(menu => {
+      const button = menu.previousElementSibling;
+
+      if (!menu.contains(event.target) && !button.contains(event.target)) {
+        menu.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => menu.classList.add('hidden'), 150);
+      }
+    });
+  });
+</script>
 
 </tr>
 
