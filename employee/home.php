@@ -201,7 +201,7 @@ $(window).on('load', function(){
     <?php else: 
         // Show files in selected folder
         $stmt = $conn->prepare("
-            SELECT uf.id, uf.name, uf.size, uf.email, uf.admin_status, uf.timers, uf.download
+            SELECT uf.id, uf.name, uf.size, uf.email, uf.admin_status, uf.timers, uf.download, uf.file_path
             FROM upload_files uf
             JOIN file_departments fd ON uf.id = fd.file_id
             WHERE uf.folder_id = ? AND fd.department_id = ? AND uf.status='Active'
@@ -227,6 +227,7 @@ $(window).on('load', function(){
           </thead>
           <tbody class="text-gray-700">
             <?php while($file = $files->fetch_assoc()): ?>
+            <?php $filepath = "../uploads/" . $file['file_path']; ?>
             <tr class="border-b hover:bg-green-50 transition-colors duration-200">
               <td class="px-4 py-2"><?php echo htmlentities($file['name']); ?></td>
               <td class="px-4 py-2"><?php echo floor($file['size']/1000)." KB"; ?></td>
@@ -235,12 +236,22 @@ $(window).on('load', function(){
               <td class="px-4 py-2"><?php echo htmlentities($file['timers']); ?></td>
               <td class="px-4 py-2"><?php echo $file['download']; ?></td>
               <td class="px-4 py-2">
-                <a href="downloads.php?file_id=<?php echo $file['id']; ?>" 
-                   class="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-full flex items-center gap-2 hover:from-blue-600 hover:to-blue-800 transition-all duration-300" 
-                   title="Download">
-                   <i class="fas fa-download"></i> Download
-                </a>
-              </td>
+  <div class="flex gap-2">
+
+    <!-- DOWNLOAD -->
+    <a href="downloads.php?file_id=<?php echo $file['id']; ?>" 
+       class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+       <i class="fas fa-download"></i>
+    </a>
+
+    <!-- VIEW -->
+    <a href="<?php echo $filepath; ?>" target="_blank"
+       class="bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600">
+       <i class="fas fa-eye"></i>
+    </a>
+
+  </div>
+</td>
             </tr>
             <?php endwhile; ?>
           </tbody>
