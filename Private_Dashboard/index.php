@@ -1,4 +1,4 @@
-    <?php session_start();?>
+<?php session_start();?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -199,7 +199,6 @@ window.onload = function(){
 <p class="text-gray-200">
 &#169; All Rights Reserved. Developed by the PSU IT Interns.
 </p>
-
 
 </footer>
 
