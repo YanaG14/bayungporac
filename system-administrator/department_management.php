@@ -175,11 +175,11 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
 
       <!-- Menu -->
       <nav class="w-full space-y-2">
-        <!-- <a href="folder_management.php" 
-        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-folder text-gray-600 group-hover:text-green-600 transition-colors"></i>
-          <span class="font-medium tracking-wide">Folders</span>
-        </a> -->
+        <a href="homepage_management.php" 
+class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50">
+  <i class="fas fa-home text-gray-600"></i>
+  <span class="font-medium">Homepage</span>
+</a>
 
         
         <a href="department_management.php" 
@@ -209,11 +209,7 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
           <span class="font-medium tracking-wide">System Administrators</span>
         </a>
 
-        <a href="homepage_management.php" 
-class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50">
-  <i class="fas fa-home text-gray-600"></i>
-  <span class="font-medium">Homepage</span>
-</a>
+        
 
     </div>
   </aside>

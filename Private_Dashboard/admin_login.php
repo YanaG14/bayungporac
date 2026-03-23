@@ -62,7 +62,7 @@ if ($row['otp_verified'] == 0) {
             header("Location: folder_management.php");
 
         } elseif ($row['role'] === "System Administrator") {
-            header("Location: ../system-administrator/department_management.php");
+            header("Location: ../system-administrator/homepage_management.php");
         
 
         } else {

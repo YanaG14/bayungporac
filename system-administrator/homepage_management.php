@@ -99,6 +99,141 @@ if(isset($_POST['save_about'])){
 }
 
 /* =========================
+   DELETE SLIDES
+========================= */
+if(isset($_GET['delete_slide'])){
+    $id = $_GET['delete_slide'];
+
+    mysqli_query($conn,"DELETE FROM homepage_slides WHERE slide_id='$id'");
+    header("Location: homepage_management.php");
+}
+
+/* =========================
+   DELETE PROFILES
+========================= */
+if(isset($_GET['delete_profile'])){
+    $id = $_GET['delete_profile'];
+
+    mysqli_query($conn,"DELETE FROM homepage_profiles WHERE profile_id='$id'");
+    header("Location: homepage_management.php");
+}
+
+/* =========================
+   DELETE FEATURED
+========================= */
+if(isset($_GET['delete_featured'])){
+    $id = $_GET['delete_featured'];
+
+    mysqli_query($conn,"DELETE FROM homepage_featured WHERE featured_id='$id'");
+    header("Location: homepage_management.php");
+}
+
+/* =========================
+   DELETE EVENTS
+========================= */
+if(isset($_GET['delete_event'])){
+    $id = $_GET['delete_event'];
+
+    mysqli_query($conn,"DELETE FROM homepage_events WHERE event_id='$id'");
+    header("Location: homepage_management.php");
+}
+
+if(isset($_POST['update_slide'])){
+    $id = $_POST['id'];
+    $caption = mysqli_real_escape_string($conn, $_POST['caption']);
+    $description = mysqli_real_escape_string($conn, $_POST['description']);
+
+    $img = $_FILES['image']['name'];
+
+    if($img != ""){
+        $tmp = $_FILES['image']['tmp_name'];
+
+        if(!is_dir("../uploads/slides")){
+            mkdir("../uploads/slides", 0777, true);
+        }
+
+        move_uploaded_file($tmp, "../uploads/slides/".$img);
+
+        mysqli_query($conn,"UPDATE homepage_slides 
+            SET caption='$caption', description='$description', image='$img' 
+            WHERE slide_id='$id'");
+    } else {
+        mysqli_query($conn,"UPDATE homepage_slides 
+            SET caption='$caption', description='$description' 
+            WHERE slide_id='$id'");
+    }
+
+    header("Location: homepage_management.php");
+}
+
+if(isset($_POST['update_profile'])){
+    $id = $_POST['id'];
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $role = mysqli_real_escape_string($conn, $_POST['role']);
+
+    $img = $_FILES['image']['name'];
+
+    if($img != ""){
+        $tmp = $_FILES['image']['tmp_name'];
+
+        if(!is_dir("../uploads/profiles")){
+            mkdir("../uploads/profiles", 0777, true);
+        }
+
+        move_uploaded_file($tmp, "../uploads/profiles/".$img);
+
+        mysqli_query($conn,"UPDATE homepage_profiles 
+            SET name='$name', role='$role', image='$img' 
+            WHERE profile_id='$id'");
+    } else {
+        mysqli_query($conn,"UPDATE homepage_profiles 
+            SET name='$name', role='$role' 
+            WHERE profile_id='$id'");
+    }
+
+    header("Location: homepage_management.php");
+}
+
+if(isset($_POST['update_featured'])){
+    $id = $_POST['id'];
+    $title = mysqli_real_escape_string($conn, $_POST['title']);
+
+    $img = $_FILES['image']['name'];
+
+    if($img != ""){
+        $tmp = $_FILES['image']['tmp_name'];
+
+        if(!is_dir("../uploads/featured")){
+            mkdir("../uploads/featured", 0777, true);
+        }
+
+        move_uploaded_file($tmp, "../uploads/featured/".$img);
+
+        mysqli_query($conn,"UPDATE homepage_featured 
+            SET title='$title', image='$img' 
+            WHERE featured_id='$id'");
+    } else {
+        mysqli_query($conn,"UPDATE homepage_featured 
+            SET title='$title' 
+            WHERE featured_id='$id'");
+    }
+
+    header("Location: homepage_management.php");
+}
+
+if(isset($_POST['update_event'])){
+    $id = $_POST['id'];
+    $title = mysqli_real_escape_string($conn, $_POST['title']);
+    $description = mysqli_real_escape_string($conn, $_POST['description']);
+
+    mysqli_query($conn,"UPDATE homepage_events 
+        SET title='$title', description='$description' 
+        WHERE event_id='$id'");
+
+    header("Location: homepage_management.php");
+}
+
+/* =========================
    FETCH DATA
 ========================= */
 $slides = mysqli_query($conn,"SELECT * FROM homepage_slides ORDER BY slide_id DESC");
@@ -156,12 +291,13 @@ $aboutRow = mysqli_fetch_assoc($about);
 
       <!-- Menu -->
       <nav class="w-full space-y-2">
-        <!-- <a href="folder_management.php" 
-        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-folder text-gray-600 group-hover:text-green-600 transition-colors"></i>
-          <span class="font-medium tracking-wide">Folders</span>
-        </a> -->
-
+        <a href="homepage_management.php" class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
+          bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
+          transition-all duration-300"
+>
+  <i class="fas fa-home text-green-600"></i>
+  <span class="font-medium">Homepage</span>
+</a>
         
         <a href="department_management.php" class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50"
    >
@@ -188,13 +324,7 @@ $aboutRow = mysqli_fetch_assoc($about);
           <span class="font-medium tracking-wide">System Administrators</span>
         </a>
 
-        <a href="homepage_management.php" class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
-          bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
-          transition-all duration-300"
->
-  <i class="fas fa-home text-green-600"></i>
-  <span class="font-medium">Homepage</span>
-</a>
+        
 
     </div>
   </aside>
@@ -223,10 +353,23 @@ $aboutRow = mysqli_fetch_assoc($about);
     </form>
 
     <?php while($row = mysqli_fetch_assoc($slides)) { ?>
-      <div class="border p-3 mb-2 flex justify-between">
-        <div>
+      <div class="border p-3 mb-2 flex justify-between items-center">
+        <div class="flex justify-between items-center">
           <img src="../uploads/slides/<?php echo $row['image']; ?>" width="80">
           <p><?php echo $row['caption']; ?></p>
+          <div class="flex gap-2">
+  <button 
+    onclick="openEditSlide(<?php echo htmlspecialchars(json_encode($row)); ?>)"
+    class="bg-blue-500 text-white px-3 py-1 rounded">
+    Edit
+  </button>
+
+  <a href="homepage_management.php?delete_slide=<?php echo $row['slide_id']; ?>" 
+     onclick="return confirm('Delete this slide?')" 
+     class="bg-red-500 text-white px-3 py-1 rounded">
+     Delete
+  </a>
+</div>
         </div>
       </div>
     <?php } ?>
@@ -245,47 +388,95 @@ $aboutRow = mysqli_fetch_assoc($about);
     </form>
 
     <?php while($row = mysqli_fetch_assoc($profiles)) { ?>
-      <div class="border p-3 mb-2">
-        <img src="../uploads/profiles/<?php echo $row['image']; ?>" width="80">
-        <p><?php echo $row['name']; ?> - <?php echo $row['role']; ?></p>
-      </div>
-    <?php } ?>
+  <div class="border p-3 mb-2 flex justify-between items-center">
+    
+    <div class="flex items-center gap-4">
+      <img src="../uploads/profiles/<?php echo $row['image']; ?>" width="80">
+      <p><?php echo $row['name']; ?> - <?php echo $row['role']; ?></p>
+    </div>
+
+    <div class="flex gap-2">
+      <button 
+        onclick="openEditProfile(<?php echo htmlspecialchars(json_encode($row)); ?>)"
+        class="bg-blue-500 text-white px-3 py-1 rounded">
+        Edit
+      </button>
+
+      <a href="homepage_management.php?delete_profile=<?php echo $row['profile_id']; ?>" 
+         onclick="return confirm('Delete this profile?')" 
+         class="bg-red-500 text-white px-3 py-1 rounded">
+         Delete
+      </a>
+    </div>
+
+  </div>
+<?php } ?>
   </div>
 
   <!-- FEATURED -->
   <div id="featured" class="tab-content hidden bg-white p-6 rounded-xl shadow">
-    <h2 class="font-semibold mb-4">Featured</h2>
+  <h2 class="font-semibold mb-4">Featured</h2>
 
-    <form method="POST" enctype="multipart/form-data" class="flex gap-2 mb-4">
-      <input type="text" name="title" placeholder="Title" class="border p-2 rounded" required>
-      <input type="file" name="image" required>
-      <button name="add_featured" class="bg-green-600 text-white px-4 rounded">Add</button>
-    </form>
+  <form method="POST" enctype="multipart/form-data" class="flex gap-2 mb-4">
+    <input type="text" name="title" placeholder="Title" class="border p-2 rounded" required>
+    <input type="file" name="image" required>
+    <button name="add_featured" class="bg-green-600 text-white px-4 rounded">Add</button>
+  </form>
 
-    <?php while($row = mysqli_fetch_assoc($featured)) { ?>
-      <div class="border p-3 mb-2">
+  <?php while($row = mysqli_fetch_assoc($featured)) { ?>
+    <div class="border p-3 mb-2 flex justify-between items-center">
+      <div class="flex items-center gap-4">
         <img src="../uploads/featured/<?php echo $row['image']; ?>" width="80">
         <p><?php echo $row['title']; ?></p>
       </div>
-    <?php } ?>
-  </div>
+
+      <div class="flex gap-2">
+        <button 
+          onclick="openEditFeatured(<?php echo htmlspecialchars(json_encode($row)); ?>)"
+          class="bg-blue-500 text-white px-3 py-1 rounded">
+          Edit
+        </button>
+
+        <a href="homepage_management.php?delete_featured=<?php echo $row['featured_id']; ?>" 
+           onclick="return confirm('Delete this featured item?')" 
+           class="bg-red-500 text-white px-3 py-1 rounded">
+           Delete
+        </a>
+      </div>
+    </div>
+  <?php } ?>
+</div>
 
   <!-- EVENTS -->
   <div id="events" class="tab-content hidden bg-white p-6 rounded-xl shadow">
-    <h2 class="font-semibold mb-4">Events</h2>
+  <h2 class="font-semibold mb-4">Events</h2>
 
-    <form method="POST" class="flex gap-2 mb-4">
-      <input type="text" name="title" placeholder="Title" class="border p-2 rounded" required>
-      <input type="text" name="description" placeholder="Description" class="border p-2 rounded">
-      <button name="add_event" class="bg-green-600 text-white px-4 rounded">Add</button>
-    </form>
+  <form method="POST" class="flex gap-2 mb-4">
+    <input type="text" name="title" placeholder="Title" class="border p-2 rounded" required>
+    <input type="text" name="description" placeholder="Description" class="border p-2 rounded">
+    <button name="add_event" class="bg-green-600 text-white px-4 rounded">Add</button>
+  </form>
 
-    <?php while($row = mysqli_fetch_assoc($events)) { ?>
-      <div class="border p-3 mb-2">
-        <p><?php echo $row['title']; ?></p>
+  <?php while($row = mysqli_fetch_assoc($events)) { ?>
+    <div class="border p-3 mb-2 flex justify-between items-center">
+      <p><?php echo $row['title']; ?></p>
+
+      <div class="flex gap-2">
+        <button 
+          onclick="openEditEvent(<?php echo htmlspecialchars(json_encode($row)); ?>)"
+          class="bg-blue-500 text-white px-3 py-1 rounded">
+          Edit
+        </button>
+
+        <a href="homepage_management.php?delete_event=<?php echo $row['event_id']; ?>" 
+           onclick="return confirm('Delete this event?')" 
+           class="bg-red-500 text-white px-3 py-1 rounded">
+           Delete
+        </a>
       </div>
-    <?php } ?>
-  </div>
+    </div>
+  <?php } ?>
+</div>
 
   <!-- ABOUT -->
   <div id="about" class="tab-content hidden bg-white p-6 rounded-xl shadow">
@@ -319,6 +510,114 @@ function confirmLogout(){
       window.location = 'Logout.php';
     }
   });
+}
+</script>
+
+<script>
+function openEditSlide(data){
+Swal.fire({
+  title: 'Edit Slide',
+  html: `
+    <form id="editSlideForm" enctype="multipart/form-data">
+      <input type="hidden" name="id" value="${data.slide_id}">
+      
+      <input name="caption" class="swal2-input" value="${data.caption}">
+      <input name="description" class="swal2-input" value="${data.description}">
+      <input type="file" name="image" class="swal2-input">
+    </form>
+  `,
+  showCancelButton: true,
+  confirmButtonText: 'Update',
+  preConfirm: () => {
+    const form = document.getElementById('editSlideForm');
+    const formData = new FormData(form);
+    formData.append('update_slide', true);
+
+    return fetch('homepage_management.php', {
+      method: 'POST',
+      body: formData
+    }).then(() => location.reload());
+  }
+});
+}
+
+function openEditProfile(data){
+Swal.fire({
+  title: 'Edit Profile',
+  html: `
+    <form id="editProfileForm" enctype="multipart/form-data">
+      <input type="hidden" name="id" value="${data.profile_id}">
+      
+      <input name="name" class="swal2-input" value="${data.name}">
+      <input name="role" class="swal2-input" value="${data.role}">
+      <input type="file" name="image" class="swal2-input">
+    </form>
+  `,
+  showCancelButton: true,
+  confirmButtonText: 'Update',
+  preConfirm: () => {
+    const form = document.getElementById('editProfileForm');
+    const formData = new FormData(form);
+    formData.append('update_profile', true);
+
+    return fetch('homepage_management.php', {
+      method: 'POST',
+      body: formData
+    }).then(() => location.reload());
+  }
+});
+}
+
+function openEditFeatured(data){
+Swal.fire({
+  title: 'Edit Featured',
+  html: `
+    <form id="editFeaturedForm" enctype="multipart/form-data">
+      <input type="hidden" name="id" value="${data.featured_id}">
+      
+      <input name="title" class="swal2-input" value="${data.title}">
+      <input type="file" name="image" class="swal2-input">
+    </form>
+  `,
+  showCancelButton: true,
+  confirmButtonText: 'Update',
+  preConfirm: () => {
+    const form = document.getElementById('editFeaturedForm');
+    const formData = new FormData(form);
+    formData.append('update_featured', true);
+
+    return fetch('homepage_management.php', {
+      method: 'POST',
+      body: formData
+    }).then(() => location.reload());
+  }
+});
+}
+
+function openEditEvent(data){
+Swal.fire({
+  title: 'Edit Event',
+  html: `
+    <form id="editEventForm">
+      <input type="hidden" name="id" value="${data.event_id}">
+      
+      <input name="title" class="swal2-input" value="${data.title}">
+      <input name="description" class="swal2-input" value="${data.description}">
+    </form>
+  `,
+  showCancelButton: true,
+  confirmButtonText: 'Update',
+  preConfirm: () => {
+    const form = document.getElementById('editEventForm');
+    const formData = new FormData(form);
+    formData.append('update_event', true);
+
+    return fetch('homepage_management.php', {
+      method: 'POST',
+      body: formData
+    }).then(() => location.reload());
+  }
+});
 }
 </script>
 
