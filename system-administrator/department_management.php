@@ -209,6 +209,12 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
           <span class="font-medium tracking-wide">System Administrators</span>
         </a>
 
+        <a href="homepage_management.php" 
+class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50">
+  <i class="fas fa-home text-gray-600"></i>
+  <span class="font-medium">Homepage</span>
+</a>
+
     </div>
   </aside>
 
