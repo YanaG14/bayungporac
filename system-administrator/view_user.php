@@ -27,7 +27,7 @@ $edit_id = '';
 if(isset($_GET['id'])){
     $edit_id = mysqli_real_escape_string($conn,$_GET['id']);
 }
-
+ 
 if (!isset($_SESSION['admin_user'])) {
     header('Location: index.php');
 } else {
@@ -286,13 +286,26 @@ class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 h
 
       <input type="email" name="email_address" placeholder="Email Address" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none transition" required>
      <div class="relative">
-  <input type="password" name="user_password" id="add_user_password" placeholder="Password"
-    class="border border-gray-300 rounded-lg px-4 py-2 pr-10 w-full focus:ring-2 focus:ring-green-500 focus:outline-none transition" required>
+  <input type="password" 
+name="user_password" 
+id="add_user_password" 
+placeholder="Password"
+
+class="border border-gray-300 rounded-lg px-4 py-2 pr-10 w-full focus:ring-2 focus:ring-green-500 focus:outline-none transition"
+pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}"
+title="Password must be at least 8 characters, include uppercase, lowercase, number and a symbol"
+required>
+
+
   <button type="button" onclick="togglePassword('add_user_password','toggleIconAddUser')"
     class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800">
     <i id="toggleIconAddUser" class="fas fa-eye"></i>
   </button>
-</div>
+  </div>
+  <p id="userPasswordHelp" class="text-red-600 text-sm mt-1 hidden">
+  Password must be at least 8 characters, include uppercase, lowercase, number, and a symbol.
+</p>
+
 
       <!-- Buttons -->
       <div class="flex justify-end gap-3 mt-4">
@@ -359,8 +372,13 @@ if($edit_id != ''){
       <input type="email" name="email_address" value="<?php echo $admin1; ?>" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
       
       <div class="relative">
-  <input type="password" name="user_password" id="edit_user_password" placeholder="Password"
-    class="border border-gray-300 rounded-lg px-4 py-2 pr-10 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+  <input type="password" 
+name="user_password" 
+id="edit_user_password" 
+placeholder="Leave blank to keep current password"
+class="border border-gray-300 rounded-lg px-4 py-2 pr-10 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}"
+title="Password must be at least 8 characters, include uppercase, lowercase, number and a symbol">
   <button type="button" onclick="togglePassword('edit_user_password','toggleIconEditUser')"
     class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800">
     <i id="toggleIconEditUser" class="fas fa-eye"></i>
@@ -460,7 +478,32 @@ if(isset($_POST['edit'])){
     $user_name = mysqli_real_escape_string($conn,$_POST['name']);
     $department_id = mysqli_real_escape_string($conn,$_POST['department_id']);
     $email_address = mysqli_real_escape_string($conn,$_POST['email_address']);
-    $user_password = password_hash($_POST['user_password'], PASSWORD_DEFAULT);
+   $user_password_raw = $_POST['user_password'];
+
+// Password validation regex
+$pattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/';
+
+// Start query
+$update_query = "UPDATE login_user SET 
+    name='$user_name',
+    department_id='$department_id',
+    email_address='$email_address'";
+
+// Only update password if not empty
+if (!empty($user_password_raw)) {
+
+    if (!preg_match($pattern, $user_password_raw)) {
+        echo "<script>alert('Password must be at least 8 characters, include uppercase, lowercase, number, and a symbol.'); window.history.back();</script>";
+        exit();
+    }
+
+    $user_password_hashed = password_hash($user_password_raw, PASSWORD_DEFAULT);
+    $update_query .= ", user_password='$user_password_hashed'";
+}
+
+$update_query .= " WHERE id='$id_post'";
+
+mysqli_query($conn, $update_query) or die(mysqli_error($conn));
 
     mysqli_query($conn,"UPDATE login_user 
 SET name='$user_name',
@@ -490,7 +533,20 @@ Swal.fire({
 });
 <?php unset($_SESSION['toast']); endif; ?>
 </script>
+<script>
+const userPasswordInput = document.getElementById('add_user_password');
+const userPasswordHelp = document.getElementById('userPasswordHelp');
 
+userPasswordInput.addEventListener('input', function() {
+    const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
+
+    if (userPasswordInput.value === "" || pattern.test(userPasswordInput.value)) {
+        userPasswordHelp.classList.add('hidden');
+    } else {
+        userPasswordHelp.classList.remove('hidden');
+    }
+});
+</script>
 <script>
 function confirmArchive(id){
     Swal.fire({

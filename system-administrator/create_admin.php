@@ -71,4 +71,4 @@ if(isset($_POST['reg'])){
         echo "OTP could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
 }
-?>
+?> 

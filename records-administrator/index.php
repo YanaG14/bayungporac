@@ -22,7 +22,7 @@ top:0;
 width:100%;
 height:100%;
 z-index:9999;
-
+ 
 }
 
 /* Navbar Gradient Animation */
@@ -145,13 +145,19 @@ if(isset($_SESSION['error_msg']) && $_SESSION['error_msg'] !== ""){
     unset($_SESSION['error_msg']);
 }
 ?>
-<?php if(isset($_SESSION['show_otp_modal'])): ?>
+<?php if(isset($_SESSION['admin_otp_modal']) || isset($_SESSION['user_otp_modal'])): ?>
 <script>
-window.onload = function(){
-    document.getElementById('otpModal').classList.remove('hidden');
-}
+document.addEventListener("DOMContentLoaded", function(){
+    const modal = document.getElementById('otpModal');
+    if(modal){
+        modal.classList.remove('hidden');
+    }
+});
 </script>
-<?php unset($_SESSION['show_otp_modal']); endif; ?>
+<?php 
+unset($_SESSION['admin_otp_modal']);
+unset($_SESSION['user_otp_modal']);
+endif; ?>
             <button
                 type="submit"
                 name="adminlog"
@@ -277,26 +283,6 @@ if(passwordField.type === "password"){
 }
 </script>
 
-<?php if(isset($_SESSION['show_otp_modal'])): ?>
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-    const modal = document.getElementById('otpModal');
-    if(modal){
-        modal.classList.remove('hidden');
-    }
-});
-</script>
-<?php unset($_SESSION['show_otp_modal']); endif; ?>
 
-<?php if(isset($_SESSION['show_otp_modal']) && $_SESSION['show_otp_modal'] === true): ?>
-<script>
-window.onload = function(){
-    const modal = document.getElementById('otpModal');
-    if(modal){
-        modal.classList.remove('hidden');
-    }
-};
-</script>
-<?php unset($_SESSION['show_otp_modal']); endif; ?>
 </body>
 </html>

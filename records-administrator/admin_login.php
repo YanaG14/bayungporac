@@ -34,11 +34,11 @@ if(isset($_POST["adminlog"])){
             exit();
         }
    //  OTP not verified
-   // 🔐 OTP CHECK (ADD THIS)
+  
 if ($row['otp_verified'] == 0) {
 
     $_SESSION['otp_email'] = $row['admin_user'];
-    $_SESSION['show_otp_modal'] = true;
+    $_SESSION['admin_otp_modal'] = true;
 
     header("Location: index.php");
     exit();
@@ -76,7 +76,7 @@ if ($row['otp_verified'] == 0) {
     // =========================
     // 🔵 IF NOT ADMIN → CHECK USER
     // =========================
-    $stmt = $conn->prepare("SELECT id, name, email_address, user_password, user_status, department_id FROM login_user WHERE email_address = ? LIMIT 1");
+    $stmt = $conn->prepare("SELECT id, name, email_address, user_password, user_status, department_id, otp_verified FROM login_user WHERE email_address = ? LIMIT 1");
 
     if (!$stmt) {
         die("Prepare failed: " . $conn->error);
@@ -96,7 +96,18 @@ if ($row['otp_verified'] == 0) {
             exit();
         }
 
-        if (password_verify($password, $user["user_password"])) {
+       if (password_verify($password, $user["user_password"])) {
+
+    // 🔴 ADD THIS OTP CHECK
+    if ((int)$user['otp_verified'] === 0) {
+
+        $_SESSION['otp_email'] = $user['email_address'];
+        $_SESSION['user_otp_modal'] = true;
+
+        header("Location: index.php");
+        exit();
+    }
+
 
             session_regenerate_id(true);
 
@@ -116,7 +127,9 @@ if ($row['otp_verified'] == 0) {
                 $logStmt->execute();
                 $logStmt->close();
             }
-
+// after login success
+ unset($_SESSION['user_otp_modal']);
+    unset($_SESSION['otp_email']);
             // ✅ REDIRECT TO USER SYSTEM
             header("Location: ../employee/home.php");
             exit();

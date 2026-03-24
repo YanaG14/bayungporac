@@ -5,14 +5,19 @@ require '../vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-if(isset($_POST['reguser'])){
+if(isset($_POST['reguser'])){ 
 
     $user_name = mysqli_real_escape_string($conn,$_POST['name']);
     $department_id = mysqli_real_escape_string($conn,$_POST['department_id']);
     $email_address = mysqli_real_escape_string($conn,$_POST['email_address']);
     $user_password_raw = $_POST['user_password'];
     $user_status = mysqli_real_escape_string($conn,$_POST['user_status']);
-
+    
+ $pattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/';
+    if (!preg_match($pattern, $user_password_raw)) {
+        echo '<script>alert("Password must be at least 8 characters, include uppercase, lowercase, number, and a symbol."); window.history.back();</script>'; 
+        exit();
+    }
     // Password hashing
     $user_password = password_hash($user_password_raw, PASSWORD_DEFAULT, ['cost'=>12]);
 

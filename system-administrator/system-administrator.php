@@ -320,7 +320,7 @@ class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:t
 <p id="passwordHelp" class="text-red-600 text-sm mt-1 hidden">
   Password must be at least 8 characters, include uppercase, lowercase, number, and a symbol.
 </p>
-
+ 
 <script>
 const passwordInput = document.getElementById('admin_password');
 const passwordHelp = document.getElementById('passwordHelp');

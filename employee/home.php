@@ -201,11 +201,23 @@ $(window).on('load', function(){
     <?php else: 
         // Show files in selected folder
         $stmt = $conn->prepare("
-            SELECT uf.id, uf.name, uf.size, uf.email, uf.admin_status, uf.timers, uf.download, uf.file_path
-            FROM upload_files uf
-            JOIN file_departments fd ON uf.id = fd.file_id
-            WHERE uf.folder_id = ? AND fd.department_id = ? AND uf.status='Active'
-            ORDER BY uf.id DESC
+            SELECT 
+    uf.id, 
+    uf.name, 
+    uf.size, 
+    uf.email, 
+    uf.admin_status, 
+    uf.timers, 
+    uf.download, 
+    uf.file_path,
+    al.name AS uploader_name
+FROM upload_files uf
+JOIN file_departments fd ON uf.id = fd.file_id
+LEFT JOIN admin_login al ON uf.email = al.id
+WHERE uf.folder_id = ? 
+AND fd.department_id = ? 
+AND uf.status='Active'
+ORDER BY uf.id DESC
         ");
         $stmt->bind_param("ii", $selected_folder, $user_department);
         $stmt->execute();
@@ -217,9 +229,9 @@ $(window).on('load', function(){
           <thead class="bg-green-700 text-white">
             <tr>
               <th class="px-4 py-3 text-left">Filename</th>
-              <th class="px-4 py-3 text-left">Size</th>
+              
               <th class="px-4 py-3 text-left">Uploader</th>
-              <th class="px-4 py-3 text-left">Status</th>
+              
               <th class="px-4 py-3 text-left">Upload Date</th>
               <th class="px-4 py-3 text-left">Downloads</th>
               <th class="px-4 py-3 text-left">Action</th>
@@ -230,9 +242,11 @@ $(window).on('load', function(){
             <?php $filepath = "../uploads/" . $file['file_path']; ?>
             <tr class="border-b hover:bg-green-50 transition-colors duration-200">
               <td class="px-4 py-2"><?php echo htmlentities($file['name']); ?></td>
-              <td class="px-4 py-2"><?php echo floor($file['size']/1000)." KB"; ?></td>
-              <td class="px-4 py-2"><?php echo htmlentities($file['email']); ?></td>
-              <td class="px-4 py-2"><?php echo htmlentities($file['admin_status']); ?></td>
+              
+              <td class="px-4 py-2">
+    <?php echo htmlentities($file['uploader_name']); ?>
+</td>
+              
               <td class="px-4 py-2"><?php echo htmlentities($file['timers']); ?></td>
               <td class="px-4 py-2"><?php echo $file['download']; ?></td>
               <td class="px-4 py-2">

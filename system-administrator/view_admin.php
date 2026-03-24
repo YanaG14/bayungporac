@@ -56,7 +56,7 @@ if (isset($_POST['edit_publish'])) {
         if (!preg_match($pattern, $admin_password_raw)) {
             echo "<script>alert('Password must be at least 8 characters, include uppercase, lowercase, number, and a symbol.'); window.history.back();</script>";
             exit();
-        }
+        } 
         $admin_password_hashed = password_hash($admin_password_raw, PASSWORD_DEFAULT);
         $update_query .= ", admin_password='$admin_password_hashed'";
     }

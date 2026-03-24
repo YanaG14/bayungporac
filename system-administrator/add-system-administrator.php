@@ -1,6 +1,11 @@
 <?php
 require_once("../include/connection.php");
 
+require '../vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 if(isset($_POST['reg'])){
 
     $user_name = mysqli_real_escape_string($conn,$_POST['name']);
@@ -22,7 +27,7 @@ $fixed_role = "System Administrator";
         </script>
         ';
         exit();
-    }
+    } 
 
     // Hash the password after validation
     $user_password_hashed = password_hash($user_password_raw, PASSWORD_DEFAULT, array('cost' => 12));
@@ -44,11 +49,39 @@ $fixed_role = "System Administrator";
               VALUES('$user_name', '$user_email', '$user_password_hashed', '$user_status', '$fixed_role')") 
               or die(mysqli_error($conn));
 
-    echo '
-    <script type="text/javascript">
-        alert("Saved Admin Info");
-        window.location = "system-administrator.php";
-    </script>
-    ';
+    // 2️⃣ Generate OTP
+    $otp = rand(100000, 999999);
+
+    // 3️⃣ Store OTP in DB
+    $conn->query("UPDATE `admin_login` SET otp_code='$otp', otp_verified=0 WHERE admin_user='$user_email'") or die(mysqli_error($conn));
+
+    // 4️⃣ Send OTP via PHPMailer
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'yanayanaya14@gmail.com'; // your Gmail
+        $mail->Password   = 'abtt ostl nvlh ehss';     // Gmail App Password
+        $mail->SMTPSecure = 'tls';
+        $mail->Port       = 587;
+
+        $mail->setFrom('yanayanaya14@gmail.com', 'Bayung Porac Archive');
+        $mail->addAddress($user_email, $user_name);
+ 
+        $mail->isHTML(true);
+        $mail->Subject = 'Verify Your Admin Account - OTP Code';
+        $mail->Body    = "<p>Hi <strong>$user_name</strong>,</p>
+                          <p>Your OTP code for account verification is: <strong>$otp</strong></p>
+                          <p>Please enter this code to verify your account.</p>";
+
+        $mail->send();
+
+        // 5️⃣ Redirect to OTP verification page
+        echo '<script>alert("OTP has been sent to the admin email!"); window.location="verify_otp.php?email='.$user_email.'";</script>';
+
+    } catch (Exception $e) {
+        echo "OTP could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
 }
 ?>

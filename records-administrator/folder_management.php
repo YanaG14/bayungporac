@@ -17,11 +17,23 @@ SELECT
 f.folder_id,
 f.folder_name,
 f.created_at,
-GROUP_CONCAT(d.department_name SEPARATOR ', ') as departments
+GROUP_CONCAT(DISTINCT d.department_name SEPARATOR ', ') as departments,
+
+-- Include file-related searchable data
+GROUP_CONCAT(DISTINCT uf.name SEPARATOR ', ') as file_names,
+GROUP_CONCAT(DISTINCT al.name SEPARATOR ', ') as uploaders,
+GROUP_CONCAT(DISTINCT uf.timers SEPARATOR ', ') as file_dates
+
 FROM folders f
 LEFT JOIN folder_departments fd ON f.folder_id = fd.folder_id
 LEFT JOIN departments d ON fd.department_id = d.department_id
+
+-- Join files
+LEFT JOIN upload_files uf ON f.folder_id = uf.folder_id AND uf.status='Active'
+LEFT JOIN admin_login al ON uf.email = al.id
+
 WHERE f.folder_status='Active'
+
 GROUP BY f.folder_id
 ORDER BY f.folder_name ASC
 ");
@@ -230,6 +242,9 @@ window.addEventListener("load", function() {
         <th class="px-4 py-2 text-left">Departments</th>
         <th class="px-4 py-2 text-left">Date Created</th>
         <th class="px-4 py-2 text-center">Action</th>
+        <th class="px-4 py-2 text-left">Files</th>
+<th class="px-4 py-2 text-left">Uploaders</th>
+<th class="px-4 py-2 text-left">File Dates</th>
       </tr>
     </thead>
     <tbody class="text-gray-700">
@@ -351,6 +366,17 @@ window.addEventListener("load", function() {
   });
 </script>
 
+<td class="px-4 py-2 hidden">
+  <?php echo $row['file_names']; ?>
+</td>
+
+<td class="px-4 py-2 hidden">
+  <?php echo $row['uploaders']; ?>
+</td>
+
+<td class="px-4 py-2 hidden">
+  <?php echo $row['file_dates']; ?>
+</td>
 </tr>
 
       <!-- EDIT FOLDER MODAL -->
