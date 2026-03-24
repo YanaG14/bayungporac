@@ -20,7 +20,7 @@ if(isset($_POST['reg'])){
     if (!preg_match($pattern, $user_password_raw)) {
         echo '<script>alert("Password must be at least 8 characters, include uppercase, lowercase, number, and a symbol."); window.history.back();</script>'; 
         exit();
-    }
+    } 
 
     $user_password_hashed = password_hash($user_password_raw, PASSWORD_DEFAULT, ['cost'=>12]);
 

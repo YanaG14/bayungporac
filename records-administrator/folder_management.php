@@ -242,9 +242,6 @@ window.addEventListener("load", function() {
         <th class="px-4 py-2 text-left">Departments</th>
         <th class="px-4 py-2 text-left">Date Created</th>
         <th class="px-4 py-2 text-center">Action</th>
-        <th class="px-4 py-2 text-left">Files</th>
-<th class="px-4 py-2 text-left">Uploaders</th>
-<th class="px-4 py-2 text-left">File Dates</th>
       </tr>
     </thead>
     <tbody class="text-gray-700">
@@ -366,17 +363,6 @@ window.addEventListener("load", function() {
   });
 </script>
 
-<td class="px-4 py-2 hidden">
-  <?php echo $row['file_names']; ?>
-</td>
-
-<td class="px-4 py-2 hidden">
-  <?php echo $row['uploaders']; ?>
-</td>
-
-<td class="px-4 py-2 hidden">
-  <?php echo $row['file_dates']; ?>
-</td>
 </tr>
 
       <!-- EDIT FOLDER MODAL -->
@@ -700,6 +686,34 @@ function confirmLogout(el) {
 }
 </script>
 
+<script>
+function toggleFiles(folder_id) {
+    const row = document.getElementById('files-' + folder_id);
+    const container = document.getElementById('files-content-' + folder_id);
+
+    if (!row) return;
+
+    // Toggle visibility
+    if (!row.classList.contains('hidden')) {
+        row.classList.add('hidden');
+        return;
+    }
+
+    row.classList.remove('hidden');
+
+    // Load files only once
+    if (container.innerHTML.trim() === 'Loading files...') {
+        $.ajax({
+            url: 'load_folder_files.php',
+            type: 'GET',
+            data: { folder_id: folder_id },
+            success: function(response) {
+                container.innerHTML = response;
+            }
+        });
+    }
+}
+</script>
 
 <!-- Footer -->
 <footer class="mt-10 text-center text-gray-600">
