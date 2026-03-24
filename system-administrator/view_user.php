@@ -81,6 +81,7 @@ $adminName = $_SESSION['admin_name'];
 
 <body class="bg-gray-100 font-sans">
 
+<!--
 <div id="loader" class="fixed inset-0 bg-white flex justify-center items-center z-50">
   <div class="flex space-x-2">
     <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full"></span>
@@ -88,6 +89,7 @@ $adminName = $_SESSION['admin_name'];
     <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full animation-delay-200"></span>
   </div>
 </div>
+-->>
 
 <!-- Page Content -->
 <div id="page-content" class="opacity-0 transition-opacity duration-500">
@@ -147,11 +149,12 @@ $adminName = $_SESSION['admin_name'];
 
       <!-- Menu -->
       <nav class="w-full space-y-2">
-        <a href="homepage_management.php" 
-class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50">
-  <i class="fas fa-home text-gray-600"></i>
-  <span class="font-medium">Homepage</span>
+       <a href="homepage_management.php" 
+class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <span class="font-medium tracking-wide">Homepage</span>
 </a>
+
 
         <a href="department_management.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">

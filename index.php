@@ -38,56 +38,80 @@ while($row = mysqli_fetch_assoc($events)){
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Bayung Porac Archive</title>
+
 <link rel="icon" href="js/img/municipalLogo.png">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+
+/* Smooth Reveal */
 .reveal {
   opacity: 0;
-  transform: translateY(40px);
-  transition: all 0.8s ease;
+  transform: translateY(60px);
+  transition: all 1s ease;
 }
 .reveal.show {
   opacity: 1;
   transform: translateY(0);
 }
-.slide {
-  transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out;
-}
-</style>
 
+/* SLIDER */
+.slide {
+  transition: opacity 1.5s ease, transform 1.5s ease;
+}
+
+/* GLASS NAV */
+.glass {
+  backdrop-filter: blur(14px);
+  background: rgba(22, 101, 52, 0.7);
+}
+
+/* IMAGE ZOOM EFFECT */
+.zoom {
+  transform: scale(1.1);
+}
+
+/* CARD HOVER */
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+}
+
+</style>
 </head>
 
 <body class="bg-gradient-to-br from-green-50 via-white to-green-100 font-sans">
 
-<nav id="navbar" class="fixed top-0 w-full bg-green-700/80 backdrop-blur-md z-50 py-5 transition-all duration-300">
+<!-- NAVBAR -->
+<nav id="navbar" class="fixed top-0 w-full glass z-50 py-5 transition-all duration-300">
   <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
 
     <div class="flex items-center gap-3">
       <img src="js/img/municipalLogo.png" id="logo" class="w-12 h-12 transition-all duration-300">
-      <h1 id="title" class="text-white font-semibold text-xl md:text-2xl transition-all duration-300">
+      <h1 id="title" class="text-white font-semibold text-2xl tracking-wide transition-all duration-300">
         Bayung Porac Archive
       </h1>
     </div>
 
     <a href="records-administrator/index.php"
-       class="bg-white text-green-800 px-4 py-2 rounded-full flex items-center gap-2 shadow-sm hover:shadow-md hover:scale-105 transition-all duration-300">
+       class="bg-white/90 text-green-800 px-5 py-2 rounded-full flex items-center gap-2 shadow hover:scale-105 transition">
       <i class="fas fa-user"></i> Login
     </a>
 
   </div>
 </nav>
 
+<!-- NAV SCROLL -->
 <script>
 const navbar = document.getElementById("navbar");
 const logo = document.getElementById("logo");
 const title = document.getElementById("title");
 
 window.addEventListener("scroll", () => {
-  if (window.scrollY > 40) {
-    navbar.classList.add("py-3", "shadow-md");
+  if (window.scrollY > 50) {
+    navbar.classList.add("py-3","shadow-lg");
     navbar.classList.remove("py-5");
 
     logo.classList.replace("w-12","w-10");
@@ -95,7 +119,7 @@ window.addEventListener("scroll", () => {
 
     title.classList.replace("text-2xl","text-lg");
   } else {
-    navbar.classList.remove("py-3", "shadow-md");
+    navbar.classList.remove("py-3","shadow-lg");
     navbar.classList.add("py-5");
 
     logo.classList.replace("w-10","w-12");
@@ -106,171 +130,286 @@ window.addEventListener("scroll", () => {
 });
 </script>
 
-<section class="pt-28 pb-10 px-4 reveal">
+<!-- HERO SLIDER -->
+<section class="pt-28 px-4 reveal">
 <div class="max-w-6xl mx-auto">
-<div class="relative rounded-2xl overflow-hidden shadow-2xl">
-<div class="relative h-[500px]">
+
+<div class="relative rounded-3xl overflow-hidden shadow-2xl">
+<div class="relative h-[520px]">
 
 <?php foreach($slideImages as $index => $img){ ?>
 <img src="<?php echo $img; ?>"
-     class="slide absolute inset-0 w-full h-full object-cover <?php echo $index == 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-105'; ?> transition duration-1000">
+     class="slide absolute inset-0 w-full h-full object-cover <?php echo $index == 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-110'; ?>">
 <?php } ?>
 
-<div class="absolute inset-0 bg-black/60"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
 
-<div class="absolute bottom-0 p-8 text-white">
-<h2 id="caption" class="text-3xl font-bold transition-all duration-500">
+<div class="absolute bottom-0 p-10 text-white">
+<h2 id="caption" class="text-4xl font-bold tracking-wide">
 <?php echo $slideCaptions[0] ?? ''; ?>
 </h2>
-
 </div>
 
 </div>
 </div>
+
 </div>
 </section>
 
-<section class="max-w-6xl mx-auto px-6 py-10 mt-20 reveal">
-<div class="grid md:grid-cols-2 gap-8 items-start">
+<!-- PROFILE -->
+<section class="max-w-6xl mx-auto px-6 py-16 reveal">
+  <div class="grid md:grid-cols-2 gap-12 items-start">
 
-<div>
-<p class="text-lg font-semibold uppercase">Officials of the Municipality of Porac, Pampanga</p>
-<h2 id="name" class="text-5xl font-semibold text-green-700 mb-4 transition-all duration-500">
-<?php echo $profileData[0]['name'] ?? ''; ?>
-</h2>
-<p id="description" class="text-lg uppercase">
-<?php echo $profileData[0]['role'] ?? ''; ?>
+    <!-- TEXT -->
+    <div id="profileText" class="transition-all duration-500">
+
+      <p class="uppercase text-gray-900 font-semibold tracking-wider 
+text-sm sm:text-base md:text-lg lg:text-xl transition-all duration-300">
+  Municipality Officials
 </p>
-</div>
 
-<div class="flex justify-end">
-  <div class="w-full max-w-2xl h-[600px] flex items-center justify-center">
-    
-    <img id="profileImage"
-         src="<?php echo isset($profileData[0]) ? 'uploads/profiles/'.$profileData[0]['image'] : 'js/img/pic6.jfif'; ?>"
-         class="rounded-lg max-w-full max-h-full shadow-lg transition-all duration-700 hover:scale-105">
+      <h2 id="name"
+      class="text-5xl md:text-6xl font-bold text-green-800 mb-4 leading-tight">
+      <?php echo $profileData[0]['name'] ?? ''; ?>
+      </h2>
+
+      <p id="description"
+      class="text-lg md:text-xl text-gray-600 uppercase tracking-wide">
+      <?php echo $profileData[0]['role'] ?? ''; ?>
+      </p>
+
+    </div>
+
+    <!-- IMAGE -->
+    <div class="flex justify-center">
+      <img id="profileImage"
+           src="<?php echo isset($profileData[0]) ? 'uploads/profiles/'.$profileData[0]['image'] : ''; ?>"
+           class="rounded-2xl shadow-xl w-[420px] h-[520px] object-cover transition duration-700 hover:scale-105">
+    </div>
 
   </div>
-</div>
-
-</div>
 </section>
 
-<section class="max-w-6xl mx-auto px-6 py-10 reveal">
-<h2 class="text-2xl font-bold text-green-800 mb-6">Featured Collections</h2>
+<!-- FEATURED -->
+<section class="max-w-6xl mx-auto px-6 py-12 reveal">
+  <h2 class="text-3xl md:text-4xl font-bold text-green-800 mb-8">
+    Featured Collections
+  </h2>
 
-<div class="relative">
-
-  <!-- Controls -->
-  <button onclick="scrollFeatured(-1)"
-    class="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow-md p-3 rounded-full z-10 hover:scale-110 transition">
-    <i class="fas fa-chevron-left"></i>
-  </button>
-
-  <button onclick="scrollFeatured(1)"
-    class="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-md p-3 rounded-full z-10 hover:scale-110 transition">
-    <i class="fas fa-chevron-right"></i>
-  </button>
-
-  <!-- Slider -->
-  <div id="featuredSlider" class="flex overflow-x-hidden scroll-smooth gap-6">
-
+  <div id="featuredSlider" class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide">
     <?php foreach($featuredData as $row){ ?>
-    <div class="min-w-[300px] bg-white rounded-2xl shadow p-4 transition transform hover:-translate-y-2 hover:shadow-xl duration-500">
-      <img src="uploads/featured/<?php echo $row['image']; ?>" class="h-40 w-full object-cover rounded">
-      <p class="mt-2 font-semibold"><?php echo $row['title']; ?></p>
+      <div class="snap-start min-w-[280px] md:min-w-[320px] bg-white rounded-2xl shadow-lg overflow-hidden transition-transform duration-500 hover:scale-105 hover:shadow-2xl">
+        <img src="uploads/featured/<?php echo $row['image']; ?>" 
+             class="h-48 w-full object-cover rounded-t-2xl">
+        <div class="p-4">
+          <p class="font-semibold text-lg md:text-xl text-gray-800">
+            <?php echo $row['title']; ?>
+          </p>
+        </div>
+      </div>
+    <?php } ?>
+  </div>
+</section>
+
+<style>
+
+  .scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+</style>
+
+<!-- EVENTS -->
+<section class="max-w-6xl mx-auto px-6 py-12 reveal">
+  <h2 class="text-3xl md:text-4xl font-bold text-green-800 mb-10 text-left">
+    Events
+  </h2>
+
+  <div class="grid md:grid-cols-3 gap-8">
+    <?php foreach($eventData as $row){ ?>
+    <div class="card bg-white p-6 rounded-3xl shadow-lg hover:shadow-2xl transition-transform duration-500 transform hover:-translate-y-2">
+      <h3 class="font-bold text-xl md:text-2xl text-gray-900 mb-2">
+        <?php echo $row['title']; ?>
+      </h3>
+      <p class="text-gray-700 leading-relaxed">
+        <?php echo $row['description']; ?>
+      </p>
     </div>
     <?php } ?>
-
   </div>
+</section>
+
+<!-- ABOUT -->
+<section class="max-w-5xl mx-auto px-6 py-16 reveal">
+<div class="bg-gradient-to-r from-gray-900 to-gray-900 text-white p-12 rounded-3xl shadow-xl">
+<h2 class="text-3xl font-bold mb-4">About</h2>
+<p class="leading-relaxed"><?php echo nl2br($aboutRow['content'] ?? ''); ?></p>
 </div>
 </section>
 
-<script>
-const slider = document.getElementById("featuredSlider");
 
-function scrollFeatured(direction) {
-  const cardWidth = 320; // width + gap approximation
-  slider.scrollBy({
-    left: direction * cardWidth,
-    behavior: "smooth"
+<!-- Porac Municipal Hall Location -->
+<!-- Contact Us Section (No Form) -->
+<!-- Contact Us Section with Scroll Animation -->
+<section id="contact-us" style="padding:80px 20px; background-color:#f8f9fa; font-family:Arial, sans-serif;">
+  
+  
+  <div class="contact-container" style="display:flex; flex-wrap:wrap; gap:40px; justify-content:center; align-items:flex-start;">
+
+    <!-- Contact Details -->
+    <div class="fade-in-left" style="flex:1; min-width:300px; max-width:500px; background:white; padding:30px; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,0.1);">
+      <p style="font-size:20px; font-weight:bold; color:#007BFF;">Contact Us</p>
+      <p><strong>Address:</strong> Porac Municipal Hall, Brgy. Poblacion, Porac, Pampanga, Philippines</p>
+      <p><strong>Phone:</strong> (+63) 45 123 4567</p>
+      <p><strong>Email:</strong> info@porac.gov.ph</p>
+      <p><strong>Office Hours:</strong> Monday – Friday, 8:00 AM – 5:00 PM</p>
+    </div>
+
+    <!-- Google Map -->
+    <div class="fade-in-right" style="flex:1; min-width:300px; max-width:600px; height:400px; border-radius:10px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.1);">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3850.1468494149326!2d120.54898631538828!3d15.07447587644914!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3396f4b9c835a37d%3A0x31f5e6ff1a63bf79!2sPorac%20Municipal%20Hall!5e0!3m2!1sen!2sph!4v1701012345678!5m2!1sen!2sph"
+        width="100%"
+        height="100%"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<style>
+/* Scroll Fade-In Animations */
+.fade-in-left, .fade-in-right {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 1s ease-out;
+}
+
+.fade-in-left.visible {
+  opacity: 1;
+  transform: translateY(0) translateX(0);
+}
+
+.fade-in-right.visible {
+  opacity: 1;
+  transform: translateY(0) translateX(0);
+}
+
+/* Optional: staggered horizontal movement */
+.fade-in-left.visible { transform: translateY(0) translateX(-10px); }
+.fade-in-right.visible { transform: translateY(0) translateX(10px); }
+</style>
+
+<script>
+// Scroll animation
+function revealOnScroll() {
+  const elements = document.querySelectorAll('.fade-in-left, .fade-in-right');
+  const windowHeight = window.innerHeight;
+  
+  elements.forEach(el => {
+    const elementTop = el.getBoundingClientRect().top;
+    const revealPoint = 150; // when to trigger
+    
+    if(elementTop < windowHeight - revealPoint){
+      el.classList.add('visible');
+    }
   });
 }
 
-/* Auto slide */
-setInterval(() => {
-  const maxScroll = slider.scrollWidth - slider.clientWidth;
-
-  if (slider.scrollLeft >= maxScroll) {
-    slider.scrollTo({ left: 0, behavior: "smooth" });
-  } else {
-    slider.scrollBy({ left: 320, behavior: "smooth" });
-  }
-}, 4000);
+window.addEventListener('scroll', revealOnScroll);
+window.addEventListener('load', revealOnScroll);
 </script>
 
-<section class="max-w-6xl mx-auto px-6 py-10 reveal">
-<h2 class="text-2xl font-bold text-green-800 mb-6">Events</h2>
-<div class="grid md:grid-cols-3 gap-6">
-<?php foreach($eventData as $row){ ?>
-<div class="bg-white p-5 rounded-2xl shadow transition hover:scale-105 duration-500">
-<h3 class="font-bold"><?php echo $row['title']; ?></h3>
-<p class="text-sm text-gray-600 mt-2"><?php echo $row['description']; ?></p>
-</div>
-<?php } ?>
-</div>
-</section>
 
-<section class="max-w-5xl mx-auto px-6 py-12 reveal">
-<div class="bg-green-700 text-white p-10 rounded-3xl">
-<h2 class="text-3xl font-bold mb-4">About</h2>
-<p><?php echo nl2br($aboutRow['content'] ?? 'No content available'); ?></p>
-</div>
-</section>
 
+<!-- FOOTER -->
 <footer class="bg-green-900 text-white text-center py-6">
-<p>All right Reserved &copy; <?php echo date('Y');?> Created By: PSU IT Interns</p>
+<p>&copy; <?php echo date('Y');?> PSU IT Interns</p>
 </footer>
 
+<!-- SCRIPTS -->
 <script>
 const slides = document.querySelectorAll(".slide");
 const captions = <?php echo json_encode($slideCaptions); ?>;
 let i = 0;
 
 setInterval(()=>{
-  slides[i].classList.replace("opacity-100","opacity-0");
-  slides[i].classList.replace("scale-100","scale-105");
+  slides[i].classList.remove("opacity-100","scale-100");
+  slides[i].classList.add("opacity-0","scale-110");
 
   i = (i+1)%slides.length;
 
-  slides[i].classList.replace("opacity-0","opacity-100");
-  slides[i].classList.replace("scale-105","scale-100");
+  slides[i].classList.remove("opacity-0","scale-110");
+  slides[i].classList.add("opacity-100","scale-100");
 
   document.getElementById("caption").textContent = captions[i] || "";
-},3000);
+},4000);
 
+/* PROFILE AUTO CHANGE */
 const profiles = <?php echo json_encode($profileData); ?>;
 let current = 0;
 
 setInterval(() => {
   current = (current + 1) % profiles.length;
 
-  document.getElementById("name").textContent = profiles[current].name;
-  document.getElementById("description").textContent = profiles[current].role;
-  document.getElementById("profileImage").src = "uploads/profiles/" + profiles[current].image;
+  const text = document.getElementById("profileText");
+  const img = document.getElementById("profileImage");
 
-}, 3000);
+  // MOVE WHOLE TEXT UP + FADE OUT
+  text.classList.add("opacity-0","-translate-y-6");
+  img.classList.add("opacity-0","scale-95");
 
-/* SCROLL REVEAL */
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
+  setTimeout(() => {
+    // CHANGE CONTENT
+    document.getElementById("name").textContent = profiles[current].name;
+    document.getElementById("description").textContent = profiles[current].role;
+    img.src = "uploads/profiles/" + profiles[current].image;
+
+    // RESET POSITION (slightly below for smooth entry)
+    text.classList.remove("-translate-y-6");
+    text.classList.add("translate-y-6");
+
+    // FORCE REPAINT (important for smooth animation)
+    text.offsetHeight;
+
+    // SLIDE UP INTO PLACE
+    text.classList.remove("opacity-0","translate-y-6");
+    img.classList.remove("opacity-0","scale-95");
+
+  }, 300);
+
+}, 4000);
+
+/* FEATURED */
+const slider = document.getElementById("featuredSlider");
+function scrollFeatured(direction){
+  slider.scrollBy({left: direction*320, behavior:"smooth"});
+}
+
+setInterval(()=>{
+  const maxScroll = slider.scrollWidth - slider.clientWidth;
+  if(slider.scrollLeft >= maxScroll){
+    slider.scrollTo({left:0, behavior:"smooth"});
+  }else{
+    slider.scrollBy({left:320, behavior:"smooth"});
+  }
+},4000);
+
+/* REVEAL */
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
     if(entry.isIntersecting){
       entry.target.classList.add("show");
     }
   });
 });
-
-document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
 </script>
 
 </body>

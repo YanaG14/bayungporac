@@ -284,211 +284,270 @@ $aboutRow = mysqli_fetch_assoc($about);
 
 <!-- SIDEBAR -->
   <aside class="w-1/4">
-    <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-screen">
+  <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-screen">
 
-      <!-- Logo -->
-      <img src="img/adminLogo.png" class="square-logo mb-6 transition-transform duration-300 hover:scale-105">
+    <!-- Logo -->
+    <img src="img/adminLogo.png"
+     class="square-logo mb-6 transition-transform duration-300 hover:scale-105"
+     style="width:180px; height:180px; object-fit:cover; border-radius:12px;">
+    <!-- Menu -->
+    <nav class="w-full space-y-3">
+      <!-- Homepage -->
+      <a href="homepage_management.php" 
+         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
+                bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
+                transition-all duration-300">
+        <i class="fas fa-home text-green-600"></i>
+        <span class="font-medium tracking-wide">Homepage</span>
+      </a>
 
-      <!-- Menu -->
-      <nav class="w-full space-y-2">
-        <a href="homepage_management.php" class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
-          bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
-          transition-all duration-300"
->
-  <i class="fas fa-home text-green-600"></i>
-  <span class="font-medium">Homepage</span>
-</a>
-        
-        <a href="department_management.php" class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50"
-   >
-  <i class="fas fa-building text-gray-600"></i>
-  <span class="font-medium tracking-wide">Offices</span>
-</a>
+      <!-- Offices -->
+      <a href="department_management.php" 
+         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 
+                hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+        <i class="fas fa-building text-gray-600 group-hover:text-green-600 transition-colors"></i>
+        <span class="font-medium tracking-wide">Offices</span>
+      </a>
 
-<a href="view_user.php" 
-        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
-          <span class="font-medium tracking-wide">Employees</span>
-        </a>
-      </nav>
+      <!-- Employees -->
+      <a href="view_user.php" 
+         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 
+                hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+        <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+        <span class="font-medium tracking-wide">Employees</span>
+      </a>
 
-        <a href="view_admin.php" 
-        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
-          <span class="font-medium tracking-wide">Records Administrators</span>
-        </a>
+      <!-- Records Administrators -->
+      <a href="view_admin.php" 
+         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 
+                hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+        <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+        <span class="font-medium tracking-wide">Records Administrators</span>
+      </a>
 
-        <a href="system-administrator.php" 
-        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
-          <span class="font-medium tracking-wide">System Administrators</span>
-        </a>
+      <!-- System Administrators -->
+      <a href="system-administrator.php" 
+         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 
+                hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+        <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+        <span class="font-medium tracking-wide">System Administrators</span>
+      </a>
+    </nav>
 
-        
-
-    </div>
-  </aside>
+  </div>
+</aside>
 
 <!-- MAIN CONTENT -->
 <div class="w-3/4">
 
   <!-- TABS -->
-  <div class="flex gap-3 mb-4">
-    <button class="tab-btn px-4 py-2 rounded-xl bg-white shadow active" onclick="showTab('slides')">Slides</button>
-    <button class="tab-btn px-4 py-2 rounded-xl bg-white shadow" onclick="showTab('profiles')">Profiles</button>
-    <button class="tab-btn px-4 py-2 rounded-xl bg-white shadow" onclick="showTab('featured')">Featured</button>
-    <button class="tab-btn px-4 py-2 rounded-xl bg-white shadow" onclick="showTab('events')">Events</button>
-    <button class="tab-btn px-4 py-2 rounded-xl bg-white shadow" onclick="showTab('about')">About</button>
-  </div>
+  <div class="p-6 bg-gray-50 rounded-2xl shadow-xl">
+
+  <!-- Tab Buttons -->
+  <div class="flex flex-wrap gap-3 mb-6">
+
+  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all font-medium text-gray-700 active:bg-green-600 active:text-white"
+          onclick="showTab('slides')">Slides</button>
+
+  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all font-medium text-gray-700"
+          onclick="showTab('profiles')">Profiles</button>
+
+  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all font-medium text-gray-700"
+          onclick="showTab('featured')">Featured</button>
+
+  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all font-medium text-gray-700"
+          onclick="showTab('events')">Events</button>
+
+  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all font-medium text-gray-700"
+          onclick="showTab('about')">About</button>
+
+</div>
+
+<style>
+  /* Active tab style */
+  .tab-btn.active {
+    background-color: #10B981; /* Tailwind green-500 */
+    color: white;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); /* stronger shadow for active tab */
+  }
+</style>
 
   <!-- SLIDES -->
-  <div id="slides" class="tab-content bg-white p-6 rounded-xl shadow">
-    <h2 class="font-semibold mb-4">Slides</h2>
+  <div id="slides" class="tab-content bg-white p-6 rounded-2xl shadow-md">
+    <h2 class="font-semibold text-xl mb-4 border-b pb-2">Slides</h2>
 
-    <form method="POST" enctype="multipart/form-data" class="flex gap-2 mb-4">
-      <input type="text" name="caption" placeholder="Caption" class="border p-2 rounded" required>
-      <input type="text" name="description" placeholder="Description" class="border p-2 rounded" required>
-      <input type="file" name="image" required>
-      <button name="add_slide" class="bg-green-600 text-white px-4 rounded">Add</button>
+    <!-- Add Slide Form -->
+    <form method="POST" enctype="multipart/form-data" class="flex flex-wrap gap-3 mb-6 items-center bg-gray-50 p-4 rounded-xl shadow-inner">
+      <input type="text" name="caption" placeholder="Caption" class="border p-2 rounded-xl flex-1 min-w-[150px]" required>
+      <input type="text" name="description" placeholder="Description" class="border p-2 rounded-xl flex-1 min-w-[150px]" required>
+      <input type="file" name="image" class="border p-2 rounded-xl" required>
+      <button name="add_slide" class="bg-green-600 text-white px-5 py-2 rounded-xl hover:bg-green-700 transition-colors">Add</button>
     </form>
 
-    <?php while($row = mysqli_fetch_assoc($slides)) { ?>
-      <div class="border p-3 mb-2 flex justify-between items-center">
-        <div class="flex justify-between items-center">
-          <img src="../uploads/slides/<?php echo $row['image']; ?>" width="80">
-          <p><?php echo $row['caption']; ?></p>
-          <div class="flex gap-2">
-  <button 
-    onclick="openEditSlide(<?php echo htmlspecialchars(json_encode($row)); ?>)"
-    class="bg-blue-500 text-white px-3 py-1 rounded">
-    Edit
-  </button>
-
-  <a href="homepage_management.php?delete_slide=<?php echo $row['slide_id']; ?>" 
-     onclick="return confirm('Delete this slide?')" 
-     class="bg-red-500 text-white px-3 py-1 rounded">
-     Delete
-  </a>
-</div>
+    <!-- Slide List -->
+    <div class="space-y-4">
+      <?php while($row = mysqli_fetch_assoc($slides)) { ?>
+        <div class="flex flex-wrap items-center justify-between bg-gray-50 p-4 rounded-xl shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-center gap-4">
+            <img src="../uploads/slides/<?php echo $row['image']; ?>" class="w-20 h-20 object-cover rounded-xl border">
+            <div>
+              <p class="font-medium"><?php echo $row['caption']; ?></p>
+              <p class="text-gray-500 text-sm"><?php echo $row['description']; ?></p>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-2 sm:mt-0">
+            <button onclick="openEditSlide(<?php echo htmlspecialchars(json_encode($row)); ?>)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition-colors">Edit</button>
+            <a href="homepage_management.php?delete_slide=<?php echo $row['slide_id']; ?>" 
+               onclick="return confirm('Delete this slide?')" 
+               class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition-colors">Delete</a>
+          </div>
         </div>
+      <?php } ?>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Optional: active tab highlight */
+.tab-btn.active {
+  background-color: #10B981; /* Tailwind green-500 */
+  color: white;
+}
+</style>
+
+  <!-- PROFILES -->
+  <div id="profiles" class="tab-content hidden bg-white p-6 rounded-2xl shadow-md">
+
+  <!-- Heading -->
+  <h2 class="font-semibold text-xl mb-6 border-b pb-2">Profiles</h2>
+
+  <!-- Add Profile Form -->
+  <form method="POST" enctype="multipart/form-data" class="flex flex-wrap gap-3 mb-6 items-center bg-gray-50 p-4 rounded-2xl shadow-inner">
+    <input type="text" name="role" placeholder="Role" class="border p-2 rounded-xl flex-1 min-w-[150px]" required>
+    <input type="text" name="name" placeholder="Name" class="border p-2 rounded-xl flex-1 min-w-[150px]" required>
+    <input type="text" name="description" placeholder="Description" class="border p-2 rounded-xl flex-1 min-w-[150px]">
+    <input type="file" name="image" class="border p-2 rounded-xl" required>
+    <button name="add_profile" class="bg-green-600 text-white px-5 py-2 rounded-xl hover:bg-green-700 transition-colors">Add</button>
+  </form>
+
+  <!-- Profile List -->
+  <div class="space-y-4">
+    <?php while($row = mysqli_fetch_assoc($profiles)) { ?>
+      <div class="flex flex-wrap items-center justify-between bg-gray-50 p-4 rounded-2xl shadow-sm hover:shadow-md transition-all">
+        
+        <div class="flex items-center gap-4">
+          <img src="../uploads/profiles/<?php echo $row['image']; ?>" class="w-20 h-20 object-cover rounded-xl border">
+          <div>
+            <p class="font-medium"><?php echo $row['name']; ?></p>
+            <p class="text-gray-500 text-sm"><?php echo $row['role']; ?></p>
+            <?php if(!empty($row['description'])) { ?>
+              <p class="text-gray-400 text-sm"><?php echo $row['description']; ?></p>
+            <?php } ?>
+          </div>
+        </div>
+
+        <div class="flex gap-2 mt-2 sm:mt-0">
+          <button 
+            onclick="openEditProfile(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
+            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition-colors">Edit</button>
+          <a href="homepage_management.php?delete_profile=<?php echo $row['profile_id']; ?>" 
+             onclick="return confirm('Delete this profile?')" 
+             class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition-colors">Delete</a>
+        </div>
+
+      </div>
+    <?php } ?>
+  </div>
+</div>
+
+  <!-- FEATURED -->
+ <div id="featured" class="tab-content hidden bg-white p-6 rounded-2xl shadow-md">
+
+  <!-- Heading -->
+  <h2 class="font-semibold text-xl mb-6 border-b pb-2">Featured</h2>
+
+  <!-- Add Featured Form -->
+  <form method="POST" enctype="multipart/form-data" class="flex flex-wrap gap-3 mb-6 items-center bg-gray-50 p-4 rounded-2xl shadow-inner">
+    <input type="text" name="title" placeholder="Title" class="border p-2 rounded-xl flex-1 min-w-[150px]" required>
+    <input type="file" name="image" class="border p-2 rounded-xl" required>
+    <button name="add_featured" class="bg-green-600 text-white px-5 py-2 rounded-xl hover:bg-green-700 transition-colors">Add</button>
+  </form>
+
+  <!-- Featured List -->
+  <div class="space-y-4">
+    <?php while($row = mysqli_fetch_assoc($featured)) { ?>
+      <div class="flex flex-wrap items-center justify-between bg-gray-50 p-4 rounded-2xl shadow-sm hover:shadow-md transition-all">
+        
+        <div class="flex items-center gap-4">
+          <img src="../uploads/featured/<?php echo $row['image']; ?>" class="w-20 h-20 object-cover rounded-xl border">
+          <p class="font-medium"><?php echo $row['title']; ?></p>
+        </div>
+
+        <div class="flex gap-2 mt-2 sm:mt-0">
+          <button 
+            onclick="openEditFeatured(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
+            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition-colors">Edit</button>
+          <a href="homepage_management.php?delete_featured=<?php echo $row['featured_id']; ?>" 
+             onclick="return confirm('Delete this featured item?')" 
+             class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition-colors">Delete</a>
+        </div>
+
       </div>
     <?php } ?>
   </div>
 
-  <!-- PROFILES -->
-  <div id="profiles" class="tab-content hidden bg-white p-6 rounded-xl shadow">
-    <h2 class="font-semibold mb-4">Profiles</h2>
-
-    <form method="POST" enctype="multipart/form-data" class="flex gap-2 mb-4">
-      <input type="text" name="role" placeholder="Role" class="border p-2 rounded" required>
-      <input type="text" name="name" placeholder="Name" class="border p-2 rounded" required>
-      <input type="text" name="description" placeholder="Description" class="border p-2 rounded">
-      <input type="file" name="image" required>
-      <button name="add_profile" class="bg-green-600 text-white px-4 rounded">Add</button>
-    </form>
-
-    <?php while($row = mysqli_fetch_assoc($profiles)) { ?>
-  <div class="border p-3 mb-2 flex justify-between items-center">
-    
-    <div class="flex items-center gap-4">
-      <img src="../uploads/profiles/<?php echo $row['image']; ?>" width="80">
-      <p><?php echo $row['name']; ?> - <?php echo $row['role']; ?></p>
-    </div>
-
-    <div class="flex gap-2">
-      <button 
-        onclick="openEditProfile(<?php echo htmlspecialchars(json_encode($row)); ?>)"
-        class="bg-blue-500 text-white px-3 py-1 rounded">
-        Edit
-      </button>
-
-      <a href="homepage_management.php?delete_profile=<?php echo $row['profile_id']; ?>" 
-         onclick="return confirm('Delete this profile?')" 
-         class="bg-red-500 text-white px-3 py-1 rounded">
-         Delete
-      </a>
-    </div>
-
-  </div>
-<?php } ?>
-  </div>
-
-  <!-- FEATURED -->
-  <div id="featured" class="tab-content hidden bg-white p-6 rounded-xl shadow">
-  <h2 class="font-semibold mb-4">Featured</h2>
-
-  <form method="POST" enctype="multipart/form-data" class="flex gap-2 mb-4">
-    <input type="text" name="title" placeholder="Title" class="border p-2 rounded" required>
-    <input type="file" name="image" required>
-    <button name="add_featured" class="bg-green-600 text-white px-4 rounded">Add</button>
-  </form>
-
-  <?php while($row = mysqli_fetch_assoc($featured)) { ?>
-    <div class="border p-3 mb-2 flex justify-between items-center">
-      <div class="flex items-center gap-4">
-        <img src="../uploads/featured/<?php echo $row['image']; ?>" width="80">
-        <p><?php echo $row['title']; ?></p>
-      </div>
-
-      <div class="flex gap-2">
-        <button 
-          onclick="openEditFeatured(<?php echo htmlspecialchars(json_encode($row)); ?>)"
-          class="bg-blue-500 text-white px-3 py-1 rounded">
-          Edit
-        </button>
-
-        <a href="homepage_management.php?delete_featured=<?php echo $row['featured_id']; ?>" 
-           onclick="return confirm('Delete this featured item?')" 
-           class="bg-red-500 text-white px-3 py-1 rounded">
-           Delete
-        </a>
-      </div>
-    </div>
-  <?php } ?>
 </div>
 
   <!-- EVENTS -->
-  <div id="events" class="tab-content hidden bg-white p-6 rounded-xl shadow">
-  <h2 class="font-semibold mb-4">Events</h2>
+ <div id="events" class="tab-content hidden bg-white p-6 rounded-2xl shadow-md">
 
-  <form method="POST" class="flex gap-2 mb-4">
-    <input type="text" name="title" placeholder="Title" class="border p-2 rounded" required>
-    <input type="text" name="description" placeholder="Description" class="border p-2 rounded">
-    <button name="add_event" class="bg-green-600 text-white px-4 rounded">Add</button>
+  <!-- Heading -->
+  <h2 class="font-semibold text-xl mb-6 border-b pb-2">Events</h2>
+
+  <!-- Add Event Form -->
+  <form method="POST" class="flex flex-wrap gap-3 mb-6 items-center bg-gray-50 p-4 rounded-2xl shadow-inner">
+    <input type="text" name="title" placeholder="Title" class="border p-2 rounded-xl flex-1 min-w-[150px]" required>
+    <input type="text" name="description" placeholder="Description" class="border p-2 rounded-xl flex-1 min-w-[150px]">
+    <button name="add_event" class="bg-green-600 text-white px-5 py-2 rounded-xl hover:bg-green-700 transition-colors">Add</button>
   </form>
 
-  <?php while($row = mysqli_fetch_assoc($events)) { ?>
-    <div class="border p-3 mb-2 flex justify-between items-center">
-      <p><?php echo $row['title']; ?></p>
+  <!-- Event List -->
+  <div class="space-y-4">
+    <?php while($row = mysqli_fetch_assoc($events)) { ?>
+      <div class="flex flex-wrap items-center justify-between bg-gray-50 p-4 rounded-2xl shadow-sm hover:shadow-md transition-all">
+        
+        <p class="font-medium"><?php echo $row['title']; ?></p>
+        <?php if(!empty($row['description'])) { ?>
+          <p class="text-gray-500 text-sm"><?php echo $row['description']; ?></p>
+        <?php } ?>
 
-      <div class="flex gap-2">
-        <button 
-          onclick="openEditEvent(<?php echo htmlspecialchars(json_encode($row)); ?>)"
-          class="bg-blue-500 text-white px-3 py-1 rounded">
-          Edit
-        </button>
+        <div class="flex gap-2 mt-2 sm:mt-0">
+          <button 
+            onclick="openEditEvent(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
+            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition-colors">Edit</button>
+          <a href="homepage_management.php?delete_event=<?php echo $row['event_id']; ?>" 
+             onclick="return confirm('Delete this event?')" 
+             class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition-colors">Delete</a>
+        </div>
 
-        <a href="homepage_management.php?delete_event=<?php echo $row['event_id']; ?>" 
-           onclick="return confirm('Delete this event?')" 
-           class="bg-red-500 text-white px-3 py-1 rounded">
-           Delete
-        </a>
       </div>
-    </div>
-  <?php } ?>
-</div>
-
-  <!-- ABOUT -->
-  <div id="about" class="tab-content hidden bg-white p-6 rounded-xl shadow">
-    <h2 class="font-semibold mb-4">About</h2>
-
-    <form method="POST">
-      <textarea name="content" class="w-full border p-3 rounded h-40"><?php echo $aboutRow['content'] ?? ''; ?></textarea>
-      <button name="save_about" class="mt-3 bg-green-600 text-white px-4 py-2 rounded">Save</button>
-    </form>
+    <?php } ?>
   </div>
 
 </div>
+
+  <!-- ABOUT -->
+  <div id="about" class="tab-content hidden bg-white p-6 rounded-2xl shadow-md">
+
+  <!-- Heading -->
+  <h2 class="font-semibold text-xl mb-6 border-b pb-2">About</h2>
+
+  <!-- About Form -->
+  <form method="POST" class="flex flex-col gap-4">
+    <textarea name="content" class="w-full border p-4 rounded-2xl h-40 resize-none shadow-inner" placeholder="Enter content here..."><?php echo $aboutRow['content'] ?? ''; ?></textarea>
+    <button name="save_about" class="self-start bg-green-600 text-white px-6 py-2 rounded-2xl hover:bg-green-700 transition-colors">Save</button>
+  </form>
+
 </div>
 
 <script>
