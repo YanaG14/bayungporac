@@ -74,6 +74,7 @@ $(document).ready(function(){
     paging: false,        // ❌ remove pagination (Previous/Next)
     info: false,          // ❌ remove "Showing 1 to X of X"
     lengthChange: false   // ❌ removes "Show entries"
+    searching: false // ❗ disable DataTables search box
 });
     $(window).on('load', function(){ $('#loader').fadeOut('slow'); });
 });
@@ -207,6 +208,17 @@ window.addEventListener("load", function() {
 
         <!-- Action Buttons -->
         <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+
+        <!-- SEARCH BAR -->
+  <div class="flex w-full sm:w-auto gap-2">
+    <input type="text" id="globalSearch" 
+  placeholder="Search"
+  oninput="performSearch()"
+  class="border border-gray-300 rounded-xl px-4 py-2 w-full sm:w-64 focus:ring-2 focus:ring-green-500">
+
+    
+  </div>
+
           <button onclick="$('#modalAddFolder').removeClass('hidden');" 
                   class="w-full sm:w-auto justify-center bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300">
             <i class="fas fa-plus"></i> Add Post
@@ -426,6 +438,9 @@ window.addEventListener("load", function() {
     </tbody>
   </table>
 </div>
+
+<!-- SEARCH RESULTS -->
+<div id="searchResults" class="mt-6"></div>
 
 <!-- ADD POST MODAL -->
 <!-- Modal Background -->
@@ -712,6 +727,36 @@ function toggleFiles(folder_id) {
             }
         });
     }
+}
+</script>
+
+<script>
+function performSearch() {
+    let keyword = document.getElementById("globalSearch").value.toLowerCase();
+
+    // FILTER TABLE ROWS (FOLDERS)
+    let table = document.getElementById("dtable");
+    let rows = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) {
+        let rowText = rows[i].innerText.toLowerCase();
+
+        if (rowText.includes(keyword)) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+
+    // AJAX SEARCH FOR FILES (UNCHANGED)
+    $.ajax({
+        url: "search_files_folders.php",
+        type: "POST",
+        data: { keyword: keyword },
+        success: function(response) {
+            $("#searchResults").html(response);
+        }
+    });
 }
 </script>
 
