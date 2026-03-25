@@ -101,7 +101,11 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
 
   <script>
     $(document).ready(function(){
-      $('#dtable').DataTable({ "pageLength": 10 });
+      $('#dtable').DataTable({
+  paging: false,        // ❌ removes Previous/Next
+  lengthChange: false,   // ❌ removes "Show entries"
+  info: false,           // ❌ removes "Showing 1 to..."
+});
       $(window).on('load', function(){ $('#loader').fadeOut('slow'); });
     });
   </script>
@@ -173,18 +177,21 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
 
   <!-- SIDEBAR -->
   <aside class="w-1/4">
-  <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-[1400]">
+  <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-[542px]">
+
 
       <!-- Logo -->
-      <img src="img/adminLogo.png" class="square-logo mb-6 transition-transform duration-300 hover:scale-105">
-
+      <img src="img/adminLogo.png"
+     class="square-logo mb-6 transition-transform duration-300 hover:scale-105"
+     style="width:180px; height:180px; object-fit:cover; border-radius:12px;">
+     
       <!-- Menu -->
       <nav class="w-full space-y-2">
         <!-- Home Page -->
            <a href="homepage_management.php" 
            class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-           <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
-           <span class="font-medium tracking-wide">Homepage</span>
+           <i class="fas fa-home text-gray-600"></i>
+           <span class="font-medium tracking-wide">Home Page</span>
            </a>
 
         <!-- Offices -->
@@ -198,20 +205,20 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
 
 <a href="view_user.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <i class="fas fa-users text-gray-600 group-hover:text-dark-600 transition-colors"></i>
           <span class="font-medium tracking-wide">Employees</span>
         </a>
       </nav>
 
         <a href="view_admin.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <i class="fas fa-user-shield text-gray-600"></i>
           <span class="font-medium tracking-wide">Records Administrators</span>
         </a>
 
         <a href="system-administrator.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <i class="fas fa-server text-gray-600 group-hover:text-dark-600 transition-colors"></i>
           <span class="font-medium tracking-wide">System Administrators</span>
         </a>
 
@@ -221,12 +228,11 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
   </aside>
 
   <!-- MAIN CONTENT -->
-  <div class="w-3/4 flex-1">
-    <div class="bg-white rounded-2xl shadow-lg p-6 h-104 transition-all duration-300 hover:shadow-xl">
-
+  <div class="w-3/4 p-1 h-[calc(79vh-2rem)]">
+    <div class="bg-white rounded-2xl shadow-lg p-6 h-[541px] transition-all duration-300 hover:shadow-xl">
       <div class="flex justify-between items-center mb-4">
         
-        <!-- Title -->
+      <!-- Title -->
         <h2 class="text-xl font-semibold text-gray-700 flex items-center gap-2">
           <i class="fas fa-building text-green-600"></i> Active Departments
         </h2>
@@ -247,9 +253,9 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
       </div>
 
       <!-- TABLE -->
-      <div class="overflow-x-none">
-        <table id="dtable" class="min-w-full border border-gray-200">
-          <thead class="bg-green-700 text-white">
+      <div class="max-h-[400px] overflow-y-auto overflow-x-hidden">
+      <table id="dtable" class="w-full border border-gray-200">
+          <thead class="bg-green-700 text-white sticky top-0 z-10">
             <tr>
               <th class="px-4 py-2">ID</th>
               <th class="px-4 py-2">Department Name</th>

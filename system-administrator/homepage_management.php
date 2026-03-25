@@ -280,6 +280,7 @@ $aboutRow = mysqli_fetch_assoc($about);
   </div>
 </nav>
 
+<!-- Main Layout -->
 <div class="mt-24 px-6 flex gap-6">
 
 <!-- SIDEBAR -->
@@ -299,14 +300,14 @@ $aboutRow = mysqli_fetch_assoc($about);
                 bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
                 transition-all duration-300">
         <i class="fas fa-home text-green-600"></i>
-        <span class="font-medium tracking-wide">Homepage</span>
+        <span class="font-medium tracking-wide">Home Page</span>
       </a>
 
       <!-- Offices -->
       <a href="department_management.php" 
          class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 
                 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-        <i class="fas fa-building text-gray-600 group-hover:text-green-600 transition-colors"></i>
+        <i class="fas fa-building text-gray-600 group-hover:text-dark-900 transition-colors"></i>
         <span class="font-medium tracking-wide">Offices</span>
       </a>
 
@@ -314,7 +315,7 @@ $aboutRow = mysqli_fetch_assoc($about);
       <a href="view_user.php" 
          class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 
                 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-        <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+        <i class="fas fa-users text-gray-600 group-hover:text-dark-600 transition-colors"></i>
         <span class="font-medium tracking-wide">Employees</span>
       </a>
 
@@ -322,7 +323,7 @@ $aboutRow = mysqli_fetch_assoc($about);
       <a href="view_admin.php" 
          class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 
                 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-        <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+        <i class="fas fa-user-shield text-gray-600"></i>
         <span class="font-medium tracking-wide">Records Administrators</span>
       </a>
 
@@ -330,10 +331,10 @@ $aboutRow = mysqli_fetch_assoc($about);
       <a href="system-administrator.php" 
          class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 
                 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-        <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+        <i class="fas fa-server text-gray-600 group-hover:text-dark-600 transition-colors"></i>
         <span class="font-medium tracking-wide">System Administrators</span>
       </a>
-    </nav>
+    </nav>  
 
   </div>
 </aside>
@@ -493,6 +494,7 @@ document.addEventListener('click', function(e){
 
 </div>
 
+
 <style>
 /* Optional: active tab highlight */
 .tab-btn.active {
@@ -505,7 +507,7 @@ document.addEventListener('click', function(e){
   <div id="profiles" class="tab-content hidden bg-white p-6 rounded-2xl shadow-md flex flex-col flex-1 overflow-hidden">
 
   <!-- Heading -->
-  <h2 class="font-semibold text-xl mb-6 border-b pb-2">Profiles</h2>
+  <h2 class="font-semibold text-xl mb-6 border-b pb-2">Officials</h2>
 
   <!-- Add Profile Form -->
   <form method="POST" enctype="multipart/form-data" class="flex flex-wrap gap-3 mb-6 items-center bg-gray-50 p-4 rounded-2xl shadow-inner">
@@ -1132,5 +1134,7 @@ Swal.fire({
 </script>
 
 
+
 </body>
+
 </html>

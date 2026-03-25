@@ -101,9 +101,11 @@ exit();
 
   <script>
     $(document).ready(function(){
-      $('#dtable').DataTable({
-        "pageLength": 10
-      });
+      $('#table4').DataTable({
+  paging: false,
+  lengthChange: false,
+  info: false
+});
 
       $(window).on('load', function(){ $('#loader').fadeOut('slow'); });
 
@@ -113,6 +115,7 @@ exit();
     });
   </script>
 </head>
+
 
 <body class="bg-gray-100 font-sans">
 
@@ -175,37 +178,40 @@ exit();
 <!-- MAIN LAYOUT -->
 <div class="mt-24 px-6 flex gap-6">
 
+
   <!-- SIDEBAR -->
   <aside class="w-1/4">
-    <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-full">
+  <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-[542px]">
 
       <!-- Logo -->
-      <img src="img/adminLogo.png" class="square-logo mb-6 transition-transform duration-300 hover:scale-105">
+      <img src="img/adminLogo.png"
+     class="square-logo mb-6 transition-transform duration-300 hover:scale-105"
+     style="width:180px; height:180px; object-fit:cover; border-radius:12px;">
 
       <!-- Menu -->
       <nav class="w-full space-y-2">
        <a href="homepage_management.php" 
 class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
-          <span class="font-medium tracking-wide">Homepage</span>
+          <i class="fas fa-home text-gray-600"></i>
+          <span class="font-medium tracking-wide">Home Page</span>
 </a>
 
 
         <a href="department_management.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-building text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <i class="fas fa-building text-gray-600 group-hover:text-dark-600 transition-colors"></i>
           <span class="font-medium tracking-wide">Offices</span>
         </a>
 
         <a href="view_user.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <i class="fas fa-users text-gray-600 group-hover:text-dark-600 transition-colors"></i>
           <span class="font-medium tracking-wide">Employees</span>
         </a>
 
         <a href="view_admin.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+          <i class="fas fa-user-shield text-gray-600"></i>
           <span class="font-medium tracking-wide">Records Administrators</span>
         </a>
 
@@ -213,7 +219,7 @@ class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 h
    class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
           bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
           transition-all duration-300">
-  <i class="fas fa-users text-green-600"></i>
+  <i class="fas fa-server text-green-600 group-hover:text-green-600 transition-colors"></i>
   <span class="font-medium tracking-wide">System Administrators</span>
 </a>
         
@@ -223,29 +229,40 @@ class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 h
   </aside>
 
   <!-- MAIN CONTENT -->
-  <div class="w-3/4 flex-1">
-    <div class="bg-white rounded-2xl shadow-lg p-6 h-full transition-all duration-300 hover:shadow-xl">
+<div class="w-3/4 p-1 h-[calc(79vh-2rem)]">
+  <div class="bg-white rounded-2xl shadow-lg p-6 h-[541px] transition-all duration-300 hover:shadow-xl">
+    
+    <div class="flex justify-between items-center mb-4">
 
-      <div class="flex justify-end items-center gap-3">
+      <!-- Title -->
+      <h2 class="text-xl font-semibold text-gray-700 flex items-center gap-2">
+        <i class="fas fa-server text-green-600 group-hover:text-green-600 transition-colors"></i> Add System Admin
+      </h2>
 
-        <!-- Add Admin Button -->
+      <!-- Button group -->
+      <div class="flex items-center gap-4">
+
+        <!-- Add Admin -->
         <button onclick="$('#modalAddAdmin').removeClass('hidden');" 
-        class="bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300">
+        class="bg-gradient-to-r from-green-600 to-green-500 text-white px-5 py-2.5 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300">
           <i class="fas fa-user-plus"></i> Add Admin
         </button>
 
-        <!-- View Archived Admins Button -->
+        <!-- View Archived Admins -->
         <button onclick="$('#modalArchivedAdmins').removeClass('hidden');" 
-        class="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300">
+        class="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white px-5 py-2.5 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300">
           <i class="fas fa-archive"></i> View Archived Admins
         </button>
 
       </div>
 
+    </div>
+
+
       <!-- TABLE -->
-      <div class="overflow-x-none">
-        <table id="dtable" class="min-w-full border border-gray-200">
-          <thead class="bg-green-700 text-white">
+      <div class="max-h-[400px] overflow-y-auto overflow-x-hidden">
+      <table id="table4" class="w-full border border-gray-200">
+          <thead class="bg-green-700 text-white sticky top-0 z-10">
             <tr>
               <th class="px-4 py-2">Full Name</th>
               <th class="px-4 py-2">Email Address</th>
@@ -611,8 +628,12 @@ if(passwordField.type === "password"){
 </script>
 
 <!-- Footer -->
-<footer class="mt-8 text-center text-gray-600">
-  <p>All right Reserved &copy; <?php echo date('Y');?> Created By: PSU IT Interns</p>
+<footer class="mt-9 text-center text-gray-500 text-sm">
+
+  <p class="text-gray-500">
+&#169; All Rights Reserved. Developed by the PSU IT Interns.
+</p>
+
 </footer>
 
 </body>
