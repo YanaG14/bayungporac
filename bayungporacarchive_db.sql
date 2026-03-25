@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2026 at 04:34 AM
+-- Generation Time: Mar 25, 2026 at 10:51 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -56,8 +56,8 @@ INSERT INTO `admin_login` (`id`, `name`, `admin_user`, `admin_password`, `admin_
 (13, 'Test1', 'exoexob@gmail.com', '$2y$12$f/KM58r0hdi8d.ZUqI9SqOFKXmxXwGvyoILxj5uL0v6/YE2hkfaJm', 'Admin', 'Records Administrator', NULL, 1),
 (14, 'Jels', 'jellydizonconcepcion@gmail.com', '$2y$12$ke65tsXxscEzsWK8Xv3o4eUN1gyK.UiIIcXYLo9xkI7smO02G22jy', 'Admin', 'Records Administrator', NULL, 1),
 (16, 'dada', 'dada@gmail.com', '$2y$12$piNaoAUPDsyOYo6sGWC84Oq.bh71.s2/0Wd5I95YSiIQlShZyYNWq', 'Admin', 'Records Administrator', '592754', 0),
-(22, 'Test 100', 'jelsdizoncon@gmail.com', '$2y$12$dgwskPR/huNTSvl0bDbsoeIkuqoOTozUc5XPx3GKiccXkVOanea0.', 'Admin', 'Records Administrator', NULL, 1),
-(23, 'joysann', 'joysanncalam259@gmail.com', '$2y$12$tj7.oeWFNF4bWMWdu5chXOvfeS7E1lbwpWmp8ICpaJU3UP7XX1DHG', 'Admin', 'System Administrator', NULL, 0);
+(23, 'joysann', 'joysanncalam259@gmail.com', '$2y$12$tj7.oeWFNF4bWMWdu5chXOvfeS7E1lbwpWmp8ICpaJU3UP7XX1DHG', 'Admin', 'System Administrator', NULL, 0),
+(24, 'Test Name', 'jelsdizoncon@gmail.com', '$2y$12$KSQ6G40RIa.MnpXhfyWtTegBfzspGK.p2EbwM.mQwSTCLUiH.NicC', 'Admin', 'Records Administrator', '375988', 0);
 
 -- --------------------------------------------------------
 
@@ -116,7 +116,9 @@ INSERT INTO `file_departments` (`id`, `file_id`, `department_id`) VALUES
 (5, 13, 3),
 (6, 13, 5),
 (7, 14, 3),
-(8, 14, 5);
+(8, 14, 5),
+(9, 15, 3),
+(10, 15, 13);
 
 -- --------------------------------------------------------
 
@@ -288,7 +290,16 @@ INSERT INTO `history_log` (`log_id`, `id`, `email_address`, `action`, `actions`,
 (0, 23, 'jelsdizoncon@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:13 PM', ''),
 (0, 23, 'jelsdizoncon@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:15 PM', ''),
 (0, 24, 'jelsdizoncon@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:48 PM', ''),
-(0, 25, 'jelsdizoncon@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 05:22 PM', '');
+(0, 25, 'jelsdizoncon@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 05:22 PM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 02:35 PM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 02:40 PM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 02:47 PM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 02:53 PM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 02:55 PM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 03:03 PM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 03:06 PM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-24-2026 01:32 PM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-25-2026 01:03 PM', '');
 
 -- --------------------------------------------------------
 
@@ -313,209 +324,234 @@ CREATE TABLE `history_log1` (
 --
 
 INSERT INTO `history_log1` (`log_id`, `id`, `admin_user`, `action`, `actions`, `ip`, `host`, `login_time`, `logout_time`) VALUES
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 12:50 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 01:37 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 01:40 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 01:47 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 02:07 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 02:17 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 02:22 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 03:06 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 03:07 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 03:31 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 03:36 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 03:55 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 08:46 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 08:48 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 09:08 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 09:24 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 02:05 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 02:55 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 03:30 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 03:37 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 03:39 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 03:39 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 03:42 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 04:20 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 04:28 PM', 'Mar-19-2026 04:08 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 12:50 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 01:37 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 01:40 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 01:47 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 02:07 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 02:17 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 02:22 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 03:06 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 03:07 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 03:31 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 03:36 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-02-2026 03:55 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 08:46 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 08:48 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 09:08 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 09:24 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 02:05 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 02:55 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 03:30 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 03:37 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 03:39 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 03:39 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 03:42 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 04:20 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 04:28 PM', 'Mar-25-2026 01:38 PM'),
 (0, 2, 'cla@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 04:35 PM', 'Mar-03-2026 04:35 PM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 04:36 PM', 'Mar-23-2026 11:26 AM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 08:20 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 09:01 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 10:04 AM', 'Mar-19-2026 04:08 PM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 11:00 AM', 'Mar-23-2026 11:26 AM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 11:00 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 11:42 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 11:42 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 11:43 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 11:45 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-05-2026 10:36 AM', 'Mar-19-2026 04:08 PM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-05-2026 10:58 AM', 'Mar-23-2026 11:26 AM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-05-2026 11:18 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-06-2026 08:39 AM', 'Mar-19-2026 04:08 PM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-06-2026 12:34 PM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-06-2026 12:38 PM', 'Mar-23-2026 11:26 AM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-06-2026 01:22 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-06-2026 01:23 PM', 'Mar-19-2026 04:08 PM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-06-2026 02:04 PM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-06-2026 02:04 PM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-09-2026 09:22 AM', 'Mar-23-2026 11:26 AM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-09-2026 10:33 AM', 'Mar-19-2026 04:08 PM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-09-2026 11:48 AM', 'Mar-23-2026 11:26 AM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-09-2026 01:32 PM', 'Mar-19-2026 04:08 PM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 08:33 AM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 08:39 AM', 'Mar-23-2026 11:26 AM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 08:50 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 08:51 AM', 'Mar-19-2026 04:08 PM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 08:53 AM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 12:48 PM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 12:51 PM', 'Mar-23-2026 11:26 AM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 01:38 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 02:27 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 03:43 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 03:44 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 03:47 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 03:48 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 04:38 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 04:38 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 04:47 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-11-2026 08:16 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-11-2026 08:16 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-11-2026 09:12 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-11-2026 10:50 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-11-2026 10:50 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-11-2026 04:01 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-11-2026 04:17 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 08:43 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 08:43 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 08:50 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 08:52 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 09:19 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 09:22 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 09:22 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 09:34 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 09:44 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 12:58 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 01:39 PM', 'Mar-19-2026 04:08 PM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 01:41 PM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 01:42 PM', 'Mar-23-2026 11:26 AM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 01:42 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 01:43 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 01:44 PM', 'Mar-19-2026 04:08 PM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 01:48 PM', 'Mar-23-2026 11:26 AM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-03-2026 04:36 PM', 'Mar-25-2026 02:33 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 08:20 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 09:01 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 10:04 AM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 11:00 AM', 'Mar-25-2026 02:33 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 11:00 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 11:42 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 11:42 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 11:43 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-04-2026 11:45 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'admin@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-05-2026 10:36 AM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-05-2026 10:58 AM', 'Mar-25-2026 02:33 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-05-2026 11:18 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-06-2026 08:39 AM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-06-2026 12:34 PM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-06-2026 12:38 PM', 'Mar-25-2026 02:33 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-06-2026 01:22 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-06-2026 01:23 PM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-06-2026 02:04 PM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-06-2026 02:04 PM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-09-2026 09:22 AM', 'Mar-25-2026 02:33 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-09-2026 10:33 AM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-09-2026 11:48 AM', 'Mar-25-2026 02:33 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-09-2026 01:32 PM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 08:33 AM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 08:39 AM', 'Mar-25-2026 02:33 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 08:50 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 08:51 AM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 08:53 AM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 12:48 PM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 12:51 PM', 'Mar-25-2026 02:33 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 01:38 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 02:27 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 03:43 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 03:44 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 03:47 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 03:48 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 04:38 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 04:38 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-10-2026 04:47 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-11-2026 08:16 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-11-2026 08:16 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-11-2026 09:12 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-11-2026 10:50 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-11-2026 10:50 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-11-2026 04:01 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-11-2026 04:17 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 08:43 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 08:43 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 08:50 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 08:52 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 09:19 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 09:22 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 09:22 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 09:34 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 09:44 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 12:58 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 01:39 PM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 01:41 PM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 01:42 PM', 'Mar-25-2026 02:33 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 01:42 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 01:43 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 01:44 PM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 01:48 PM', 'Mar-25-2026 02:33 PM'),
 (0, 7, 'adm.staff0002@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 01:49 PM', 'Mar-13-2026 03:32 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 02:25 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 02:39 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 04:20 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-13-2026 08:51 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-13-2026 09:48 AM', 'Mar-19-2026 04:08 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 02:25 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 02:39 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-12-2026 04:20 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-13-2026 08:51 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-13-2026 09:48 AM', 'Mar-25-2026 01:38 PM'),
 (0, 8, 'test@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-13-2026 12:14 PM', 'Mar-13-2026 02:07 PM'),
 (0, 8, 'test@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-13-2026 12:27 PM', 'Mar-13-2026 02:07 PM'),
 (0, 8, 'test@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-13-2026 12:39 PM', 'Mar-13-2026 02:07 PM'),
 (0, 8, 'test@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-13-2026 12:40 PM', 'Mar-13-2026 02:07 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-13-2026 02:08 PM', 'Mar-19-2026 04:08 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-13-2026 02:08 PM', 'Mar-25-2026 01:38 PM'),
 (0, 7, 'adm.staff0002@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-13-2026 02:10 PM', 'Mar-13-2026 03:32 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-13-2026 03:32 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 09:12 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.178.141', '10.50.178.141', 'Mar-17-2026 09:12 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.178.141', '10.50.178.141', 'Mar-17-2026 09:13 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.178.141', '10.50.178.141', 'Mar-17-2026 09:17 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 10:32 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 11:41 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 11:49 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 11:50 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 11:50 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 11:52 AM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 12:00 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 12:06 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 01:08 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 01:10 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 01:16 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 01:20 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 01:21 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 01:22 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:33 PM', 'Mar-19-2026 04:08 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Mar-13-2026 03:32 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 09:12 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.178.141', '10.50.178.141', 'Mar-17-2026 09:12 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.178.141', '10.50.178.141', 'Mar-17-2026 09:13 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.178.141', '10.50.178.141', 'Mar-17-2026 09:17 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 10:32 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 11:41 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 11:49 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 11:50 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 11:50 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 11:52 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 12:00 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 12:06 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 01:08 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 01:10 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 01:16 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 01:20 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 01:21 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 01:22 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:33 PM', 'Mar-25-2026 01:38 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:37 PM', 'Mar-18-2026 05:15 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:37 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:42 PM', 'Mar-19-2026 04:08 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:37 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:42 PM', 'Mar-25-2026 01:38 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:42 PM', 'Mar-18-2026 05:15 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:46 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:47 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:55 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:56 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:57 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:58 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:58 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:00 PM', 'Mar-19-2026 04:08 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:46 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:47 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:55 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:56 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:57 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:58 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 02:58 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:00 PM', 'Mar-25-2026 01:38 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:01 PM', 'Mar-18-2026 05:15 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:01 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:04 PM', 'Mar-19-2026 04:08 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:01 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:04 PM', 'Mar-25-2026 01:38 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:05 PM', 'Mar-18-2026 05:15 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:08 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:11 PM', 'Mar-19-2026 04:08 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:08 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:11 PM', 'Mar-25-2026 01:38 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:11 PM', 'Mar-18-2026 05:15 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:45 PM', 'Mar-19-2026 04:08 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:45 PM', 'Mar-25-2026 01:38 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:46 PM', 'Mar-18-2026 05:15 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:48 PM', 'Mar-18-2026 05:15 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:49 PM', 'Mar-18-2026 05:15 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:53 PM', 'Mar-18-2026 05:15 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:53 PM', 'Mar-18-2026 05:15 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:53 PM', 'Mar-19-2026 04:08 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.128.29', 'ADMInterns.lan', 'Mar-17-2026 03:53 PM', 'Mar-25-2026 01:38 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-17-2026 04:36 PM', 'Mar-18-2026 05:15 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'LAPTOP-9VQHFE0A', 'Mar-18-2026 02:58 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.178.141', '10.50.178.141', 'Mar-18-2026 03:02 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 03:08 PM', 'Mar-19-2026 04:08 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'LAPTOP-9VQHFE0A', 'Mar-18-2026 02:58 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.178.141', '10.50.178.141', 'Mar-18-2026 03:02 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 03:08 PM', 'Mar-25-2026 01:38 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 03:14 PM', 'Mar-18-2026 05:15 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 03:23 PM', 'Mar-18-2026 05:15 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 04:32 PM', 'Mar-19-2026 04:08 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 04:32 PM', 'Mar-25-2026 01:38 PM'),
 (0, 14, 'jellydizonconcepcion@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 04:47 PM', 'Mar-18-2026 04:49 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 04:55 PM', 'Mar-18-2026 05:15 PM'),
 (0, 15, 'joysanncalam259@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 04:59 PM', 'Mar-19-2026 03:14 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 05:04 PM', 'Mar-18-2026 05:15 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.178.141', '10.50.178.141', 'Mar-18-2026 05:04 PM', 'Mar-19-2026 04:08 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.178.141', '10.50.178.141', 'Mar-18-2026 05:04 PM', 'Mar-25-2026 01:38 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 05:07 PM', 'Mar-18-2026 05:15 PM'),
 (0, 15, 'joysanncalam259@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 05:08 PM', 'Mar-19-2026 03:14 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 05:10 PM', 'Mar-18-2026 05:15 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.178.141', '10.50.178.141', 'Mar-18-2026 05:13 PM', 'Mar-19-2026 04:08 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.178.141', '10.50.178.141', 'Mar-18-2026 05:13 PM', 'Mar-25-2026 01:38 PM'),
 (0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 05:15 PM', 'Mar-18-2026 05:15 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 05:15 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 05:17 PM', 'Mar-19-2026 04:08 PM'),
-(0, 3, 'Joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 09:42 AM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 09:46 AM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'Joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 01:30 PM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'Joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 02:08 PM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'Joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 02:17 PM', 'Mar-23-2026 11:26 AM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 05:15 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-18-2026 05:17 PM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'Joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 09:42 AM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 09:46 AM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'Joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 01:30 PM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'Joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 02:08 PM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'Joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 02:17 PM', 'Mar-25-2026 02:33 PM'),
 (0, 15, 'joysanncalam259@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 02:40 PM', 'Mar-19-2026 03:14 PM'),
 (0, 15, 'joysanncalam259@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 02:56 PM', 'Mar-19-2026 03:14 PM'),
 (0, 15, 'joysanncalam259@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 03:03 PM', 'Mar-19-2026 03:14 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 03:04 PM', 'Mar-19-2026 04:08 PM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 03:05 PM', 'Mar-23-2026 11:26 AM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 03:04 PM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 03:05 PM', 'Mar-25-2026 02:33 PM'),
 (0, 15, 'joysanncalam259@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 03:13 PM', 'Mar-19-2026 03:14 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 03:13 PM', 'Mar-19-2026 04:08 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 03:13 PM', 'Mar-25-2026 01:38 PM'),
 (0, 15, 'joysanncalam259@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 03:13 PM', 'Mar-19-2026 03:14 PM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 03:14 PM', 'Mar-23-2026 11:26 AM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:02 PM', 'Mar-19-2026 04:08 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:07 PM', 'Mar-19-2026 04:08 PM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:09 PM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:12 PM', 'Mar-23-2026 11:26 AM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:19 PM', ''),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 03:14 PM', 'Mar-25-2026 02:33 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:02 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:07 PM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:09 PM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:12 PM', 'Mar-25-2026 02:33 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:19 PM', 'Mar-25-2026 01:38 PM'),
 (0, 18, 'jelsdizoncon@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:22 PM', 'Mar-19-2026 04:22 PM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:22 PM', 'Mar-23-2026 11:26 AM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:22 PM', 'Mar-25-2026 02:33 PM'),
 (0, 19, 'jelsdizoncon@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:24 PM', ''),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:58 PM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:58 PM', 'Mar-23-2026 11:26 AM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:58 PM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 04:58 PM', 'Mar-25-2026 02:33 PM'),
 (0, 20, 'jelsdizoncon@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 05:01 PM', 'Mar-19-2026 05:12 PM'),
 (0, 20, 'jelsdizoncon@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 05:11 PM', 'Mar-19-2026 05:12 PM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 05:24 PM', 'Mar-23-2026 11:26 AM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 05:24 PM', 'Mar-25-2026 02:33 PM'),
 (0, 21, 'jelsdizoncon@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 05:26 PM', ''),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 05:35 PM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 05:35 PM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 05:38 PM', 'Mar-23-2026 11:26 AM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 05:35 PM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 05:35 PM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 05:38 PM', 'Mar-25-2026 02:33 PM'),
 (0, 22, 'jelsdizoncon@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 05:47 PM', 'Mar-19-2026 05:51 PM'),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 06:05 PM', ''),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 06:18 PM', ''),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 10:16 AM', 'Mar-23-2026 11:26 AM'),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 10:48 AM', 'Mar-23-2026 11:26 AM');
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 06:05 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-19-2026 06:18 PM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 10:16 AM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 10:48 AM', 'Mar-25-2026 02:33 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 11:46 AM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 11:59 AM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 12:02 PM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 02:28 PM', 'Mar-25-2026 02:33 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 02:47 PM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 02:47 PM', 'Mar-25-2026 02:33 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 02:50 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 02:54 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 03:01 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 03:04 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 03:08 PM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 03:22 PM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 03:23 PM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 03:25 PM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-23-2026 03:54 PM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-24-2026 09:39 AM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-24-2026 11:39 AM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-25-2026 08:32 AM', 'Mar-25-2026 02:33 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-25-2026 10:25 AM', 'Mar-25-2026 02:33 PM'),
+(0, 11, 'test1009@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-25-2026 10:37 AM', ''),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-25-2026 11:54 AM', 'Mar-25-2026 01:38 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-25-2026 01:30 PM', 'Mar-25-2026 01:38 PM'),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-25-2026 01:43 PM', 'Mar-25-2026 02:33 PM'),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-25-2026 02:33 PM', ''),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '10.50.139.159', 'LAPTOP-9VQHFE0A.lan', 'Mar-25-2026 02:56 PM', '');
 
 -- --------------------------------------------------------
 
@@ -533,7 +569,7 @@ CREATE TABLE `homepage_about` (
 --
 
 INSERT INTO `homepage_about` (`about_id`, `content`) VALUES
-(1, 'about 1');
+(1, 'The Municipality of Porac is a vibrant and progressive community located in the province of Pampanga, Philippines. Known for its rich history, cultural heritage, and natural beauty, Porac is committed to fostering sustainable development, inclusive governance, and a high quality of life for its residents.\r\n\r\nOur local government is dedicated to delivering efficient public services, promoting transparency, and empowering our citizens through various programs in education, health, infrastructure, and economic growth. We take pride in our resilient community, warm hospitality, and initiatives that preserve our environment while embracing innovation.\r\n\r\nAt the heart of Porac is our vision of building a thriving, safe, and sustainable municipality where every resident can prosper and participate in shaping the future of our town.');
 
 -- --------------------------------------------------------
 
@@ -553,8 +589,11 @@ CREATE TABLE `homepage_events` (
 --
 
 INSERT INTO `homepage_events` (`event_id`, `title`, `description`, `status`) VALUES
-(1, 'anniversary', 'anni', 'Active'),
-(2, 'flag', 'flag?', 'Active');
+(1, 'Power Interruption Notice', 'The Municipal Government informs all residents that there will be a scheduled power interruption in certain areas due to maintenance and upgrading of electrical lines. This temporary interruption is necessary to ensure the continued improvement of the power distribution system and to prevent future technical issues. Residents are advised to prepare in advance by charging essential devices, securing electrical appliances, and planning activities accordingly. The interruption will last for a specified duration and power will be restored immediately upon completion of the maintenance work. Everyone is asked for their understanding and cooperation during this period as these efforts aim to provide more reliable and efficient electricity service to the community.', 'Active'),
+(2, 'Municipal Announcement', 'The Municipal Government informs all residents of important updates regarding ongoing programs and upcoming activities within the community. Citizens are encouraged to stay informed about scheduled events, public services, and any new guidelines issued by the local government. This announcement may include details such as health services, infrastructure projects, community events, and public safety reminders. All residents are advised to cooperate and participate in municipal initiatives to help maintain order, safety, and progress in the locality. For further information or clarification, the public may coordinate with the designated municipal offices or visit official communication channels regularly.', 'Active'),
+(3, 'BAYUNG PORAC ARCHIVE SYSTEM UPDATE NOTICE', 'Good day everyoneS!  We would like to inform all concerned individuals that there will be an upcoming update regarding our current system and services. This initiative is part of our continuous effort to improve efficiency, enhance user experience, and ensure that all operations are running smoothly and securely.  During this period, some features may be temporarily unavailable or may experience slight delays. We kindly ask for your patience and understanding as we work on these improvements. Rest assured that our team is doing its best to minimize any inconvenience and to complete the update as quickly as possible.  We encourage everyone to stay tuned for further announcements and updates. Your cooperation and support are highly appreciated as we strive to provide better service for all.  Thank you for your understanding.  — Management', 'Active'),
+(9, 'Water Supply Advisory', 'The Municipal Government informs all residents that there will be a temporary interruption and low water pressure in certain areas due to maintenance and improvement works on the water distribution system. This activity is necessary to ensure the continuous delivery of safe and clean water services to the community. Residents are advised to store enough water in advance and use it wisely during the affected period. Normal water supply will resume once the maintenance work is completed. The public is requested to understand and cooperate as these improvements are made for the long-term benefit of the community.', 'Active'),
+(10, 'Water Supply Advisory', 'The Municipal Government informs all residents that there will be a temporary interruption and low water pressure in certain areas due to maintenance and improvement works on the water distribution system. This activity is necessary to ensure the continuous delivery of safe and clean water services to the community. Residents are advised to store enough water in advance and use it wisely during the affected period. Normal water supply will resume once the maintenance work is completed. The public is requested to understand and cooperate as these improvements are made for the long-term benefit of the community.', 'Active');
 
 -- --------------------------------------------------------
 
@@ -574,8 +613,10 @@ CREATE TABLE `homepage_featured` (
 --
 
 INSERT INTO `homepage_featured` (`featured_id`, `title`, `image`, `status`) VALUES
-(1, 'Kasalan', 'kasalan.jpg', 'Active'),
-(2, 'zumba', 'zumba.jpg', 'Active');
+(1, 'Kasalans', 'kasalan.jpg', 'Active'),
+(2, 'zumba', 'zumba.jpg', 'Active'),
+(3, 'Anniversary', 'anniversary.jpg', 'Active'),
+(4, 'Flag', 'flag.jpg', 'Active');
 
 -- --------------------------------------------------------
 
@@ -597,8 +638,8 @@ CREATE TABLE `homepage_profiles` (
 --
 
 INSERT INTO `homepage_profiles` (`profile_id`, `role`, `name`, `description`, `image`, `status`) VALUES
-(1, 'Municipal Mayor', 'Test 1', 'Mayor', 'mayor.jpg', 'Active'),
-(2, 'Role 2', 'Mayora', 'vice', 'mayora.jpg', 'Active');
+(1, 'Municipal Mayor', 'Mayor Jaime V. Capil', 'Mayor', 'pic6.jfif', 'Active'),
+(2, 'etcsbd', 'Vice Mayor Trisha Angelie G. Capil', 'vice', 'pic5.jpg', 'Active');
 
 -- --------------------------------------------------------
 
@@ -619,8 +660,10 @@ CREATE TABLE `homepage_slides` (
 --
 
 INSERT INTO `homepage_slides` (`slide_id`, `image`, `caption`, `description`, `status`) VALUES
-(2, 'm2.jpg', 'Second try', '2nd', 'Active'),
-(3, 'm1.jpg', 'First slider pic', '1st 1st 1st 1st 1st1st 1st', 'Active');
+(2, '571808193_1306062041320599_2932551843240489384_n.jpg', 'Second try', '2nd', 'Active'),
+(3, 'm1.jpg', 'First slider pic', '1st 1st 1st 1st 1st1st 1st', 'Active'),
+(4, '571374454_1306061967987273_5285049817042558389_n.jpg', '3RD', 'EX TEXT', 'Active'),
+(6, '571193868_1304689528124517_7677279926875881355_n.jpg', '5TH', 'N/A', 'Active');
 
 -- --------------------------------------------------------
 
@@ -645,7 +688,7 @@ CREATE TABLE `login_user` (
 
 INSERT INTO `login_user` (`id`, `name`, `email_address`, `user_password`, `user_status`, `department_id`, `otp_code`, `otp_verified`) VALUES
 (1, 'Diana Lhiz G. Balastigue', 'yana@gmail.com', '$2y$10$rWW8aRzePJwU6HoFbLdChOIQ.gsf9mNlFctEW8/ckdlBEFhBQE/1K', '', 2, NULL, 0),
-(3, 'Luigi G. Capulong', 'luigi@gmail.com', '$2y$10$tEiKBHzXvjj5iEXCcnVkdOMfs9GHMwiAh7uHT6vHd5Mgpoy0y.kFe', '', 3, NULL, 0),
+(3, 'Luigi G. Capulong', 'luigi@gmail.com', '$2y$10$tEiKBHzXvjj5iEXCcnVkdOMfs9GHMwiAh7uHT6vHd5Mgpoy0y.kFe', '', 3, NULL, 1),
 (4, 'Patrick James M. Flores', 'patrick@gmail.com', '$2y$12$zCgkEFlKpKRwHFIwtjUwKuvAjf8H3Z8RosizjN1kfiSYkHmBEkoJu', '', 3, NULL, 0),
 (6, 'Victoria L. Mansanas', 'victoria@gmail.com', '$2y$12$7qHBKoBZIot30Nz4eFDvA.9c0dvFOsARAG6yDKFRFdxAuaYvgCpKi', '', 3, NULL, 0),
 (7, 'Vladimir D. Foreigner', 'vladimir@gmail.com', '$2y$12$JaBAB0XbmVOx3lgDrLXqHOoKvZmPr4F26oMQyRYrUnpWuOXskXSyu', '', 3, NULL, 0),
@@ -683,7 +726,8 @@ CREATE TABLE `upload_files` (
 
 INSERT INTO `upload_files` (`id`, `folder_id`, `name`, `file_path`, `size`, `download`, `timers`, `admin_status`, `email`, `status`) VALUES
 (13, 9, 'Sample 2.pdf', '1773915712_Sample 2.pdf', '12817', 0, 'Mar-19-2026 11:21 AM', 'Admin', '1', 'Active'),
-(14, 9, 'Sample 1.pdf', '1773915712_Sample 1.pdf', '12594', 0, 'Mar-19-2026 11:21 AM', 'Admin', '1', 'Active');
+(14, 9, 'Sample 1.pdf', '1773915712_Sample 1.pdf', '12594', 2, 'Mar-19-2026 11:21 AM', 'Admin', '1', 'Active'),
+(15, 29, 'Sample 4.pdf', '1774249540_Sample 4.pdf', '12716', 0, 'Mar-23-2026 08:05 AM', 'Admin', '1', 'Active');
 
 --
 -- Indexes for dumped tables
@@ -777,7 +821,7 @@ ALTER TABLE `upload_files`
 -- AUTO_INCREMENT for table `admin_login`
 --
 ALTER TABLE `admin_login`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `departments`
@@ -789,7 +833,7 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `file_departments`
 --
 ALTER TABLE `file_departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `folders`
@@ -813,13 +857,13 @@ ALTER TABLE `homepage_about`
 -- AUTO_INCREMENT for table `homepage_events`
 --
 ALTER TABLE `homepage_events`
-  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `homepage_featured`
 --
 ALTER TABLE `homepage_featured`
-  MODIFY `featured_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `featured_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `homepage_profiles`
@@ -831,7 +875,7 @@ ALTER TABLE `homepage_profiles`
 -- AUTO_INCREMENT for table `homepage_slides`
 --
 ALTER TABLE `homepage_slides`
-  MODIFY `slide_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `slide_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `login_user`
@@ -843,7 +887,7 @@ ALTER TABLE `login_user`
 -- AUTO_INCREMENT for table `upload_files`
 --
 ALTER TABLE `upload_files`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables
