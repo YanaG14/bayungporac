@@ -119,17 +119,15 @@ id="materialFormCardPasswordEx"
 name="admin_password"
 class="w-full px-4 py-3 pr-12 bg-black/30 border border-white/50 rounded-lg text-white placeholder-white placeholder:text-sm outline-none transition duration-300 hover:bg-white/20 hover:border-white-400 focus:ring-2 focus:ring-green-500"
 placeholder="Enter your password">
-
 <button
 type="button"
 onclick="togglePassword()"
 class="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300">
-
 <i id="toggleIcon" class="fa-solid fa-eye"></i>
-
 </button>
 
 </div>
+ 
 </div>
 
 
@@ -167,9 +165,26 @@ endif; ?>
             </button>
 
         </form>
+<div class="mt-3 text-center">
+<a href="#" onclick="showForgotPassword()" class="text-sm text-green-600 hover:underline">
+    Forgot Password?
+  </a>
+  </div>
+</div>
 
 </div>
 
+<!-- Forgot Password Message Modal -->
+<div id="forgotPasswordModal" class="hidden fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+  <div class="bg-white rounded-xl shadow-lg p-6 w-80 text-center">
+    <h2 class="text-lg font-semibold text-gray-800 mb-3">Forgot Password</h2>
+    <p class="text-gray-600 mb-5">
+      Please contact your system administrator to reset your password.
+    </p>
+    <button onclick="closeForgotPassword()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+      Close
+    </button>
+  </div>
 </div>
 
 <!-- OTP MODAL -->
@@ -210,6 +225,15 @@ endif; ?>
 
 
 <!-- Scripts -->
+<script>
+function showForgotPassword() {
+  document.getElementById('forgotPasswordModal').classList.remove('hidden');
+}
+
+function closeForgotPassword() {
+  document.getElementById('forgotPasswordModal').classList.add('hidden');
+}
+</script>
 
 <script src="js/jquery-3.4.0.min.js"></script>
 

@@ -52,7 +52,7 @@ if(isset($_POST['reg'])){
         $mail->Password   = 'abtt ostl nvlh ehss';     // Gmail App Password
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
-
+ 
         $mail->setFrom('yanayanaya14@gmail.com', 'Bayung Porac Archive');
         $mail->addAddress($user_email, $user_name);
  
@@ -64,8 +64,10 @@ if(isset($_POST['reg'])){
 
         $mail->send();
 
-        // 5️⃣ Redirect to OTP verification page
-        echo '<script>alert("OTP has been sent to the admin email!"); window.location="verify_otp.php?email='.$user_email.'";</script>';
+         echo '<script>
+    alert("OTP sent to your email!");
+    window.location="view_admin.php?otp_email='.$user_email.'";
+</script>';
 
     } catch (Exception $e) {
         echo "OTP could not be sent. Mailer Error: {$mail->ErrorInfo}";
