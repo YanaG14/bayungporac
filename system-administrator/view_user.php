@@ -216,6 +216,7 @@ class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 h
   <th class="px-4 py-2">Full Name</th>
   <th class="px-4 py-2">Department</th>
   <th class="px-4 py-2">Email Address</th>
+  <th class="px-4 py-2 text-center">Verification</th>
   <th class="px-4 py-2 text-center">Action</th>
 </tr>
           </thead>
@@ -232,6 +233,7 @@ class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 h
                 $fname = $rs['name'];
                 $department = $rs['department_name'];
                 $admin = $rs['email_address'];
+                $verified = $rs['otp_verified'];
           ?>
             <tr class="border-b hover:bg-gray-50">
   <td class="px-4 py-2"><?php echo $fname; ?></td>
@@ -239,10 +241,27 @@ class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 h
     <?php echo ($department != '') ? $department : 'No Department'; ?>
   </td>
   <td class="px-4 py-2"><?php echo $admin; ?></td>
+  <td class="px-4 py-2 text-center">
+  <?php if($verified == 1){ ?>
+    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+      Verified
+    </span>
+  <?php } else { ?>
+    <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold">
+      Not Verified
+    </span>
+  <?php } ?>
+</td>
               <td class="px-4 py-2 text-center space-x-2">
                 <a href="view_user.php?id=<?php echo $rs['id']; ?>" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"><i class="fas fa-edit"></i></a>
                 <button onclick="confirmArchive(<?php echo $rs['id']; ?>)" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
     <i class="fas fa-archive"></i>
+</button>
+<button type="button"
+onclick="openOtpModal(<?php echo htmlspecialchars(json_encode($rs['email_address']), ENT_QUOTES, 'UTF-8'); ?>, <?php echo (int)$rs['otp_verified']; ?>)"
+class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">
+
+<i class="fas fa-check"></i>
 </button>
               </td>
             </tr>
@@ -389,7 +408,9 @@ title="Password must be at least 8 characters, include uppercase, lowercase, num
 </div>
 
       <input type="hidden" name="status" value="Employee">
-
+<p id="editPasswordHelp" class="text-red-600 text-sm mt-1 hidden">
+  Password must be at least 8 characters, include uppercase, lowercase, number, and a symbol.
+</p>
       <!-- Buttons -->
       <div class="flex justify-end gap-3 mt-4">
         <button type="submit" name="edit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-5 py-2 shadow-md transition duration-200">Update</button>
@@ -462,6 +483,47 @@ title="Password must be at least 8 characters, include uppercase, lowercase, num
     </div>
   </div>
 </div>
+
+
+<!--OTP MODAL--->
+<div id="otpModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
+  <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md relative">
+
+    <button onclick="closeOtpModal()" class="absolute top-3 right-4 text-xl">&times;</button>
+
+    <h2 class="text-xl font-semibold mb-4">Verify Account</h2>
+
+    <!-- Email display -->
+    <p class="text-sm mb-3 text-gray-600">
+      Email: <span id="otp_email_display" class="font-semibold"></span>
+    </p>
+
+    <!-- VERIFIED MESSAGE -->
+    <div id="verifiedMessage" class="hidden text-center">
+      <p class="text-green-600 font-semibold text-lg">
+        ✅ Account already verified
+      </p>
+    </div>
+
+    <!-- OTP FORM -->
+    <form id="otpForm">
+      <input type="hidden" id="otp_email">
+
+      <div id="otpFormSection">
+        <input type="text" id="otp_code" class="w-full border p-2 rounded mb-4" placeholder="Enter OTP" required>
+
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded w-full">
+          Verify
+        </button>
+      </div>
+    </form>
+
+    <p id="otpMessage" class="text-sm mt-2"></p>
+
+  </div>
+</div>
+<!--OTP MODAL END--->
+
 
 <!-- Tailwind Keyframe Animation -->
 <style>
@@ -611,6 +673,49 @@ function confirmLogout(el) {
 </script>
 
 <script>
+document.getElementById("otpForm").addEventListener("submit", function(e){
+    e.preventDefault(); // 🚨 prevent page reload
+
+    const email = document.getElementById("otp_email").value;
+    const otp = document.getElementById("otp_code").value.trim(); // ✅ FIX: trim spaces
+
+    fetch("verify_user_otp.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}`
+    })
+    .then(res => res.text())
+    .then(data => {
+        const messageEl = document.getElementById("otpMessage");
+        messageEl.innerText = data;
+
+        if(data.includes("success")){
+          messageEl.innerText = data;
+            setTimeout(() => {
+                window.location.href = "view_user.php"; //
+            }, 1000);
+        } else {
+            // ✅ FIX: reset input so user can try again properly
+            const otpInput = document.getElementById("otp_code");
+            otpInput.value = "";
+            otpInput.focus();
+             messageEl.innerText = ""; // clear first
+
+        setTimeout(() => {
+            messageEl.innerText = data; // re-assign after short delay
+             }, 50);
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById("otpMessage").innerText = "Error verifying OTP";
+    });
+});
+</script>
+
+<script>
 function togglePassword(fieldId, iconId) {
     const passwordField = document.getElementById(fieldId);
     const icon = document.getElementById(iconId);
@@ -626,6 +731,68 @@ function togglePassword(fieldId, iconId) {
 }
 </script>
 
+<script>
+
+function closeOtpModal(){
+    document.getElementById("otpModal").classList.add("hidden");
+}
+</script>
+<script>
+function openOtpModal(email, verified){
+    document.getElementById("otp_email").value = email;
+    document.getElementById("otp_email_display").innerText = email;
+
+    const formSection = document.getElementById("otpFormSection");
+    const verifiedMessage = document.getElementById("verifiedMessage");
+
+    if(verified == 1){
+        // Show verified message
+        formSection.classList.add("hidden");
+        verifiedMessage.classList.remove("hidden");
+    } else {
+        // Show OTP form
+        formSection.classList.remove("hidden");
+        verifiedMessage.classList.add("hidden");
+    }
+
+    document.getElementById("otpModal").classList.remove("hidden");
+}
+
+function closeOtpModal(){
+    document.getElementById("otpModal").classList.add("hidden");
+}
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get("otp_email");
+
+    if (email) {
+        openOtpModal(email, 0); // not verified
+    }
+
+});
+</script>
+
+
+<script>
+const editPasswordInput = document.getElementById('edit_user_password');
+const editPasswordHelp = document.getElementById('editPasswordHelp');
+
+if (editPasswordInput) {
+    editPasswordInput.addEventListener('input', function() {
+        const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
+
+        if (editPasswordInput.value === "" || pattern.test(editPasswordInput.value)) {
+            editPasswordHelp.classList.add('hidden');
+        } else {
+            editPasswordHelp.classList.remove('hidden');
+        }
+    });
+}
+</script>
 
 <!-- Footer -->
 <footer class="mt-8 text-center text-gray-600">

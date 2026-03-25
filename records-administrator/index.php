@@ -1,4 +1,4 @@
-<?php session_start();?>
+    <?php session_start();?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +22,7 @@ top:0;
 width:100%;
 height:100%;
 z-index:9999;
- 
+
 }
 
 /* Navbar Gradient Animation */
@@ -119,7 +119,24 @@ id="materialFormCardPasswordEx"
 name="admin_password"
 class="w-full px-4 py-3 pr-12 bg-black/30 border border-white/50 rounded-lg text-white placeholder-white placeholder:text-sm outline-none transition duration-300 hover:bg-white/20 hover:border-white-400 focus:ring-2 focus:ring-green-500"
 placeholder="Enter your password">
+<div class="mt-4 text-center">
+  <a href="#" onclick="showForgotPassword()" class="text-sm text-green-600 hover:underline">
+    Forgot Password?
+  </a>
+</div>
 
+<!-- Forgot Password Message Modal -->
+<div id="forgotPasswordModal" class="hidden fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+  <div class="bg-white rounded-xl shadow-lg p-6 w-80 text-center">
+    <h2 class="text-lg font-semibold text-gray-800 mb-3">Forgot Password</h2>
+    <p class="text-gray-600 mb-5">
+      Please contact your system administrator to reset your password.
+    </p>
+    <button onclick="closeForgotPassword()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+      Close
+    </button>
+  </div>
+</div>
 <button
 type="button"
 onclick="togglePassword()"
@@ -145,19 +162,6 @@ if(isset($_SESSION['error_msg']) && $_SESSION['error_msg'] !== ""){
     unset($_SESSION['error_msg']);
 }
 ?>
-<?php if(isset($_SESSION['admin_otp_modal']) || isset($_SESSION['user_otp_modal'])): ?>
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-    const modal = document.getElementById('otpModal');
-    if(modal){
-        modal.classList.remove('hidden');
-    }
-});
-</script>
-<?php 
-unset($_SESSION['admin_otp_modal']);
-unset($_SESSION['user_otp_modal']);
-endif; ?>
             <button
                 type="submit"
                 name="adminlog"
@@ -172,32 +176,7 @@ endif; ?>
 
 </div>
 
-<!-- OTP MODAL -->
-<div id="otpModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-  <div class="bg-white rounded-xl p-6 w-[90%] max-w-sm text-center shadow-lg">
 
-    <h2 class="text-xl font-semibold mb-3 text-red-600">
-      Account Not Verified
-    </h2>
-
-    <p class="text-gray-600 mb-4">
-      Please enter the OTP sent to your email.
-    </p>
-
-    <form method="POST" action="verify_otp.php">
-      <input type="hidden" name="email" value="<?php echo $_SESSION['otp_email'] ?? ''; ?>">
-
-      <input type="text" name="otp" maxlength="6" required
-        class="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 text-center text-lg tracking-widest focus:ring-2 focus:ring-green-500">
-
-      <button type="submit" name="verify"
-        class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
-        Verify OTP
-      </button>
-    </form>
-
-  </div>
-</div>
 <!-- Footer -->
 
 <footer class="text-center py-4">
@@ -210,7 +189,15 @@ endif; ?>
 
 
 <!-- Scripts -->
+<script>
+function showForgotPassword() {
+  document.getElementById('forgotPasswordModal').classList.remove('hidden');
+}
 
+function closeForgotPassword() {
+  document.getElementById('forgotPasswordModal').classList.add('hidden');
+}
+</script>
 <script src="js/jquery-3.4.0.min.js"></script>
 
 <script>
@@ -281,8 +268,9 @@ if(passwordField.type === "password"){
 }
 
 }
-</script>
 
+
+</script>
 
 </body>
 </html>

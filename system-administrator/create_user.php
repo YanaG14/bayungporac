@@ -45,7 +45,7 @@ if(isset($_POST['reguser'])){
     // Send OTP via Gmail
     $mail = new PHPMailer(true);
 
-    try {
+    try { 
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
@@ -67,10 +67,10 @@ if(isset($_POST['reguser'])){
 
         $mail->send();
 
-        echo '<script>
-            alert("OTP sent to your email!");
-            window.location="verify_user_otp.php?email='.$email_address.'";
-        </script>';
+       echo '<script>
+    alert("OTP sent to your email!");
+    window.location="view_user.php?otp_email='.$email_address.'";
+</script>';
 
     } catch (Exception $e) {
         echo "Mailer Error: {$mail->ErrorInfo}";

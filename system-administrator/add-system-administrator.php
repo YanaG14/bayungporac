@@ -49,7 +49,7 @@ $fixed_role = "System Administrator";
               VALUES('$user_name', '$user_email', '$user_password_hashed', '$user_status', '$fixed_role')") 
               or die(mysqli_error($conn));
 
-    // 2️⃣ Generate OTP
+    // 2️⃣ Generate OTP 
     $otp = rand(100000, 999999);
 
     // 3️⃣ Store OTP in DB
@@ -77,8 +77,10 @@ $fixed_role = "System Administrator";
 
         $mail->send();
 
-        // 5️⃣ Redirect to OTP verification page
-        echo '<script>alert("OTP has been sent to the admin email!"); window.location="verify_otp.php?email='.$user_email.'";</script>';
+         echo '<script>
+    alert("OTP sent to your email!");
+    window.location="view_system-administrator.php?otp_email='.$user_email.'";
+</script>';
 
     } catch (Exception $e) {
         echo "OTP could not be sent. Mailer Error: {$mail->ErrorInfo}";
