@@ -405,12 +405,88 @@ onclick="showTab('about')">About</button>
               <p class="text-gray-500 text-sm"><?php echo $row['description']; ?></p>
             </div>
           </div>
-          <div class="flex gap-2 mt-2 sm:mt-0">
-            <button onclick="openEditSlide(<?php echo htmlspecialchars(json_encode($row)); ?>)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition-colors">Edit</button>
-            <a href="homepage_management.php?delete_slide=<?php echo $row['slide_id']; ?>" 
-               onclick="return confirm('Delete this slide?')" 
-               class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition-colors">Delete</a>
-          </div>
+
+
+          <div class="relative inline-block text-left mt-2 sm:mt-0">
+
+  <!-- 3 horizontal lines button -->
+  <button onclick="toggleSlideMenu(<?php echo $row['slide_id']; ?>)" 
+          class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-xl transition">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Dropdown (LEFT side, centered vertically) -->
+  <div id="slide-menu-<?php echo $row['slide_id']; ?>" 
+       class="hidden absolute right-full mr-2 top-1/2 -translate-y-1/2 w-36 bg-white border rounded-xl shadow-lg z-50 p-2
+              transform scale-95 opacity-0 transition-all duration-200 origin-right">
+
+    <div class="flex flex-col gap-2">
+
+      <!-- Edit -->
+      <button 
+        onclick="openEditSlide(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
+        class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm transition">
+        Edit
+      </button>
+
+      <!-- Delete -->
+      <a href="homepage_management.php?delete_slide=<?php echo $row['slide_id']; ?>" 
+         onclick="return confirm('Delete this slide?')" 
+         class="w-full bg-gray-100 hover:bg-gray-200 text-red-600 px-4 py-2 rounded-lg text-sm transition text-center">
+        Delete
+      </a>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggleSlideMenu(id){
+  const menu = document.getElementById('slide-menu-' + id);
+
+  // Close other menus
+  document.querySelectorAll('[id^="slide-menu-"]').forEach(el => {
+    if(el !== menu){
+      el.classList.add('hidden','scale-95','opacity-0');
+    }
+  });
+
+  if(menu.classList.contains('hidden')){
+    menu.classList.remove('hidden');
+
+    setTimeout(() => {
+      menu.classList.remove('scale-95','opacity-0');
+      menu.classList.add('scale-100','opacity-100');
+    }, 10);
+
+  } else {
+    closeSlideMenu(menu);
+  }
+}
+
+function closeSlideMenu(menu){
+  menu.classList.remove('scale-100','opacity-100');
+  menu.classList.add('scale-95','opacity-0');
+
+  setTimeout(() => {
+    menu.classList.add('hidden');
+  }, 200);
+}
+
+// Close when clicking outside
+document.addEventListener('click', function(e){
+  document.querySelectorAll('[id^="slide-menu-"]').forEach(menu => {
+    const button = menu.previousElementSibling;
+
+    if (!menu.contains(e.target) && !button.contains(e.target)) {
+      closeSlideMenu(menu);
+    }
+  });
+});
+</script>
+
+          
         </div>
       <?php } ?>
     </div>
@@ -456,14 +532,87 @@ onclick="showTab('about')">About</button>
           </div>
         </div>
 
-        <div class="flex gap-2 mt-2 sm:mt-0">
-          <button 
-            onclick="openEditProfile(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition-colors">Edit</button>
-          <a href="homepage_management.php?delete_profile=<?php echo $row['profile_id']; ?>" 
-             onclick="return confirm('Delete this profile?')" 
-             class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition-colors">Delete</a>
-        </div>
+
+        
+
+       <div class="relative inline-block text-left mt-2 sm:mt-0">
+
+  <!-- 3 horizontal lines button -->
+  <button onclick="toggleMenu(<?php echo $row['profile_id']; ?>)" 
+          class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-xl transition">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Dropdown (LEFT side, perfectly centered vertically) -->
+  <div id="menu-<?php echo $row['profile_id']; ?>" 
+       class="hidden absolute right-full mr-2 top-1/2 -translate-y-1/2 w-36 bg-white border rounded-xl shadow-lg z-50 p-2
+              transform scale-95 opacity-0 transition-all duration-200 origin-right">
+
+    <div class="flex flex-col gap-2">
+
+      <!-- Edit -->
+      <button 
+        onclick="openEditProfile(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
+        class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm transition">
+        Edit
+      </button>
+
+      <!-- Delete -->
+      <a href="homepage_management.php?delete_profile=<?php echo $row['profile_id']; ?>" 
+         onclick="return confirm('Delete this profile?')" 
+         class="w-full bg-gray-100 hover:bg-gray-200 text-red-600 px-4 py-2 rounded-lg text-sm transition text-center">
+        Delete
+      </a>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggleMenu(id){
+  const menu = document.getElementById('menu-' + id);
+
+  // Close other menus
+  document.querySelectorAll('[id^="menu-"]').forEach(el => {
+    if(el !== menu){
+      el.classList.add('hidden','scale-95','opacity-0');
+    }
+  });
+
+  if(menu.classList.contains('hidden')){
+    menu.classList.remove('hidden');
+
+    setTimeout(() => {
+      menu.classList.remove('scale-95','opacity-0');
+      menu.classList.add('scale-100','opacity-100');
+    }, 10);
+
+  } else {
+    closeMenu(menu);
+  }
+}
+
+function closeMenu(menu){
+  menu.classList.remove('scale-100','opacity-100');
+  menu.classList.add('scale-95','opacity-0');
+
+  setTimeout(() => {
+    menu.classList.add('hidden');
+  }, 200);
+}
+
+// Close when clicking outside
+document.addEventListener('click', function(e){
+  document.querySelectorAll('[id^="menu-"]').forEach(menu => {
+    const button = menu.previousElementSibling;
+
+    if (!menu.contains(e.target) && !button.contains(e.target)) {
+      closeMenu(menu);
+    }
+  });
+});
+</script>
 
       </div>
     <?php } ?>
@@ -493,14 +642,85 @@ onclick="showTab('about')">About</button>
           <p class="font-medium"><?php echo $row['title']; ?></p>
         </div>
 
-        <div class="flex gap-2 mt-2 sm:mt-0">
-          <button 
-            onclick="openEditFeatured(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition-colors">Edit</button>
-          <a href="homepage_management.php?delete_featured=<?php echo $row['featured_id']; ?>" 
-             onclick="return confirm('Delete this featured item?')" 
-             class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition-colors">Delete</a>
-        </div>
+        <div class="relative inline-block text-left mt-2 sm:mt-0">
+
+  <!-- 3 horizontal lines button -->
+  <button onclick="toggleFeaturedMenu(<?php echo $row['featured_id']; ?>)" 
+          class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-xl transition">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Dropdown (LEFT side, centered vertically) -->
+  <div id="featured-menu-<?php echo $row['featured_id']; ?>" 
+       class="hidden absolute right-full mr-2 top-1/2 -translate-y-1/2 w-36 bg-white border rounded-xl shadow-lg z-50 p-2
+              transform scale-95 opacity-0 transition-all duration-200 origin-right">
+
+    <div class="flex flex-col gap-2">
+
+      <!-- Edit -->
+      <button 
+        onclick="openEditFeatured(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
+        class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm transition">
+        Edit
+      </button>
+
+      <!-- Delete -->
+      <a href="homepage_management.php?delete_featured=<?php echo $row['featured_id']; ?>" 
+         onclick="return confirm('Delete this featured item?')" 
+         class="w-full bg-gray-100 hover:bg-gray-200 text-red-600 px-4 py-2 rounded-lg text-sm transition text-center">
+        Delete
+      </a>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggleFeaturedMenu(id){
+  const menu = document.getElementById('featured-menu-' + id);
+
+  // Close other menus
+  document.querySelectorAll('[id^="featured-menu-"]').forEach(el => {
+    if(el !== menu){
+      el.classList.add('hidden','scale-95','opacity-0');
+    }
+  });
+
+  if(menu.classList.contains('hidden')){
+    menu.classList.remove('hidden');
+
+    setTimeout(() => {
+      menu.classList.remove('scale-95','opacity-0');
+      menu.classList.add('scale-100','opacity-100');
+    }, 10);
+
+  } else {
+    closeFeaturedMenu(menu);
+  }
+}
+
+function closeFeaturedMenu(menu){
+  menu.classList.remove('scale-100','opacity-100');
+  menu.classList.add('scale-95','opacity-0');
+
+  setTimeout(() => {
+    menu.classList.add('hidden');
+  }, 200);
+}
+
+// Close when clicking outside
+document.addEventListener('click', function(e){
+  document.querySelectorAll('[id^="featured-menu-"]').forEach(menu => {
+    const button = menu.previousElementSibling;
+
+    if (!menu.contains(e.target) && !button.contains(e.target)) {
+      closeFeaturedMenu(menu);
+    }
+  });
+});
+</script>
+
 
       </div>
     <?php } ?>
@@ -531,14 +751,84 @@ onclick="showTab('about')">About</button>
           <p class="text-gray-500 text-sm"><?php echo $row['description']; ?></p>
         <?php } ?>
 
-        <div class="flex gap-2 mt-2 sm:mt-0">
-          <button 
-            onclick="openEditEvent(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition-colors">Edit</button>
-          <a href="homepage_management.php?delete_event=<?php echo $row['event_id']; ?>" 
-             onclick="return confirm('Delete this event?')" 
-             class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition-colors">Delete</a>
-        </div>
+        <div class="relative inline-block text-left mt-2 sm:mt-0">
+
+  <!-- 3 horizontal lines button -->
+  <button onclick="toggleEventMenu(<?php echo $row['event_id']; ?>)" 
+          class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-xl transition">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Dropdown (RIGHT side, centered vertically) -->
+  <div id="event-menu-<?php echo $row['event_id']; ?>" 
+       class="hidden absolute left-full ml-2 top-1/2 -translate-y-1/2 w-36 bg-white border rounded-xl shadow-lg z-50 p-2
+              transform scale-95 opacity-0 transition-all duration-200 origin-left">
+
+    <div class="flex flex-col gap-2">
+
+      <!-- Edit -->
+      <button 
+        onclick="openEditEvent(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
+        class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm transition">
+        Edit
+      </button>
+
+      <!-- Delete -->
+      <a href="homepage_management.php?delete_event=<?php echo $row['event_id']; ?>" 
+         onclick="return confirm('Delete this event?')" 
+         class="w-full bg-gray-100 hover:bg-gray-200 text-red-600 px-4 py-2 rounded-lg text-sm transition text-center">
+        Delete
+      </a>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggleEventMenu(id){
+  const menu = document.getElementById('event-menu-' + id);
+
+  // Close other menus
+  document.querySelectorAll('[id^="event-menu-"]').forEach(el => {
+    if(el !== menu){
+      el.classList.add('hidden','scale-95','opacity-0');
+    }
+  });
+
+  if(menu.classList.contains('hidden')){
+    menu.classList.remove('hidden');
+
+    setTimeout(() => {
+      menu.classList.remove('scale-95','opacity-0');
+      menu.classList.add('scale-100','opacity-100');
+    }, 10);
+
+  } else {
+    closeEventMenu(menu);
+  }
+}
+
+function closeEventMenu(menu){
+  menu.classList.remove('scale-100','opacity-100');
+  menu.classList.add('scale-95','opacity-0');
+
+  setTimeout(() => {
+    menu.classList.add('hidden');
+  }, 200);
+}
+
+// Close when clicking outside
+document.addEventListener('click', function(e){
+  document.querySelectorAll('[id^="event-menu-"]').forEach(menu => {
+    const button = menu.previousElementSibling;
+
+    if (!menu.contains(e.target) && !button.contains(e.target)) {
+      closeEventMenu(menu);
+    }
+  });
+});
+</script>
 
       </div>
     <?php } ?>

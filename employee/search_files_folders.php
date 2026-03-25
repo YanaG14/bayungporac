@@ -28,62 +28,68 @@ if(isset($_POST['keyword'])){
     ORDER BY uf.id DESC
 ");
 
-    if(mysqli_num_rows($query) > 0){
+if(mysqli_num_rows($query) > 0){
 
-        echo '<div class="bg-white rounded-2xl shadow p-4 mt-4">';
-        echo '<h3 class="text-lg font-semibold mb-3">Files Search Results</h3>';
+echo '<div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl p-6 mt-6 mx-9 border border-gray-100">';
 
-        echo '<table class="min-w-full text-sm border">';
-        echo '<thead class="bg-gray-200">
-                <tr>
-                    <th class="p-2">Filename</th>
-                    <th class="p-2">Folder</th>
-                    <th class="p-2">Departments</th>
-                    <th class="p-2">Uploader</th>
-                    <th class="p-2">Date</th>
-                    <th class="p-2 text-center">Action</th>
-                </tr>
-              </thead><tbody>';
+echo '<h3 class="text-xl font-semibold text-gray-800 mb-4">Files Search Results</h3>';
 
-        while($row = mysqli_fetch_array($query)){
-            $id = $row['id'];
-            $filepath = "../uploads/".$row['file_path'];
+echo '<div class="overflow-x-auto rounded-2xl">';
+echo '<table class="min-w-full text-sm border-separate border-spacing-y-2">';
 
-            echo "<tr class='border-b'>";
+echo '<thead>
+        <tr class="text-dark-600 text-left">
+            <th class="p-3">Filename</th>
+            <th class="p-3">Folder</th>
+            <th class="p-3">Departments</th>
+            <th class="p-3">Uploader</th>
+            <th class="p-3">Date</th>
+            <th class="p-3 text-center">Action</th>
+        </tr>
+      </thead><tbody>';
 
-            echo "<td class='p-2'>".htmlentities($row['name'])."</td>";
-            echo "<td class='p-2'>".htmlentities($row['folder_name'])."</td>";
-            echo "<td class='p-2'>".htmlentities($row['departments'])."</td>";
-            echo "<td class='p-2'>".htmlentities($row['uploader_name'])."</td>";
-            echo "<td class='p-2'>".htmlentities($row['timers'])."</td>";
+while($row = mysqli_fetch_array($query)){
+    $id = $row['id'];
+    $filepath = "../uploads/".$row['file_path'];
 
-            // ACTION COLUMN (CLEAN BUTTONS)
-echo "<td class='p-2 text-center'>
-        <div class='flex gap-2 justify-center'>
+    echo "<tr class='bg-white shadow-sm hover:shadow-md transition rounded-xl'>";
 
-            <!-- DOWNLOAD -->
-            <a href='downloads.php?file_id=$id'
-               class='bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600'>
-               <i class='fas fa-download'></i>
-            </a>
+    echo "<td class='p-3 font-medium text-dark-800'>".htmlentities($row['name'])."</td>";
+    echo "<td class='p-3 text-dark-600'>".htmlentities($row['folder_name'])."</td>";
+    echo "<td class='p-3 text-dark-600'>".htmlentities($row['departments'])."</td>";
+    echo "<td class='p-3 text-dark-600'>".htmlentities($row['uploader_name'])."</td>";
+    echo "<td class='p-3 text-dark-600'>".htmlentities($row['timers'])."</td>";
 
-            <!-- VIEW -->
-            <a href='$filepath' target='_blank'
-               class='bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600'>
-               <i class='fas fa-eye'></i>
-            </a>
+    // ACTION COLUMN (with dropdown button styled)
+    echo "<td class='p-3 text-center'>
+            <div class='flex justify-center gap-2'>
 
-        </div>
-      </td>";
+                <!-- DOWNLOAD -->
+                <a href='downloads.php?file_id=$id'
+                   class='bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-2 rounded-xl shadow hover:scale-105 transition duration-300'
+                   title='Download'>
+                   <i class='fas fa-download'></i>
+                </a>
 
-            echo "</tr>";
-        }
+                <!-- VIEW -->
+                <a href='$filepath' target='_blank'
+                   class='bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-3 py-2 rounded-xl shadow hover:scale-105 transition duration-300'
+                   title='View'>
+                   <i class='fas fa-eye'></i>
+                </a>
 
-        echo '</tbody></table></div>';
+            </div>
+        </td>";
 
-    } else {
-        echo "<div class='mt-4 text-gray-500'>No files found.</div>";
-    }
+    echo "</tr>";
+}
+
+echo '</tbody></table></div>';
+echo '</div>';
+
+} else {
+    echo "<div class='mt-6 text-gray-500 text-center'>No files found.</div>";
+}
 }
 ?>
 
@@ -127,7 +133,7 @@ document.addEventListener('click', function (event) {
     });
 });
 
-// Open edit modal (you must create this in main page)
+// Open edit modal
 function openEditFromSearch(id){
     fetch('get_file_details.php?id=' + id)
     .then(res => res.text())
@@ -138,14 +144,15 @@ function openEditFromSearch(id){
 }
 </script>
 
+<!-- MODAL DESIGN -->
 <div id="editModal" 
-class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
+class="hidden fixed inset-0 bg-black/40 backdrop-blur-md flex justify-center items-center z-50">
 
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-fadeIn">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg p-6 animate-fadeIn border border-gray-100">
 
         <div class="flex justify-between items-center mb-4">
-            <h4 class="font-semibold text-lg">Edit File</h4>
-            <button onclick="closeEditModal()" class="text-gray-500 text-xl">&times;</button>
+            <h4 class="font-semibold text-lg text-gray-800">Edit File</h4>
+            <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
         </div>
 
         <div id="editModalContent">

@@ -29,6 +29,11 @@ for($i=0; $i<count($files['name']); $i++){
     $tmp = $files['tmp_name'][$i];
     $size = $files['size'][$i];
 
+    // ✅ ADD THIS BLOCK HERE
+    if ($files['error'][$i] !== UPLOAD_ERR_OK) {
+        continue; // skip this file if upload error occurred
+    }
+
     if($name == "") continue;
 
     // prevent overwrite
