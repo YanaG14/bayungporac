@@ -131,27 +131,7 @@ $(window).on('load', function(){
 <div class="mt-24 px-6 md:px-12">
   <div class="grid grid-cols-12 gap-6">
 
-    <!-- SIDEBAR 
-    <aside class="col-span-12 md:col-span-3 space-y-6">
-      <div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-6 border-t-4 border-green-600 hover:scale-[1.02] transition-transform duration-300">
-        <div class="flex flex-col items-center">
-          <img src="../records-administrator/department_images/<?php echo $department_img; ?>" class="w-28 h-28 rounded-full shadow-md mb-3">
-          <h2 class="text-lg font-semibold text-gray-700">Admin Profile</h2>
-        </div>
-        <hr class="my-4 border-gray-300">
-        <p class="text-sm"><b>Full Name:</b> <?php echo $name; ?></p>
-        <p class="text-sm"><b>Position:</b> Admin Staff</p>
-      </div>
-
-      <div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-6 border-t-4 border-green-600 hover:scale-[1.02] transition-transform duration-300">
-        <h3 class="font-semibold text-lg mb-3 text-gray-700">File Document Guidelines</h3>
-        <ul class="text-sm list-disc ml-5 space-y-1 text-gray-600">
-          <li>Ensure revisions are clearly identified</li>
-          <li>Documents remain legible</li>
-          <li>Prevent unintended use of obsolete documents</li>
-        </ul>
-      </div>
-    </aside> -->
+    
 
     <!-- MAIN TABLE/FOLDER SECTION -->
     <main class="col-span-12 md:col-span-9">
@@ -173,10 +153,23 @@ $(window).on('load', function(){
     ?>
       <h2 class="text-xl md:text-2xl font-bold text-gray-700 mb-6">Folders</h2>
        <div class="overflow-y-auto h-[550px] w-[1393px] p-4 rounded-xl shadow-inner"> <!--table ito-->
+
+<!-- SEARCH BAR -->
+<div class="mb-6 flex justify-center">
+    <div class="w-full max-w-xl flex gap-2">
+        <input type="text" id="searchInput"
+            placeholder="Search"
+            class="w-full border rounded-xl px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+
+        
+    </div>
+</div>
+
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
   <?php while($folder = $folders->fetch_assoc()): ?>
     
-    <div class="flex flex-col gap-2 p-4 bg-white rounded-xl shadow-md hover:bg-green-50 hover:scale-[1.02] transition-transform duration-300">
+    <div class="folder-card flex flex-col gap-2 p-4 bg-white rounded-xl shadow-md hover:bg-green-50 hover:scale-[1.02] transition-transform duration-300"
+     data-name="<?php echo strtolower($folder['folder_name']); ?>">
 
       <!-- Folder Link -->
       <a href="?folder_id=<?php echo $folder['folder_id']; ?>" 
@@ -280,6 +273,9 @@ ORDER BY uf.id DESC
   </div>
 </div>
 
+<!-- SEARCH RESULTS -->
+<div id="searchResults"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 function confirmUserLogout(el) {
@@ -331,6 +327,55 @@ function confirmUserLogout(el) {
     line-height: 1.3;
 }
 </style>
+
+<script>
+function searchFiles(){
+    let keyword = document.getElementById("searchInput").value.toLowerCase();
+
+    let folders = document.querySelectorAll(".folder-card");
+    let hasVisible = false;
+
+    folders.forEach(folder => {
+        let name = folder.getAttribute("data-name");
+
+        if(name.includes(keyword)){
+            folder.style.display = "";
+            hasVisible = true;
+        } else {
+            folder.style.display = "none";
+        }
+    });
+
+    // OPTIONAL: if you want AJAX results ALSO
+    if(keyword.trim() === ""){
+        document.getElementById("searchResults").innerHTML = "";
+        return;
+    }
+
+    fetch("search_files_folders.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "keyword=" + encodeURIComponent(keyword)
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("searchResults").innerHTML = data;
+    });
+}
+
+// EVENT LISTENER (SAFE LOAD)
+document.addEventListener("DOMContentLoaded", function(){
+    document.getElementById("searchInput").addEventListener("keyup", searchFiles);
+});
+</script>
+
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function(){
+    searchFiles();
+});
+</script>
 
 <!-- Footer -->
 <footer class="mt-9 text-center text-gray-500 text-sm">
