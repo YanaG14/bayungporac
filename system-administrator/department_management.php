@@ -109,6 +109,7 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
 
 <body class="bg-gray-100 font-sans">
 
+
 <!--
 <div id="loader" class="fixed inset-0 bg-white flex justify-center items-center z-50">
   <div class="flex space-x-2">
@@ -169,29 +170,31 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
 <!-- MAIN LAYOUT -->
 <div class="mt-24 px-6 flex gap-6">
 
+
   <!-- SIDEBAR -->
   <aside class="w-1/4">
-    <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-screen">
+  <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-[1400]">
 
       <!-- Logo -->
       <img src="img/adminLogo.png" class="square-logo mb-6 transition-transform duration-300 hover:scale-105">
 
       <!-- Menu -->
       <nav class="w-full space-y-2">
-        <a href="homepage_management.php" 
-class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
-          <span class="font-medium tracking-wide">Homepage</span>
-</a>
+        <!-- Home Page -->
+           <a href="homepage_management.php" 
+           class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+           <i class="fas fa-users text-gray-600 group-hover:text-green-600 transition-colors"></i>
+           <span class="font-medium tracking-wide">Homepage</span>
+           </a>
 
-        
-        <a href="department_management.php" 
-   class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
-          bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
-          transition-all duration-300">
-  <i class="fas fa-building text-green-600"></i>
-  <span class="font-medium tracking-wide">Offices</span>
-</a>
+        <!-- Offices -->
+           <a href="department_management.php" 
+           class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
+           bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
+           transition-all duration-300">
+           <i class="fas fa-building text-green-600"></i>
+           <span class="font-medium tracking-wide">Offices</span>
+           </a>
 
 <a href="view_user.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">

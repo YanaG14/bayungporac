@@ -26,89 +26,94 @@ if(isset($_POST['keyword'])){
 
     if(mysqli_num_rows($query) > 0){
 
-        echo '<div class="bg-white rounded-2xl shadow p-4 mt-4">';
-        echo '<h3 class="text-lg font-semibold mb-3">Files Search Results</h3>';
+    echo '<div class="bg-white rounded-2xl shadow-lg p-6 mt-6 overflow-hidden">';
 
-        echo '<table class="min-w-full text-sm border">';
-        echo '<thead class="bg-gray-200">
-                <tr>
-                    <th class="p-2">Filename</th>
-                    <th class="p-2">Folder</th>
-                    <th class="p-2">Departments</th>
-                    <th class="p-2">Uploader</th>
-                    <th class="p-2">Date</th>
-                    <th class="p-2 text-center">Action</th>
-                </tr>
-              </thead><tbody>';
+    echo '<div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold text-gray-800">Files Search Results</h3>
+          </div>';
 
-        while($row = mysqli_fetch_array($query)){
-            $id = $row['id'];
-            $filepath = "../uploads/".$row['file_path'];
+    echo '<div class="overflow-x-auto rounded-xl border">';
 
-            echo "<tr class='border-b'>";
+    echo '<table class="min-w-full text-sm text-left text-gray-600">';
 
-            echo "<td class='p-2'>".htmlentities($row['name'])."</td>";
-            echo "<td class='p-2'>".htmlentities($row['folder_name'])."</td>";
-            echo "<td class='p-2'>".htmlentities($row['departments'])."</td>";
-            echo "<td class='p-2'>".htmlentities($row['uploader_name'])."</td>";
-            echo "<td class='p-2'>".htmlentities($row['timers'])."</td>";
+    // HEADER
+    echo '<thead class="bg-gray-100 text-gray-700 uppercase text-xs tracking-wider sticky top-0">
+            <tr>
+                <th class="px-4 py-3">Filename</th>
+                <th class="px-4 py-3">Folder</th>
+                <th class="px-4 py-3">Departments</th>
+                <th class="px-4 py-3">Uploader</th>
+                <th class="px-4 py-3">Date</th>
+                <th class="px-4 py-3 text-center">Action</th>
+            </tr>
+          </thead>';
 
-            // ACTION COLUMN
-            echo "<td class='p-2 text-center'>
-                    <div class='flex justify-center relative'>
+    echo '<tbody class="divide-y divide-gray-100">';
 
-                        <!-- 3 DOT BUTTON -->
-                        <button onclick='toggleMenuSearch($id)'
-                          class='bg-gray-900 text-white px-3 py-2 rounded-xl hover:bg-gray-800 transition transform hover:scale-105 shadow-md'>
-                          <i class='fas fa-ellipsis-h'></i>
-                        </button>
+    while($row = mysqli_fetch_array($query)){
+        $id = $row['id'];
+        $filepath = "../uploads/".$row['file_path'];
 
-                        <!-- DROPDOWN -->
-                        <div id='menu-search-$id'
-                          class='hidden absolute top-full mt-2 right-0 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 z-50
-                                 transform scale-95 opacity-0 transition-all duration-200'>
+        echo "<tr class='hover:bg-gray-50 transition'>";
 
-                          <!-- DOWNLOAD -->
-                          <a href='downloads.php?file_id=$id'
-                            class='w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2 rounded-t-2xl'>
+        echo "<td class='px-4 py-3 font-medium text-gray-800'>".htmlentities($row['name'])."</td>";
+        echo "<td class='px-4 py-3'>".htmlentities($row['folder_name'])."</td>";
+        echo "<td class='px-4 py-3'>".htmlentities($row['departments'])."</td>";
+        echo "<td class='px-4 py-3'>".htmlentities($row['uploader_name'])."</td>";
+        echo "<td class='px-4 py-3 whitespace-nowrap'>".htmlentities($row['timers'])."</td>";
+
+        // ACTION
+        echo "<td class='px-4 py-3 text-center'>
+                <div class='relative inline-block'>
+
+                    <button onclick='toggleMenuSearch($id)'
+                        class='bg-gray-900 text-white px-3 py-2 rounded-lg hover:bg-gray-800 transition shadow-sm'>
+                        <i class='fas fa-ellipsis-h'></i>
+                    </button>
+
+                    <div id='menu-search-$id'
+                        class='hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border z-50 
+                               transform scale-95 opacity-0 transition-all duration-200'>
+
+                        <a href='downloads.php?file_id=$id'
+                            class='flex items-center gap-2 px-4 py-3 hover:bg-gray-50 rounded-t-xl'>
                             <i class='fa fa-download text-blue-500'></i>
                             Download
-                          </a>
+                        </a>
 
-                          <!-- VIEW -->
-                          <a href='$filepath' target='_blank'
-                            class='w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2'>
+                        <a href='$filepath' target='_blank'
+                            class='flex items-center gap-2 px-4 py-3 hover:bg-gray-50'>
                             <i class='fa fa-eye text-indigo-500'></i>
                             View
-                          </a>
+                        </a>
 
-                          <!-- ARCHIVE -->
-                          <a href='archive_file.php?file_id=$id'
-                            class='w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2'>
+                        <a href='archive_file.php?file_id=$id'
+                            class='flex items-center gap-2 px-4 py-3 hover:bg-gray-50'>
                             <i class='fa fa-archive text-red-500'></i>
                             Archive
-                          </a>
+                        </a>
 
-                          <!-- EDIT -->
-                          <button onclick=\"openEditFromSearch($id)\"
-                            class='w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2 rounded-b-2xl'>
+                        <button onclick=\"openEditFromSearch($id)\"
+                            class='w-full text-left flex items-center gap-2 px-4 py-3 hover:bg-gray-50 rounded-b-xl'>
                             <i class='fa fa-edit text-green-500'></i>
                             Edit
-                          </button>
-
-                        </div>
+                        </button>
 
                     </div>
-                  </td>";
 
-            echo "</tr>";
-        }
+                </div>
+              </td>";
 
-        echo '</tbody></table></div>';
-
-    } else {
-        echo "<div class='mt-4 text-gray-500'>No files found.</div>";
+        echo "</tr>";
     }
+
+    echo '</tbody></table>';
+    echo '</div>'; // overflow
+    echo '</div>'; // card
+
+} else {
+    echo "<div class='mt-6 text-center text-gray-500'>No files found.</div>";
+}
 }
 ?>
 

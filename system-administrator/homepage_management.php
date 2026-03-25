@@ -284,12 +284,13 @@ $aboutRow = mysqli_fetch_assoc($about);
 
 <!-- SIDEBAR -->
   <aside class="w-1/4">
-  <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-screen">
+  <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-[1300]">
 
     <!-- Logo -->
     <img src="img/adminLogo.png"
      class="square-logo mb-6 transition-transform duration-300 hover:scale-105"
      style="width:180px; height:180px; object-fit:cover; border-radius:12px;">
+
     <!-- Menu -->
     <nav class="w-full space-y-3">
       <!-- Homepage -->
@@ -338,29 +339,38 @@ $aboutRow = mysqli_fetch_assoc($about);
 </aside>
 
 <!-- MAIN CONTENT -->
-<div class="w-3/4">
+<div class="w-3/4 p-1 h-[calc(79vh-2rem)]">
 
   <!-- TABS -->
-  <div class="p-6 bg-gray-50 rounded-2xl shadow-xl">
+  <div class="p-6 bg-gray-50 rounded-2xl shadow-xl h-full flex flex-col">
 
   <!-- Tab Buttons -->
   <div class="flex flex-wrap gap-3 mb-6">
 
-  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all font-medium text-gray-700 active:bg-green-600 active:text-white"
-          onclick="showTab('slides')">Slides</button>
+  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md 
+hover:shadow-xl hover:-translate-y-1 
+transition-all duration-200 font-medium text-gray-700 active:bg-green-600 active:text-white"
+onclick="showTab('slides')">Slides</button>
 
-  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all font-medium text-gray-700"
-          onclick="showTab('profiles')">Profiles</button>
+<button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md 
+hover:shadow-xl hover:-translate-y-1 
+transition-all duration-200 font-medium text-gray-700"
+onclick="showTab('profiles')">Profiles</button>
 
-  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all font-medium text-gray-700"
-          onclick="showTab('featured')">Featured</button>
+<button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md 
+hover:shadow-xl hover:-translate-y-1 
+transition-all duration-200 font-medium text-gray-700"
+onclick="showTab('featured')">Featured</button>
 
-  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all font-medium text-gray-700"
-          onclick="showTab('events')">Events</button>
+<button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md 
+hover:shadow-xl hover:-translate-y-1 
+transition-all duration-200 font-medium text-gray-700"
+onclick="showTab('events')">Announcement</button>
 
-  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all font-medium text-gray-700"
-          onclick="showTab('about')">About</button>
-
+<button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md 
+hover:shadow-xl hover:-translate-y-1 
+transition-all duration-200 font-medium text-gray-700"
+onclick="showTab('about')">About</button>
 </div>
 
 <style>
@@ -373,7 +383,7 @@ $aboutRow = mysqli_fetch_assoc($about);
 </style>
 
   <!-- SLIDES -->
-  <div id="slides" class="tab-content bg-white p-6 rounded-2xl shadow-md">
+ <div id="slides" class="tab-content bg-white p-6 rounded-2xl shadow-md flex flex-col flex-1 overflow-hidden">
     <h2 class="font-semibold text-xl mb-4 border-b pb-2">Slides</h2>
 
     <!-- Add Slide Form -->
@@ -385,7 +395,7 @@ $aboutRow = mysqli_fetch_assoc($about);
     </form>
 
     <!-- Slide List -->
-    <div class="space-y-4">
+    <div class="space-y-4 overflow-y-auto flex-1 pr-2">
       <?php while($row = mysqli_fetch_assoc($slides)) { ?>
         <div class="flex flex-wrap items-center justify-between bg-gray-50 p-4 rounded-xl shadow-sm hover:shadow-md transition-all">
           <div class="flex items-center gap-4">
@@ -395,16 +405,92 @@ $aboutRow = mysqli_fetch_assoc($about);
               <p class="text-gray-500 text-sm"><?php echo $row['description']; ?></p>
             </div>
           </div>
-          <div class="flex gap-2 mt-2 sm:mt-0">
-            <button onclick="openEditSlide(<?php echo htmlspecialchars(json_encode($row)); ?>)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition-colors">Edit</button>
-            <a href="homepage_management.php?delete_slide=<?php echo $row['slide_id']; ?>" 
-               onclick="return confirm('Delete this slide?')" 
-               class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition-colors">Delete</a>
-          </div>
+
+
+          <div class="relative inline-block text-left mt-2 sm:mt-0">
+
+  <!-- 3 horizontal lines button -->
+  <button onclick="toggleSlideMenu(<?php echo $row['slide_id']; ?>)" 
+          class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-xl transition">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Dropdown (LEFT side, centered vertically) -->
+  <div id="slide-menu-<?php echo $row['slide_id']; ?>" 
+       class="hidden absolute right-full mr-2 top-1/2 -translate-y-1/2 w-36 bg-white border rounded-xl shadow-lg z-50 p-2
+              transform scale-95 opacity-0 transition-all duration-200 origin-right">
+
+    <div class="flex flex-col gap-2">
+
+      <!-- Edit -->
+      <button 
+        onclick="openEditSlide(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
+        class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm transition">
+        Edit
+      </button>
+
+      <!-- Delete -->
+      <a href="homepage_management.php?delete_slide=<?php echo $row['slide_id']; ?>" 
+         onclick="return confirm('Delete this slide?')" 
+         class="w-full bg-gray-100 hover:bg-gray-200 text-red-600 px-4 py-2 rounded-lg text-sm transition text-center">
+        Delete
+      </a>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggleSlideMenu(id){
+  const menu = document.getElementById('slide-menu-' + id);
+
+  // Close other menus
+  document.querySelectorAll('[id^="slide-menu-"]').forEach(el => {
+    if(el !== menu){
+      el.classList.add('hidden','scale-95','opacity-0');
+    }
+  });
+
+  if(menu.classList.contains('hidden')){
+    menu.classList.remove('hidden');
+
+    setTimeout(() => {
+      menu.classList.remove('scale-95','opacity-0');
+      menu.classList.add('scale-100','opacity-100');
+    }, 10);
+
+  } else {
+    closeSlideMenu(menu);
+  }
+}
+
+function closeSlideMenu(menu){
+  menu.classList.remove('scale-100','opacity-100');
+  menu.classList.add('scale-95','opacity-0');
+
+  setTimeout(() => {
+    menu.classList.add('hidden');
+  }, 200);
+}
+
+// Close when clicking outside
+document.addEventListener('click', function(e){
+  document.querySelectorAll('[id^="slide-menu-"]').forEach(menu => {
+    const button = menu.previousElementSibling;
+
+    if (!menu.contains(e.target) && !button.contains(e.target)) {
+      closeSlideMenu(menu);
+    }
+  });
+});
+</script>
+
+          
         </div>
       <?php } ?>
     </div>
-  </div>
+
 </div>
 
 <style>
@@ -416,7 +502,7 @@ $aboutRow = mysqli_fetch_assoc($about);
 </style>
 
   <!-- PROFILES -->
-  <div id="profiles" class="tab-content hidden bg-white p-6 rounded-2xl shadow-md">
+  <div id="profiles" class="tab-content hidden bg-white p-6 rounded-2xl shadow-md flex flex-col flex-1 overflow-hidden">
 
   <!-- Heading -->
   <h2 class="font-semibold text-xl mb-6 border-b pb-2">Profiles</h2>
@@ -431,7 +517,7 @@ $aboutRow = mysqli_fetch_assoc($about);
   </form>
 
   <!-- Profile List -->
-  <div class="space-y-4">
+  <div class="space-y-4 overflow-y-auto flex-1 pr-2">
     <?php while($row = mysqli_fetch_assoc($profiles)) { ?>
       <div class="flex flex-wrap items-center justify-between bg-gray-50 p-4 rounded-2xl shadow-sm hover:shadow-md transition-all">
         
@@ -446,14 +532,87 @@ $aboutRow = mysqli_fetch_assoc($about);
           </div>
         </div>
 
-        <div class="flex gap-2 mt-2 sm:mt-0">
-          <button 
-            onclick="openEditProfile(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition-colors">Edit</button>
-          <a href="homepage_management.php?delete_profile=<?php echo $row['profile_id']; ?>" 
-             onclick="return confirm('Delete this profile?')" 
-             class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition-colors">Delete</a>
-        </div>
+
+        
+
+       <div class="relative inline-block text-left mt-2 sm:mt-0">
+
+  <!-- 3 horizontal lines button -->
+  <button onclick="toggleMenu(<?php echo $row['profile_id']; ?>)" 
+          class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-xl transition">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Dropdown (LEFT side, perfectly centered vertically) -->
+  <div id="menu-<?php echo $row['profile_id']; ?>" 
+       class="hidden absolute right-full mr-2 top-1/2 -translate-y-1/2 w-36 bg-white border rounded-xl shadow-lg z-50 p-2
+              transform scale-95 opacity-0 transition-all duration-200 origin-right">
+
+    <div class="flex flex-col gap-2">
+
+      <!-- Edit -->
+      <button 
+        onclick="openEditProfile(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
+        class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm transition">
+        Edit
+      </button>
+
+      <!-- Delete -->
+      <a href="homepage_management.php?delete_profile=<?php echo $row['profile_id']; ?>" 
+         onclick="return confirm('Delete this profile?')" 
+         class="w-full bg-gray-100 hover:bg-gray-200 text-red-600 px-4 py-2 rounded-lg text-sm transition text-center">
+        Delete
+      </a>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggleMenu(id){
+  const menu = document.getElementById('menu-' + id);
+
+  // Close other menus
+  document.querySelectorAll('[id^="menu-"]').forEach(el => {
+    if(el !== menu){
+      el.classList.add('hidden','scale-95','opacity-0');
+    }
+  });
+
+  if(menu.classList.contains('hidden')){
+    menu.classList.remove('hidden');
+
+    setTimeout(() => {
+      menu.classList.remove('scale-95','opacity-0');
+      menu.classList.add('scale-100','opacity-100');
+    }, 10);
+
+  } else {
+    closeMenu(menu);
+  }
+}
+
+function closeMenu(menu){
+  menu.classList.remove('scale-100','opacity-100');
+  menu.classList.add('scale-95','opacity-0');
+
+  setTimeout(() => {
+    menu.classList.add('hidden');
+  }, 200);
+}
+
+// Close when clicking outside
+document.addEventListener('click', function(e){
+  document.querySelectorAll('[id^="menu-"]').forEach(menu => {
+    const button = menu.previousElementSibling;
+
+    if (!menu.contains(e.target) && !button.contains(e.target)) {
+      closeMenu(menu);
+    }
+  });
+});
+</script>
 
       </div>
     <?php } ?>
@@ -461,7 +620,7 @@ $aboutRow = mysqli_fetch_assoc($about);
 </div>
 
   <!-- FEATURED -->
- <div id="featured" class="tab-content hidden bg-white p-6 rounded-2xl shadow-md">
+ <div id="featured" class="tab-content hidden bg-white p-6 rounded-2xl shadow-md flex flex-col flex-1 overflow-hidden">
 
   <!-- Heading -->
   <h2 class="font-semibold text-xl mb-6 border-b pb-2">Featured</h2>
@@ -474,7 +633,7 @@ $aboutRow = mysqli_fetch_assoc($about);
   </form>
 
   <!-- Featured List -->
-  <div class="space-y-4">
+  <div class="space-y-4 overflow-y-auto flex-1 pr-2">
     <?php while($row = mysqli_fetch_assoc($featured)) { ?>
       <div class="flex flex-wrap items-center justify-between bg-gray-50 p-4 rounded-2xl shadow-sm hover:shadow-md transition-all">
         
@@ -483,14 +642,85 @@ $aboutRow = mysqli_fetch_assoc($about);
           <p class="font-medium"><?php echo $row['title']; ?></p>
         </div>
 
-        <div class="flex gap-2 mt-2 sm:mt-0">
-          <button 
-            onclick="openEditFeatured(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition-colors">Edit</button>
-          <a href="homepage_management.php?delete_featured=<?php echo $row['featured_id']; ?>" 
-             onclick="return confirm('Delete this featured item?')" 
-             class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition-colors">Delete</a>
-        </div>
+        <div class="relative inline-block text-left mt-2 sm:mt-0">
+
+  <!-- 3 horizontal lines button -->
+  <button onclick="toggleFeaturedMenu(<?php echo $row['featured_id']; ?>)" 
+          class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-xl transition">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Dropdown (LEFT side, centered vertically) -->
+  <div id="featured-menu-<?php echo $row['featured_id']; ?>" 
+       class="hidden absolute right-full mr-2 top-1/2 -translate-y-1/2 w-36 bg-white border rounded-xl shadow-lg z-50 p-2
+              transform scale-95 opacity-0 transition-all duration-200 origin-right">
+
+    <div class="flex flex-col gap-2">
+
+      <!-- Edit -->
+      <button 
+        onclick="openEditFeatured(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
+        class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm transition">
+        Edit
+      </button>
+
+      <!-- Delete -->
+      <a href="homepage_management.php?delete_featured=<?php echo $row['featured_id']; ?>" 
+         onclick="return confirm('Delete this featured item?')" 
+         class="w-full bg-gray-100 hover:bg-gray-200 text-red-600 px-4 py-2 rounded-lg text-sm transition text-center">
+        Delete
+      </a>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggleFeaturedMenu(id){
+  const menu = document.getElementById('featured-menu-' + id);
+
+  // Close other menus
+  document.querySelectorAll('[id^="featured-menu-"]').forEach(el => {
+    if(el !== menu){
+      el.classList.add('hidden','scale-95','opacity-0');
+    }
+  });
+
+  if(menu.classList.contains('hidden')){
+    menu.classList.remove('hidden');
+
+    setTimeout(() => {
+      menu.classList.remove('scale-95','opacity-0');
+      menu.classList.add('scale-100','opacity-100');
+    }, 10);
+
+  } else {
+    closeFeaturedMenu(menu);
+  }
+}
+
+function closeFeaturedMenu(menu){
+  menu.classList.remove('scale-100','opacity-100');
+  menu.classList.add('scale-95','opacity-0');
+
+  setTimeout(() => {
+    menu.classList.add('hidden');
+  }, 200);
+}
+
+// Close when clicking outside
+document.addEventListener('click', function(e){
+  document.querySelectorAll('[id^="featured-menu-"]').forEach(menu => {
+    const button = menu.previousElementSibling;
+
+    if (!menu.contains(e.target) && !button.contains(e.target)) {
+      closeFeaturedMenu(menu);
+    }
+  });
+});
+</script>
+
 
       </div>
     <?php } ?>
@@ -512,7 +742,7 @@ $aboutRow = mysqli_fetch_assoc($about);
   </form>
 
   <!-- Event List -->
-  <div class="space-y-4">
+  <div class="space-y-4 overflow-y-auto flex-1 pr-2 h-[220px]">
     <?php while($row = mysqli_fetch_assoc($events)) { ?>
       <div class="flex flex-wrap items-center justify-between bg-gray-50 p-4 rounded-2xl shadow-sm hover:shadow-md transition-all">
         
@@ -521,14 +751,84 @@ $aboutRow = mysqli_fetch_assoc($about);
           <p class="text-gray-500 text-sm"><?php echo $row['description']; ?></p>
         <?php } ?>
 
-        <div class="flex gap-2 mt-2 sm:mt-0">
-          <button 
-            onclick="openEditEvent(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition-colors">Edit</button>
-          <a href="homepage_management.php?delete_event=<?php echo $row['event_id']; ?>" 
-             onclick="return confirm('Delete this event?')" 
-             class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition-colors">Delete</a>
-        </div>
+        <div class="relative inline-block text-left mt-2 sm:mt-0">
+
+  <!-- 3 horizontal lines button -->
+  <button onclick="toggleEventMenu(<?php echo $row['event_id']; ?>)" 
+          class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-xl transition">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Dropdown (RIGHT side, centered vertically) -->
+  <div id="event-menu-<?php echo $row['event_id']; ?>" 
+       class="hidden absolute left-full ml-2 top-1/2 -translate-y-1/2 w-36 bg-white border rounded-xl shadow-lg z-50 p-2
+              transform scale-95 opacity-0 transition-all duration-200 origin-left">
+
+    <div class="flex flex-col gap-2">
+
+      <!-- Edit -->
+      <button 
+        onclick="openEditEvent(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
+        class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm transition">
+        Edit
+      </button>
+
+      <!-- Delete -->
+      <a href="homepage_management.php?delete_event=<?php echo $row['event_id']; ?>" 
+         onclick="return confirm('Delete this event?')" 
+         class="w-full bg-gray-100 hover:bg-gray-200 text-red-600 px-4 py-2 rounded-lg text-sm transition text-center">
+        Delete
+      </a>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggleEventMenu(id){
+  const menu = document.getElementById('event-menu-' + id);
+
+  // Close other menus
+  document.querySelectorAll('[id^="event-menu-"]').forEach(el => {
+    if(el !== menu){
+      el.classList.add('hidden','scale-95','opacity-0');
+    }
+  });
+
+  if(menu.classList.contains('hidden')){
+    menu.classList.remove('hidden');
+
+    setTimeout(() => {
+      menu.classList.remove('scale-95','opacity-0');
+      menu.classList.add('scale-100','opacity-100');
+    }, 10);
+
+  } else {
+    closeEventMenu(menu);
+  }
+}
+
+function closeEventMenu(menu){
+  menu.classList.remove('scale-100','opacity-100');
+  menu.classList.add('scale-95','opacity-0');
+
+  setTimeout(() => {
+    menu.classList.add('hidden');
+  }, 200);
+}
+
+// Close when clicking outside
+document.addEventListener('click', function(e){
+  document.querySelectorAll('[id^="event-menu-"]').forEach(menu => {
+    const button = menu.previousElementSibling;
+
+    if (!menu.contains(e.target) && !button.contains(e.target)) {
+      closeEventMenu(menu);
+    }
+  });
+});
+</script>
 
       </div>
     <?php } ?>
@@ -544,7 +844,7 @@ $aboutRow = mysqli_fetch_assoc($about);
 
   <!-- About Form -->
   <form method="POST" class="flex flex-col gap-4">
-    <textarea name="content" class="w-full border p-4 rounded-2xl h-40 resize-none shadow-inner" placeholder="Enter content here..."><?php echo $aboutRow['content'] ?? ''; ?></textarea>
+    <textarea name="content" class="w-full border p-4 rounded-2xl h-[260px] resize-none shadow-inner" placeholder="Enter content here..."><?php echo $aboutRow['content'] ?? ''; ?></textarea>
     <button name="save_about" class="self-start bg-green-600 text-white px-6 py-2 rounded-2xl hover:bg-green-700 transition-colors">Save</button>
   </form>
 
@@ -575,18 +875,64 @@ function confirmLogout(){
 <script>
 function openEditSlide(data){
 Swal.fire({
-  title: 'Edit Slide',
+  title: '<span style="font-size:22px; font-weight:600;">Edit Slide</span>',
+  width: '700px',
+  background: '#f9fafb',
+  showClass: {
+    popup: 'animate__animated animate__fadeInUp'
+  },
+  hideClass: {
+    popup: 'animate__animated animate__fadeOutDown'
+  },
   html: `
-    <form id="editSlideForm" enctype="multipart/form-data">
+    <form id="editSlideForm" enctype="multipart/form-data"
+      style="display:flex; flex-direction:column; gap:14px; text-align:left;">
+
       <input type="hidden" name="id" value="${data.slide_id}">
-      
-      <input name="caption" class="swal2-input" value="${data.caption}">
-      <input name="description" class="swal2-input" value="${data.description}">
-      <input type="file" name="image" class="swal2-input">
+
+      <!-- Caption -->
+      <div>
+        <label style="font-size:13px; font-weight:500; color:#374151;">Caption</label>
+        <input 
+          name="caption" 
+          value="${data.caption}" 
+          class="swal2-input"
+          style="width:100%; margin-top:4px; border-radius:10px; padding:10px; border:1px solid #e5e7eb;"
+        >
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label style="font-size:13px; font-weight:500; color:#374151;">Description</label>
+        <textarea 
+          name="description"
+          style="width:100%; height:160px; margin-top:4px; border-radius:10px; padding:10px; border:1px solid #e5e7eb; resize:none;"
+        >${data.description}</textarea>
+      </div>
+
+      <!-- Image Upload -->
+      <div>
+        <label style="font-size:13px; font-weight:500; color:#374151;">Slide Image</label>
+        <input 
+          type="file" 
+          name="image"
+          class="swal2-input"
+          style="width:100%; margin-top:4px; border-radius:10px; padding:8px; border:1px solid #e5e7eb; background:white;"
+        >
+      </div>
+
     </form>
   `,
   showCancelButton: true,
   confirmButtonText: 'Update',
+  cancelButtonText: 'Cancel',
+  confirmButtonColor: '#16a34a',
+  cancelButtonColor: '#6b7280',
+
+  customClass: {
+    popup: 'rounded-2xl shadow-2xl'
+  },
+
   preConfirm: () => {
     const form = document.getElementById('editSlideForm');
     const formData = new FormData(form);
@@ -602,18 +948,66 @@ Swal.fire({
 
 function openEditProfile(data){
 Swal.fire({
-  title: 'Edit Profile',
+  title: '<span style="font-size:22px; font-weight:600;">Edit Profile</span>',
+  width: '650px',
+  background: '#f9fafb',
+  showClass: {
+    popup: 'animate__animated animate__fadeInUp'
+  },
+  hideClass: {
+    popup: 'animate__animated animate__fadeOutDown'
+  },
   html: `
-    <form id="editProfileForm" enctype="multipart/form-data">
+    <form id="editProfileForm" enctype="multipart/form-data"
+      style="display:flex; flex-direction:column; gap:14px; text-align:left;">
+
       <input type="hidden" name="id" value="${data.profile_id}">
-      
-      <input name="name" class="swal2-input" value="${data.name}">
-      <input name="role" class="swal2-input" value="${data.role}">
-      <input type="file" name="image" class="swal2-input">
+
+      <!-- Name -->
+      <div>
+        <label style="font-size:13px; font-weight:500; color:#374151;">Name</label>
+        <input 
+          name="name" 
+          value="${data.name}" 
+          class="swal2-input"
+          style="width:100%; margin-top:4px; border-radius:10px; padding:10px; border:1px solid #e5e7eb;"
+        >
+      </div>
+
+      <!-- Role -->
+      <div>
+        <label style="font-size:13px; font-weight:500; color:#374151;">Role</label>
+        <input 
+          name="role" 
+          value="${data.role}" 
+          class="swal2-input"
+          style="width:100%; margin-top:4px; border-radius:10px; padding:10px; border:1px solid #e5e7eb;"
+        >
+      </div>
+
+      <!-- Image Upload -->
+      <div>
+        <label style="font-size:13px; font-weight:500; color:#374151;">Profile Image</label>
+        <input 
+          type="file" 
+          name="image"
+          class="swal2-input"
+          style="width:100%; margin-top:4px; border-radius:10px; padding:8px; border:1px solid #e5e7eb; background:white;"
+        >
+      </div>
+
     </form>
   `,
   showCancelButton: true,
   confirmButtonText: 'Update',
+  cancelButtonText: 'Cancel',
+  confirmButtonColor: '#16a34a',
+  cancelButtonColor: '#6b7280',
+
+  customClass: {
+    popup: 'rounded-2xl shadow-2xl'
+  },
+
   preConfirm: () => {
     const form = document.getElementById('editProfileForm');
     const formData = new FormData(form);
@@ -629,17 +1023,55 @@ Swal.fire({
 
 function openEditFeatured(data){
 Swal.fire({
-  title: 'Edit Featured',
+  title: '<span style="font-size:22px; font-weight:600;">Edit Featured</span>',
+  width: '650px',
+  background: '#f9fafb',
+  showClass: {
+    popup: 'animate__animated animate__fadeInUp'
+  },
+  hideClass: {
+    popup: 'animate__animated animate__fadeOutDown'
+  },
   html: `
-    <form id="editFeaturedForm" enctype="multipart/form-data">
+    <form id="editFeaturedForm" enctype="multipart/form-data"
+      style="display:flex; flex-direction:column; gap:14px; text-align:left;">
+
       <input type="hidden" name="id" value="${data.featured_id}">
-      
-      <input name="title" class="swal2-input" value="${data.title}">
-      <input type="file" name="image" class="swal2-input">
+
+      <!-- Title -->
+      <div>
+        <label style="font-size:13px; font-weight:500; color:#374151;">Title</label>
+        <input 
+          name="title" 
+          value="${data.title}" 
+          class="swal2-input"
+          style="width:100%; margin-top:4px; border-radius:10px; padding:10px; border:1px solid #e5e7eb;"
+        >
+      </div>
+
+      <!-- Image Upload -->
+      <div>
+        <label style="font-size:13px; font-weight:500; color:#374151;">Featured Image</label>
+        <input 
+          type="file" 
+          name="image"
+          class="swal2-input"
+          style="width:100%; margin-top:4px; border-radius:10px; padding:8px; border:1px solid #e5e7eb; background:white;"
+        >
+      </div>
+
     </form>
   `,
   showCancelButton: true,
   confirmButtonText: 'Update',
+  cancelButtonText: 'Cancel',
+  confirmButtonColor: '#16a34a',
+  cancelButtonColor: '#6b7280',
+
+  customClass: {
+    popup: 'rounded-2xl shadow-2xl'
+  },
+
   preConfirm: () => {
     const form = document.getElementById('editFeaturedForm');
     const formData = new FormData(form);
@@ -656,16 +1088,35 @@ Swal.fire({
 function openEditEvent(data){
 Swal.fire({
   title: 'Edit Event',
+  width: '600px',
   html: `
-    <form id="editEventForm">
+    <form id="editEventForm" style="display:flex; flex-direction:column; gap:12px;">
+
       <input type="hidden" name="id" value="${data.event_id}">
-      
-      <input name="title" class="swal2-input" value="${data.title}">
-      <input name="description" class="swal2-input" value="${data.description}">
+
+      <!-- Title (wider / full width) -->
+      <input 
+        name="title" 
+        class="swal2-input" 
+        placeholder="Event Title"
+        value="${data.title}" 
+        style="width:100%; margin:0;"
+      >
+
+      <!-- Description (larger textarea) -->
+      <textarea 
+        name="description" 
+        class="swal2-textarea" 
+        placeholder="Event Description"
+        style="width:100%; height:150px; resize:none; margin:0;"
+      >${data.description}</textarea>
+
     </form>
   `,
   showCancelButton: true,
   confirmButtonText: 'Update',
+  cancelButtonText: 'Cancel',
+  confirmButtonColor: '#16a34a',
   preConfirm: () => {
     const form = document.getElementById('editEventForm');
     const formData = new FormData(form);
@@ -679,6 +1130,7 @@ Swal.fire({
 });
 }
 </script>
+
 
 </body>
 </html>

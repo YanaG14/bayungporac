@@ -131,29 +131,38 @@ window.addEventListener("scroll", () => {
 </script>
 
 <!-- HERO SLIDER -->
-<section class="pt-28 px-4 reveal">
-<div class="max-w-6xl mx-auto">
+<section class="relative w-full pt-20 reveal px-0">
 
-<div class="relative rounded-3xl overflow-hidden shadow-2xl">
-<div class="relative h-[520px]">
+  <div class="relative w-full overflow-hidden shadow-2xl h-[650px] md:h-[720px]">
 
-<?php foreach($slideImages as $index => $img){ ?>
-<img src="<?php echo $img; ?>"
-     class="slide absolute inset-0 w-full h-full object-cover <?php echo $index == 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-110'; ?>">
-<?php } ?>
+    <!-- Slides -->
+    <?php foreach($slideImages as $index => $img){ ?>
+      <img 
+        src="<?php echo $img; ?>"
+        class="slide absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out
+        <?php echo $index == 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-110'; ?>">
+    <?php } ?>
 
-<div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+    <!-- Overlay gradient -->
+    <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/20"></div>
 
-<div class="absolute bottom-0 p-10 text-white">
-<h2 id="caption" class="text-4xl font-bold tracking-wide">
-<?php echo $slideCaptions[0] ?? ''; ?>
-</h2>
-</div>
+    <!-- Content -->
+    <div class="absolute inset-0 flex items-center">
+      <div class="max-w-5xl px-6 md:px-16 text-white">
 
-</div>
-</div>
+        <h2 id="caption" class="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-wide drop-shadow-lg">
+          <?php echo $slideCaptions[0] ?? ''; ?>
+        </h2>
 
-</div>
+        <p class="mt-4 text-sm md:text-lg text-gray-200 max-w-2xl">
+          Discover updates, announcements, and highlights from the municipality.
+        </p>
+
+      </div>
+    </div>
+
+  </div>
+
 </section>
 
 <!-- PROFILE -->
@@ -225,29 +234,101 @@ text-sm sm:text-base md:text-lg lg:text-xl transition-all duration-300">
 <!-- EVENTS -->
 <section class="max-w-6xl mx-auto px-6 py-12 reveal">
   <h2 class="text-3xl md:text-4xl font-bold text-green-800 mb-10 text-left">
-    Events
+    Announcement
   </h2>
 
-  <div class="grid md:grid-cols-3 gap-8">
-    <?php foreach($eventData as $row){ ?>
-    <div class="card bg-white p-6 rounded-3xl shadow-lg hover:shadow-2xl transition-transform duration-500 transform hover:-translate-y-2">
-      <h3 class="font-bold text-xl md:text-2xl text-gray-900 mb-2">
-        <?php echo $row['title']; ?>
-      </h3>
-      <p class="text-gray-700 leading-relaxed">
-        <?php echo $row['description']; ?>
-      </p>
-    </div>
+  <!-- Horizontal scroll container -->
+  <div class="flex gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 no-scrollbar">
+
+    <?php foreach($eventData as $index => $row){ ?>
+      
+      <div class="min-w-[300px] max-w-[300px] bg-white p-6 rounded-3xl shadow-lg hover:shadow-2xl transition-transform duration-500 transform hover:-translate-y-2 cursor-pointer snap-start"
+           onclick="toggleContent(<?php echo $index; ?>)">
+
+        <h3 class="font-bold text-xl md:text-2xl text-gray-900 mb-2">
+          <?php echo $row['title']; ?>
+        </h3>
+
+        <!-- Short preview -->
+        <p class="text-gray-700 leading-relaxed" id="short-<?php echo $index; ?>">
+          <?php echo substr($row['description'], 0, 120) . '...'; ?>
+        </p>
+
+        <!-- Full content -->
+        <p class="text-gray-700 leading-relaxed hidden mt-2" id="full-<?php echo $index; ?>">
+          <?php echo $row['description']; ?>
+        </p>
+
+        <span class="text-green-600 text-sm mt-3 inline-block" id="toggle-text-<?php echo $index; ?>">
+          Read more
+        </span>
+
+      </div>
+
     <?php } ?>
+
   </div>
 </section>
 
+<script>
+function toggleContent(index) {
+  const shortText = document.getElementById('short-' + index);
+  const fullText = document.getElementById('full-' + index);
+  const toggleText = document.getElementById('toggle-text-' + index);
+
+  if (fullText.classList.contains('hidden')) {
+    shortText.classList.add('hidden');
+    fullText.classList.remove('hidden');
+    toggleText.textContent = 'Show less';
+  } else {
+    shortText.classList.remove('hidden');
+    fullText.classList.add('hidden');
+    toggleText.textContent = 'Read more';
+  }
+}
+</script>
+
+<style>
+/* Hide scrollbar for Chrome, Safari and Edge */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none; /* Firefox */
+}
+</style>
+
 <!-- ABOUT -->
-<section class="max-w-5xl mx-auto px-6 py-16 reveal">
-<div class="bg-gradient-to-r from-gray-900 to-gray-900 text-white p-12 rounded-3xl shadow-xl">
-<h2 class="text-3xl font-bold mb-4">About</h2>
-<p class="leading-relaxed"><?php echo nl2br($aboutRow['content'] ?? ''); ?></p>
-</div>
+<section class="relative py-20 px-6 reveal bg-gradient-to-br from-green-50 via-white to-green-100">
+
+  <!-- Decorative background blur circles -->
+  <div class="absolute top-10 left-10 w-72 h-72 bg-green-300/30 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-10 right-10 w-72 h-72 bg-green-500/20 rounded-full blur-3xl"></div>
+
+  <!-- Wider container -->
+  <div class="max-w-7xl mx-auto relative z-10">
+
+    <div class="bg-white/70 backdrop-blur-xl border border-white/40 rounded-3xl shadow-2xl p-8 md:p-12">
+
+      <!-- Header -->
+      <div class="mb-6">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+          About
+        </h2>
+        <div class="w-14 h-1 bg-green-500 rounded-full"></div>
+      </div>
+
+      <!-- Content -->
+      <p class="text-gray-600 leading-relaxed text-sm md:text-base whitespace-pre-line">
+        <?php echo $aboutRow['content'] ?? ''; ?>
+      </p>
+
+    </div>
+
+  </div>
 </section>
 
 
