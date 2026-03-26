@@ -287,20 +287,17 @@ $aboutRow = mysqli_fetch_assoc($about);
 
 <!-- NAVBAR -->
 <nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
-  <div class="flex flex-col md:flex-row justify-between items-center h-auto md:h-16 px-4 sm:px-6 md:px-6 py-2 md:py-0">
-
-    <!-- Logo & Title -->
-    <div class="flex items-center space-x-2 mb-2 md:mb-0 flex-shrink-0">
-      <img src="js/img/municipalLogo.png" class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16" alt="Logo">
-      <h1 class="text-white font-semibold text-sm sm:text-base md:text-lg truncate">Bayung Porac Archive</h1>
+  <div class="flex justify-between items-center h-16 px-6">
+    <div class="flex items-center space-x-3">
+      <img src="js/img/municipalLogo.png" class="w-10 h-10 object-contain" alt="Logo">
+      <h1 class="text-white font-semibold text-lg">Bayung Porac Archive</h1>
     </div>
-
-    <!-- Welcome & Logout -->
-    <div class="text-white flex flex-col md:flex-row gap-2 md:gap-4 items-center flex-shrink-0">
-      <span class="text-sm sm:text-base truncate">Welcome, <?php echo $_SESSION['admin_name']; ?>!</span>
-      <a href="#" onclick="confirmLogout()" class="bg-white text-green-700 px-3 py-1 rounded text-sm sm:text-base hover:bg-gray-100 transition whitespace-nowrap">Logout</a>
+    <div class="flex items-center space-x-4 text-white">
+      <span>Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?>!</span>
+      <a href="#" onclick="confirmLogout(this)" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
+  Log out
+</a>
     </div>
-
   </div>
 </nav>
 
@@ -317,17 +314,17 @@ function confirmLogout() {
 
 <!-- SIDEBAR -->
   <aside class="w-1/4">
-  <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-[1300]">
+  <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-[542px]">
 
-    <!-- Logo -->
-    <img src="img/adminLogo.png"
+      <!-- Logo -->
+      <img src="img/adminLogo.png"
      class="square-logo mb-6 transition-transform duration-300 hover:scale-105"
      style="width:180px; height:180px; object-fit:cover; border-radius:12px;">
 
-    <!-- Menu -->
-    <nav class="w-full space-y-3">
-      <!-- Homepage -->
-      <a href="homepage_management.php" 
+      <!-- Menu -->
+      <nav class="w-full space-y-2">
+        <!--Home Page-->
+   <a href="homepage_management.php" 
          class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
                 bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
                 transition-all duration-300">
@@ -335,41 +332,38 @@ function confirmLogout() {
         <span class="font-medium tracking-wide">Home Page</span>
       </a>
 
-      <!-- Offices -->
-      <a href="department_management.php" 
-         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 
-                hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-        <i class="fas fa-building text-gray-600 group-hover:text-dark-900 transition-colors"></i>
-        <span class="font-medium tracking-wide">Offices</span>
-      </a>
 
-      <!-- Employees -->
-      <a href="view_user.php" 
-         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 
-                hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-        <i class="fas fa-users text-gray-600 group-hover:text-dark-600 transition-colors"></i>
-        <span class="font-medium tracking-wide">Employees</span>
-      </a>
 
-      <!-- Records Administrators -->
-      <a href="view_admin.php" 
-         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 
-                hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-        <i class="fas fa-user-shield text-gray-600"></i>
-        <span class="font-medium tracking-wide">Records Administrators</span>
-      </a>
+        <a href="department_management.php" 
+        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-building text-gray-600 group-hover:text-dark-600 transition-colors"></i>
+          <span class="font-medium tracking-wide">Offices</span>
+        </a>
 
-      <!-- System Administrators -->
-      <a href="system-administrator.php" 
-         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 
-                hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-        <i class="fas fa-server text-gray-600 group-hover:text-dark-600 transition-colors"></i>
-        <span class="font-medium tracking-wide">System Administrators</span>
-      </a>
-    </nav>  
 
-  </div>
-</aside>
+       <a href="view_user.php" 
+        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-users text-gray-600 group-hover:text-dark-600 transition-colors"></i>
+          <span class="font-medium tracking-wide">Employees</span>
+        </a>
+
+
+  <a href="view_admin.php" 
+        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-user-shield text-gray-600"></i>
+          <span class="font-medium tracking-wide">Records Administrators</span>
+        </a>
+
+<a href="system-administrator.php" 
+        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-server text-gray-600 group-hover:text-dark-600 transition-colors"></i>
+          <span class="font-medium tracking-wide">System Administrators</span>
+        </a>
+        
+      </nav>
+
+    </div>
+  </aside>
 
 <!-- MAIN CONTENT -->
 <div class="w-3/4 p-1 h-[calc(79vh-2rem)]">

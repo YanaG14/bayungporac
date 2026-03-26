@@ -118,7 +118,7 @@ exit();
 
 
 <body class="bg-gray-100 font-sans">
-
+<!--
 <div id="loader" class="fixed inset-0 bg-white flex justify-center items-center z-50">
   <div class="flex space-x-2">
     <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full"></span>
@@ -126,7 +126,7 @@ exit();
     <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full animation-delay-200"></span>
   </div>
 </div>
-
+-->
 <!-- Page Content -->
 <div id="page-content" class="opacity-0 transition-opacity duration-500">
   <!-- your full page content here -->

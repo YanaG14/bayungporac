@@ -120,7 +120,7 @@ exit();
 
 
 <body class="bg-gray-100 font-sans">
-
+<!--
 <div id="loader" class="fixed inset-0 bg-white flex justify-center items-center z-50">
   <div class="flex space-x-2">
     <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full"></span>
@@ -128,7 +128,7 @@ exit();
     <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full animation-delay-200"></span>
   </div>
 </div>
-
+-->
 <!-- Page Content -->
 <div id="page-content" class="opacity-0 transition-opacity duration-500">
   <!-- your full page content here -->
@@ -167,7 +167,7 @@ exit();
       <h1 class="text-white font-semibold text-lg">Bayung Porac Archive</h1>
     </div>
     <div class="flex items-center space-x-4 text-white">
-      <span>Welcome, <?php echo ucwords(htmlentities($_SESSION['name'])); ?>!</span>
+      <span>Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?>!</span>
       <a href="#" onclick="confirmLogout(this)" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
   Log out
 </a>
@@ -209,7 +209,7 @@ exit();
    class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
           bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
           transition-all duration-300">
-  <i class="fas fa-user-shield text-green-600"></i>
+  <i class="fas fa-users text-green-600 group-hover:text-dark-600 transition-colors"></i>
   <span class="font-medium tracking-wide">Employees</span>
 </a>
 
@@ -712,8 +712,8 @@ function confirmArchiveAdmin(id) {
 <script>
 function confirmUnarchiveAdmin(id) {
     Swal.fire({
-        title: 'Unarchive Admin?',
-        text: 'This admin will be restored from archive.',
+        title: 'Unarchive User?',
+        text: 'This User will be restored from archive.',
         icon: null, // can be 'success' or 'info' for better visual
         width: '350px',
         showCancelButton: true,

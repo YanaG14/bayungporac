@@ -179,23 +179,22 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
   <aside class="w-1/4">
   <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-[542px]">
 
-
       <!-- Logo -->
       <img src="img/adminLogo.png"
      class="square-logo mb-6 transition-transform duration-300 hover:scale-105"
      style="width:180px; height:180px; object-fit:cover; border-radius:12px;">
-     
+
       <!-- Menu -->
       <nav class="w-full space-y-2">
-        <!-- Home Page -->
-           <a href="homepage_management.php" 
-           class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-           <i class="fas fa-home text-gray-600"></i>
-           <span class="font-medium tracking-wide">Home Page</span>
-           </a>
+        <!--Home Page-->
+   <a href="homepage_management.php" 
+          class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-home text-gray-600"></i>
+          <span class="font-medium tracking-wide">Home Page</span>
+</a>
 
-        <!-- Offices -->
-           <a href="department_management.php" 
+
+        <a href="department_management.php" 
            class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
            bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
            transition-all duration-300">
@@ -203,26 +202,27 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
            <span class="font-medium tracking-wide">Offices</span>
            </a>
 
-<a href="view_user.php" 
+
+        <a href="view_user.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
           <i class="fas fa-users text-gray-600 group-hover:text-dark-600 transition-colors"></i>
           <span class="font-medium tracking-wide">Employees</span>
         </a>
-      </nav>
 
-        <a href="view_admin.php" 
+
+  <a href="view_admin.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
           <i class="fas fa-user-shield text-gray-600"></i>
           <span class="font-medium tracking-wide">Records Administrators</span>
         </a>
 
-        <a href="system-administrator.php" 
+<a href="system-administrator.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
           <i class="fas fa-server text-gray-600 group-hover:text-dark-600 transition-colors"></i>
           <span class="font-medium tracking-wide">System Administrators</span>
         </a>
-
         
+      </nav>
 
     </div>
   </aside>
