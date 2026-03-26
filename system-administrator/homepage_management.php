@@ -30,6 +30,10 @@ if(isset($_POST['add_slide'])){
 
     mysqli_query($conn,"INSERT INTO homepage_slides (image, caption, description)
     VALUES ('$img','$caption','$desc')");
+
+    // Redirect after POST
+    header("Location: homepage_management.php");
+    exit();
 }
 
 /* =========================
@@ -51,6 +55,10 @@ if(isset($_POST['add_profile'])){
 
     mysqli_query($conn,"INSERT INTO homepage_profiles (role,name,description,image)
     VALUES ('$role','$name','$desc','$img')");
+
+    // Redirect after POST
+    header("Location: homepage_management.php");
+    exit();
 }
 
 /* =========================
@@ -70,6 +78,10 @@ if(isset($_POST['add_featured'])){
 
     mysqli_query($conn,"INSERT INTO homepage_featured (title,image)
     VALUES ('$title','$img')");
+
+    // Redirect after POST
+    header("Location: homepage_management.php");
+    exit();
 }
 
 /* =========================
@@ -81,6 +93,10 @@ if(isset($_POST['add_event'])){
 
     mysqli_query($conn,"INSERT INTO homepage_events (title,description)
     VALUES ('$title','$desc')");
+
+    // Redirect after POST
+    header("Location: homepage_management.php");
+    exit();
 }
 
 /* =========================
@@ -96,6 +112,10 @@ if(isset($_POST['save_about'])){
     } else {
         mysqli_query($conn,"INSERT INTO homepage_about (content) VALUES ('$content')");
     }
+
+    // Redirect after POST
+    header("Location: homepage_management.php");
+    exit();
 }
 
 /* =========================

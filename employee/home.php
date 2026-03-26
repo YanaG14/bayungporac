@@ -65,7 +65,6 @@ $(document).ready(function(){
   left: 0; top: 0;
   width: 100%; height: 100%;
   z-index: 9999;
-
 }
 </style>
 
@@ -73,6 +72,7 @@ $(document).ready(function(){
 $(window).on('load', function(){
     setTimeout(function(){
         $('#loader').fadeOut('slow');
+        $('#page-content').addClass('opacity-100'); // show page
     }, 300);
 });
 </script>
@@ -89,26 +89,7 @@ $(window).on('load', function(){
   </div>
 </div>
 
-<!-- Page Content -->
 <div id="page-content" class="opacity-0 transition-opacity duration-500">
-  <!-- your full page content here -->
-</div>
-
-<style>
-/* Bounce animation */
-@keyframes bounce {
-  0%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-10px); }
-}
-
-.dot {
-  display: inline-block;
-  animation: bounce 1s infinite ease-in-out;
-}
-
-.animation-delay-100 { animation-delay: 0.1s; }
-.animation-delay-200 { animation-delay: 0.2s; }
-</style>
 
 <!-- NAVBAR -->
 <nav class="fixed top-0 w-full bg-green-700 shadow-md z-50">
@@ -119,27 +100,28 @@ $(window).on('load', function(){
     </div>
     <div class="flex items-center space-x-4 text-white">
       <span class="hidden sm:inline-block">Welcome, <b><?php echo ucwords(htmlentities($name)); ?></b>!</span>
-     <a href="#" onclick="confirmUserLogout(this)" 
-   class="px-4 py-2 rounded-lg border border-white hover:bg-white hover:text-green-700 transition-all duration-300">
-    Log out
-</a>
+      <a href="#" onclick="confirmUserLogout(this)" 
+         class="px-4 py-2 rounded-lg border border-white hover:bg-white hover:text-green-700 transition-all duration-300">
+         Log out
+      </a>
     </div>
   </div>
 </nav>
 
-<!-- MAIN CONTENT -->
-<div class="mt-24 px-6 md:px-12">
-  <div class="grid grid-cols-12 gap-6">
 
-    
 
     <!-- MAIN TABLE/FOLDER SECTION -->
-    <main class="col-span-12 md:col-span-9">
-
-    <div class="bg-white/90 backdrop-blur-md shadow-lg  h-[650px] w-[1440px] rounded-2xl p-6 hover:shadow-xl transition-shadow duration-300"> <!--container ito-->
+<main class="mt-24 px-2 md:px-9 col-span-12 md:col-span-9">
+  <div id="parentContainer"
+       class="bg-white/90 backdrop-blur-md shadow-lg rounded-2xl p-6
+              hover:shadow-xl transition-shadow duration-300
+              w-full max-w-full
+              min-h-[50vh] md:min-h-[60vh] lg:min-h-[70vh]
+              overflow-y-hidden
+              mx-auto
+              transition-all duration-300 ease-in-out">
 
     <?php if ($selected_folder === 0): 
-        // Show folders assigned to department
         $stmt = $conn->prepare("
             SELECT f.folder_id, f.folder_name
             FROM folders f
@@ -151,124 +133,147 @@ $(window).on('load', function(){
         $stmt->execute();
         $folders = $stmt->get_result();
     ?>
-      <h2 class="text-xl md:text-2xl font-bold text-gray-700 mb-6">Folders</h2>
-       <div class="overflow-y-auto h-[550px] w-[1393px] p-4 rounded-xl shadow-inner"> <!--table ito-->
 
-<!-- SEARCH BAR -->
-<div class="mb-6 flex justify-center">
-    <div class="w-full max-w-xl flex gap-2">
-        <input type="text" id="searchInput"
-            placeholder="Search"
-            class="w-full border rounded-xl px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+    <h2 class="text-xl md:text-2xl font-bold text-gray-700 mb-6">Folders</h2>
 
-        
-    </div>
-</div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-  <?php while($folder = $folders->fetch_assoc()): ?>
-    
-    <div class="folder-card flex flex-col gap-2 p-4 bg-white rounded-xl shadow-md hover:bg-green-50 hover:scale-[1.02] transition-transform duration-300"
-     data-name="<?php echo strtolower($folder['folder_name']); ?>">
-
-      <!-- Folder Link -->
-      <a href="?folder_id=<?php echo $folder['folder_id']; ?>" 
-         class="flex items-center gap-3">
-        <i class="fas fa-folder text-yellow-500 text-2xl"></i>
-        <span class="font-medium text-gray-700">
-          <?php echo htmlentities($folder['folder_name']); ?>
-        </span>
-      </a>
-
-      <!-- DOWNLOAD BUTTON -->
-      <a href="download_folder.php?folder_id=<?php echo $folder['folder_id']; ?>" 
-   class="bg-green-600 text-white px-3 py-2 rounded-lg text-center hover:bg-green-700 transition flex items-center justify-center gap-2">
-   <i class="fas fa-download"></i> Download Folder
-</a>
-
+    <!-- SEARCH BAR -->
+    <div class="mb-6 flex justify-center">
+        <div class="w-full max-w-xl flex gap-2">
+            <input type="text" id="searchInput"
+                placeholder="Search"
+                class="w-full border rounded-xl px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+        </div>
     </div>
 
-  <?php endwhile; ?>
-</div>
+    <!--FOLDER CONTAINER-->
+    <div id="folderContainer" class="flex flex-col gap-4 w-full p-4">
 
-    <?php else: 
-        // Show files in selected folder
-        $stmt = $conn->prepare("
-            SELECT 
-    uf.id, 
-    uf.name, 
-    uf.size, 
-    uf.email, 
-    uf.admin_status, 
-    uf.timers, 
-    uf.download, 
-    uf.file_path,
-    al.name AS uploader_name
-FROM upload_files uf
-JOIN file_departments fd ON uf.id = fd.file_id
-LEFT JOIN admin_login al ON uf.email = al.id
-WHERE uf.folder_id = ? 
-AND fd.department_id = ? 
-AND uf.status='Active'
-ORDER BY uf.id DESC
-        ");
-        $stmt->bind_param("ii", $selected_folder, $user_department);
-        $stmt->execute();
-        $files = $stmt->get_result();
-    ?>
-      <h2 class="text-xl md:text-2xl font-bold text-gray-700 mb-4">Documents</h2>
-      <div class="overflow-x-auto rounded-xl shadow-inner">
-        <table id="dtable" class="min-w-full border border-gray-200">
-          <thead class="bg-green-700 text-white">
-            <tr>
-              <th class="px-4 py-3 text-left">Filename</th>
-              
-              <th class="px-4 py-3 text-left">Uploader</th>
-              
-              <th class="px-4 py-3 text-left">Upload Date</th>
-              <th class="px-4 py-3 text-left">Downloads</th>
-              <th class="px-4 py-3 text-left">Action</th>
-            </tr>
-          </thead>
-          <tbody class="text-gray-700">
-            <?php while($file = $files->fetch_assoc()): ?>
-            <?php $filepath = "../uploads/" . $file['file_path']; ?>
-            <tr class="border-b hover:bg-green-50 transition-colors duration-200">
-              <td class="px-4 py-2"><?php echo htmlentities($file['name']); ?></td>
-              
-              <td class="px-4 py-2">
-    <?php echo htmlentities($file['uploader_name']); ?>
-</td>
-              
-              <td class="px-4 py-2"><?php echo htmlentities($file['timers']); ?></td>
-              <td class="px-4 py-2"><?php echo $file['download']; ?></td>
-              <td class="px-4 py-2">
-  <div class="flex gap-2">
+      <?php while($folder = $folders->fetch_assoc()): ?>
+        <!-- FOLDER CARD -->
+        <div class="folder-card flex flex-col bg-white rounded-lg shadow-md p-3
+                    hover:bg-green-50 transition duration-200 cursor-pointer"
+             data-name="<?php echo strtolower($folder['folder_name']); ?>"
+             onclick="window.location='?folder_id=<?php echo $folder['folder_id']; ?>'">
 
-    <!-- DOWNLOAD -->
-    <a href="downloads.php?file_id=<?php echo $file['id']; ?>" 
-       class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-       <i class="fas fa-download"></i>
-    </a>
+          <!-- FOLDER HEADER: title + download button -->
+          <div class="flex justify-between items-center gap-2">
+            <div class="flex items-center gap-2 truncate px-2 py-1">
+              <i class="fas fa-folder text-yellow-500 text-sm"></i>
+              <span class="font-medium text-gray-700 text-sm truncate">
+                <?php echo htmlentities($folder['folder_name']); ?>
+              </span>
+            </div>
 
-    <!-- VIEW -->
-    <a href="<?php echo $filepath; ?>" target="_blank"
-       class="bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600">
-       <i class="fas fa-eye"></i>
-    </a>
+            <!-- DOWNLOAD BUTTON (icon only) -->
+            <a href="download_folder.php?folder_id=<?php echo $folder['folder_id']; ?>" 
+               class="text-green-600 hover:text-green-800 transition text-lg flex-shrink-0"
+               onclick="event.stopPropagation();">
+              <i class="fas fa-download"></i>
+            </a>
+          </div>
 
+        </div>
+      <?php endwhile; ?>
+    </div>
   </div>
-</td>
-            </tr>
-            <?php endwhile; ?>
-          </tbody>
-        </table>
+</main>
+
+<!-- SEARCH JS WITH SMOOTH ANIMATION -->
+<script>
+  const searchInput = document.getElementById('searchInput');
+  const folderCards = document.querySelectorAll('.folder-card');
+  const parentContainer = document.getElementById('parentContainer');
+
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase().trim();
+    let visibleCount = 0;
+
+    folderCards.forEach(card => {
+      const folderName = card.getAttribute('data-name');
+      if(folderName.includes(query) || query === '') {
+        card.style.display = 'flex'; // show card
+        visibleCount++;
+      } else {
+        card.style.display = 'none'; // hide card
+      }
+    });
+
+    // Smoothly adjust parent container height when searching
+    if(query === '') {
+      // Reset to responsive default height
+      parentContainer.style.height = '';
+      parentContainer.style.overflowY = 'hidden';
+    } else {
+      // Shrink to fit visible folders + small padding
+      const folderHeight = folderCards[0]?.offsetHeight || 100;
+      const gap = 16; // gap-4 in px
+      parentContainer.style.height = `${visibleCount * (folderHeight + gap) + 40}px`; 
+      parentContainer.style.overflowY = 'auto';
+    }
+  });
+
+  // Adjust width dynamically on screen resize
+  window.addEventListener('resize', () => {
+    parentContainer.style.width = `${Math.min(window.innerWidth - 32, 1455)}px`;
+  });
+</script>
+
+        <?php else: 
+            // Show files in selected folder
+            $stmt = $conn->prepare("
+                SELECT uf.id, uf.name, uf.size, uf.email, uf.admin_status, uf.timers, uf.download, uf.file_path,
+                       al.name AS uploader_name
+                FROM upload_files uf
+                JOIN file_departments fd ON uf.id = fd.file_id
+                LEFT JOIN admin_login al ON uf.email = al.id
+                WHERE uf.folder_id = ? AND fd.department_id = ? AND uf.status='Active'
+                ORDER BY uf.id DESC
+            ");
+            $stmt->bind_param("ii", $selected_folder, $user_department);
+            $stmt->execute();
+            $files = $stmt->get_result();
+        ?>
+        <h2 class="text-xl md:text-2xl font-bold text-gray-700 mb-4">Documents</h2>
+        <div class="overflow-x-auto rounded-xl shadow-inner">
+          <table id="dtable" class="min-w-full border border-gray-200">
+            <thead class="bg-green-700 text-white">
+              <tr>
+                <th class="px-4 py-3 text-left">Filename</th>
+                <th class="px-4 py-3 text-left">Uploader</th>
+                <th class="px-4 py-3 text-left">Upload Date</th>
+                <th class="px-4 py-3 text-left">Downloads</th>
+                <th class="px-4 py-3 text-left">Action</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-700">
+              <?php while($file = $files->fetch_assoc()): ?>
+              <?php $filepath = "../uploads/" . $file['file_path']; ?>
+              <tr class="border-b hover:bg-green-50 transition-colors duration-200">
+                <td class="px-4 py-2"><?php echo htmlentities($file['name']); ?></td>
+                <td class="px-4 py-2"><?php echo htmlentities($file['uploader_name']); ?></td>
+                <td class="px-4 py-2"><?php echo htmlentities($file['timers']); ?></td>
+                <td class="px-4 py-2"><?php echo $file['download']; ?></td>
+                <td class="px-4 py-2">
+                  <div class="flex gap-2">
+                    <a href="downloads.php?file_id=<?php echo $file['id']; ?>" 
+                       class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                       <i class="fas fa-download"></i>
+                    </a>
+                    <a href="<?php echo $filepath; ?>" target="_blank"
+                       class="bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600">
+                       <i class="fas fa-eye"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              <?php endwhile; ?>
+            </tbody>
+          </table>
+        </div>
+        <a href="home.php" class="mt-5 inline-block bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">Back to Folders</a>
+        <?php endif; ?>
+
       </div>
-      <a href="home.php" class="mt-5 inline-block bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">Back to Folders</a>
-    <?php endif; ?>
-
-
-    </div>
     </main>
   </div>
 </div>
@@ -276,77 +281,16 @@ ORDER BY uf.id DESC
 <!-- SEARCH RESULTS -->
 <div id="searchResults"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-function confirmUserLogout(el) {
-    Swal.fire({
-      title: 'Are you sure you want to logout?', 
-        showCancelButton: true,
-        confirmButtonColor: '#dc2626',
-        cancelButtonColor: '#6b7280',
-        confirmButtonText: 'Logout',
-        cancelButtonText: 'Cancel',
-        backdrop: `
-            rgba(0,0,0,0.4)
-            url("img/lg.flip-book-loader.gif") 
-            center top
-            no-repeat
-            blur(3px)
-        `,
-        customClass: {
-            popup: 'swal-custom-popup',
-            title: 'swal-title-nowrap'
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = 'Logout.php';
-        }
-    });
-}
-
-</script>
-
-<style>
-.swal-title-nowrap {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-weight: 600;
-    font-size: 1.4rem; 
-    text-align: center;
-}
-.swal2-popup.swal-custom-popup {
-    padding: 1.5rem 1.5rem;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.swal2-html-container {
-    line-height: 1.3;
-}
-</style>
-
 <script>
 function searchFiles(){
     let keyword = document.getElementById("searchInput").value.toLowerCase();
 
     let folders = document.querySelectorAll(".folder-card");
-    let hasVisible = false;
-
     folders.forEach(folder => {
         let name = folder.getAttribute("data-name");
-
-        if(name.includes(keyword)){
-            folder.style.display = "";
-            hasVisible = true;
-        } else {
-            folder.style.display = "none";
-        }
+        folder.style.display = name.includes(keyword) ? "" : "none";
     });
 
-    // OPTIONAL: if you want AJAX results ALSO
     if(keyword.trim() === ""){
         document.getElementById("searchResults").innerHTML = "";
         return;
@@ -354,37 +298,23 @@ function searchFiles(){
 
     fetch("search_files_folders.php", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: "keyword=" + encodeURIComponent(keyword)
     })
     .then(response => response.text())
-    .then(data => {
-        document.getElementById("searchResults").innerHTML = data;
-    });
+    .then(data => { document.getElementById("searchResults").innerHTML = data; });
 }
 
-// EVENT LISTENER (SAFE LOAD)
 document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("searchInput").addEventListener("keyup", searchFiles);
 });
 </script>
 
-<script>
-document.getElementById("searchInput").addEventListener("keyup", function(){
-    searchFiles();
-});
-</script>
-
 <!-- Footer -->
 <footer class="mt-9 text-center text-gray-500 text-sm">
-
-  <p class="text-gray-500">
-&#169; All Rights Reserved. Developed by the PSU IT Interns.
-</p>
-
+  <p class="text-gray-500">&#169; All Rights Reserved. Developed by the PSU IT Interns.</p>
 </footer>
 
+</div> <!-- page-content -->
 </body>
 </html>
