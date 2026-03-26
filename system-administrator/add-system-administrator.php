@@ -61,7 +61,7 @@ $fixed_role = "System Administrator";
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'yanayanaya14@gmail.com'; // your Gmail
+        $mail->Username   = 'yanayanaya14@gmail.com';
         $mail->Password   = 'abtt ostl nvlh ehss';     // Gmail App Password
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;

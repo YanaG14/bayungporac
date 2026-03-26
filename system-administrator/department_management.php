@@ -272,15 +272,80 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
               <td class="px-4 py-2"><img src="department_images/<?php echo $row['department_img']; ?>" width="60"></td>
               <td class="px-4 py-2"><?php echo $row['department_status']; ?></td>
               <td class="px-4 py-2 text-center space-x-2">
-                <button onclick="document.getElementById('modalEditDepartment<?php echo $row['department_id']; ?>').classList.remove('hidden');" 
-        class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-  <i class="fas fa-edit"></i>
-</button>
-                <a href="#" 
-class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" 
-onclick="confirmArchiveDepartment(<?php echo $row['department_id']; ?>)">
-<i class="fas fa-archive"></i>
-</a>
+
+
+             <div class="relative flex justify-center">
+  
+  <!-- 3 DOT BUTTON -->
+  <button onclick="toggleMenu(<?php echo $row['department_id']; ?>)" 
+          class="p-2 rounded-full hover:bg-gray-200 transition z-10">
+    <i class="fas fa-ellipsis-h"></i>
+  </button>
+
+  <!-- DROPDOWN MENU -->
+  <div id="menu<?php echo $row['department_id']; ?>" 
+       class="hidden absolute right-full mr-2 top-1/2 -translate-y-1/2
+              bg-white shadow-lg rounded-xl py-2 w-32
+              opacity-0 scale-95 transition-all duration-200">
+
+    <!-- EDIT -->
+    <button onclick="document.getElementById('modalEditDepartment<?php echo $row['department_id']; ?>').classList.remove('hidden'); closeMenu(<?php echo $row['department_id']; ?>)"
+            class="flex items-center gap-2 w-full px-4 py-2 hover:bg-gray-100 text-blue-600">
+      <i class="fas fa-edit"></i> Edit
+    </button>
+
+    <!-- ARCHIVE -->
+    <button onclick="confirmArchiveDepartment(<?php echo $row['department_id']; ?>); closeMenu(<?php echo $row['department_id']; ?>)"
+            class="flex items-center gap-2 w-full px-4 py-2 hover:bg-gray-100 text-red-600">
+      <i class="fas fa-archive"></i> Archive
+    </button>
+
+  </div>
+</div>
+
+
+<script>
+function toggleMenu(id) {
+    let menu = document.getElementById("menu" + id);
+
+    // Close all other menus
+    document.querySelectorAll("[id^='menu']").forEach(m => {
+        if (m !== menu) {
+            m.classList.add("hidden", "opacity-0", "scale-95");
+        }
+    });
+
+    // Toggle current menu
+    if (menu.classList.contains("hidden")) {
+        menu.classList.remove("hidden");
+
+        setTimeout(() => {
+            menu.classList.remove("opacity-0", "scale-95");
+            menu.classList.add("opacity-100", "scale-100");
+        }, 10);
+    } else {
+        closeMenu(id);
+    }
+}
+
+function closeMenu(id) {
+    let menu = document.getElementById("menu" + id);
+    menu.classList.add("opacity-0", "scale-95");
+
+    setTimeout(() => {
+        menu.classList.add("hidden");
+    }, 200);
+}
+
+// Close when clicking outside
+document.addEventListener("click", function(e) {
+    if (!e.target.closest(".relative")) {
+        document.querySelectorAll("[id^='menu']").forEach(menu => {
+            menu.classList.add("hidden", "opacity-0", "scale-95");
+        });
+    }
+});
+</script>
               </td>
             </tr>
             <?php } ?>

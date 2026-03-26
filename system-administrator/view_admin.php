@@ -290,20 +290,105 @@ exit();
     </span>
   <?php } ?>
 </td>
-              <td class="px-4 py-2 text-center space-x-2">
-                <a href="view_admin.php?id=<?php echo $row['id']; ?>" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"><i class="fas fa-edit"></i></a>
-               <a href="#" 
-   class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" 
-   onclick="confirmArchiveAdmin(<?php echo $row['id']; ?>)">
-   <i class="fas fa-archive"></i>
-</a>
-<button type="button"
-onclick="openOtpModal(<?php echo htmlspecialchars(json_encode($row['admin_user']), ENT_QUOTES, 'UTF-8'); ?>, <?php echo (int)$row['otp_verified']; ?>)"
-class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">
 
-<i class="fas fa-check"></i>
-</button>
-              </td>
+
+
+            <td class="px-2 py-1 text-center">
+  <div class="relative inline-flex justify-center">
+
+    <!-- 3 DOT BUTTON -->
+    <button onclick="toggleMenu(<?php echo $row['id']; ?>, this)" 
+            class="p-1 rounded-full hover:bg-gray-200 transition z-10 text-sm">
+      <i class="fas fa-ellipsis-h"></i>
+    </button>
+
+    <!-- DROPDOWN MENU -->
+    <div id="menu<?php echo $row['id']; ?>" 
+         class="hidden absolute top-1/2 -translate-y-1/2
+                bg-white shadow-md rounded-lg py-1 w-32
+                opacity-0 scale-95 transition-all duration-150 text-sm">
+
+      <!-- EDIT -->
+      <a href="view_admin.php?id=<?php echo $row['id']; ?>"
+         onclick="closeMenu(<?php echo $row['id']; ?>)"
+         class="flex items-center gap-1 px-3 py-1 hover:bg-gray-100 text-blue-600">
+        <i class="fas fa-edit text-sm"></i> Edit
+      </a>
+
+      <!-- ARCHIVE -->
+      <button onclick="confirmArchiveAdmin(<?php echo $row['id']; ?>); closeMenu(<?php echo $row['id']; ?>)"
+              class="flex items-center gap-1 w-full px-3 py-1 hover:bg-gray-100 text-red-600">
+        <i class="fas fa-archive text-sm"></i> Archive
+      </button>
+
+      <!-- VERIFY OTP -->
+      <button type="button"
+        onclick="openOtpModal(
+          <?php echo htmlspecialchars(json_encode($row['admin_user']), ENT_QUOTES, 'UTF-8'); ?>, 
+          <?php echo (int)$row['otp_verified']; ?>
+        ); closeMenu(<?php echo $row['id']; ?>)"
+        class="flex items-center gap-1 w-full px-3 py-1 hover:bg-gray-100 text-yellow-600">
+        <i class="fas fa-check text-sm"></i> Verify
+      </button>
+
+    </div>
+  </div>
+</td>
+
+
+<script>
+function toggleMenu(id, btn) {
+    let menu = document.getElementById("menu" + id);
+
+    // close other menus
+    document.querySelectorAll("[id^='menu']").forEach(m => {
+        if (m.id !== "menu" + id) {
+            m.classList.add("hidden", "opacity-0", "scale-95");
+        }
+    });
+
+    if (!menu.classList.contains("hidden")) {
+        closeMenu(id);
+        return;
+    }
+
+    // Default: open left
+    menu.classList.remove("hidden");
+    menu.style.right = "100%";
+    menu.style.left = "auto";
+    menu.classList.remove("opacity-0", "scale-95");
+    menu.classList.add("opacity-100", "scale-100");
+
+    // Check if it overflows the table/container
+    const rect = menu.getBoundingClientRect();
+    if (rect.left < 0) {
+        // Not enough space on left → open to the right
+        menu.style.left = "100%";
+        menu.style.right = "auto";
+    }
+}
+
+function closeMenu(id) {
+    let menu = document.getElementById("menu" + id);
+    menu.classList.remove("opacity-100", "scale-100");
+    menu.classList.add("opacity-0", "scale-95");
+
+    setTimeout(() => {
+        menu.classList.add("hidden");
+    }, 150);
+}
+
+// Click outside = close
+document.addEventListener("click", function(e) {
+    document.querySelectorAll("[id^='menu']").forEach(menu => {
+        if (!menu.parentElement.contains(e.target)) {
+            menu.classList.add("hidden", "opacity-0", "scale-95");
+        }
+    });
+});
+</script>
+
+              
               </td>
             </tr>
           <?php } ?>

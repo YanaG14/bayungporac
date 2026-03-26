@@ -248,7 +248,7 @@ $aboutRow = mysqli_fetch_assoc($about);
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Homepage Management</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="js/img/municipalLogo.png">
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -267,18 +267,30 @@ $aboutRow = mysqli_fetch_assoc($about);
 
 <!-- NAVBAR -->
 <nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
-  <div class="flex justify-between items-center h-16 px-6">
-    <div class="flex items-center space-x-3">
-      <img src="js/img/municipalLogo.png" class="w-10 h-10">
-      <h1 class="text-white font-semibold">Bayung Porac Archive</h1>
+  <div class="flex flex-col md:flex-row justify-between items-center h-auto md:h-16 px-4 sm:px-6 md:px-6 py-2 md:py-0">
+
+    <!-- Logo & Title -->
+    <div class="flex items-center space-x-2 mb-2 md:mb-0 flex-shrink-0">
+      <img src="js/img/municipalLogo.png" class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16" alt="Logo">
+      <h1 class="text-white font-semibold text-sm sm:text-base md:text-lg truncate">Bayung Porac Archive</h1>
     </div>
 
-    <div class="text-white flex gap-4 items-center">
-      <span>Welcome, <?php echo $_SESSION['admin_name']; ?>!</span>
-      <a href="#" onclick="confirmLogout()" class="bg-white text-green-700 px-3 py-1 rounded">Logout</a>
+    <!-- Welcome & Logout -->
+    <div class="text-white flex flex-col md:flex-row gap-2 md:gap-4 items-center flex-shrink-0">
+      <span class="text-sm sm:text-base truncate">Welcome, <?php echo $_SESSION['admin_name']; ?>!</span>
+      <a href="#" onclick="confirmLogout()" class="bg-white text-green-700 px-3 py-1 rounded text-sm sm:text-base hover:bg-gray-100 transition whitespace-nowrap">Logout</a>
     </div>
+
   </div>
 </nav>
+
+<script>
+function confirmLogout() {
+  if(confirm("Are you sure you want to logout?")) {
+    window.location.href = 'logout.php'; // replace with your logout URL
+  }
+}
+</script>
 
 <!-- Main Layout -->
 <div class="mt-24 px-6 flex gap-6">
