@@ -165,7 +165,7 @@ endif; ?>
             </button>
 
         </form>
-<div class="mt-3 text-center">
+<!-- <div class="mt-3 text-center">
 <a href="#" onclick="showForgotPassword()" class="text-sm text-green-600 hover:underline">
     Forgot Password?
   </a>
@@ -174,7 +174,7 @@ endif; ?>
 
 </div>
 
-<!-- Forgot Password Message Modal -->
+Forgot Password Message Moda
 <div id="forgotPasswordModal" class="hidden fixed inset-0 flex items-center justify-center bg-black/50 z-50">
   <div class="bg-white rounded-xl shadow-lg p-6 w-80 text-center">
     <h2 class="text-lg font-semibold text-gray-800 mb-3">Forgot Password</h2>
@@ -183,7 +183,7 @@ endif; ?>
     </p>
     <button onclick="closeForgotPassword()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
       Close
-    </button>
+    </button> -->
   </div>
 </div>
 
