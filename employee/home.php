@@ -99,12 +99,15 @@ $(window).on('load', function(){
       <h1 class="text-white font-bold text-lg md:text-xl">Bayung Porac Archive</h1>
     </div>
     <div class="flex items-center space-x-4 text-white">
-      <span class="hidden sm:inline-block">Welcome, <b><?php echo ucwords(htmlentities($name)); ?></b>!</span>
-      <a href="#" onclick="confirmUserLogout(this)" 
-         class="px-4 py-2 rounded-lg border border-white hover:bg-white hover:text-green-700 transition-all duration-300">
-         Log out
-      </a>
-    </div>
+  <span class="hidden sm:inline-block">
+    Welcome, <b><?php echo ucwords(htmlentities($name)); ?></b>!
+  </span>
+  <a href="logout.php" 
+     
+     class="px-4 py-2 rounded-lg border border-white hover:bg-white hover:text-green-700 transition-all duration-300">
+     Log out
+  </a>
+</div>
   </div>
 </nav>
 
