@@ -437,10 +437,13 @@ window.addEventListener("load", function() {
       <?php } ?>
     </tbody>
   </table>
+
+  <!-- SEARCH RESULTS -->
+<div id="searchResults" class="mt-6"></div>
+
 </div>
 
-<!-- SEARCH RESULTS -->
-<div id="searchResults" class="mt-6"></div>
+
 
 <!-- ADD POST MODAL -->
 <!-- Modal Background -->

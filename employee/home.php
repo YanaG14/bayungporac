@@ -178,6 +178,10 @@ $(window).on('load', function(){
         </div>
       <?php endwhile; ?>
     </div>
+
+    <!-- SEARCH RESULTS -->
+<div id="searchResults"></div>
+
   </div>
 </main>
 
@@ -281,8 +285,7 @@ $(window).on('load', function(){
   </div>
 </div>
 
-<!-- SEARCH RESULTS -->
-<div id="searchResults"></div>
+
 
 <script>
 function searchFiles(){
