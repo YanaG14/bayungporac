@@ -221,12 +221,12 @@ window.addEventListener("load", function() {
 
           <button onclick="$('#modalAddFolder').removeClass('hidden');" 
                   class="w-full sm:w-auto justify-center bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300">
-            <i class="fas fa-plus"></i> Add Post
+            <i class="fas fa-plus"></i> <!--Add Post-->
           </button>
 
           <button onclick="openArchivedFolders();" 
                   class="w-full sm:w-auto justify-center bg-gradient-to-r from-yellow-500 to-yellow-400 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg transition-all duration-300 flex items-center gap-2">
-            <i class="fas fa-archive"></i> View Archived Post
+            <i class="fas fa-archive"></i> <!--View Archived Post-->
           </button>
         </div>
       </div>
@@ -285,7 +285,7 @@ window.addEventListener("load", function() {
 
     <!-- 3 DOT BUTTON (HORIZONTAL) -->
     <button onclick="toggleMenu(<?php echo $row['folder_id']; ?>)"
-      class="bg-gray-900 text-white px-3 py-2 rounded-xl hover:bg-gray-800 transition transform hover:scale-105 shadow-md">
+      class="bg-gray-100  text-gray-300 px-3 py-2 rounded-xl hover:bg-gray-400 hover:text-gray-100 transition transform hover:scale-105 shadow-md">
       <i class="fas fa-ellipsis-h"></i>
     </button>
 

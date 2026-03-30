@@ -287,17 +287,35 @@ $aboutRow = mysqli_fetch_assoc($about);
 
 <!-- NAVBAR -->
 <nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
-  <div class="flex justify-between items-center h-16 px-6">
-    <div class="flex items-center space-x-3">
-      <img src="js/img/municipalLogo.png" class="w-10 h-10 object-contain" alt="Logo">
-      <h1 class="text-white font-semibold text-lg">Bayung Porac Archive</h1>
+  <div class="flex flex-col md:flex-row justify-between items-center px-4 sm:px-6 py-3 md:py-4 lg:py-0">
+
+    <!-- Left: Hamburger + Logo + Title -->
+    <div class="flex items-center w-full md:w-auto justify-center md:justify-start space-x-2 md:space-x-4 lg:space-x-6">
+      <!-- Hamburger: mobile only -->
+      <button id="menuBtn" class="md:hidden bg-green-600 text-white p-2 rounded-lg shadow-lg">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- Logo + Title -->
+      <img src="js/img/municipalLogo.png" 
+           class="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 object-contain" 
+           alt="Logo">
+      <h1 class="text-white font-semibold text-lg sm:text-xl lg:text-1xl whitespace-nowrap">
+        Bayung Porac Archive
+      </h1>
     </div>
-    <div class="flex items-center space-x-4 text-white">
-      <span>Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?>!</span>
-      <a href="#" onclick="confirmLogout(this)" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
-  Log out
-</a>
+
+    <!-- Right: User Info -->
+    <div class="flex items-center mt-2 md:mt-0 justify-center md:justify-end space-x-2 sm:space-x-4 lg:space-x-6 w-full md:w-auto">
+      <span class="text-white text-sm sm:text-base lg:text-lg whitespace-nowrap">
+        Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?>!
+      </span>
+      <a href="#" onclick="confirmLogout(this)" 
+         class="bg-white text-green-800 border border-green-800 px-3 sm:px-4 py-1 sm:py-2 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300 text-sm sm:text-base lg:text-lg whitespace-nowrap">
+        Log out
+      </a>
     </div>
+
   </div>
 </nav>
 
@@ -313,57 +331,81 @@ function confirmLogout() {
 <div class="mt-24 px-6 flex gap-6">
 
 <!-- SIDEBAR -->
-  <aside class="w-1/4">
-  <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-[542px]">
 
-      <!-- Logo -->
-      <img src="img/adminLogo.png"
-     class="square-logo mb-6 transition-transform duration-300 hover:scale-105"
-     style="width:180px; height:180px; object-fit:cover; border-radius:12px;">
 
-      <!-- Menu -->
-      <nav class="w-full space-y-2">
-        <!--Home Page-->
-   <a href="homepage_management.php" 
-         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
-                bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
-                transition-all duration-300">
+<!-- Sidebar -->
+<aside id="sidebar"
+  class="fixed md:static top-0 left-0 h-full md:h-auto w-64 md:w-1/4 
+         transform -translate-x-full md:translate-x-0 
+         transition-transform duration-300 z-40">
+
+  <div class="bg-white/80 backdrop-blur-lg rounded-none md:rounded-2xl 
+              shadow-xl p-6 border border-gray-200 
+              flex flex-col items-center h-full md:h-[542px]">
+
+    <!-- Logo -->
+    <img src="img/adminLogo.png"
+      class="mb-6 transition-transform duration-300 hover:scale-105"
+      style="width:150px; height:150px; object-fit:cover; border-radius:12px;">
+
+    <!-- Menu -->
+    <nav class="w-full space-y-2">
+
+      <a href="homepage_management.php" 
+        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
+               bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
         <i class="fas fa-home text-green-600"></i>
-        <span class="font-medium tracking-wide">Home Page</span>
+        <span class="font-medium">Home Page</span>
       </a>
 
-
-
-        <a href="department_management.php" 
+      <a href="department_management.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-building text-gray-600 group-hover:text-dark-600 transition-colors"></i>
-          <span class="font-medium tracking-wide">Offices</span>
-        </a>
+        <i class="fas fa-building text-gray-600"></i>
+        <span class="font-medium">Offices</span>
+      </a>
 
-
-       <a href="view_user.php" 
+      <a href="view_user.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-users text-gray-600 group-hover:text-dark-600 transition-colors"></i>
-          <span class="font-medium tracking-wide">Employees</span>
-        </a>
+        <i class="fas fa-users text-gray-600"></i>
+        <span class="font-medium">Employees</span>
+      </a>
 
-
-  <a href="view_admin.php" 
+      <a href="view_admin.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-user-shield text-gray-600"></i>
-          <span class="font-medium tracking-wide">Records Administrators</span>
-        </a>
+        <i class="fas fa-user-shield text-gray-600"></i>
+        <span class="font-medium">Records Administrators</span>
+      </a>
 
-<a href="system-administrator.php" 
+      <a href="system-administrator.php" 
         class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-server text-gray-600 group-hover:text-dark-600 transition-colors"></i>
-          <span class="font-medium tracking-wide">System Administrators</span>
-        </a>
-        
-      </nav>
+        <i class="fas fa-server text-gray-600"></i>
+        <span class="font-medium">System Administrators</span>
+      </a>
 
-    </div>
-  </aside>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+
+  // Toggle sidebar
+  menuBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('-translate-x-full');
+    overlay.classList.toggle('hidden');
+  });
+
+  // Click overlay to close
+  overlay.addEventListener('click', () => {
+    sidebar.classList.add('-translate-x-full');
+    overlay.classList.add('hidden');
+  });
+</script>
+<!-- Overlay (Mobile) -->
+<div id="overlay" 
+  class="fixed inset-0 bg-black bg-opacity-40 hidden z-30 md:hidden"></div>
 
 <!-- MAIN CONTENT -->
 <div class="w-3/4 p-1 h-[calc(79vh-2rem)]">
@@ -372,33 +414,52 @@ function confirmLogout() {
   <div class="p-6 bg-gray-50 rounded-2xl shadow-xl h-full flex flex-col">
 
   <!-- Tab Buttons -->
-  <div class="flex flex-wrap gap-3 mb-6">
-
-  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md 
-hover:shadow-xl hover:-translate-y-1 
-transition-all duration-200 font-medium text-gray-700 active:bg-green-600 active:text-white"
-onclick="showTab('slides')">Slides</button>
-
-<button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md 
-hover:shadow-xl hover:-translate-y-1 
-transition-all duration-200 font-medium text-gray-700"
-onclick="showTab('profiles')">Profiles</button>
-
-<button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md 
-hover:shadow-xl hover:-translate-y-1 
-transition-all duration-200 font-medium text-gray-700"
-onclick="showTab('featured')">Featured</button>
-
-<button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md 
-hover:shadow-xl hover:-translate-y-1 
-transition-all duration-200 font-medium text-gray-700"
-onclick="showTab('events')">Announcement</button>
-
-<button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md 
-hover:shadow-xl hover:-translate-y-1 
-transition-all duration-200 font-medium text-gray-700"
-onclick="showTab('about')">About</button>
+  <!-- Mobile: Dropdown -->
+<div class="block md:hidden mb-4">
+  <select id="mobileTabs" class="w-full px-4 py-2 rounded-2xl bg-white shadow-md text-gray-700 font-medium">
+    <option value="slides">Slides</option>
+    <option value="profiles">Profiles</option>
+    <option value="featured">Featured</option>
+    <option value="events">Announcement</option>
+    <option value="about">About</option>
+  </select>
 </div>
+
+<!-- Desktop: Buttons -->
+<div class="hidden md:flex flex-wrap gap-3 mb-6">
+  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 font-medium text-gray-700 active:bg-green-600 active:text-white"
+          onclick="showTab('slides')">Slides</button>
+
+  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 font-medium text-gray-700"
+          onclick="showTab('profiles')">Profiles</button>
+
+  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 font-medium text-gray-700"
+          onclick="showTab('featured')">Featured</button>
+
+  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 font-medium text-gray-700"
+          onclick="showTab('events')">Announcement</button>
+
+  <button class="tab-btn px-5 py-2 rounded-2xl bg-white shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 font-medium text-gray-700"
+          onclick="showTab('about')">About</button>
+</div>
+
+<script>
+// Mobile dropdown functionality
+document.getElementById('mobileTabs').addEventListener('change', function() {
+  const tab = this.value;
+  showTab(tab);
+
+  // Optional: highlight the selected tab visually
+  this.querySelectorAll('option').forEach(opt => opt.selected = opt.value === tab);
+});
+
+// Example showTab function if not already defined
+function showTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
+  const activeTab = document.getElementById(tabId);
+  if(activeTab) activeTab.style.display = 'block';
+}
+</script>
 
 <style>
   /* Active tab style */
@@ -410,61 +471,60 @@ onclick="showTab('about')">About</button>
 </style>
 
   <!-- SLIDES -->
- <div id="slides" class="tab-content bg-white p-6 rounded-2xl shadow-md flex flex-col flex-1 overflow-hidden">
-    <h2 class="font-semibold text-xl mb-4 border-b pb-2">Slides</h2>
+ <!-- SLIDES -->
+<div id="slides" class="tab-content bg-white p-4 sm:p-6 rounded-2xl shadow-md flex flex-col flex-1 overflow-hidden">
+  <h2 class="font-semibold text-xl mb-4 border-b pb-2">Slides</h2>
 
-    <!-- Add Slide Form -->
-    <form method="POST" enctype="multipart/form-data" class="flex flex-wrap gap-3 mb-6 items-center bg-gray-50 p-4 rounded-xl shadow-inner">
-      <input type="text" name="caption" placeholder="Caption" class="border p-2 rounded-xl flex-1 min-w-[150px]" required>
-      <input type="text" name="description" placeholder="Description" class="border p-2 rounded-xl flex-1 min-w-[150px]" required>
-      <input type="file" name="image" class="border p-2 rounded-xl" required>
-      <button name="add_slide" class="bg-green-600 text-white px-5 py-2 rounded-xl hover:bg-green-700 transition-colors">Add</button>
-    </form>
+  <!-- Add Slide Form -->
+  <form method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row flex-wrap gap-3 mb-6 items-center bg-gray-50 p-4 rounded-xl shadow-inner w-full">
+    <input type="text" name="caption" placeholder="Caption" class="border p-3 rounded-xl flex-1 min-w-[120px] w-full sm:w-full md:w-auto" required>
+    <input type="text" name="description" placeholder="Description" class="border p-3 rounded-xl flex-1 min-w-[120px] w-full sm:w-full md:w-auto" required>
+    <input type="file" name="image" class="border p-3 rounded-xl w-full sm:w-full md:w-auto" required>
+    <button name="add_slide" class="bg-green-600 text-white px-5 py-3 rounded-xl hover:bg-green-700 transition-colors w-full sm:w-full md:w-auto">
+      Add
+    </button>
+  </form>
 
-    <!-- Slide List -->
-    <div class="space-y-4 overflow-y-auto flex-1 pr-2">
-      <?php while($row = mysqli_fetch_assoc($slides)) { ?>
-        <div class="flex flex-wrap items-center justify-between bg-gray-50 p-4 rounded-xl shadow-sm hover:shadow-md transition-all">
-          <div class="flex items-center gap-4">
-            <img src="../uploads/slides/<?php echo $row['image']; ?>" class="w-20 h-20 object-cover rounded-xl border">
-            <div>
-              <p class="font-medium"><?php echo $row['caption']; ?></p>
-              <p class="text-gray-500 text-sm"><?php echo $row['description']; ?></p>
+  <!-- Slide List -->
+  <div class="flex flex-col gap-4 overflow-y-auto">
+    <?php while($row = mysqli_fetch_assoc($slides)) { ?>
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 p-4 rounded-xl shadow-sm hover:shadow-md transition-all gap-4 w-full">
+
+        <!-- Slide Info -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full">
+          <img src="../uploads/slides/<?php echo $row['image']; ?>" class="w-full sm:w-28 h-28 object-cover rounded-xl border flex-shrink-0">
+          <div class="flex-1 min-w-0">
+            <p class="font-medium text-lg sm:text-base truncate"><?php echo $row['caption']; ?></p>
+            <p class="text-gray-500 text-sm sm:text-xs truncate"><?php echo $row['description']; ?></p>
+          </div>
+        </div>
+
+        <!-- Dropdown Menu -->
+        <div class="relative mt-3 sm:mt-0 w-full sm:w-auto">
+          <button onclick="toggleSlideMenu(<?php echo $row['slide_id']; ?>)" 
+                  class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-xl transition w-full sm:w-auto">
+            <i class="fas fa-bars"></i>
+          </button>
+
+          <div id="slide-menu-<?php echo $row['slide_id']; ?>" 
+               class="hidden absolute left-0 sm:right-full sm:left-auto top-full sm:top-1/2 mt-2 sm:mt-0 w-full sm:w-36 bg-white border rounded-xl shadow-lg z-50 p-2
+                      scale-95 opacity-0 transition-all duration-200 origin-top-left sm:origin-top-right">
+            <div class="flex flex-col gap-2">
+              <button onclick="openEditSlide(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
+                      class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm transition text-left">
+                Edit
+              </button>
+              <a href="homepage_management.php?delete_slide=<?php echo $row['slide_id']; ?>" 
+                 onclick="return confirm('Delete this slide?')" 
+                 class="w-full bg-gray-100 hover:bg-gray-200 text-red-600 px-4 py-2 rounded-lg text-sm transition text-left">
+                Delete
+              </a>
             </div>
           </div>
+        </div>
 
-
-          <div class="relative inline-block text-left mt-2 sm:mt-0">
-
-  <!-- 3 horizontal lines button -->
-  <button onclick="toggleSlideMenu(<?php echo $row['slide_id']; ?>)" 
-          class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-xl transition">
-    <i class="fas fa-bars"></i>
-  </button>
-
-  <!-- Dropdown (LEFT side, centered vertically) -->
-  <div id="slide-menu-<?php echo $row['slide_id']; ?>" 
-       class="hidden absolute right-full mr-2 top-1/2 -translate-y-1/2 w-36 bg-white border rounded-xl shadow-lg z-50 p-2
-              transform scale-95 opacity-0 transition-all duration-200 origin-right">
-
-    <div class="flex flex-col gap-2">
-
-      <!-- Edit -->
-      <button 
-        onclick="openEditSlide(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
-        class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm transition">
-        Edit
-      </button>
-
-      <!-- Delete -->
-      <a href="homepage_management.php?delete_slide=<?php echo $row['slide_id']; ?>" 
-         onclick="return confirm('Delete this slide?')" 
-         class="w-full bg-gray-100 hover:bg-gray-200 text-red-600 px-4 py-2 rounded-lg text-sm transition text-center">
-        Delete
-      </a>
-
-    </div>
-
+      </div>
+    <?php } ?>
   </div>
 </div>
 
@@ -481,12 +541,10 @@ function toggleSlideMenu(id){
 
   if(menu.classList.contains('hidden')){
     menu.classList.remove('hidden');
-
     setTimeout(() => {
       menu.classList.remove('scale-95','opacity-0');
       menu.classList.add('scale-100','opacity-100');
     }, 10);
-
   } else {
     closeSlideMenu(menu);
   }
@@ -495,30 +553,17 @@ function toggleSlideMenu(id){
 function closeSlideMenu(menu){
   menu.classList.remove('scale-100','opacity-100');
   menu.classList.add('scale-95','opacity-0');
-
-  setTimeout(() => {
-    menu.classList.add('hidden');
-  }, 200);
+  setTimeout(() => menu.classList.add('hidden'), 200);
 }
 
-// Close when clicking outside
+// Close menu when clicking outside
 document.addEventListener('click', function(e){
   document.querySelectorAll('[id^="slide-menu-"]').forEach(menu => {
     const button = menu.previousElementSibling;
-
-    if (!menu.contains(e.target) && !button.contains(e.target)) {
-      closeSlideMenu(menu);
-    }
+    if (!menu.contains(e.target) && !button.contains(e.target)) closeSlideMenu(menu);
   });
 });
 </script>
-
-          
-        </div>
-      <?php } ?>
-    </div>
-
-</div>
 
 
 <style>
@@ -563,7 +608,7 @@ document.addEventListener('click', function(e){
 
         
 
-       <div class="relative inline-block text-left mt-2 sm:mt-0">
+      <div class="relative inline-block text-left mt-2 sm:mt-0">
 
   <!-- 3 horizontal lines button -->
   <button onclick="toggleMenu(<?php echo $row['profile_id']; ?>)" 
@@ -571,10 +616,15 @@ document.addEventListener('click', function(e){
     <i class="fas fa-bars"></i>
   </button>
 
-  <!-- Dropdown (LEFT side, perfectly centered vertically) -->
+  <!-- Dropdown -->
   <div id="menu-<?php echo $row['profile_id']; ?>" 
-       class="hidden absolute right-full mr-2 top-1/2 -translate-y-1/2 w-36 bg-white border rounded-xl shadow-lg z-50 p-2
-              transform scale-95 opacity-0 transition-all duration-200 origin-right">
+       class="hidden absolute 
+              left-full ml-2 
+              sm:right-full sm:left-auto sm:mr-2 
+              top-1/2 -translate-y-1/2 
+              w-36 bg-white border rounded-xl shadow-lg z-50 p-2
+              transform scale-95 opacity-0 transition-all duration-200 
+              origin-left sm:origin-right">
 
     <div class="flex flex-col gap-2">
 
@@ -670,6 +720,8 @@ document.addEventListener('click', function(e){
           <p class="font-medium"><?php echo $row['title']; ?></p>
         </div>
 
+        
+
         <div class="relative inline-block text-left mt-2 sm:mt-0">
 
   <!-- 3 horizontal lines button -->
@@ -678,10 +730,15 @@ document.addEventListener('click', function(e){
     <i class="fas fa-bars"></i>
   </button>
 
-  <!-- Dropdown (LEFT side, centered vertically) -->
+  <!-- Dropdown -->
   <div id="featured-menu-<?php echo $row['featured_id']; ?>" 
-       class="hidden absolute right-full mr-2 top-1/2 -translate-y-1/2 w-36 bg-white border rounded-xl shadow-lg z-50 p-2
-              transform scale-95 opacity-0 transition-all duration-200 origin-right">
+       class="hidden absolute 
+              left-full ml-2 
+              sm:right-full sm:left-auto sm:mr-2 
+              top-1/2 -translate-y-1/2 
+              w-36 bg-white border rounded-xl shadow-lg z-50 p-2
+              transform scale-95 opacity-0 transition-all duration-200 
+              origin-left sm:origin-right">
 
     <div class="flex flex-col gap-2">
 
