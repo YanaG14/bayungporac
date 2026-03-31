@@ -157,151 +157,305 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
 
 <!-- NAVBAR -->
 <nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
-  <div class="flex justify-between items-center h-16 px-6">
-    <div class="flex items-center space-x-3">
-      <img src="js/img/municipalLogo.png" class="w-10 h-10 object-contain">
-      <h1 class="text-white font-semibold text-lg">Bayung Porac Archive</h1>
+  <div class="flex justify-between items-center h-16 px-4 sm:px-6">
+    <!-- Left side: Mobile toggle + Logo + Title -->
+    <div class="flex items-center space-x-3 min-w-0">
+      <!-- Mobile Toggle Button -->
+      <button id="sidebarToggle" class="lg:hidden bg-transparent/0 backdrop-blur-sm p-2.5 rounded-lg shadow-md border-2 border-white/20 p-2.5 w-11 h-11 flex items-center justify-center shrink-0 z-10 outline-none focus:outline-none active:bg-transparent/0 transition-none hover:bg-transparent">
+  <i id="toggleIcon" class="fas fa-bars text-white/90 text-lg transition-none"></i>
+</button>
+      <!-- Logo + Title -->
+      <div class="flex items-center space-x-3 min-w-0 flex-1">
+        <img src="js/img/municipalLogo.png" class="w-9 h-9 object-contain flex-shrink-0">
+        <h1 class="text-white font-semibold text-base sm:text-lg truncate">Bayung Porac Archive</h1>
+      </div>
     </div>
-    <div class="flex items-center space-x-4 text-white">
-      <span>Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?>!</span>
-      <a href="#" onclick="confirmLogout(this)" class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white hover:border-white transition-colors duration-300">
-  Log out
-</a>
-    </div>
+
+    <!-- Right side: Welcome + Logout -->
+    
   </div>
 </nav>
 
 <!-- MAIN LAYOUT -->
-<div class="mt-24 px-6 flex gap-6">
+<div class="mt-24 px-4 sm:px-6 flex flex-col lg:flex-row gap-4 lg:gap-6 min-h-screen">
 
+<!-- SIDEBAR -->
+<aside id="sidebar" class="lg:w-1/4 w-72 lg:h-[650px] fixed lg:static inset-y-0 left-0 z-30 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out lg:flex lg:flex-col">
+  <div class="bg-white/95 backdrop-blur-lg rounded-3xl lg:rounded-[3rem] shadow-2xl lg:shadow-2xl p-1 sm:p-3 lg:p-8 border border-gray-200/50 flex flex-col h-screen lg:h-[650px] items-center relative overflow-hidden">
+    
+    <!-- Mobile Close Button -->
+    <button onclick="toggleSidebar()" class="lg:hidden absolute top-1 right-1 text-gray-500 text-lg font-bold z-20 p-1 rounded-xl transition-none hover:bg-transparent">
+      <i class="fas fa-times"></i>
+    </button>
 
-  <!-- SIDEBAR -->
-  <aside class="w-1/4">
-  <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200 flex flex-col items-center h-[542px]">
-
-      <!-- Logo -->
-      <img src="img/adminLogo.png"
-     class="square-logo mb-6 transition-transform duration-300 hover:scale-105"
-     style="width:180px; height:180px; object-fit:cover; border-radius:12px;">
-
-      <!-- Menu -->
-      <nav class="w-full space-y-2">
-        <!--Home Page-->
-   <a href="homepage_management.php" 
-          class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-home text-gray-600"></i>
-          <span class="font-medium tracking-wide">Home Page</span>
-</a>
-
-
-        <a href="department_management.php" 
-           class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl 
-           bg-gray-50 shadow-md hover:bg-gray-100 hover:shadow-xl hover:-translate-y-1 
-           transition-all duration-300">
-           <i class="fas fa-building text-green-600"></i>
-           <span class="font-medium tracking-wide">Offices</span>
-           </a>
-
-
-        <a href="view_user.php" 
-        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-users text-gray-600 group-hover:text-dark-600 transition-colors"></i>
-          <span class="font-medium tracking-wide">Employees</span>
-        </a>
-
-
-  <a href="view_admin.php" 
-        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-user-shield text-gray-600"></i>
-          <span class="font-medium tracking-wide">Records Administrators</span>
-        </a>
-
-<a href="system-administrator.php" 
-        class="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-          <i class="fas fa-server text-gray-600 group-hover:text-dark-600 transition-colors"></i>
-          <span class="font-medium tracking-wide">System Administrators</span>
-        </a>
-        
-      </nav>
-
-    </div>
-  </aside>
-
-  <!-- MAIN CONTENT -->
-  <div class="w-3/4 p-1 h-[calc(79vh-2rem)]">
-    <div class="bg-white rounded-2xl shadow-lg p-6 h-[541px] transition-all duration-300 hover:shadow-xl">
-      <div class="flex justify-between items-center mb-4">
-        
-      <!-- Title -->
-        <h2 class="text-xl font-semibold text-gray-700 flex items-center gap-2">
-          <i class="fas fa-building text-green-600"></i> Active Departments
-        </h2>
-
-        <!-- Buttons grouped with gap -->
-        <div class="flex items-center gap-3">
-          <button onclick="document.getElementById('modalAddDepartment').classList.remove('hidden');" 
-          class="bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300">
-            <i class="fas fa-plus"></i> Add Department
-          </button>
-
-          <button onclick="document.getElementById('modalArchivedDepartments').classList.remove('hidden');" 
-          class="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300">
-            <i class="fas fa-archive"></i> Archived Departments
-          </button>
-        </div>
-
+    <!-- Logo & Menu Container -->
+    <div id="sidebarContent" class="flex flex-col w-full h-full pt-4 lg:pt-6 transition-all duration-500 ease-out">
+      
+      <!-- LOGO -->
+      <div class="mb-2 lg:mb-8 w-full flex justify-center px-1">
+        <img src="img/adminLogo.png"
+             class="w-32 h-32 sm:w-36 sm:h-36 lg:w-40 lg:h-40 xl:w-44 xl:h-44 object-cover rounded-3xl transition-all duration-300 hover:scale-105 shadow-2xl border-4 border-white/90 mx-auto">
       </div>
 
-      <!-- TABLE -->
-      <div class="max-h-[400px] overflow-y-auto overflow-x-hidden">
-      <table id="dtable" class="w-full border border-gray-200">
-          <thead class="bg-green-700 text-white sticky top-0 z-10">
-            <tr>
-              <th class="px-4 py-2">ID</th>
-              <th class="px-4 py-2">Department Name</th>
-              <th class="px-4 py-2">Image</th>
-              <th class="px-4 py-2">Status</th>
-              <th class="px-4 py-2 text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody class="text-gray-700">
-            <?php while($row = mysqli_fetch_assoc($query)) { ?>
-            <tr class="border-b hover:bg-gray-50">
-              <td class="px-4 py-2"><?php echo $row['department_id']; ?></td>
-              <td class="px-4 py-2"><?php echo $row['department_name']; ?></td>
-              <td class="px-4 py-2"><img src="department_images/<?php echo $row['department_img']; ?>" width="60"></td>
-              <td class="px-4 py-2"><?php echo $row['department_status']; ?></td>
-              <td class="px-4 py-2 text-center space-x-2">
+      <!-- Welcome Section -->
+      <div class="w-full px-2 sm:px-4 mb-2 lg:mb-8 flex flex-col items-center gap-1.5 lg:gap-3 text-dark text-xs sm:text-sm lg:text-base font-medium">
+        
+        <!-- Admin Name -->
+        <span class="welcome-text text-center truncate max-w-[260px] sm:max-w-none bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent text-xs sm:text-sm lg:text-2xl font-bold tracking-wide leading-tight">
+          <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?>
+        </span>
+        
+        <!-- Logout Button -->
+        <a href="#" onclick="confirmLogout(this)" 
+           class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3.5 py-1 rounded-xl hover:from-green-600 hover:to-emerald-600 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 font-semibold text-xs whitespace-nowrap shadow-lg border-0 backdrop-blur-sm w-fit mx-auto hover:scale-105">
+          Log out
+        </a>
+      </div>
 
+      <!-- Menu - NO SCROLLBAR + Full height on desktop -->
+      <nav class="w-full flex-1 px-2 sm:px-3 space-y-1.5 lg:space-y-3 overflow-y-auto lg:overflow-visible scrollbar-thin scrollbar-thumb-gray-300/70 scrollbar-track-transparent lg:max-h-none max-h-[calc(100vh-240px)] lg:max-h-none">
+        
+        <!--Home Page-->
+        <a href="homepage_management.php" 
+           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-blue-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-blue-200/50 backdrop-blur-sm">
+           <i class="fas fa-home text-gray-500 group-hover:text-blue-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
+           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">Home Page</span>
+        </a>
 
-             <div class="relative flex justify-center">
+        <!-- Offices -->
+        <a href="department_management.php" 
+           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl 
+           bg-gradient-to-r from-green-50 via-emerald-50 to-teal-50 shadow-md border border-green-200/60
+           hover:bg-gradient-to-r hover:from-green-100 hover:to-emerald-100 hover:shadow-2xl hover:-translate-y-1 hover:border-green-300/80
+           transition-all duration-300 text-xs sm:text-sm lg:text-base backdrop-blur-sm">
+           <i class="fas fa-building text-green-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 shadow-sm rounded p-0.5 bg-white/50"></i>
+           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate text-green-800">Offices</span>
+        </a>
+
+        <!--Employees-->
+        <a href="view_user.php" 
+           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-indigo-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-indigo-200/50 backdrop-blur-sm">
+           <i class="fas fa-users text-gray-500 group-hover:text-indigo-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
+           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">Employees</span>
+        </a>
+
+        <!--Records Administrators-->
+        <a href="view_admin.php" 
+           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-purple-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-purple-200/50 backdrop-blur-sm">
+           <i class="fas fa-user-shield text-gray-500 group-hover:text-purple-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
+           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">Records Administrators</span>
+        </a>
+
+        <!--System Administrators-->
+        <a href="system-administrator.php" 
+           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-indigo-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-indigo-200/50 backdrop-blur-sm">
+           <i class="fas fa-server text-gray-500 group-hover:text-indigo-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
+           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">System Administrators</span>
+        </a>
+      </nav>
+    </div>
+  </div>
+</aside>
+
+<style>
+/* Custom Scrollbar - Ultra Compact */
+#sidebar nav::-webkit-scrollbar {
+  width: 3px;
+}
+#sidebar nav::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 6px;
+}
+#sidebar nav::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.8);
+  border-radius: 6px;
+}
+#sidebar nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 114, 128, 1);
+}
+
+/* Smooth scrolling */
+#sidebar nav {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.8) transparent;
+}
+</style>
+
+<!-- Mobile Overlay -->
+<div id="sidebarOverlay" class="lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-20 hidden transition-all duration-300" onclick="toggleSidebar()"></div>
+
+<script>
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const toggleBtn = document.getElementById('sidebarToggle');
+    const content = document.getElementById('sidebarContent');
+    const icon = toggleBtn?.querySelector('i');
+    
+    sidebar.classList.toggle('-translate-x-full');
+    
+    if (sidebar.classList.contains('-translate-x-full')) {
+        // Closing - move content back up
+        content.classList.remove('pt-[30vh]');
+        content.classList.add('pt-0');
+        overlay.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+        if (icon) {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+        toggleBtn?.classList.remove('bg-green-50', 'ring-2', 'ring-green-300', 'scale-110');
+    } else {
+        // Opening - move content down 30%
+        content.classList.remove('pt-0');
+        content.classList.add('pt-[30vh]');
+        overlay.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+        if (icon) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+        }
+        toggleBtn?.classList.add('bg-green-50', 'ring-2', 'ring-green-300', 'scale-110');
+    }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtn = document.getElementById('sidebarToggle');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleSidebar();
+        });
+    }
+});
+
+// Auto-close on link click (mobile)
+document.addEventListener('click', function(e) {
+    if (window.innerWidth < 1024 && e.target.closest('#sidebar a')) {
+        setTimeout(toggleSidebar, 150);
+    }
+});
+
+// Resize handler
+let resizeTimeout;
+window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function() {
+        if (window.innerWidth >= 1024) {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const content = document.getElementById('sidebarContent');
+            const toggleBtn = document.getElementById('sidebarToggle');
+            const icon = toggleBtn?.querySelector('i');
+            
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.add('hidden');
+            content.classList.remove('pt-[30vh]');
+            content.classList.add('pt-0');
+            document.body.classList.remove('overflow-hidden');
+            if (icon) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+            toggleBtn?.classList.remove('bg-green-50', 'ring-2', 'ring-green-300', 'scale-110');
+        }
+    }, 250);
+});
+
+// Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const sidebar = document.getElementById('sidebar');
+        if (!sidebar.classList.contains('-translate-x-full')) {
+            toggleSidebar();
+        }
+    }
+});
+</script>
+
+  <!-- MAIN CONTENT -->
+ <div class="lg:w-3/4 w-full p-1 h-auto lg:h-[calc(79vh-2rem)] min-h-[500px]">
+    <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 h-auto lg:h-[650px] transition-all duration-300 hover:shadow-xl">
+      <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-4 gap-4 lg:gap-0">
+    <!-- Title -->
+    <h2 class="text-xl sm:text-2xl font-semibold text-gray-700 flex items-center gap-2 order-2 lg:order-1">
+      <i class="fas fa-building text-green-600"></i> Active Departments
+    </h2>
+
+    <!-- Buttons grouped with gap -->
+    <div class="flex flex-wrap items-center gap-2 lg:gap-3 order-1 lg:order-2 justify-center lg:justify-end">
+      <button onclick="document.getElementById('modalAddDepartment').classList.remove('hidden');" 
+              class="bg-gradient-to-r from-green-600 to-green-500 text-white px-3 sm:px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300 text-sm sm:text-base whitespace-nowrap">
+        <i class="fas fa-plus"></i> Add Department
+      </button>
+
+      <button onclick="document.getElementById('modalArchivedDepartments').classList.remove('hidden');" 
+              class="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white px-3 sm:px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300 text-sm sm:text-base whitespace-nowrap">
+        <i class="fas fa-archive"></i> Archived
+      </button>
+    </div>
+  </div>
   
-  <!-- 3 DOT BUTTON -->
-  <button onclick="toggleMenu(<?php echo $row['department_id']; ?>)" 
-          class="p-2 rounded-full hover:bg-gray-200 transition z-10">
-    <i class="fas fa-ellipsis-h"></i>
-  </button>
+  <!-- TABLE -->
+  <div class="max-h-[400px] lg:max-h-[450px] overflow-y-auto overflow-x-auto lg:overflow-x-hidden">
+    <table id="dtable" class="w-full border border-gray-200 min-w-full lg:min-w-0">
+        <thead class="bg-green-700 text-white sticky top-0 z-10">
+          <tr>
+            <th class="px-2 sm:px-4 py-2 text-xs sm:text-sm">ID</th>
+            <th class="px-2 sm:px-4 py-2 text-xs sm:text-sm">Department Name</th>
+            <th class="px-2 sm:px-4 py-2 text-xs sm:text-sm">Image</th>
+            <th class="px-2 sm:px-4 py-2 text-xs sm:text-sm">Status</th>
+            <th class="px-2 sm:px-4 py-2 text-xs sm:text-sm text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700 divide-y divide-gray-200">
+          <?php while($row = mysqli_fetch_assoc($query)) { ?>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-2 sm:px-4 py-3 text-xs sm:text-sm"><?php echo $row['department_id']; ?></td>
+            <td class="px-2 sm:px-4 py-3 text-xs sm:text-sm font-medium"><?php echo $row['department_name']; ?></td>
+            <td class="px-2 sm:px-4 py-3"><img src="department_images/<?php echo $row['department_img']; ?>" class="w-12 h-12 sm:w-14 sm:h-14 lg:w-15 lg:h-15 object-cover rounded" alt="Dept Image"></td>
+            <td class="px-2 sm:px-4 py-3">
+              <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800"><?php echo $row['department_status']; ?></span>
+            </td>
+            <td class="px-2 sm:px-4 py-3 text-center">
+              <div class="relative flex justify-center">
+                <!-- 3 DOT BUTTON -->
+                <button onclick="toggleMenu(<?php echo $row['department_id']; ?>)" 
+                        class="p-2 rounded-full hover:bg-gray-200 transition z-10 flex items-center justify-center w-10 h-10">
+                  <i class="fas fa-ellipsis-h text-sm"></i>
+                </button>
 
-  <!-- DROPDOWN MENU -->
-  <div id="menu<?php echo $row['department_id']; ?>" 
-       class="hidden absolute right-full mr-2 top-1/2 -translate-y-1/2
-              bg-white shadow-lg rounded-xl py-2 w-32
-              opacity-0 scale-95 transition-all duration-200">
+                <!-- DROPDOWN MENU -->
+                <div id="menu<?php echo $row['department_id']; ?>" 
+                     class="hidden absolute right-0 sm:right-full sm:mr-2 top-1/2 -translate-y-1/2
+                            bg-white shadow-lg rounded-xl py-2 w-32 sm:w-36
+                            opacity-0 scale-95 transition-all duration-200 border border-gray-200">
+                  <!-- EDIT -->
+                  <button onclick="document.getElementById('modalEditDepartment<?php echo $row['department_id']; ?>').classList.remove('hidden'); closeMenu(<?php echo $row['department_id']; ?>)"
+                          class="flex items-center gap-2 w-full px-3 py-2 hover:bg-gray-100 text-blue-600 text-sm">
+                    <i class="fas fa-edit"></i> Edit
+                  </button>
 
-    <!-- EDIT -->
-    <button onclick="document.getElementById('modalEditDepartment<?php echo $row['department_id']; ?>').classList.remove('hidden'); closeMenu(<?php echo $row['department_id']; ?>)"
-            class="flex items-center gap-2 w-full px-4 py-2 hover:bg-gray-100 text-blue-600">
-      <i class="fas fa-edit"></i> Edit
-    </button>
-
-    <!-- ARCHIVE -->
-    <button onclick="confirmArchiveDepartment(<?php echo $row['department_id']; ?>); closeMenu(<?php echo $row['department_id']; ?>)"
-            class="flex items-center gap-2 w-full px-4 py-2 hover:bg-gray-100 text-red-600">
-      <i class="fas fa-archive"></i> Archive
-    </button>
+                  <!-- ARCHIVE -->
+                  <button onclick="confirmArchiveDepartment(<?php echo $row['department_id']; ?>); closeMenu(<?php echo $row['department_id']; ?>)"
+                          class="flex items-center gap-2 w-full px-3 py-2 hover:bg-gray-100 text-red-600 text-sm">
+                    <i class="fas fa-archive"></i> Archive
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <?php } ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
   </div>
 </div>
+
 
 
 <script>
@@ -346,16 +500,7 @@ document.addEventListener("click", function(e) {
     }
 });
 </script>
-              </td>
-            </tr>
-            <?php } ?>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-</div>
+              
 
 <!-- ADD DEPARTMENT MODAL -->
 <!-- Add Department Modal -->

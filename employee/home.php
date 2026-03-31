@@ -92,29 +92,150 @@ $(window).on('load', function(){
 <div id="page-content" class="opacity-0 transition-opacity duration-500">
 
 <!-- NAVBAR -->
+<!-- Main Navbar -->
 <nav class="fixed top-0 w-full bg-green-700 shadow-md z-50">
-  <div class="flex justify-between items-center h-16 px-6">
-    <div class="flex items-center space-x-3">
-      <img src="img/municipalLogo.png" class="w-12 rounded-full border-2 border-white">
-      <h1 class="text-white font-bold text-lg md:text-xl">Bayung Porac Archive</h1>
+  <div class="flex justify-between items-center h-16 px-4 sm:px-6">
+    <!-- Logo & Title -->
+    <div class="flex items-center space-x-2 sm:space-x-3">
+      <img src="img/municipalLogo.png" alt="Logo" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white object-cover">
+      <h1 class="text-white font-bold text-base sm:text-lg md:text-xl whitespace-nowrap">Bayung Porac Archive</h1>
     </div>
-    <div class="flex items-center space-x-4 text-white">
-  <span class="hidden sm:inline-block">
-    Welcome, <b><?php echo ucwords(htmlentities($name)); ?></b>!
-  </span>
-  <a href="logout.php" 
-     
-     class="px-4 py-2 rounded-lg border border-white hover:bg-white hover:text-green-700 transition-all duration-300">
-     Log out
-  </a>
-</div>
+
+    <!-- Right Side -->
+    <div class="flex items-center space-x-2 sm:space-x-4">
+      <!-- Desktop Welcome -->
+      <span class="hidden md:inline-block text-sm md:text-base">
+        Welcome, <b><?php echo ucwords(htmlentities($name)); ?></b>!
+      </span>
+      
+      <!-- Mobile Menu Button -->
+      <button id="mobileMenuBtn" 
+        class="md:hidden p-2 rounded-lg hover:bg-green-600 hover:bg-opacity-20 transition-all duration-200 group">
+  <svg class="w-5 h-5 text-white transition-transform duration-200 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" id="menuIcon">
+    <!-- Hamburger (3 lines) -->
+    <path class="hamburger" stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 12h16M4 16h16"/>
+    
+    <!-- X (hidden by default) -->
+    <path class="close opacity-0 scale-0" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+  </svg>
+</button>
+      
+      <!-- Desktop Logout -->
+      <a href="logout.php" class="hidden md:inline-block px-4 py-2 text-sm md:text-base rounded-lg border border-white hover:bg-white hover:text-green-700 transition-all duration-300 font-medium">
+        Log out
+      </a>
+    </div>
   </div>
 </nav>
+
+<!-- Mobile Dropdown Menu (YELLOW BG + WHITE TEXT) -->
+<div id="mobileMenu" class="md:hidden fixed top-20 sm:top-20 left-4 right-4 max-w-sm mx-auto bg-white shadow-2xl rounded-2xl border-2 border-gray-200 z-40 opacity-0 invisible transform scale-95 transition-all duration-300">
+  <div class="p-6 space-y-4">
+    <!-- Mobile Welcome -->
+    <div class="text-center">
+      <p class="text-sm font-medium text-gray-600">Welcome,</p>
+      <p class="font-bold text-xl text-gray-900"><?php echo ucwords(htmlentities($name)); ?></p>
+    </div>
+    
+    <!-- Smaller Logout Button -->
+    <a href="logout.php" 
+       class="block w-full max-w-[140px] mx-auto text-center px-6 py-2.5 bg-white text-red-700 font-bold rounded-xl hover:bg-red-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-red-200">
+      Log out
+    </a>
+  </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileBtn = document.getElementById('mobileMenuBtn');
+  const menuIcon = document.getElementById('menuIcon');
+  const hamburgerPaths = menuIcon.querySelectorAll('.hamburger');
+  const closePaths = menuIcon.querySelectorAll('.close');
+  const mobileMenu = document.getElementById('mobileMenu');
+  let isOpen = false;
+
+  mobileBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    
+    isOpen = !isOpen;
+    
+    if (isOpen) {
+      // Show menu & change to X
+      mobileMenu.classList.remove('opacity-0', 'invisible', 'scale-95');
+      mobileMenu.classList.add('opacity-100', 'visible', 'scale-100');
+      
+      // Animate to X
+      hamburgerPaths.forEach(path => {
+        path.style.opacity = '0';
+        path.style.transform = 'scaleY(0)';
+      });
+      closePaths.forEach(path => {
+        path.style.opacity = '1';
+        path.style.transform = 'scale(1)';
+      });
+      
+    } else {
+      // Hide menu & change back to hamburger
+      mobileMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+      mobileMenu.classList.add('opacity-0', 'invisible', 'scale-95');
+      
+      // Animate back to hamburger
+      hamburgerPaths.forEach(path => {
+        path.style.opacity = '1';
+        path.style.transform = 'scaleY(1)';
+      });
+      closePaths.forEach(path => {
+        path.style.opacity = '0';
+        path.style.transform = 'scale(0)';
+      });
+    }
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!mobileBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+      if (isOpen) {
+        // Reset to hamburger
+        hamburgerPaths.forEach(path => {
+          path.style.opacity = '1';
+          path.style.transform = 'scaleY(1)';
+        });
+        closePaths.forEach(path => {
+          path.style.opacity = '0';
+          path.style.transform = 'scale(0)';
+        });
+      }
+      mobileMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+      mobileMenu.classList.add('opacity-0', 'invisible', 'scale-95');
+      isOpen = false;
+    }
+  });
+
+  // Close on desktop resize
+  window.addEventListener('resize', function() {
+    if (window.innerWidth >= 768 && isOpen) {
+      // Reset to hamburger
+      hamburgerPaths.forEach(path => {
+        path.style.opacity = '1';
+        path.style.transform = 'scaleY(1)';
+      });
+      closePaths.forEach(path => {
+        path.style.opacity = '0';
+        path.style.transform = 'scale(0)';
+      });
+      mobileMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+      mobileMenu.classList.add('opacity-0', 'invisible', 'scale-95');
+      isOpen = false;
+    }
+  });
+});
+</script>
 
 
 
     <!-- MAIN TABLE/FOLDER SECTION -->
-<main class="mt-24 px-2 md:px-9 col-span-12 md:col-span-9">
+<main class="mt-20 px-2 md:px-9 col-span-12 md:col-span-9">
   <div id="parentContainer"
        class="bg-white/90 backdrop-blur-md shadow-lg rounded-2xl p-6
               hover:shadow-xl transition-shadow duration-300
