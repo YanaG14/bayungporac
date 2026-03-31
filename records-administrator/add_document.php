@@ -16,7 +16,38 @@ if(!isset($_GET['folder_id'])){
 }
 
 $folder_id = intval($_GET['folder_id']);
+
+// Fetch active folders
+$query = mysqli_query($conn,"
+SELECT 
+f.folder_id,
+f.folder_name,
+f.created_at,
+GROUP_CONCAT(DISTINCT d.department_name SEPARATOR ', ') as departments,
+
+-- Include file-related searchable data
+GROUP_CONCAT(DISTINCT uf.name SEPARATOR ', ') as file_names,
+GROUP_CONCAT(DISTINCT al.name SEPARATOR ', ') as uploaders,
+GROUP_CONCAT(DISTINCT uf.timers SEPARATOR ', ') as file_dates
+
+FROM folders f
+LEFT JOIN folder_departments fd ON f.folder_id = fd.folder_id
+LEFT JOIN departments d ON fd.department_id = d.department_id
+
+-- Join files
+LEFT JOIN upload_files uf ON f.folder_id = uf.folder_id AND uf.status='Active'
+LEFT JOIN admin_login al ON uf.email = al.id
+
+WHERE f.folder_status='Active'
+
+GROUP BY f.folder_id
+ORDER BY f.folder_name ASC
+");
+
+
+
 ?>
+
 
 <head>
 <meta charset="utf-8">
@@ -30,7 +61,7 @@ $folder_id = intval($_GET['folder_id']);
 
 <!-- jQuery + DataTables -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
 <!-- Font Awesome -->
@@ -38,6 +69,7 @@ $folder_id = intval($_GET['folder_id']);
 
 <!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
+
 
 <style>
 #loader {
@@ -61,6 +93,16 @@ $folder_id = intval($_GET['folder_id']);
   to { opacity: 1; transform: translateY(0);}
 }
 .animate-fadeIn { animation: fadeIn 0.3s ease-out; }
+
+table.dataTable,
+table.dataTable th,
+table.dataTable td {
+    border: none !important;
+}
+
+table.dataTable thead th {
+    border-bottom: none !important;
+}
 </style>
 
 <script>
@@ -68,13 +110,15 @@ $(document).ready(function(){
     $('#dtable').DataTable({
         paging: false,
         info: false,
-        lengthChange: false
+        lengthChange: false,
+         searching: false
     });
 
     $('#archivedTable').DataTable({
         paging: false,
         info: false,
-        lengthChange: false
+        lengthChange: false,
+         searching: false
     });
 });
 </script>
@@ -141,38 +185,55 @@ class="inline-block mb-4 bg-white px-4 py-2 rounded-xl shadow hover:bg-green-100
     </span>
   </h4>
 
+  
 <!--ACTION BUTTONS-->
-<div class="flex gap-2">
+<div class="flex gap-3">
+
+<div class="flex w-full sm:w-auto">
+  <div class="relative w-full sm:w-80">
+
+    <!-- ICON -->
+    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+
+    <!-- INPUT -->
+    <input type="text" id="globalSearch" 
+      placeholder="Search"
+      oninput="performSearch()"
+      class="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2 
+             focus:ring-2 focus:ring-blue-300 focus:outline-none">
+    
+  </div>
+</div>
+
+
+<!-- UPLOAD FILE (ICON ONLY) -->
 <button onclick="openModal('uploadModal')" 
-class="bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition">
-<i class="fas fa-file-upload"></i> Upload File
+  class="text-green-600 hover:text-green-800 transition duration-200 text-lg focus:outline-none">
+  <i class="fas fa-file-upload"></i>
 </button>
 
-<button onclick="openModal('archiveModal')" 
-class="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition">
-<i class="fas fa-archive"></i> View Archived Files
+<!-- VIEW ARCHIVED FILES (ICON ONLY) -->
+<button onclick="openArchivedFiles()"
+  class="text-yellow-500 hover:text-yellow-600 transition duration-200 text-lg focus:outline-none">
+  <i class="fas fa-archive"></i>
 </button>
 
 </div>
 </div>
 
 <!-- TABLE -->
-<div class="flex-1 overflow-y-auto">
-
-<table id="dtable" class="min-w-full">
-
-<thead class="bg-green-600 text-white">
+<div class="h-[560px] w-[1420px] overflow-y-auto overflow-x-hidden rounded-xl border">
+<table id="dtable" class="min-w-full border-gray-200 table-auto">
+<thead class="bg-gray-200 text-black uppercase text-s tracking-wider sticky top-0">
 <tr>
-<th class="px-4 py-2">Filename</th>
-<th class="px-4 py-2">Departments</th>
-<th class="px-4 py-2">Uploader</th>
-<th class="px-4 py-2">Date Uploaded</th>
-<th class="px-4 py-2">Downloads</th>
-<th class="px-4 py-2 text-center">Action</th>
+  <th class="px-4 py-2 text-left">Filename</th>
+  <th class="px-4 py-2 text-left">Departments</th>
+  <th class="px-4 py-2 text-left">Uploader</th>
+  <th class="px-4 py-2 text-left">Date Uploaded</th>
+  <th class="px-4 py-2 text-center">Action</th>
 </tr>
 </thead>
-
-<tbody class="text-gray-700">
+<tbody class="text-gray-700 bg-gray-30">
 
 <?php
 $query = mysqli_query($conn, "
@@ -192,11 +253,11 @@ $download = $file['download'];
 $filepath = "../uploads/".$file['file_path'];
 ?>
 
-<tr class="border-b">
+<tr>
 
 <td class="px-4 py-2"><?php echo htmlentities($name); ?></td>
 
-<td class="px-4 py-2">
+<td class="px-4 py-2 ">
 <?php
 $dept_query = mysqli_query($conn,"
 SELECT d.department_name 
@@ -214,46 +275,47 @@ echo implode(', ',$names);
 
 <td class="px-4 py-2"><?php echo htmlentities($uploads); ?></td>
 <td class="px-4 py-2"><?php echo htmlentities($time); ?></td>
-<td class="px-4 py-2"><?php echo htmlentities($download); ?></td>
+<!-- <td class="px-4 py-2"><?php echo htmlentities($download); ?></td> -->
 
 <td class="px-4 py-2">
   <div class="flex justify-center relative">
 
-    <!-- 3 DOT BUTTON -->
-    <button onclick="toggleMenuFile(<?php echo $id; ?>)"
-      class="bg-gray-900 text-white px-3 py-2 rounded-xl hover:bg-gray-800 transition transform hover:scale-105 shadow-md">
-      <i class="fas fa-ellipsis-h"></i>
-    </button>
+    <!-- 3 DOT BUTTON (MODERN SMALL) -->
+<button onclick="toggleMenuFile(<?php echo $id; ?>)"
+  class="flex items-center justify-center w-8 h-8 rounded-full text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition duration-200">
+  <i class="fas fa-ellipsis-h text-sm"></i>
+</button>
 
     <!-- DROPDOWN -->
     <div id="menu-file-<?php echo $id; ?>"
-      class="hidden absolute top-full mt-2 right-0 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 z-50
-             transform scale-95 opacity-0 transition-all duration-200">
+      class="hidden absolute top-full mt-1 right-0 w-28 bg-white rounded-lg shadow-sm border border-gray-100 z-50
+         transform scale-95 opacity-0 transition-all duration-150">
 
       <!-- DOWNLOAD -->
       <a href="downloads.php?file_id=<?php echo $id; ?>"
-        class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2 rounded-t-2xl">
+        class="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-100 rounded-b-lg">
         <i class="fa fa-download text-blue-500"></i>
         Download
       </a>
 
-      <!-- VIEW -->
-      <a href="<?php echo $filepath; ?>" target="_blank"
-        class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2">
-        <i class="fa fa-eye text-indigo-500"></i>
-        View
-      </a>
+      <!-- VIEW (FIXED) -->
+<a href="<?php echo $filepath; ?>" target="_blank"
+   class="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-100 rounded-b-lg"
+   onclick="window.open(this.href, '_blank'); return false;">
+  <i class="fa fa-eye text-indigo-500"></i>
+  View
+</a>
 
       <!-- ARCHIVE -->
       <a href="archive_file.php?file_id=<?php echo $id; ?>"
-        class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2">
+        class="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-100 rounded-b-lg">
         <i class="fa fa-archive text-red-500"></i>
         Archive
       </a>
 
       <!-- EDIT -->
       <button onclick="openModal('editModal<?php echo $id; ?>')"
-        class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2 rounded-b-2xl">
+        class="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-100 rounded-b-lg">
         <i class="fa fa-edit text-green-500"></i>
         Edit
       </button>
@@ -454,73 +516,199 @@ Upload File
 </div>
 </div>
 
-<!-- ARCHIVED MODAL -->
-<div id="archiveModal"
-class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
+<!-- ARCHIVED FILES MODAL -->
+<div id="archiveModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm p-4">
 
-<div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-4xl p-6 animate-fadeIn">
+  <div class="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-4xl max-h-[80vh] p-6 overflow-auto relative animate-fadeIn">
 
-<div class="flex justify-between items-center mb-4">
-<h4 class="font-semibold text-lg">Archived Files</h4>
-<button onclick="closeModal('archiveModal')" class="text-gray-500 text-xl">&times;</button>
+    <!-- Close -->
+    <button onclick="closeModal('archiveModal')" 
+      class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+
+    <!-- Title -->
+    <h3 class="text-2xl font-semibold mb-4 flex items-center gap-2 text-gray-800">
+      <i class="fas fa-archive text-yellow-500"></i> Archived Files
+    </h3>
+
+    <!-- SEARCH BAR -->
+    <div class="mb-4">
+      <div class="relative w-full">
+        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+        <input type="text" id="archiveSearch"
+          placeholder="Search archived files..."
+          oninput="searchArchived()"
+          class="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2 focus:ring-2 focus:ring-blue-300 focus:outline-none">
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div id="archivedContent" class="overflow-auto max-h-[60vh] rounded-xl border">
+      Loading archived files...
+    </div>
+
+  </div>
 </div>
 
-<table id="archivedTable" class="min-w-full text-sm">
-<thead class="bg-gray-700 text-white">
-<tr>
-<th class="p-3">Filename</th>
-<th class="p-3">Size</th>
-<th class="p-3">Uploader</th>
-<th class="p-3">Role</th>
-<th class="p-3">Date Uploaded</th>
-<th class="p-3">Downloads</th>
-<th class="p-3">Action</th>
-</tr>
-</thead>
+<script>
+function searchArchived() {
+    let keyword = document.getElementById("archiveSearch").value.toLowerCase();
+    let rows = document.querySelectorAll("#archivedContent table tbody tr");
 
-<tbody>
-<?php
-$archived = mysqli_query($conn, "
-SELECT uf.*, al.name AS uploader_name
-FROM upload_files uf
-LEFT JOIN admin_login al ON uf.email = al.id
-WHERE uf.folder_id='$folder_id' AND uf.status='Archived'
-ORDER BY uf.id DESC
-");
+    rows.forEach(row => {
+        let text = row.innerText.toLowerCase();
+        row.style.display = text.includes(keyword) ? "" : "none";
+    });
+}
+</script>
 
-while($f = mysqli_fetch_array($archived)){
-$fid = $f['id'];
-$fpath = "../uploads/".$f['file_path'];
-?>
-<tr class="border-b">
-<td class="p-3"><?php echo htmlentities($f['name']); ?></td>
-<td class="p-3"><?php echo floor($f['size']/1000).' KB'; ?></td>
-<td class="p-3"><?php echo htmlentities($f['uploader_name']); ?></td>
-<td class="p-3"><?php echo htmlentities($f['admin_status']); ?></td>
-<td class="p-3"><?php echo htmlentities($f['timers']); ?></td>
-<td class="p-3"><?php echo htmlentities($f['download']); ?></td>
-<td class="p-3 space-x-2">
-<a href="<?php echo $fpath; ?>" target="_blank"
-class="bg-indigo-500 text-white px-2 py-1 rounded">
-<i class="fa fa-eye"></i>
-</a>
-<a href="unarchive_file.php?file_id=<?php echo $fid; ?>"
-class="bg-green-500 text-white px-2 py-1 rounded">
-<i class="fa fa-undo"></i>
-</a>
-</td>
-</tr>
-<?php } ?>
-</tbody>
-</table>
+<script>
+function openArchivedFiles() {
+    // Show modal
+    document.getElementById('archiveModal').classList.remove('hidden');
 
-</div>
-</div>
+    // Load content
+    document.getElementById('archivedContent').innerHTML = 'Loading archived files...';
+
+    $('#archivedContent').load('load_archived_files.php?folder_id=<?php echo $folder_id; ?>');
+}
+</script>
+
+<script>
+function performSearch() {
+    let keyword = document.getElementById("globalSearch").value.toLowerCase();
+
+    // FILTER TABLE ROWS (FOLDERS)
+    let table = document.getElementById("dtable");
+    let rows = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) {
+        let rowText = rows[i].innerText.toLowerCase();
+
+        if (rowText.includes(keyword)) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+
+    // AJAX SEARCH FOR FILES (UNCHANGED)
+    $.ajax({
+        url: "search_files_documents.php",
+        type: "POST",
+        data: { keyword: keyword },
+        success: function(response) {
+            $("#searchResults").html(response);
+        }
+    });
+}
+</script>
 
 <!-- Footer -->
 <footer class="mt-6 text-center text-gray-600">
   <p>All right Reserved &copy; <?php echo date('Y');?> Created By: PSU IT Interns</p>
 </footer>
+
+
+<!-- FILE PREVIEW MODAL -->
+<div id="previewModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm p-4">
+
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl h-[85vh] relative overflow-hidden">
+
+    <!-- CLOSE -->
+    <button onclick="closePreview()" 
+      class="absolute top-3 right-4 text-gray-600 hover:text-black text-2xl font-bold z-50">&times;</button>
+
+    <!-- CONTENT -->
+    <div id="previewContent" class="w-full h-full flex items-center justify-center bg-gray-100">
+      Loading preview...
+    </div>
+
+  </div>
+</div>
+
+<script>
+function openPreview(filePath) {
+    const modal = document.getElementById('previewModal');
+    const content = document.getElementById('previewContent');
+
+    modal.classList.remove('hidden');
+
+    let ext = filePath.split('.').pop().toLowerCase();
+
+    if (ext === 'pdf') {
+        content.innerHTML = `<iframe src="${filePath}" class="w-full h-full"></iframe>`;
+    } else if (['jpg','jpeg','png','gif','webp'].includes(ext)) {
+        content.innerHTML = `<img src="${filePath}" class="max-h-full max-w-full object-contain">`;
+    } else {
+        content.innerHTML = `
+            <div class="text-center">
+                <p class="mb-3 text-gray-700">Preview not available</p>
+                <a href="${filePath}" target="_blank" class="text-blue-600 underline">
+                    Open File
+                </a>
+            </div>
+        `;
+    }
+}
+
+function closePreview() {
+    document.getElementById('previewModal').classList.add('hidden');
+    document.getElementById('previewContent').innerHTML = 'Loading preview...';
+}
+</script>
+
+
+<script>
+function toggleSelectAll(source) {
+    document.querySelectorAll('.fileCheckbox').forEach(cb => {
+        cb.checked = source.checked;
+    });
+}
+
+function confirmBulkRestore() {
+    let selected = [];
+
+    document.querySelectorAll('.fileCheckbox:checked').forEach(cb => {
+        selected.push(cb.value);
+    });
+
+    if (selected.length === 0) {
+        Swal.fire('No files selected');
+        return;
+    }
+
+    Swal.fire({
+        title: 'Restore selected files?',
+        text: selected.length + ' file(s) will be restored.',
+        showCancelButton: true,
+        confirmButtonText: 'Restore',
+        confirmButtonColor: '#16a34a'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            bulkRestore(selected);
+        }
+    });
+}
+
+function bulkRestore(ids) {
+    $.ajax({
+        url: 'bulk_restore.php',
+        type: 'POST',
+        data: { ids: ids },
+        success: function() {
+            openArchivedFiles(); // reload modal
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Restored!',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+    });
+}
+</script>
+
 
 </body>
 </html>

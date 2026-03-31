@@ -210,24 +210,34 @@ window.addEventListener("load", function() {
         <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
 
         <!-- SEARCH BAR -->
-  <div class="flex w-full sm:w-auto gap-2">
+<div class="flex w-full sm:w-auto">
+  <div class="relative w-full sm:w-80">
+
+    <!-- ICON -->
+    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+
+    <!-- INPUT -->
     <input type="text" id="globalSearch" 
-  placeholder="Search"
-  oninput="performSearch()"
-  class="border border-gray-300 rounded-xl px-4 py-2 w-full sm:w-64 focus:ring-2 focus:ring-green-500">
-
+      placeholder="Search"
+      oninput="performSearch()"
+      class="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2 
+             focus:ring-2 focus:ring-blue-300 focus:outline-none">
     
-  </div>
+  </div> 
+</div>
 
-          <button onclick="$('#modalAddFolder').removeClass('hidden');" 
-                  class="w-full sm:w-auto justify-center bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300">
-            <i class="fas fa-plus"></i> <!--Add Post-->
-          </button>
+         <!-- ADD POST (ICON ONLY - NO BG) -->
+<button onclick="$('#modalAddFolder').removeClass('hidden');"
+  class="text-green-600 hover:text-green-800 transition duration-200 text-lg focus:outline-none">
+  <i class="fas fa-plus"></i>
+</button>
 
-          <button onclick="openArchivedFolders();" 
-                  class="w-full sm:w-auto justify-center bg-gradient-to-r from-yellow-500 to-yellow-400 text-white px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg transition-all duration-300 flex items-center gap-2">
-            <i class="fas fa-archive"></i> <!--View Archived Post-->
-          </button>
+<!-- ARCHIVE (ICON ONLY - NO BG) -->
+<button onclick="openArchivedFolders();"
+  class="text-yellow-500 hover:text-yellow-600 transition duration-200 text-lg focus:outline-none">
+  <i class="fas fa-archive"></i>
+</button>
+
         </div>
       </div>
 
@@ -246,9 +256,9 @@ window.addEventListener("load", function() {
 </script>
 
       <!-- TABLE -->
-      <div class="h-[560px] w-[1440px] overflow-y-auto overflow-x-hidden">
+      <div class="h-[560px] w-[1420px] overflow-y-auto overflow-x-hidden rounded-xl border">
   <table id="dtable" class="min-w-full border-gray-200 table-auto">
-    <thead class="bg-green-600 text-white">
+    <thead class="bg-gray-200 text-black uppercase text-s tracking-wider sticky top-0">
       <tr>
         <th class="px-4 py-2 text-left">Folder Name</th>
         <th class="px-4 py-2 text-left">Departments</th>
@@ -256,7 +266,8 @@ window.addEventListener("load", function() {
         <th class="px-4 py-2 text-center">Action</th>
       </tr>
     </thead>
-    <tbody class="text-gray-700">
+    <tbody class="text-gray-700 bg-gray-30">
+      
       <?php while($row=mysqli_fetch_array($query)){ ?>
       <tr class="border-b">
         
@@ -283,39 +294,36 @@ window.addEventListener("load", function() {
   <td class="px-4 py-2 align-middle">
   <div class="flex justify-center relative">
 
-    <!-- 3 DOT BUTTON (HORIZONTAL) -->
-    <button onclick="toggleMenu(<?php echo $row['folder_id']; ?>)"
-      class="bg-gray-100  text-gray-300 px-3 py-2 rounded-xl hover:bg-gray-400 hover:text-gray-100 transition transform hover:scale-105 shadow-md">
-      <i class="fas fa-ellipsis-h"></i>
-    </button>
+   <!-- 3 DOT BUTTON (MODERN SMALL) -->
+<button onclick="toggleMenu(<?php echo $row['folder_id']; ?>)"
+  class="flex items-center justify-center w-8 h-8 rounded-full text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition duration-200">
+  <i class="fas fa-ellipsis-h text-sm"></i>
+</button>
+    
 
-    <!-- DROPDOWN MENU -->
     <div id="menu-<?php echo $row['folder_id']; ?>"
-      class="hidden absolute top-full mt-2 right-0 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 z-50
-             transform scale-95 opacity-0 transition-all duration-200">
+  class="hidden absolute top-full mt-1 right-0 w-28 bg-white rounded-lg shadow-sm border border-gray-100 z-50
+         transform scale-95 opacity-0 transition-all duration-150">
 
-      <!-- EDIT -->
-      <button onclick="openEditModal(<?php echo $row['folder_id']; ?>)"
-        class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2 rounded-t-2xl">
-        <i class="fas fa-edit text-blue-500"></i>
-        Edit
-      </button>
+  <button onclick="openEditModal(<?php echo $row['folder_id']; ?>)"
+    class="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-100 rounded-t-lg">
+    <i class="fas fa-edit text-[10px] text-blue-500"></i>
+    Edit
+  </button>
 
-      <!-- ARCHIVE -->
-      <button onclick="confirmArchive(<?php echo $row['folder_id']; ?>)"
-        class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2">
-        <i class="fas fa-archive text-red-500"></i>
-        Archive
-      </button>
+  <button onclick="confirmArchive(<?php echo $row['folder_id']; ?>)"
+    class="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-100 rounded-t-lg">
+    <i class="fas fa-archive text-[10px] text-yellow-500"></i>
+    Archive
+  </button>
 
-      <!-- DOWNLOAD -->
-      <a href="download_folder.php?folder_id=<?php echo $row['folder_id']; ?>"
-        class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2 rounded-b-2xl">
-        <i class="fas fa-download text-green-600"></i>
-        Download
-      </a>
+  <a href="download_folder.php?folder_id=<?php echo $row['folder_id']; ?>"
+    class="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-100 rounded-b-lg">
+    <i class="fas fa-download text-[10px] text-green-600"></i>
+    Download
+  </a>
 
-    </div>
+</div>
 
   </div>
 </td>
@@ -488,10 +496,10 @@ window.addEventListener("load", function() {
                 class="bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg px-5 py-2 shadow-md transition duration-200 w-full sm:w-auto">
           Create Folder
         </button>
-        <button type="button" onclick="closeModal('modalAddFolder')" 
+
+        <!-- <button type="button" onclick="closeModal('modalAddFolder')" 
                 class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg px-5 py-2 transition duration-200 w-full sm:w-auto">
-          Close
-        </button>
+        </button> -->
       </div>
 
     </form>
@@ -520,7 +528,6 @@ window.addEventListener("load", function() {
 </style>
 
 <!-- ARCHIVED FOLDERS MODAL -->
-<!-- Archived Folders Modal -->
 <div id="modalArchivedFolders" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
   <!-- Modal Card -->
   <div class="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-3/4 max-w-3xl max-h-[80vh] p-6 overflow-auto relative animate-fadeIn">
@@ -530,7 +537,7 @@ window.addEventListener("load", function() {
 
     <!-- Modal Title -->
     <h3 class="text-2xl font-semibold mb-5 flex items-center gap-2 text-gray-800">
-      <i class="fas fa-archive text-gray-700"></i> Archived Folders
+      <i class="fas fa-archive text-yellow-500"></i> Archived Folders
     </h3>
 
     <!-- Modal Content -->

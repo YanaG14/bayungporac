@@ -3,7 +3,7 @@ session_start();
 require_once("../include/connection.php");
 
 $id = intval($_GET['id']);
-
+ 
 // GET FILE
 $query = mysqli_query($conn, "
 SELECT * FROM upload_files WHERE id='$id'
