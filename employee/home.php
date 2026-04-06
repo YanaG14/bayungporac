@@ -34,7 +34,7 @@ $selected_folder = isset($_GET['folder_id']) ? intval($_GET['folder_id']) : 0;
 
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bayung Porac Archive</title>
 
 <link rel="icon" type="image/png" href="img/municipalLogo.png">
@@ -81,13 +81,7 @@ $(window).on('load', function(){
 
 <body class="bg-gray-50 font-sans">
 
-<div id="loader" class="fixed inset-0 bg-white flex justify-center items-center z-50 transition-opacity duration-500">
-  <div class="flex space-x-2">
-    <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full"></span>
-    <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full animation-delay-100"></span>
-    <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full animation-delay-200"></span>
-  </div>
-</div>
+
 
 <div id="page-content" class="opacity-0 transition-opacity duration-500">
 

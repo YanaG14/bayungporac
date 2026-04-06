@@ -399,6 +399,7 @@ function confirmLogout() {
   </div>
 </aside>
 
+
 <style>
 /* Custom Scrollbar - Ultra Compact */
 #sidebar nav::-webkit-scrollbar {

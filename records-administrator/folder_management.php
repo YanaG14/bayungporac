@@ -86,370 +86,375 @@ $(document).ready(function(){
 <!-- Loader -->
 <!-- Loader -->
 <!-- Loader -->
-<div id="loader" class="fixed inset-0 bg-white flex justify-center items-center z-50 transition-opacity duration-500">
-  <div class="flex space-x-2">
-    <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full"></span>
-    <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full animation-delay-100"></span>
-    <span class="dot animate-bounce-delay bg-green-600 w-4 h-4 rounded-full animation-delay-200"></span>
-  </div>
-</div>
-
-<!-- Page Content -->
-<div id="page-content" class="opacity-0 transition-opacity duration-500">
-  <!-- your full page content here -->
-</div>
-
-<style>
-/* Bounce animation */
-@keyframes bounce {
-  0%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-10px); }
-}
-
-.dot {
-  display: inline-block;
-  animation: bounce 1s infinite ease-in-out;
-}
-
-.animation-delay-100 { animation-delay: 0.1s; }
-.animation-delay-200 { animation-delay: 0.2s; }
-</style>
-
-<script>
-  window.addEventListener('load', function() {
-    const loader = document.getElementById('loader');
-    const pageContent = document.getElementById('page-content');
-
-    // Start fade out
-    loader.style.opacity = '0';
-
-    // Wait for transition to finish
-    setTimeout(() => {
-      loader.style.display = 'none';
-      pageContent.style.opacity = '1'; // Reveal page content
-    }, 500); // matches transition duration
-  });
-</script>
-
-<script>
-// Wait for the page to fully load
-window.addEventListener("load", function() {
-  const loader = document.getElementById("loader");
-  const content = document.getElementById("page-content");
-
-  loader.classList.add("opacity-0"); // fade out loader
-  setTimeout(() => {
-    loader.style.display = "none"; // remove loader
-    content.classList.remove("opacity-0"); // show page content
-  }, 500); // match transition duration
-});
-</script>
 
 
 
 <!-- NAVBAR -->
-<nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
-  <div class="flex flex-col sm:flex-row justify-between items-center 
-              h-auto sm:h-16 px-4 sm:px-6 py-2 sm:py-0 gap-2 sm:gap-0">
-
-    <!-- Left: Logo + Title -->
-    <div class="flex items-center space-x-3">
-      <img src="js/img/municipalLogo.png" class="w-8 h-8 sm:w-10 sm:h-10 object-contain">
-      <h1 class="text-white font-semibold text-base sm:text-lg text-center sm:text-left">
-        Bayung Porac Archive
-      </h1>
+<nav class="fixed top-0 w-full bg-green-700 shadow-md z-50">
+  <div class="flex justify-between items-center h-16 px-4 sm:px-6">
+    <!-- Logo & Title -->
+    <div class="flex items-center space-x-2 sm:space-x-3">
+      <img src="js/img/municipalLogo.png" alt="Logo" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white object-cover">
+      <h1 class="text-white font-bold text-base sm:text-lg md:text-xl whitespace-nowrap">Bayung Porac Archive</h1>
     </div>
 
-    <!-- Right: User Info -->
-    <div class="flex flex-col sm:flex-row items-center 
-                gap-2 sm:space-x-4 text-white 
-                text-sm sm:text-base text-center sm:text-left">
-
-      <span>
-        Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?>!
+    <!-- Right Side -->
+    <div class="flex items-center space-x-2 sm:space-x-4">
+      <!-- Desktop Welcome -->
+      <span class="hidden md:inline-block text-sm md:text-base">
+        Welcome, <b><?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></b>!
       </span>
-
+      
+      <!-- Mobile Menu Button -->
+      <button id="mobileMenuBtn" 
+        class="md:hidden p-2 rounded-lg hover:bg-green-600 hover:bg-opacity-20 transition-all duration-200 group">
+        <svg class="w-5 h-5 text-white transition-transform duration-200 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" id="menuIcon">
+          <!-- Hamburger (3 lines) -->
+          <path class="hamburger" stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 12h16M4 16h16"/>
+          
+          <!-- X (hidden by default) -->
+          <path class="close opacity-0 scale-0" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+      
+      <!-- Desktop Logout -->
       <a href="#" onclick="confirmLogout(this)" 
-         class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded 
-                hover:bg-green-800 hover:text-white hover:border-white 
-                transition-colors duration-300">
+         class="hidden md:inline-block px-4 py-2 text-sm md:text-base rounded-lg border border-white hover:bg-white hover:text-green-700 transition-all duration-300 font-medium">
         Log out
       </a>
-
     </div>
-
   </div>
 </nav>
 
-<!-- MAIN LAYOUT -->
-<div class="mt-24 px-4 sm:px-6 flex flex-col lg:flex-row gap-6">
-
-  <!-- HAMBURGER BUTTON: only shows on mobile, centered -->
- <div class="lg:hidden w-full flex justify-start items-center mt-4 h-16 px-6">
-    <button id="sidebarToggle" class="bg-green-700 text-white p-3 rounded-md text-lg">
-        <i class="fas fa-bars"></i>
-    </button>
+<!-- Mobile Dropdown Menu -->
+<div id="mobileMenu" class="md:hidden fixed top-20 sm:top-20 left-4 right-4 max-w-sm mx-auto bg-white shadow-2xl rounded-2xl border-2 border-gray-200 z-40 opacity-0 invisible transform scale-95 transition-all duration-300">
+  <div class="p-6 space-y-4">
+    <!-- Mobile Welcome -->
+    <div class="text-center">
+      <p class="text-sm font-medium text-gray-600">Welcome,</p>
+      <p class="font-bold text-xl text-gray-900"><?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></p>
+    </div>
     
-</div>
-
-  <!-- CONTAINER -->
-  <div class=" h-[655px] w-[1440px] lg:w-3/4 flex-1 lg:ml-0"> 
-    <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 h-full transition-all duration-300 hover:shadow-xl">
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4">
-
-        <!-- HEADER -->
-<h2 class="text-lg sm:text-xl font-semibold flex items-center gap-2 text-center sm:text-left">
-  <i class="fas fa-layer-group text-green-500"></i>
-  <span class="relative">
-    POSTS
-    <span class="absolute left-0 -bottom-1 w-full h-1 bg-gradient-to-r from-green-500 to-emerald-600 rounded"></span>
-  </span>
-</h2>
-
-        <!-- Action Buttons -->
-        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
-
-        <!-- SEARCH BAR -->
-<div class="flex w-full sm:w-auto">
-  <div class="relative w-full sm:w-80">
-
-    <!-- ICON -->
-    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-
-    <!-- INPUT -->
-    <input type="text" id="globalSearch" 
-      placeholder="Search"
-      oninput="performSearch()"
-      class="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2 
-             focus:ring-2 focus:ring-blue-300 focus:outline-none">
-    
-  </div> 
-</div>
-
-         <!-- ADD POST (ICON ONLY - NO BG) -->
-<button onclick="$('#modalAddFolder').removeClass('hidden');"
-  class="text-green-600 hover:text-green-800 transition duration-200 text-lg focus:outline-none">
-  <i class="fas fa-plus"></i>
-</button>
-
-<!-- ARCHIVE (ICON ONLY - NO BG) -->
-<button onclick="openArchivedFolders();"
-  class="text-yellow-500 hover:text-yellow-600 transition duration-200 text-lg focus:outline-none">
-  <i class="fas fa-archive"></i>
-</button>
-
-        </div>
-      </div>
-
-      <script>
-  const sidebarToggle = document.getElementById('sidebarToggle');
-  const sidebar = document.getElementById('sidebar');
-  const sidebarClose = document.getElementById('sidebarClose');
-
-  sidebarToggle.addEventListener('click', () => {
-    sidebar.classList.remove('-translate-x-full');
-  });
-
-  sidebarClose.addEventListener('click', () => {
-    sidebar.classList.add('-translate-x-full');
-  });
-</script>
-
-      <!-- TABLE -->
-      <div class="h-[560px] w-[1420px] overflow-y-auto overflow-x-hidden rounded-xl border">
-  <table id="dtable" class="min-w-full border-gray-200 table-auto">
-    <thead class="bg-gray-200 text-black uppercase text-s tracking-wider sticky top-0">
-      <tr>
-        <th class="px-4 py-2 text-left">Folder Name</th>
-        <th class="px-4 py-2 text-left">Departments</th>
-        <th class="px-4 py-2 text-left">Date Created</th>
-        <th class="px-4 py-2 text-center">Action</th>
-      </tr>
-    </thead>
-    <tbody class="text-gray-700 bg-gray-30">
-      
-      <?php while($row=mysqli_fetch_array($query)){ ?>
-      <tr class="border-b">
-        
-        <!-- Folder Name -->
-  <td class="px-4 py-2 align-middle">
-    <a href="add_document.php?folder_id=<?php echo $row['folder_id']; ?>" 
-       class="flex items-center gap-2 text-gray-800 hover:text-green-700 truncate">
-      <i class="fas fa-folder text-yellow-500"></i>
-      <b class="truncate"><?php echo $row['folder_name']; ?></b>
+    <!-- Mobile Logout -->
+    <a href="#" onclick="confirmLogout(this)" 
+       class="block w-full max-w-[140px] mx-auto text-center px-6 py-2.5 bg-white text-red-700 font-bold rounded-xl hover:bg-red-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-red-200">
+      Log out
     </a>
-  </td>
-
-  <!-- Departments -->
-  <td class="px-4 py-2 align-middle text-xs sm:text-sm md:text-base break-words max-w-[220px]">
-    <?php echo $row['departments']; ?>
-  </td>
-
-  <!-- Date Created -->
-  <td class="px-4 py-2 align-middle">
-    <?php echo $row['created_at']; ?>
-  </td>
-
-  <!-- Action Buttons -->
-  <td class="px-4 py-2 align-middle">
-  <div class="flex justify-center relative">
-
-   <!-- 3 DOT BUTTON (MODERN SMALL) -->
-<button onclick="toggleMenu(<?php echo $row['folder_id']; ?>)"
-  class="flex items-center justify-center w-8 h-8 rounded-full text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition duration-200">
-  <i class="fas fa-ellipsis-h text-sm"></i>
-</button>
-    
-
-    <div id="menu-<?php echo $row['folder_id']; ?>"
-  class="hidden absolute top-full mt-1 right-0 w-28 bg-white rounded-lg shadow-sm border border-gray-100 z-50
-         transform scale-95 opacity-0 transition-all duration-150">
-
-  <button onclick="openEditModal(<?php echo $row['folder_id']; ?>)"
-    class="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-100 rounded-t-lg">
-    <i class="fas fa-edit text-[10px] text-blue-500"></i>
-    Edit
-  </button>
-
-  <button onclick="confirmArchive(<?php echo $row['folder_id']; ?>)"
-    class="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-100 rounded-t-lg">
-    <i class="fas fa-archive text-[10px] text-yellow-500"></i>
-    Archive
-  </button>
-
-  <a href="download_folder.php?folder_id=<?php echo $row['folder_id']; ?>"
-    class="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-100 rounded-b-lg">
-    <i class="fas fa-download text-[10px] text-green-600"></i>
-    Download
-  </a>
-
-</div>
-
   </div>
-</td>
-
+</div>
 
 <script>
-  function toggleMenu(id) {
-    const menu = document.getElementById('menu-' + id);
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileBtn = document.getElementById('mobileMenuBtn');
+  const menuIcon = document.getElementById('menuIcon');
+  const hamburgerPaths = menuIcon.querySelectorAll('.hamburger');
+  const closePaths = menuIcon.querySelectorAll('.close');
+  const mobileMenu = document.getElementById('mobileMenu');
+  let isOpen = false;
 
-    // Close all other menus first
-    document.querySelectorAll('[id^="menu-"]').forEach(el => {
-      if (el !== menu) {
-        el.classList.add('hidden', 'scale-95', 'opacity-0');
-      }
-    });
-
-    // Toggle current menu
-    if (menu.classList.contains('hidden')) {
-      menu.classList.remove('hidden');
-
-      // Animate open
-      setTimeout(() => {
-        menu.classList.remove('scale-95', 'opacity-0');
-        menu.classList.add('scale-100', 'opacity-100');
-      }, 10);
-
+  mobileBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    
+    isOpen = !isOpen;
+    
+    if (isOpen) {
+      // Show menu & change to X
+      mobileMenu.classList.remove('opacity-0', 'invisible', 'scale-95');
+      mobileMenu.classList.add('opacity-100', 'visible', 'scale-100');
+      
+      // Animate to X
+      hamburgerPaths.forEach(path => {
+        path.style.opacity = '0';
+        path.style.transform = 'scaleY(0)';
+      });
+      closePaths.forEach(path => {
+        path.style.opacity = '1';
+        path.style.transform = 'scale(1)';
+      });
+      
     } else {
-      closeMenu(id);
+      // Hide menu & change back to hamburger
+      mobileMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+      mobileMenu.classList.add('opacity-0', 'invisible', 'scale-95');
+      
+      // Animate back to hamburger
+      hamburgerPaths.forEach(path => {
+        path.style.opacity = '1';
+        path.style.transform = 'scaleY(1)';
+      });
+      closePaths.forEach(path => {
+        path.style.opacity = '0';
+        path.style.transform = 'scale(0)';
+      });
     }
-  }
-
-  function closeMenu(id) {
-    const menu = document.getElementById('menu-' + id);
-
-    menu.classList.add('scale-95', 'opacity-0');
-
-    setTimeout(() => {
-      menu.classList.add('hidden');
-    }, 150);
-  }
-
-  function openEditModal(id) {
-    closeMenu(id);
-    $('#modalEditFolder' + id).removeClass('hidden');
-  }
-
-  // CLICK OUTSIDE CLOSE
-  document.addEventListener('click', function (event) {
-    document.querySelectorAll('[id^="menu-"]').forEach(menu => {
-      const button = menu.previousElementSibling;
-
-      if (!menu.contains(event.target) && !button.contains(event.target)) {
-        menu.classList.add('scale-95', 'opacity-0');
-        setTimeout(() => menu.classList.add('hidden'), 150);
-      }
-    });
   });
+
+  // Close when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!mobileBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+      if (isOpen) {
+        // Reset to hamburger
+        hamburgerPaths.forEach(path => {
+          path.style.opacity = '1';
+          path.style.transform = 'scaleY(1)';
+        });
+        closePaths.forEach(path => {
+          path.style.opacity = '0';
+          path.style.transform = 'scale(0)';
+        });
+      }
+      mobileMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+      mobileMenu.classList.add('opacity-0', 'invisible', 'scale-95');
+      isOpen = false;
+    }
+  });
+
+  // Close on desktop resize
+  window.addEventListener('resize', function() {
+    if (window.innerWidth >= 768 && isOpen) {
+      // Reset to hamburger
+      hamburgerPaths.forEach(path => {
+        path.style.opacity = '1';
+        path.style.transform = 'scaleY(1)';
+      });
+      closePaths.forEach(path => {
+        path.style.opacity = '0';
+        path.style.transform = 'scale(0)';
+      });
+      mobileMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+      mobileMenu.classList.add('opacity-0', 'invisible', 'scale-95');
+      isOpen = false;
+    }
+  });
+});
 </script>
 
-</tr>
+<!-- MAIN LAYOUT -->
+<div class="mt-24 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
+  <div class="w-full lg:w-3/4 flex-1 h-[600px] sm:h-[620px] lg:h-[655px]"> 
+    <div class="bg-white rounded-2xl shadow-lg p-3 sm:p-4 lg:p-6 h-full transition-all duration-300 hover:shadow-xl">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
 
-      <!-- EDIT FOLDER MODAL -->
-      <div id="modalEditFolder<?php echo $row['folder_id']; ?>" 
-           class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50 p-4">
-        <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-lg p-4 sm:p-6 relative">
+        <!-- HEADER (Responsive) -->
+        <h2 class="text-lg sm:text-xl lg:text-2xl font-semibold flex items-center gap-2 text-center sm:text-left flex-1">
+          <i class="fas fa-layer-group text-green-500 text-sm sm:text-base"></i>
+          <span class="relative">
+            POSTS
+            <span class="absolute left-0 -bottom-1 w-full h-1 bg-gradient-to-r from-green-500 to-emerald-600 rounded scale-x-75 sm:scale-x-100"></span>
+          </span>
+        </h2>
 
-          <!-- Close Button -->
-          <button onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').addClass('hidden');" 
-                  class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+        <!-- Action Buttons (Responsive Stack) -->
+        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto items-center sm:items-end">
 
-          <!-- Modal Title -->
-          <h3 class="text-xl sm:text-2xl font-semibold mb-5 flex items-center gap-2 text-gray-800">
-            <i class="fas fa-edit text-blue-600"></i> Edit Folder
-          </h3>
+          <!-- SEARCH BAR (Full Width Mobile) -->
+          <div class="w-full sm:w-64 lg:w-80 flex-shrink-0">
+            <div class="relative">
+              <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm z-10"></i>
+              <input type="text" id="globalSearch" 
+                     placeholder="Search folders..."
+                     oninput="performSearch()"
+                     class="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2.5 sm:py-2.5 
+                            focus:ring-2 focus:ring-green-300 focus:outline-none transition-all duration-200 shadow-sm">
+            </div> 
+          </div>
 
-          <!-- Form -->
-          <form method="POST" action="update_folder.php" class="flex flex-col gap-4">
-            <input type="hidden" name="folder_id" value="<?php echo $row['folder_id']; ?>">
+          <!-- Action Buttons (Mobile Stack) -->
+          <div class="flex gap-1.5 sm:gap-2">
+            <!-- ADD POST -->
+            <button onclick="$('#modalAddFolder').removeClass('hidden');"
+                    class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg hover:bg-green-50 hover:text-green-700  flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md text-green-600 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-300">
+              <i class="fas fa-plus"></i>
+            </button>
 
-            <!-- Folder Name -->
-            <input type="text" name="folder_name" value="<?php echo $row['folder_name']; ?>" placeholder="Folder Name" 
-                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
+            <!-- ARCHIVE -->
+            <button onclick="openArchivedFolders();"
+                    class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg hover:bg-yellow-50 hover:text-yellow-700  flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md text-yellow-500 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-yellow-300">
+              <i class="fas fa-archive"></i>
+            </button>
+          </div>
 
-            <!-- Assign Departments -->
-            <div class="mt-2">
-              <label class="font-medium text-gray-700 mb-1 block">Assign Departments</label>
-              <div class="flex flex-col gap-2 max-h-40 overflow-y-auto p-2 border rounded-lg">
-                <?php
-                $dept = mysqli_query($conn,"SELECT * FROM departments");
-                while($d=mysqli_fetch_array($dept)){
-                  $check = mysqli_query($conn,"SELECT * FROM folder_departments WHERE folder_id='".$row['folder_id']."' AND department_id='".$d['department_id']."'");
-                  $checked = mysqli_num_rows($check)>0 ? "checked" : "";
-                ?>
-                <label class="flex items-center gap-2">
-                  <input type="checkbox" name="departments[]" value="<?php echo $d['department_id']; ?>" class="accent-blue-600" <?php echo $checked; ?>>
-                  <?php echo $d['department_name']; ?>
-                </label>
-                <?php } ?>
-              </div>
-            </div>
-
-            <!-- Buttons -->
-            <div class="flex flex-col sm:flex-row justify-end gap-3 mt-3">
-              <button type="submit" name="update" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-5 py-2 shadow-md transition duration-200 w-full sm:w-auto
-                      transform hover:scale-105">
-                Update Folder
-              </button>
-
-              <button type="button" onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').addClass('hidden');" 
-                      class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg px-5 py-2 transition duration-200 w-full sm:w-auto">
-                Close
-              </button>
-            </div>
-
-          </form>
         </div>
       </div>
 
-      <?php } ?>
-    </tbody>
-  </table>
+      <!-- Responsive Table Container -->
+      <div class="w-full h-[calc(100%-120px)] sm:h-[calc(100%-140px)] lg:h-[560px] overflow-hidden rounded-xl border shadow-sm">
+        <div class="w-full h-full overflow-x-auto overflow-y-auto custom-scrollbar">
+          <table id="dtable" class="min-w-[800px] w-full border-gray-200 table-auto">
+            <thead class="bg-gray-200 text-black uppercase text-xs sm:text-sm tracking-wider sticky top-0 z-10 shadow-sm">
+              <tr>
+                <th class="px-3 sm:px-4 py-2.5 text-left font-medium min-w-[180px]">Folder Name</th>
+                <th class="px-3 sm:px-4 py-2.5 text-left font-medium min-w-[160px] hidden md:table-cell">Departments</th>
+                <th class="px-3 sm:px-4 py-2.5 text-left font-medium min-w-[120px]">Date Created</th>
+                <th class="px-3 sm:px-4 py-2.5 text-center font-medium w-16 sm:w-20">Action</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-700 divide-y divide-gray-100">
+              
+              <?php while($row=mysqli_fetch_array($query)){ ?>
+              <tr class="hover:bg-gray-50/50 transition-colors duration-150 border-b last:border-b-0">
+                
+                <!-- Folder Name -->
+                <td class="px-3 sm:px-4 py-3 align-middle">
+                  <a href="add_document.php?folder_id=<?php echo $row['folder_id']; ?>" 
+                     class="flex items-center gap-2 sm:gap-3 text-gray-800 hover:text-green-700 truncate group transition-all duration-200">
+                    <i class="fas fa-folder text-yellow-500 text-sm sm:text-base flex-shrink-0"></i>
+                    <b class="truncate text-sm font-medium"><?php echo $row['folder_name']; ?></b>
+                  </a>
+                </td>
 
-  <!-- SEARCH RESULTS -->
-<div id="searchResults" class="mt-6"></div>
+                <!-- Departments -->
+                <td class="px-3 sm:px-4 py-3 align-middle text-xs sm:text-sm hidden md:table-cell break-words max-w-[200px]">
+                  <?php echo $row['departments']; ?>
+                </td>
 
+                <!-- Date Created -->
+                <td class="px-3 sm:px-4 py-3 align-middle text-xs sm:text-sm">
+                  <?php echo date('M j, Y', strtotime($row['created_at'])); ?>
+                </td>
+
+                <!-- Action Buttons -->
+                <td class="px-3 sm:px-4 py-3 align-middle">
+                  <div class="flex justify-center relative">
+                    <!-- 3 DOT BUTTON -->
+                    <button onclick="toggleMenu(<?php echo $row['folder_id']; ?>)"
+                            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-green-400">
+                      <i class="fas fa-ellipsis-h text-sm"></i>
+                    </button>
+                    
+                    <div id="menu-<?php echo $row['folder_id']; ?>"
+                         class="hidden absolute top-full mt-1.5 right-0 w-28 sm:w-32 bg-white rounded-lg shadow-lg border border-gray-100 z-50
+                                transform scale-95 opacity-0 transition-all duration-200 origin-top-right">
+                      
+                      <button onclick="openEditModal(<?php echo $row['folder_id']; ?>);"
+                              class="w-full flex items-center gap-2 px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg transition-all duration-200">
+                        <i class="fas fa-edit text-blue-500 text-xs"></i>
+                        Edit
+                      </button>
+
+                      <button onclick="confirmArchive(<?php echo $row['folder_id']; ?>);"
+                              class="w-full flex items-center gap-2 px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200">
+                        <i class="fas fa-archive text-yellow-500 text-xs"></i>
+                        Archive
+                      </button>
+
+                      <a href="download_folder.php?folder_id=<?php echo $row['folder_id']; ?>"
+                         class="w-full flex items-center gap-2 px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg transition-all duration-200 block">
+                        <i class="fas fa-download text-green-600 text-xs"></i>
+                        Download
+                      </a>
+                    </div>
+                  </div>
+                </td>
+
+              </tr>
+
+              <!-- EDIT FOLDER MODAL (Responsive) -->
+              <div id="modalEditFolder<?php echo $row['folder_id']; ?>" 
+                   class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 p-4 sm:p-6">
+                <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-sm sm:max-w-md lg:max-w-lg p-4 sm:p-6 relative max-h-[90vh] overflow-y-auto">
+                  
+                  <!-- Close Button -->
+                  <button onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').addClass('hidden');" 
+                          class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold p-1 rounded-full hover:bg-gray-100 transition-all">
+                    &times;
+                  </button>
+
+                  <!-- Modal Title -->
+                  <h3 class="text-lg sm:text-xl lg:text-2xl font-semibold mb-5 sm:mb-6 flex items-center gap-2 text-gray-800 text-center sm:text-left">
+                    <i class="fas fa-edit text-blue-600"></i> Edit Folder
+                  </h3>
+
+                  <!-- Form -->
+                  <form method="POST" action="update_folder.php" class="flex flex-col gap-4">
+                    <input type="hidden" name="folder_id" value="<?php echo $row['folder_id']; ?>">
+
+                    <!-- Folder Name -->
+                    <input type="text" name="folder_name" value="<?php echo $row['folder_name']; ?>" placeholder="Folder Name" 
+                           class="w-full border border-gray-300 rounded-lg px-4 py-2.5 sm:py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all shadow-sm text-sm sm:text-base" required>
+
+                    <!-- Assign Departments -->
+                    <div>
+                      <label class="font-medium text-gray-700 mb-2 block text-sm sm:text-base">Assign Departments</label>
+                      <div class="flex flex-col gap-2.5 max-h-40 sm:max-h-48 overflow-y-auto p-3 sm:p-4 border rounded-lg shadow-sm">
+                        <?php
+                        $dept = mysqli_query($conn,"SELECT * FROM departments");
+                        while($d=mysqli_fetch_array($dept)){
+                          $check = mysqli_query($conn,"SELECT * FROM folder_departments WHERE folder_id='".$row['folder_id']."' AND department_id='".$d['department_id']."'");
+                          $checked = mysqli_num_rows($check)>0 ? "checked" : "";
+                        ?>
+                        <label class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-50 cursor-pointer transition-all text-sm">
+                          <input type="checkbox" name="departments[]" value="<?php echo $d['department_id']; ?>" class="w-4 h-4 accent-blue-600 rounded shadow-sm" <?php echo $checked; ?>>
+                          <span class="truncate"><?php echo $d['department_name']; ?></span>
+                        </label>
+                        <?php } ?>
+                      </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex flex-col sm:flex-row justify-end gap-3 mt-4 pt-4 border-t border-gray-100">
+                      <button type="submit" name="update" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-6 py-2.5 sm:py-3 shadow-md transition-all duration-200 w-full sm:w-auto transform hover:scale-105 text-sm sm:text-base">
+                        Update Folder
+                      </button>
+                      <button type="button" onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').addClass('hidden');" 
+                              class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg px-6 py-2.5 sm:py-3 transition-all duration-200 w-full sm:w-auto text-sm sm:text-base">
+                        Close
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <?php } ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SEARCH RESULTS -->
+      <div id="searchResults" class="mt-6 p-4 rounded-xl bg-blue-50 border border-blue-200 hidden"></div>
+    </div>
+  </div>
 </div>
+
+<style>
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: #f8fafc; border-radius: 3px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { 
+  background: linear-gradient(45deg, #464948); 
+  border-radius: 3px; 
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #059669; }
+</style>
+
+<script>
+function toggleMenu(id) {
+  const menu = document.getElementById('menu-' + id);
+  document.querySelectorAll('[id^="menu-"]').forEach(el => {
+    if (el !== menu) el.classList.add('hidden', 'scale-95', 'opacity-0');
+  });
+  menu.classList.toggle('hidden');
+  if (!menu.classList.contains('hidden')) {
+    setTimeout(() => menu.classList.remove('scale-95', 'opacity-0'), 10);
+  } else {
+    setTimeout(() => menu.classList.add('scale-95', 'opacity-0'), 10);
+  }
+}
+
+function openEditModal(id) {
+  $('#modalEditFolder' + id).removeClass('hidden');
+  document.body.classList.add('overflow-hidden');
+}
+
+document.addEventListener('click', function(e) {
+  document.querySelectorAll('[id^="menu-"]').forEach(menu => {
+    const btn = menu.previousElementSibling;
+    if (!menu.contains(e.target) && !btn?.contains(e.target)) {
+      menu.classList.add('hidden', 'scale-95', 'opacity-0');
+    }
+  });
+});
+</script>
 
 
 
