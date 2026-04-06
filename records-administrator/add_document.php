@@ -139,29 +139,147 @@ $(document).ready(function(){
 <div id="page-content" class="opacity-0 transition-opacity duration-500">
 
 <!-- NAVBAR -->
-<nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
-  <div class="flex flex-col sm:flex-row justify-between items-center 
-              h-auto sm:h-16 px-4 sm:px-6 py-2 sm:py-0 gap-2 sm:gap-0">
-
-    <!-- Left: Logo + Title -->
-    <div class="flex items-center space-x-3">
-      <img src="js/img/municipalLogo.png" class="w-8 h-8 sm:w-10 sm:h-10 object-contain">
-      <h1 class="text-white font-semibold text-base sm:text-lg text-center sm:text-left">
-        Bayung Porac Archive
-      </h1>
+<nav class="fixed top-0 w-full bg-green-700 shadow-md z-50">
+  <div class="flex justify-between items-center h-16 px-4 sm:px-6">
+    <!-- Logo & Title -->
+    <div class="flex items-center space-x-2 sm:space-x-3">
+      <img src="js/img/municipalLogo.png" alt="Logo" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white object-cover">
+      <h1 class="text-white font-bold text-base sm:text-lg md:text-xl whitespace-nowrap">Bayung Porac Archive</h1>
     </div>
 
-    <div class="flex items-center gap-4 text-white text-sm sm:text-base">
-      <span>Welcome, <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?>!</span>
-
-      <a href="#" onclick="confirmLogout()"
-         class="bg-white text-green-800 border border-green-800 px-3 py-1 rounded hover:bg-green-800 hover:text-white transition">
+    <!-- Right Side -->
+    <div class="flex items-center space-x-2 sm:space-x-4">
+      <!-- Desktop Welcome -->
+      <span class="hidden md:inline-block text-sm md:text-base">
+        Welcome, <b><?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></b>!
+      </span>
+      
+      <!-- Mobile Menu Button -->
+      <button id="mobileMenuBtn" 
+        class="md:hidden p-2 rounded-lg hover:bg-green-600 hover:bg-opacity-20 transition-all duration-200 group">
+        <svg class="w-5 h-5 text-white transition-transform duration-200 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" id="menuIcon">
+          <!-- Hamburger (3 lines) -->
+          <path class="hamburger" stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 12h16M4 16h16"/>
+          
+          <!-- X (hidden by default) -->
+          <path class="close opacity-0 scale-0" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+      
+      <!-- Desktop Logout -->
+      <a href="#" onclick="confirmLogout(this)" 
+         class="hidden md:inline-block px-4 py-2 text-sm md:text-base rounded-lg border border-white hover:bg-white hover:text-green-700 transition-all duration-300 font-medium">
         Log out
       </a>
     </div>
-
   </div>
 </nav>
+
+<!-- Mobile Dropdown Menu -->
+<div id="mobileMenu" class="md:hidden fixed top-20 sm:top-20 left-4 right-4 max-w-sm mx-auto bg-white shadow-2xl rounded-2xl border-2 border-gray-200 z-40 opacity-0 invisible transform scale-95 transition-all duration-300">
+  <div class="p-6 space-y-4">
+    <!-- Mobile Welcome -->
+    <div class="text-center">
+      <p class="text-sm font-medium text-gray-600">Welcome,</p>
+      <p class="font-bold text-xl text-gray-900"><?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></p>
+    </div>
+    
+    <!-- Mobile Logout -->
+    <a href="#" onclick="confirmLogout(this)" 
+       class="block w-full max-w-[140px] mx-auto text-center px-6 py-2.5 bg-white text-red-700 font-bold rounded-xl hover:bg-red-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-red-200">
+      Log out
+    </a>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileBtn = document.getElementById('mobileMenuBtn');
+  const menuIcon = document.getElementById('menuIcon');
+  const hamburgerPaths = menuIcon.querySelectorAll('.hamburger');
+  const closePaths = menuIcon.querySelectorAll('.close');
+  const mobileMenu = document.getElementById('mobileMenu');
+  let isOpen = false;
+
+  mobileBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    
+    isOpen = !isOpen;
+    
+    if (isOpen) {
+      // Show menu & change to X
+      mobileMenu.classList.remove('opacity-0', 'invisible', 'scale-95');
+      mobileMenu.classList.add('opacity-100', 'visible', 'scale-100');
+      
+      // Animate to X
+      hamburgerPaths.forEach(path => {
+        path.style.opacity = '0';
+        path.style.transform = 'scaleY(0)';
+      });
+      closePaths.forEach(path => {
+        path.style.opacity = '1';
+        path.style.transform = 'scale(1)';
+      });
+      
+    } else {
+      // Hide menu & change back to hamburger
+      mobileMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+      mobileMenu.classList.add('opacity-0', 'invisible', 'scale-95');
+      
+      // Animate back to hamburger
+      hamburgerPaths.forEach(path => {
+        path.style.opacity = '1';
+        path.style.transform = 'scaleY(1)';
+      });
+      closePaths.forEach(path => {
+        path.style.opacity = '0';
+        path.style.transform = 'scale(0)';
+      });
+    }
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!mobileBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+      if (isOpen) {
+        // Reset to hamburger
+        hamburgerPaths.forEach(path => {
+          path.style.opacity = '1';
+          path.style.transform = 'scaleY(1)';
+        });
+        closePaths.forEach(path => {
+          path.style.opacity = '0';
+          path.style.transform = 'scale(0)';
+        });
+      }
+      mobileMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+      mobileMenu.classList.add('opacity-0', 'invisible', 'scale-95');
+      isOpen = false;
+    }
+  });
+
+  // Close on desktop resize
+  window.addEventListener('resize', function() {
+    if (window.innerWidth >= 768 && isOpen) {
+      // Reset to hamburger
+      hamburgerPaths.forEach(path => {
+        path.style.opacity = '1';
+        path.style.transform = 'scaleY(1)';
+      });
+      closePaths.forEach(path => {
+        path.style.opacity = '0';
+        path.style.transform = 'scale(0)';
+      });
+      mobileMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+      mobileMenu.classList.add('opacity-0', 'invisible', 'scale-95');
+      isOpen = false;
+    }
+  });
+});
+</script>
+
+
+
 
 <!-- MAIN LAYOUT-->
 <div class="mt-20 px-4 sm:px-6">
@@ -173,11 +291,13 @@ class="inline-block mb-4 bg-white px-4 py-2 rounded-xl shadow hover:bg-green-100
 </a>
 
 <!--CONTAINER-->
-<div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 h-[615px] flex flex-col hover:shadow-xl transition">
+<div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 h-[615px] flex flex-col hover:shadow-xl transition-all duration-300">
 
-<!-- HEADER -->
-<div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4">
-<h4 class="text-lg sm:text-xl font-semibold flex items-center gap-2 text-gray-700">
+<!-- HEADER - STACKS ON MOBILE -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4 pb-3 border-b border-gray-100">
+  
+  <!-- LEFT: TITLE -->
+  <h4 class="text-lg sm:text-xl font-semibold flex items-center gap-2 text-gray-700 flex-shrink-0 order-1">
     <i class="fas fa-folder-open text-green-500"></i>
     <span class="relative">
       RECORDS MANAGEMENT
@@ -185,56 +305,60 @@ class="inline-block mb-4 bg-white px-4 py-2 rounded-xl shadow hover:bg-green-100
     </span>
   </h4>
 
-  
-<!--ACTION BUTTONS-->
-<div class="flex gap-3">
-
-<div class="flex w-full sm:w-auto">
-  <div class="relative w-full sm:w-80">
-
-    <!-- ICON -->
-    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-
-    <!-- INPUT -->
-    <input type="text" id="globalSearch" 
-      placeholder="Search"
-      oninput="performSearch()"
-      class="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2 
-             focus:ring-2 focus:ring-blue-300 focus:outline-none">
+  <!-- RIGHT: SEARCH + ACTION BUTTONS -->
+  <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 w-full sm:w-auto order-2">
     
+    <!-- SEARCH (FULL WIDTH MOBILE) -->
+    <div class="flex-1 min-w-0 w-full sm:w-80">
+      <div class="relative">
+        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm z-10"></i>
+        <input type="text" id="globalSearch" 
+          placeholder="Search records..." 
+          oninput="performSearch()"
+          class="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2.5 sm:py-2 
+                 focus:ring-2 focus:ring-blue-300 focus:outline-none transition-all duration-200
+                 bg-gray-50 hover:bg-white shadow-sm">
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS (STACK MOBILE) -->
+    <div class="flex gap-1 sm:gap-2 flex-shrink-0">
+      <!-- UPLOAD -->
+      <button onclick="openModal('uploadModal')" 
+        class="flex items-center justify-center w-11 h-11 rounded-full 
+               text-green-600 hover:text-green-800 hover:bg-green-50 transition-all duration-200 
+               shadow-sm border border-green-100 focus:outline-none focus:ring-2 focus:ring-green-200"
+        title="Upload File">
+        <i class="fas fa-file-upload text-lg"></i>
+      </button>
+
+      <!-- ARCHIVE -->
+      <button onclick="openArchivedFiles()"
+        class="flex items-center justify-center w-11 h-11 rounded-full 
+               text-yellow-500 hover:text-yellow-600 hover:bg-yellow-50 transition-all duration-200 
+               shadow-sm border border-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-200"
+        title="View Archived">
+        <i class="fas fa-archive text-lg"></i>
+      </button>
+    </div>
   </div>
 </div>
 
-
-<!-- UPLOAD FILE (ICON ONLY) -->
-<button onclick="openModal('uploadModal')" 
-  class="text-green-600 hover:text-green-800 transition duration-200 text-lg focus:outline-none">
-  <i class="fas fa-file-upload"></i>
-</button>
-
-<!-- VIEW ARCHIVED FILES (ICON ONLY) -->
-<button onclick="openArchivedFiles()"
-  class="text-yellow-500 hover:text-yellow-600 transition duration-200 text-lg focus:outline-none">
-  <i class="fas fa-archive"></i>
-</button>
-
-</div>
-</div>
-
-<!-- TABLE -->
-<div class="h-[560px] w-[1420px] overflow-y-auto overflow-x-hidden rounded-xl border">
-<table id="dtable" class="min-w-full border-gray-200 table-auto">
-<thead class="bg-gray-200 text-black uppercase text-s tracking-wider sticky top-0">
-<tr>
-  <th class="px-4 py-2 text-left">Filename</th>
-  <th class="px-4 py-2 text-left">Departments</th>
-  <th class="px-4 py-2 text-left">Uploader</th>
-  <th class="px-4 py-2 text-left">Date Uploaded</th>
-  <th class="px-4 py-2 text-center">Action</th>
-</tr>
-</thead>
-<tbody class="text-gray-700 bg-gray-30">
-
+<!-- RESPONSIVE TABLE CONTAINER -->
+<div class="flex-1 min-h-0 overflow-hidden rounded-xl border border-gray-200">
+  <div class="h-full w-full overflow-y-auto overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+    <table id="dtable" class="min-w-full border-collapse table-auto w-[1200px] lg:w-[1615px]">
+      <thead class="bg-gradient-to-r from-gray-200 to-gray-100 text-black uppercase text-xs sm:text-sm tracking-wider sticky top-0 z-10 shadow-sm">
+        <tr>
+          <th class="px-3 py-3 sm:px-4 sm:py-2 text-left font-medium min-w-[200px] sm:min-w-[250px]">Filename</th>
+          <th class="px-3 py-3 sm:px-4 sm:py-2 text-left font-medium min-w-[150px]">Departments</th>
+          <th class="px-3 py-3 sm:px-4 sm:py-2 text-left font-medium min-w-[120px]">Uploader</th>
+          <th class="px-3 py-3 sm:px-4 sm:py-2 text-left font-medium min-w-[140px]">Date Uploaded</th>
+          <th class="px-3 py-3 sm:px-4 sm:py-2 text-center font-medium min-w-[80px]">Action</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700 divide-y divide-gray-100 bg-white">
+      
 <?php
 $query = mysqli_query($conn, "
 SELECT uf.*, al.name AS uploader_name
@@ -253,202 +377,285 @@ $download = $file['download'];
 $filepath = "../uploads/".$file['file_path'];
 ?>
 
-<tr>
+        <tr class="hover:bg-gray-50 transition-colors duration-150 group">
+          <td class="px-3 py-3 sm:px-4 sm:py-2 font-medium text-sm truncate max-w-[200px] sm:max-w-none">
+            <?php echo htmlentities($name); ?>
+          </td>
 
-<td class="px-4 py-2"><?php echo htmlentities($name); ?></td>
+          <td class="px-3 py-3 sm:px-4 sm:py-2 text-sm">
+            <?php
+            $dept_query = mysqli_query($conn,"
+            SELECT d.department_name 
+            FROM file_departments fd
+            JOIN departments d ON fd.department_id = d.department_id
+            WHERE fd.file_id = $id
+            ");
+            $names=[];
+            while($d=mysqli_fetch_array($dept_query)){
+            $names[]=$d['department_name'];
+            }
+            echo !empty($names) ? implode(', ', array_slice($names, 0, 2)) . (count($names) > 2 ? '...' : '') : '—';
+            ?>
+          </td>
 
-<td class="px-4 py-2 ">
+          <td class="px-3 py-3 sm:px-4 sm:py-2 text-sm font-medium">
+            <?php echo htmlentities($uploads) ?: '—'; ?>
+          </td>
+
+          <td class="px-3 py-3 sm:px-4 sm:py-2 text-sm text-gray-500">
+            <?php echo htmlentities($time); ?>
+          </td>
+
+          <td class="px-3 py-3 sm:px-4 sm:py-2">
+            <div class="flex justify-center relative">
+              <button onclick="toggleMenuFile(<?php echo $id; ?>)" 
+                class="flex items-center justify-center w-9 h-9 rounded-full text-gray-600 
+                       hover:bg-gray-100 hover:text-gray-900 hover:shadow-md transition-all duration-200
+                       group-hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                title="Actions">
+                <i class="fas fa-ellipsis-h text-sm"></i>
+              </button>
+
+              <div id="menu-file-<?php echo $id; ?>"
+                class="hidden absolute top-full mt-1 right-0 w-44 sm:w-28 bg-white/95 backdrop-blur-sm 
+                       rounded-xl shadow-lg border border-gray-100 z-50
+                       transform scale-95 opacity-0 transition-all duration-200
+                       sm:-left-2 sm:w-32 lg:w-28 lg:right-0">
+                
+                <a href="downloads.php?file_id=<?php echo $id; ?>"
+                  class="block w-full flex items-center gap-2 px-3 py-2.5 text-xs sm:text-sm text-gray-700 
+                         hover:bg-blue-50 hover:text-blue-700 rounded-t-xl border-b border-gray-50">
+                  <i class="fa fa-download text-blue-500 w-4"></i><span>Download</span>
+                </a>
+
+                <a href="<?php echo $filepath; ?>" target="_blank"
+                   class="block w-full flex items-center gap-2 px-3 py-2.5 text-xs sm:text-sm text-gray-700 
+                          hover:bg-indigo-50 hover:text-indigo-700 border-b border-gray-50"
+                   onclick="window.open(this.href, '_blank'); return false;">
+                  <i class="fa fa-eye text-indigo-500 w-4"></i><span>View</span>
+                </a>
+
+                <a href="archive_file.php?file_id=<?php echo $id; ?>"
+                  class="block w-full flex items-center gap-2 px-3 py-2.5 text-xs sm:text-sm text-gray-700 
+                         hover:bg-red-50 hover:text-red-700 border-b border-gray-50">
+                  <i class="fa fa-archive text-red-500 w-4"></i><span>Archive</span>
+                </a>
+
+                <button onclick="openModal('editModal<?php echo $id; ?>')"
+                  class="block w-full flex items-center gap-2 px-3 py-2.5 text-xs sm:text-sm text-gray-700 
+                         hover:bg-green-50 hover:text-green-700 text-left rounded-b-xl">
+                  <i class="fa fa-edit text-green-500 w-4"></i><span>Edit</span>
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+<?php } ?>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ALL EDIT MODALS (Generated in loop) -->
 <?php
-$dept_query = mysqli_query($conn,"
-SELECT d.department_name 
-FROM file_departments fd
-JOIN departments d ON fd.department_id = d.department_id
-WHERE fd.file_id = $id
-");
-$names=[];
-while($d=mysqli_fetch_array($dept_query)){
-$names[]=$d['department_name'];
+// Reset query to generate modals
+mysqli_data_seek($query, 0);
+while($file = mysqli_fetch_array($query)){
+$id = $file['id'];
+$file_parts = pathinfo($file['name']);
+$filename_no_ext = $file_parts['filename'];
+$extension = $file_parts['extension'];
+
+// Get assigned departments
+$assigned = mysqli_query($conn,"SELECT department_id FROM file_departments WHERE file_id='$id'");
+$assigned_dept = [];
+while($ad=mysqli_fetch_array($assigned)){
+  $assigned_dept[] = $ad['department_id'];
 }
-echo implode(', ',$names);
 ?>
-</td>
 
-<td class="px-4 py-2"><?php echo htmlentities($uploads); ?></td>
-<td class="px-4 py-2"><?php echo htmlentities($time); ?></td>
-<!-- <td class="px-4 py-2"><?php echo htmlentities($download); ?></td> -->
+<!-- EDIT MODAL -->
+<div id="editModal<?php echo $id; ?>" 
+  class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50 p-4">
 
-<td class="px-4 py-2">
-  <div class="flex justify-center relative">
-
-    <!-- 3 DOT BUTTON (MODERN SMALL) -->
-<button onclick="toggleMenuFile(<?php echo $id; ?>)"
-  class="flex items-center justify-center w-8 h-8 rounded-full text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition duration-200">
-  <i class="fas fa-ellipsis-h text-sm"></i>
-</button>
-
-    <!-- DROPDOWN -->
-    <div id="menu-file-<?php echo $id; ?>"
-      class="hidden absolute top-full mt-1 right-0 w-28 bg-white rounded-lg shadow-sm border border-gray-100 z-50
-         transform scale-95 opacity-0 transition-all duration-150">
-
-      <!-- DOWNLOAD -->
-      <a href="downloads.php?file_id=<?php echo $id; ?>"
-        class="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-100 rounded-b-lg">
-        <i class="fa fa-download text-blue-500"></i>
-        Download
-      </a>
-
-      <!-- VIEW (FIXED) -->
-<a href="<?php echo $filepath; ?>" target="_blank"
-   class="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-100 rounded-b-lg"
-   onclick="window.open(this.href, '_blank'); return false;">
-  <i class="fa fa-eye text-indigo-500"></i>
-  View
-</a>
-
-      <!-- ARCHIVE -->
-      <a href="archive_file.php?file_id=<?php echo $id; ?>"
-        class="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-100 rounded-b-lg">
-        <i class="fa fa-archive text-red-500"></i>
-        Archive
-      </a>
-
-      <!-- EDIT -->
-      <button onclick="openModal('editModal<?php echo $id; ?>')"
-        class="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-100 rounded-b-lg">
-        <i class="fa fa-edit text-green-500"></i>
-        Edit
-      </button>
-
+  <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-md p-6 animate-fadeIn">
+    <div class="flex justify-between items-center mb-4">
+      <h4 class="font-semibold text-lg">Edit File</h4>
+      <button onclick="closeModal('editModal<?php echo $id; ?>')" 
+        class="text-gray-500 text-xl hover:text-gray-700 transition">&times;</button>
     </div>
 
+    <form method="POST" action="update_file.php">
+      <input type="hidden" name="file_id" value="<?php echo $id; ?>">
+      <input type="hidden" name="folder_id" value="<?php echo $folder_id; ?>">
+
+      <label class="block text-sm font-medium text-gray-700 mb-1">File Name</label>
+      <input type="text" name="file_name" 
+        class="w-full border border-gray-300 p-3 rounded-lg mt-1 focus:ring-2 focus:ring-blue-300 focus:outline-none"
+        value="<?php echo htmlentities($filename_no_ext); ?>" required>
+      <span class="text-gray-500 text-sm ml-1">.<?php echo $extension; ?></span>
+
+      <label class="block text-sm font-medium text-gray-700 mt-4 mb-2">Assign Departments</label>
+      
+      <?php
+      $departments = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='Active'");
+      while($d=mysqli_fetch_array($departments)){
+      ?>
+      <div class="flex items-center p-2 rounded-lg hover:bg-gray-50 transition">
+        <input type="checkbox" name="departments[]" value="<?php echo $d['department_id']; ?>"
+          id="dept_<?php echo $d['department_id']; ?>_<?php echo $id; ?>"
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+          <?php echo in_array($d['department_id'],$assigned_dept)?'checked':''; ?>>
+        <label for="dept_<?php echo $d['department_id']; ?>_<?php echo $id; ?>" 
+          class="ml-2 text-sm font-medium text-gray-700 cursor-pointer select-none">
+          <?php echo htmlentities($d['department_name']); ?>
+        </label>
+      </div>
+      <?php } ?>
+
+      <div class="mt-6 flex gap-2 justify-end">
+        <button type="button" onclick="closeModal('editModal<?php echo $id; ?>')"
+          class="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition">
+          Cancel
+        </button>
+        <button name="update_file"
+          class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition font-medium">
+          Save Changes
+        </button>
+      </div>
+    </form>
   </div>
-</td>
+</div>
 
+<?php } ?>
+
+</div>
+
+<!-- COMPLETE WORKING JAVASCRIPT -->
 <script>
-  function toggleMenuFile(id) {
-    const menu = document.getElementById('menu-file-' + id);
+function openModal(id){ 
+  document.getElementById(id).classList.remove('hidden'); 
+  document.body.style.overflow = 'hidden'; // Prevent background scroll
+}
 
-    // Close other menus
-    document.querySelectorAll('[id^="menu-file-"]').forEach(el => {
-      if (el !== menu) {
-        el.classList.add('hidden', 'scale-95', 'opacity-0');
-      }
-    });
+function closeModal(id){ 
+  document.getElementById(id).classList.add('hidden'); 
+  document.body.style.overflow = 'auto';
+}
 
-    // Toggle current
-    if (menu.classList.contains('hidden')) {
-      menu.classList.remove('hidden');
+function toggleMenuFile(id) {
+  const menu = document.getElementById('menu-file-' + id);
 
-      setTimeout(() => {
-        menu.classList.remove('scale-95', 'opacity-0');
-        menu.classList.add('scale-100', 'opacity-100');
-      }, 10);
-
-    } else {
-      closeMenuFile(id);
+  // Close all other menus first
+  document.querySelectorAll('[id^="menu-file-"]').forEach(el => {
+    if (el.id !== 'menu-file-' + id) {
+      el.classList.add('hidden', 'scale-95', 'opacity-0');
     }
+  });
+
+  // Toggle current menu
+  if (menu.classList.contains('hidden')) {
+    menu.classList.remove('hidden');
+    // Force reflow
+    menu.offsetHeight;
+    menu.classList.remove('scale-95', 'opacity-0');
+    menu.classList.add('scale-100', 'opacity-100');
+  } else {
+    closeMenuFile(id);
   }
+}
 
-  function closeMenuFile(id) {
-    const menu = document.getElementById('menu-file-' + id);
-
+function closeMenuFile(id) {
+  const menu = document.getElementById('menu-file-' + id);
+  if (menu) {
     menu.classList.add('scale-95', 'opacity-0');
-
     setTimeout(() => {
       menu.classList.add('hidden');
     }, 150);
   }
-
-  function openModal(id) {
-    document.getElementById(id).classList.remove('hidden');
-  }
-
-  // Click outside to close
-  document.addEventListener('click', function (event) {
-    document.querySelectorAll('[id^="menu-file-"]').forEach(menu => {
-      const button = menu.previousElementSibling;
-
-      if (!menu.contains(event.target) && !button.contains(event.target)) {
-        menu.classList.add('scale-95', 'opacity-0');
-        setTimeout(() => menu.classList.add('hidden'), 150);
-      }
-    });
-  });
-</script>
-
-</tr>
-
-<!-- EDIT MODAL -->
-<div id="editModal<?php echo $id; ?>" 
-class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
-
-<div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-md p-6 animate-fadeIn">
-
-<div class="flex justify-between items-center mb-4">
-<h4 class="font-semibold text-lg">Edit File</h4>
-<button onclick="closeModal('editModal<?php echo $id; ?>')" class="text-gray-500 text-xl">&times;</button>
-</div>
-
-<form method="POST" action="update_file.php">
-<input type="hidden" name="file_id" value="<?php echo $id; ?>">
-<input type="hidden" name="folder_id" value="<?php echo $folder_id; ?>">
-
-<?php 
-$file_parts = pathinfo($file['name']);
-$filename_no_ext = $file_parts['filename'];
-$extension = $file_parts['extension'];
-?>
-
-<label>File Name</label>
-<input type="text" name="file_name" class="w-full border p-2 rounded mt-2"
-value="<?php echo htmlentities($filename_no_ext); ?>" required>
-
-<span class="text-gray-500 text-sm">.<?php echo $extension; ?></span>
-
-<br><br>
-
-<label>Assign Departments</label>
-
-<?php
-$departments = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='Active'");
-$assigned = mysqli_query($conn,"SELECT department_id FROM file_departments WHERE file_id='$id'");
-$assigned_dept = [];
-
-while($ad=mysqli_fetch_array($assigned)){
-$assigned_dept[] = $ad['department_id'];
 }
 
-while($d=mysqli_fetch_array($departments)){
-?>
-<div class="mt-2">
-<input type="checkbox" name="departments[]" value="<?php echo $d['department_id']; ?>"
-<?php echo in_array($d['department_id'],$assigned_dept)?'checked':''; ?>>
-<?php echo htmlentities($d['department_name']); ?>
-</div>
-<?php } ?>
+// Global search function (placeholder - implement your logic)
+function performSearch() {
+  const searchTerm = document.getElementById('globalSearch').value.toLowerCase();
+  const rows = document.querySelectorAll('#dtable tbody tr');
+  
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    if (text.includes(searchTerm)) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+}
 
-<div class="mt-4 text-right">
-<button name="update_file"
-class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
-Save Changes
-</button>
-</div>
+// Close menus on outside click
+document.addEventListener('click', function(event) {
+  let clickedMenuButton = false;
+  document.querySelectorAll('button[onclick^="toggleMenuFile"]').forEach(button => {
+    if (button.contains(event.target)) {
+      clickedMenuButton = true;
+    }
+  });
+  
+  if (!clickedMenuButton) {
+    document.querySelectorAll('[id^="menu-file-"]').forEach(menu => {
+      menu.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => menu.classList.add('hidden'), 150);
+    });
+  }
+});
 
-</form>
-</div>
-</div>
+// Close modals on escape key
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    document.querySelectorAll('[id^="editModal"]').forEach(modal => {
+      if (!modal.classList.contains('hidden')) {
+        closeModal(modal.id);
+      }
+    });
+  }
+});
 
-<?php } ?>
+// Prevent body scroll when modal open
+document.querySelectorAll('[id^="editModal"]').forEach(modal => {
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      closeModal(modal.id);
+    }
+  });
+});
+</script>
 
-</tbody>
-</table>
+<style>
+/* Custom scrollbar for table */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
 
-</div>
-</div>
-</div>
-
-</div>
+/* Fade in animation for modals */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+</style>
 
 <script>
 function openModal(id){ document.getElementById(id).classList.remove('hidden'); }
