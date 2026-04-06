@@ -10,7 +10,7 @@
 <title>Bayung Porac Archive - Admin</title>
 
 <link rel="icon" type="image/png" href="js/img/municipalLogo.png">
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
@@ -163,27 +163,12 @@ endif; ?>
                 class="w-full bg-yellow-500/90 hover:bg-yellow-400 text-white font-semibold py-3 rounded-lg border border-white-300 transition duration-300 shadow-md">
                 Log in
             </button>
-
-        </form>
-<!-- <div class="mt-3 text-center">
-<a href="#" onclick="showForgotPassword()" class="text-sm text-green-600 hover:underline">
+<div class="text-center mt-4">
+  <button type="button" onclick="showForgotPassword()" class="text-sm text-white hover:underline">
     Forgot Password?
-  </a>
-  </div>
+  </button>
 </div>
-
-</div>
-
-Forgot Password Message Moda
-<div id="forgotPasswordModal" class="hidden fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-  <div class="bg-white rounded-xl shadow-lg p-6 w-80 text-center">
-    <h2 class="text-lg font-semibold text-gray-800 mb-3">Forgot Password</h2>
-    <p class="text-gray-600 mb-5">
-      Please contact your system administrator to reset your password.
-    </p>
-    <button onclick="closeForgotPassword()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-      Close
-    </button> -->
+        </form>
   </div>
 </div>
 
@@ -213,6 +198,74 @@ Forgot Password Message Moda
 
   </div>
 </div>
+
+<!-- Forgot Password Modal -->
+<div id="forgotPasswordModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-6 w-[90%] max-w-md text-center shadow-lg relative">
+    <button onclick="closeForgotPassword()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-lg font-bold">&times;</button>
+    <h2 class="text-xl font-semibold mb-3 text-red-600">Forgot Password</h2>
+    <p class="text-gray-600 mb-4">Enter your registered email to receive a verification OTP.</p>
+    <form id="forgotPasswordForm">
+     <input type="email" name="email" required
+       class="w-full border border-gray-300 rounded-lg px-4 py-2 mb-2 text-center text-sm focus:ring-2 focus:ring-green-500"
+       placeholder="Enter your email">
+<div id="forgotPasswordMessage" class="text-center text-sm mb-4"></div>
+      <button type="submit"
+              class="w-full bg-yellow-500 hover:bg-yellow-400 text-white py-2 rounded-lg">
+        Send OTP
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- OTP Verification Modal -->
+<div id="otpResetModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-6 w-[90%] max-w-md text-center shadow-lg relative">
+    <button onclick="closeOTP()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-lg font-bold">&times;</button>
+    <h2 class="text-xl font-semibold mb-3 text-red-600">Enter OTP</h2>
+    <p class="text-gray-600 mb-4">We sent an OTP to your email.</p>
+    <form id="otpForm">
+      <input type="text" name="otp" maxlength="6" required
+             class="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 text-center text-lg tracking-widest focus:ring-2 focus:ring-green-500"
+             placeholder="Enter OTP">
+                 <div id="otpMessage" class="text-sm mb-4 text-green-600"></div>
+      <button type="submit"
+              class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
+        Verify OTP
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Reset Password Modal -->
+<div id="resetPasswordModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-6 w-[90%] max-w-md text-center shadow-lg relative">
+    <button onclick="closeReset()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-lg font-bold">&times;</button>
+    <h2 class="text-xl font-semibold mb-3 text-red-600">Reset Password</h2>
+    <p class="text-gray-600 mb-4">Enter your new password.</p>
+    <form id="resetPasswordForm">
+     <div class="relative">
+  <input
+    type="password"
+    id="resetPasswordField"
+    name="password"
+    class="w-full px-4 py-3 pr-12 bg-white border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 placeholder:text-sm outline-none transition duration-300 hover:bg-gray-100 focus:ring-2 focus:ring-green-500"
+    placeholder="Enter your password">
+  <button
+    type="button"
+    onclick="toggleResetPassword()"
+    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
+    <i id="resetToggleIcon" class="fa-solid fa-eye"></i>
+  </button>
+</div>
+      <button type="submit"
+              class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 mt-4">
+        Reset Password
+      </button>
+    </form>
+  </div>
+</div>
+
 <!-- Footer -->
 
 <footer class="text-center py-4">
@@ -222,18 +275,151 @@ Forgot Password Message Moda
 </p>
 
 </footer>
-
-
-<!-- Scripts -->
 <script>
-function showForgotPassword() {
-  document.getElementById('forgotPasswordModal').classList.remove('hidden');
-}
-
-function closeForgotPassword() {
-  document.getElementById('forgotPasswordModal').classList.add('hidden');
+function toggleResetPassword() {
+    const passwordField = document.getElementById("resetPasswordField");
+    const icon = document.getElementById("resetToggleIcon");
+    if(passwordField.type === "password"){
+        passwordField.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        passwordField.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
 }
 </script>
+<!-- Scripts -->
+<script>
+document.getElementById('forgotPasswordForm').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const messageDiv = document.getElementById('forgotPasswordMessage'); // Inline message div
+
+    // Clear previous message
+    messageDiv.textContent = '';
+    messageDiv.classList.remove('text-red-600','text-green-500');
+
+    fetch('forgot_password.php', { method:'POST', body:formData })
+    .then(res => res.json())
+    .then(data => {
+        if(data.status==='success'){
+            otpEmail = data.email;
+            messageDiv.textContent = 'OTP sent successfully! Check your email.';
+            messageDiv.classList.add('text-green-500');
+            closeForgotPassword();
+            showOTP();
+        } else {
+            messageDiv.textContent = data.message;
+            messageDiv.classList.add('text-red-600');
+        }
+    })
+    .catch(err => {
+        messageDiv.textContent = 'Something went wrong!';
+        messageDiv.classList.add('text-red-600');
+    });
+}); 
+</script>
+
+
+<script>
+function showForgotPassword(){ document.getElementById('forgotPasswordModal').classList.remove('hidden'); }
+function closeForgotPassword(){ document.getElementById('forgotPasswordModal').classList.add('hidden'); }
+function showOTP(){ document.getElementById('otpResetModal').classList.remove('hidden'); }
+function closeOTP(){ document.getElementById('otpResetModal').classList.add('hidden'); }
+function showReset(){ document.getElementById('resetPasswordModal').classList.remove('hidden'); }
+function closeReset(){ document.getElementById('resetPasswordModal').classList.add('hidden'); }
+
+let otpEmail = ''; // to store email for OTP verification
+
+// 1️⃣ Send OTP (Forgot Password)
+document.getElementById('forgotPasswordForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const formData = new FormData(this);
+
+    fetch('forgot_password.php', { method:'POST', body:formData })
+    .then(res=>res.json())
+    .then(data=>{
+        if(data.status==='success'){
+            otpEmail = data.email;
+            closeForgotPassword();
+            showOTP();
+        } else {
+      
+        }
+    });
+});
+
+// 2️⃣ Verify OTP
+document.getElementById('otpForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const formData = new FormData(this);
+    formData.append('email', otpEmail);
+
+    fetch('verify_reset_otp.php', { method:'POST', body:formData })
+    .then(res=>res.json())
+    .then(data=>{
+        if(data.status==='success'){
+            closeOTP();
+            showReset();
+        } else {
+            alert(data.message);
+        }
+    });
+});
+
+// 3️⃣ Reset Password
+// 3️⃣ Reset Password
+document.getElementById('resetPasswordForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const formData = new FormData(this);
+    formData.append('email', otpEmail);
+
+    fetch('reset_password.php', { method:'POST', body:formData })
+    .then(res=>res.json())
+    .then(data=>{
+        if(data.status==='success'){
+            closeReset();
+
+           Swal.fire({
+    toast: true,
+    position: 'top',
+    icon: 'success',
+    title: 'Password updated successfully.',
+    showConfirmButton: false,
+    timer: 6000,
+    timerProgressBar: false,
+});
+
+        } else {
+           Swal.fire({
+    toast: true,
+    position: 'top',
+    icon: 'error',
+    title: data.message || 'Something went wrong.',
+    showConfirmButton: false,
+    timer: 2500,
+    timerProgressBar: true,
+});
+        }
+    })
+    .catch(() => {
+      Swal.fire({
+    toast: true,
+    position: 'top',
+    icon: 'error',
+    title: 'Network error. Please try again.',
+    showConfirmButton: false,
+    timer: 2500,
+});
+    });
+});
+</script>
+
+
+
 
 <script src="js/jquery-3.4.0.min.js"></script>
 

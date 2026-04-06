@@ -64,10 +64,16 @@ if(isset($_POST['reg'])){
 
         $mail->send();
 
+
+
+        
          echo '<script>
     alert("OTP sent to your email!");
     window.location="view_admin.php?otp_email='.$user_email.'";
-</script>';
+</script>
+
+
+';
 
     } catch (Exception $e) {
         echo "OTP could not be sent. Mailer Error: {$mail->ErrorInfo}";

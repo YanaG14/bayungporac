@@ -67,10 +67,31 @@ if(isset($_POST['reguser'])){
 
         $mail->send();
 
-       echo '<script>
-    alert("OTP sent to your email!");
-    window.location="view_user.php?otp_email='.$email_address.'";
-</script>';
+     echo '
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+    });
+
+    Toast.fire({
+        icon: "success",
+        title: "OTP sent to your email!"
+    });
+
+    setTimeout(function(){
+        window.location.href = "view_user.php?otp_email='.$email_address.'";
+    }, 2000);
+
+});
+</script>
+';
 
     } catch (Exception $e) {
         echo "Mailer Error: {$mail->ErrorInfo}";

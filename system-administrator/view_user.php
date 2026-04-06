@@ -91,6 +91,11 @@ exit();
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
+table, table th, table td {
+  border: none;
+}
+
+
     #loader {
       position: fixed;
       inset: 0;
@@ -107,6 +112,7 @@ exit();
   paging: false,
   lengthChange: false,
   info: false
+  searching: false  
 });
 
       $(window).on('load', function(){ $('#loader').fadeOut('slow'); });
@@ -395,7 +401,19 @@ document.addEventListener('keydown', function(e) {
 
       <!-- Button group -->
       <div class="flex flex-wrap items-center gap-2 lg:gap-4 order-1 lg:order-2 justify-center lg:justify-end">
-        
+        <div class="relative w-full sm:w-80">
+
+    <!-- ICON -->
+    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+
+    <!-- INPUT -->
+    <input type="text" id="globalSearch" 
+      placeholder="Search"
+      oninput="performSearch()"
+      class="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2 
+             focus:ring-2 focus:ring-blue-300 focus:outline-none">
+    
+  </div>
         <!-- Add Admin -->
         <button onclick="$('#modalAddAdmin').removeClass('hidden');" 
                 class="bg-gradient-to-r from-green-600 to-green-500 text-white px-3 sm:px-5 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300 text-sm sm:text-base whitespace-nowrap">
@@ -407,7 +425,7 @@ document.addEventListener('keydown', function(e) {
                 class="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white px-3 sm:px-5 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300 text-sm sm:text-base whitespace-nowrap">
           <i class="fas fa-archive"></i> View Archived User
         </button>
-
+ 
       </div>
 
     </div>
@@ -1021,7 +1039,29 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+<script>
+function performSearch() {
+    const input = document.getElementById('globalSearch').value.toLowerCase();
+    const table = document.getElementById('table3');
+    const rows = table.getElementsByTagName('tr');
 
+    // Loop through table rows (skip header)
+    for (let i = 1; i < rows.length; i++) {
+        let row = rows[i];
+        let cells = row.getElementsByTagName('td');
+        let rowText = '';
+        for (let j = 0; j < cells.length; j++) {
+            rowText += cells[j].textContent.toLowerCase() + ' ';
+        }
+
+        if (rowText.includes(input)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    }
+}
+</script>
 
 <!-- Footer -->
 <footer class="mt-9 text-center text-gray-500 text-sm">

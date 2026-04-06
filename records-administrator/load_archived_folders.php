@@ -72,7 +72,7 @@ require_once("../include/connection.php");
             <td class="px-6 py-4 text-center">
 
               <a href="unarchive_folder.php?id=<?php echo $row['folder_id']; ?>"
-                 onclick="return confirm('Restore this folder?')"
+              onclick="confirmRestore(event, this)"
                  class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg shadow hover:bg-green-700 hover:scale-105 transition-all duration-200">
 
                 <!-- Icon -->
@@ -109,3 +109,23 @@ require_once("../include/connection.php");
   </div>
 
 </div>
+
+<script>
+function confirmRestore(e, el){
+    e.preventDefault(); // stop default action
+
+    Swal.fire({
+        title: 'Restore this folder?',
+        showCancelButton: true,
+        confirmButtonColor: '#16a34a',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Yes, restore',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // continue original action
+            window.location.href = el.href;
+        }
+    });
+}
+</script>

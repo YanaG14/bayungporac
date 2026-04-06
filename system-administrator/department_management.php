@@ -104,7 +104,8 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
       $('#dtable').DataTable({
   paging: false,        // ❌ removes Previous/Next
   lengthChange: false,   // ❌ removes "Show entries"
-  info: false,           // ❌ removes "Showing 1 to..."
+  info: false,     
+  searching: false      // ❌ removes "Showing 1 to..."
 });
       $(window).on('load', function(){ $('#loader').fadeOut('slow'); });
     });
@@ -279,7 +280,14 @@ $query = mysqli_query($conn,"SELECT * FROM departments WHERE department_status='
   scrollbar-width: thin;
   scrollbar-color: rgba(156, 163, 175, 0.8) transparent;
 }
+
+table, table th, table td {
+  border: none;
+}
+
 </style>
+
+
 
 <!-- Mobile Overlay -->
 <div id="sidebarOverlay" class="lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-20 hidden transition-all duration-300" onclick="toggleSidebar()"></div>
@@ -385,6 +393,19 @@ document.addEventListener('keydown', function(e) {
 
     <!-- Buttons grouped with gap -->
     <div class="flex flex-wrap items-center gap-2 lg:gap-3 order-1 lg:order-2 justify-center lg:justify-end">
+       <div class="relative w-full sm:w-80">
+
+    <!-- ICON -->
+    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+
+    <!-- INPUT -->
+    <input type="text" id="globalSearch" 
+      placeholder="Search"
+      oninput="performSearch()"
+      class="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2 
+             focus:ring-2 focus:ring-blue-300 focus:outline-none">
+    
+  </div>
       <button onclick="document.getElementById('modalAddDepartment').classList.remove('hidden');" 
               class="bg-gradient-to-r from-green-600 to-green-500 text-white px-3 sm:px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300 text-sm sm:text-base whitespace-nowrap">
         <i class="fas fa-plus"></i> Add Department
@@ -394,7 +415,9 @@ document.addEventListener('keydown', function(e) {
               class="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white px-3 sm:px-4 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300 text-sm sm:text-base whitespace-nowrap">
         <i class="fas fa-archive"></i> Archived
       </button>
+     
     </div>
+    
   </div>
   
   <!-- TABLE -->
@@ -834,6 +857,38 @@ function confirmLogout(el) {
     });
 }
 </script>
+
+<script>
+function performSearch() {
+    let keyword = document.getElementById("globalSearch").value.toLowerCase();
+
+    // FILTER TABLE ROWS (FOLDERS)
+    let table = document.getElementById("dtable");
+    let rows = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) {
+        let rowText = rows[i].innerText.toLowerCase();
+
+        if (rowText.includes(keyword)) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+
+    // AJAX SEARCH FOR FILES (UNCHANGED)
+    $.ajax({
+        url: "search_files_documents.php",
+        type: "POST",
+        data: { keyword: keyword },
+        success: function(response) {
+            $("#searchResults").html(response);
+        }
+    });
+}
+</script>
+
+
 
 <style>
 .swal-title-nowrap {
