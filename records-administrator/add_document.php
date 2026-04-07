@@ -150,9 +150,9 @@ $(document).ready(function(){
     <!-- Right Side -->
     <div class="flex items-center space-x-2 sm:space-x-4">
       <!-- Desktop Welcome -->
-      <span class="hidden md:inline-block text-sm md:text-base">
-        Welcome, <b><?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></b>!
-      </span>
+      <span class="hidden md:inline-block text-sm md:text-base text-white">
+  Welcome, <b><?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></b>!
+</span>
       
       <!-- Mobile Menu Button -->
       <button id="mobileMenuBtn" 
@@ -168,9 +168,9 @@ $(document).ready(function(){
       
       <!-- Desktop Logout -->
       <a href="#" onclick="confirmLogout(this)" 
-         class="hidden md:inline-block px-4 py-2 text-sm md:text-base rounded-lg border border-white hover:bg-white hover:text-green-700 transition-all duration-300 font-medium">
-        Log out
-      </a>
+      class="hidden md:inline-block px-4 py-2 text-sm md:text-base text-white rounded-lg border border-white hover:bg-white hover:text-green-700 transition-all duration-300 font-medium">
+    Log out
+    </a>
     </div>
   </div>
 </nav>
@@ -325,18 +325,14 @@ class="inline-block mb-4 bg-white px-4 py-2 rounded-xl shadow hover:bg-green-100
     <div class="flex gap-1 sm:gap-2 flex-shrink-0">
       <!-- UPLOAD -->
       <button onclick="openModal('uploadModal')" 
-        class="flex items-center justify-center w-11 h-11 rounded-full 
-               text-green-600 hover:text-green-800 hover:bg-green-50 transition-all duration-200 
-               shadow-sm border border-green-100 focus:outline-none focus:ring-2 focus:ring-green-200"
+        class="flex items-center justify-center w-11 h-11 rounded-full text-green-600 focus:outline-none"
         title="Upload File">
-        <i class="fas fa-file-upload text-lg"></i>
+      <i class="fas fa-file-upload text-lg"></i>
       </button>
 
       <!-- ARCHIVE -->
       <button onclick="openArchivedFiles()"
-        class="flex items-center justify-center w-11 h-11 rounded-full 
-               text-yellow-500 hover:text-yellow-600 hover:bg-yellow-50 transition-all duration-200 
-               shadow-sm border border-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-200"
+        class="flex items-center justify-center w-11 h-11 rounded-full text-yellow-500 focus:outline-none"
         title="View Archived">
         <i class="fas fa-archive text-lg"></i>
       </button>
