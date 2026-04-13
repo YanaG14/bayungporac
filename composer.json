@@ -1,5 +1,14 @@
 {
     "require": {
-        "phpmailer/phpmailer": "^7.0"
+        "phpmailer/phpmailer": "^7.0",
+        "elasticsearch/elasticsearch": "^9.3",
+        "smalot/pdfparser": "^2.12",
+        "phpoffice/phpword": "^1.4",
+        "phpoffice/phpspreadsheet": "^5.5"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     }
 }

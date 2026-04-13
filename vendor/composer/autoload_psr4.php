@@ -6,5 +6,26 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'ZipStream\\' => array($vendorDir . '/maennchen/zipstream-php/src'),
+    'Symfony\\Polyfill\\Php82\\' => array($vendorDir . '/symfony/polyfill-php82'),
+    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
+    'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
+    'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-factory/src', $vendorDir . '/psr/http-message/src'),
+    'Psr\\Http\\Client\\' => array($vendorDir . '/psr/http-client/src'),
+    'PhpOffice\\PhpWord\\' => array($vendorDir . '/phpoffice/phpword/src/PhpWord'),
+    'PhpOffice\\PhpSpreadsheet\\' => array($vendorDir . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet'),
+    'PhpOffice\\Math\\' => array($vendorDir . '/phpoffice/math/src/Math'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
+    'OpenTelemetry\\Context\\' => array($vendorDir . '/open-telemetry/context'),
+    'OpenTelemetry\\API\\' => array($vendorDir . '/open-telemetry/api'),
+    'Nyholm\\Psr7\\' => array($vendorDir . '/nyholm/psr7/src'),
+    'Matrix\\' => array($vendorDir . '/markbaker/matrix/classes/src'),
+    'Http\\Promise\\' => array($vendorDir . '/php-http/promise/src'),
+    'Http\\Discovery\\' => array($vendorDir . '/php-http/discovery/src'),
+    'Http\\Client\\' => array($vendorDir . '/php-http/httplug/src'),
+    'Elastic\\Transport\\' => array($vendorDir . '/elastic/transport/src'),
+    'Elastic\\Elasticsearch\\' => array($vendorDir . '/elasticsearch/elasticsearch/src'),
+    'Composer\\Pcre\\' => array($vendorDir . '/composer/pcre/src'),
+    'Complex\\' => array($vendorDir . '/markbaker/complex/classes/src'),
 );

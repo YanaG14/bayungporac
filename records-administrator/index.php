@@ -236,35 +236,85 @@ endif; ?>
     </form>
   </div>
 </div>
-
 <!-- Reset Password Modal -->
 <div id="resetPasswordModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
   <div class="bg-white rounded-xl p-6 w-[90%] max-w-md text-center shadow-lg relative">
-    <button onclick="closeReset()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-lg font-bold">&times;</button>
+    
+    <button onclick="closeReset()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-lg font-bold">
+      &times;
+    </button>
+
     <h2 class="text-xl font-semibold mb-3 text-red-600">Reset Password</h2>
     <p class="text-gray-600 mb-4">Enter your new password.</p>
-    <form id="resetPasswordForm">
-     <div class="relative">
-  <input
-    type="password"
-    id="resetPasswordField"
-    name="password"
-    class="w-full px-4 py-3 pr-12 bg-white border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 placeholder:text-sm outline-none transition duration-300 hover:bg-gray-100 focus:ring-2 focus:ring-green-500"
-    placeholder="Enter your password">
-  <button
-    type="button"
-    onclick="toggleResetPassword()"
-    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
-    <i id="resetToggleIcon" class="fa-solid fa-eye"></i>
-  </button>
-</div>
+
+    <form id="resetPasswordForm" class="flex flex-col gap-3">
+
+      <!-- Password Field -->
+      <div class="relative">
+        <input 
+          type="password" 
+          id="resetPasswordField"
+          name="password"
+          placeholder="Enter your password"
+          class="w-full px-4 py-3 pr-12 bg-white border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 placeholder:text-sm outline-none transition duration-300 hover:bg-gray-100 focus:ring-2 focus:ring-green-500"
+          
+          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}"
+          required
+        >
+
+        <button
+          type="button"
+          onclick="toggleResetPassword()"
+          class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
+          <i id="resetToggleIcon" class="fa-solid fa-eye"></i>
+        </button>
+      </div>
+
+      <!-- Inline validation message -->
+      <p id="resetPasswordHelp" class="text-red-600 text-sm hidden">
+        Password must be at least 8 characters, include uppercase, lowercase, number, and a symbol.
+      </p>
+
       <button type="submit"
-              class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 mt-4">
+        class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 mt-2">
         Reset Password
       </button>
+
     </form>
   </div>
 </div>
+
+<!-- SCRIPT -->
+<script>
+function toggleResetPassword() {
+  const input = document.getElementById("resetPasswordField");
+  const icon = document.getElementById("resetToggleIcon");
+
+  if (input.type === "password") {
+    input.type = "text";
+    icon.classList.remove("fa-eye");
+    icon.classList.add("fa-eye-slash");
+  } else {
+    input.type = "password";
+    icon.classList.remove("fa-eye-slash");
+    icon.classList.add("fa-eye");
+  }
+}
+
+// LIVE VALIDATION
+const resetPasswordField = document.getElementById("resetPasswordField");
+const resetHelp = document.getElementById("resetPasswordHelp");
+
+resetPasswordField.addEventListener("input", function () {
+  const pattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}/;
+
+  if (!pattern.test(this.value)) {
+    resetHelp.classList.remove("hidden");
+  } else {
+    resetHelp.classList.add("hidden");
+  }
+});
+</script>
 
 <!-- Footer -->
 

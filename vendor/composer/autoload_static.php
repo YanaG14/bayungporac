@@ -6,22 +6,178 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit2185d2f99bcd56787481d9357a5972d3
 {
+    public static $files = array (
+        '5897ea0ac4cccf14d323035e65887801' => __DIR__ . '/..' . '/symfony/polyfill-php82/bootstrap.php',
+        '8e92226780215d0ec758aa7b73e0ede9' => __DIR__ . '/..' . '/open-telemetry/context/fiber/initialize_fiber_handler.php',
+        'c7b4a5d8b94d270f0f9a84f81e1dd63d' => __DIR__ . '/..' . '/open-telemetry/api/Trace/functions.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
+        'Z' =>
+        array (
+            'ZipStream\\' => 10,
+        ),
+        'S' =>
+        array (
+            'Symfony\\Polyfill\\Php82\\' => 23,
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+        ),
         'P' =>
         array (
+            'Psr\\SimpleCache\\' => 16,
+            'Psr\\Log\\' => 8,
+            'Psr\\Http\\Message\\' => 17,
+            'Psr\\Http\\Client\\' => 16,
+            'PhpOffice\\PhpWord\\' => 18,
+            'PhpOffice\\PhpSpreadsheet\\' => 25,
+            'PhpOffice\\Math\\' => 15,
             'PHPMailer\\PHPMailer\\' => 20,
+        ),
+        'O' =>
+        array (
+            'OpenTelemetry\\Context\\' => 22,
+            'OpenTelemetry\\API\\' => 18,
+        ),
+        'N' =>
+        array (
+            'Nyholm\\Psr7\\' => 12,
+        ),
+        'M' =>
+        array (
+            'Matrix\\' => 7,
+        ),
+        'H' =>
+        array (
+            'Http\\Promise\\' => 13,
+            'Http\\Discovery\\' => 15,
+            'Http\\Client\\' => 12,
+        ),
+        'E' =>
+        array (
+            'Elastic\\Transport\\' => 18,
+            'Elastic\\Elasticsearch\\' => 22,
+        ),
+        'C' =>
+        array (
+            'Composer\\Pcre\\' => 14,
+            'Complex\\' => 8,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'ZipStream\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
+        ),
+        'Symfony\\Polyfill\\Php82\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php82',
+        ),
+        'Symfony\\Polyfill\\Mbstring\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Psr\\SimpleCache\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/psr/simple-cache/src',
+        ),
+        'Psr\\Log\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/src',
+        ),
+        'Psr\\Http\\Message\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Psr\\Http\\Client\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-client/src',
+        ),
+        'PhpOffice\\PhpWord\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/phpoffice/phpword/src/PhpWord',
+        ),
+        'PhpOffice\\PhpSpreadsheet\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
+        ),
+        'PhpOffice\\Math\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/phpoffice/math/src/Math',
+        ),
         'PHPMailer\\PHPMailer\\' =>
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
+        'OpenTelemetry\\Context\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/open-telemetry/context',
+        ),
+        'OpenTelemetry\\API\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/open-telemetry/api',
+        ),
+        'Nyholm\\Psr7\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/nyholm/psr7/src',
+        ),
+        'Matrix\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
+        ),
+        'Http\\Promise\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/php-http/promise/src',
+        ),
+        'Http\\Discovery\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/php-http/discovery/src',
+        ),
+        'Http\\Client\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/php-http/httplug/src',
+        ),
+        'Elastic\\Transport\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/elastic/transport/src',
+        ),
+        'Elastic\\Elasticsearch\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/elasticsearch/elasticsearch/src',
+        ),
+        'Composer\\Pcre\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/composer/pcre/src',
+        ),
+        'Complex\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
+        ),
+    );
+
+    public static $prefixesPsr0 = array (
+        'S' =>
+        array (
+            'Smalot\\PdfParser\\' =>
+            array (
+                0 => __DIR__ . '/..' . '/smalot/pdfparser/src',
+            ),
+        ),
     );
 
     public static $classMap = array (
+        'AllowDynamicProperties' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/AllowDynamicProperties.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Random\\BrokenRandomEngineError' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/Random/BrokenRandomEngineError.php',
+        'Random\\CryptoSafeEngine' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/Random/CryptoSafeEngine.php',
+        'Random\\Engine' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/Random/Engine.php',
+        'Random\\Engine\\Secure' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/Random/Engine/Secure.php',
+        'Random\\RandomError' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/Random/RandomError.php',
+        'Random\\RandomException' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/Random/RandomException.php',
+        'SensitiveParameter' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/SensitiveParameter.php',
+        'SensitiveParameterValue' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/SensitiveParameterValue.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -29,6 +185,7 @@ class ComposerStaticInit2185d2f99bcd56787481d9357a5972d3
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit2185d2f99bcd56787481d9357a5972d3::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit2185d2f99bcd56787481d9357a5972d3::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit2185d2f99bcd56787481d9357a5972d3::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit2185d2f99bcd56787481d9357a5972d3::$classMap;
 
         }, null, ClassLoader::class);

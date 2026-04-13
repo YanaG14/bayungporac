@@ -85,11 +85,12 @@ $(document).ready(function(){
 <!-- Loader -->
 <!-- Loader -->
 <!-- Loader -->
-
+ 
 
 
 <!-- NAVBAR -->
 <nav class="fixed top-0 w-full bg-green-700 shadow-md z-50">
+  
   <div class="flex justify-between items-center h-16 px-4 sm:px-6">
     <!-- Logo & Title -->
     <div class="flex items-center space-x-2 sm:space-x-3">
@@ -100,9 +101,9 @@ $(document).ready(function(){
     <!-- Right Side -->
     <div class="flex items-center space-x-2 sm:space-x-4">
       <!-- Desktop Welcome -->
-      <span class="hidden md:inline-block text-sm md:text-base">
-        Welcome, <b><?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></b>!
-      </span>
+      <span class="hidden md:inline-block text-sm md:text-base text-white">
+  Welcome, <b><?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></b>!
+</span>
       
       <!-- Mobile Menu Button -->
       <button id="mobileMenuBtn" 
@@ -118,8 +119,8 @@ $(document).ready(function(){
       
       <!-- Desktop Logout -->
       <a href="#" onclick="confirmLogout(this)" 
-         class="hidden md:inline-block px-4 py-2 text-sm md:text-base rounded-lg border border-white hover:bg-white hover:text-green-700 transition-all duration-300 font-medium">
-        Log out
+   class="hidden md:inline-block px-4 py-2 text-sm md:text-base text-white rounded-lg border border-white hover:bg-white hover:text-green-700 transition-all duration-300 font-medium">
+  Log out
       </a>
     </div>
   </div>
@@ -230,7 +231,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- MAIN LAYOUT -->
 <div class="mt-24 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
-  <div class="w-full lg:w-3/4 flex-1 h-[600px] sm:h-[620px] lg:h-[655px]"> 
+
+<?php include 'sidebar.php'; ?>
+
+  <!-- MAIN CONTENT -->
+  <div class="w-full lg:w-3/4 flex-1 h-[600px] sm:h-[620px] lg:h-[655px]">
+ 
     <div class="bg-white rounded-2xl shadow-lg p-3 sm:p-4 lg:p-6 h-full transition-all duration-300 hover:shadow-xl">
       <div class="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
 
@@ -238,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <h2 class="text-lg sm:text-xl lg:text-2xl font-semibold flex items-center gap-2 text-center sm:text-left flex-1">
           <i class="fas fa-layer-group text-green-500 text-sm sm:text-base"></i>
           <span class="relative">
-            POSTS
+            RECORDS MANAGEMENT
             <span class="absolute left-0 -bottom-1 w-full h-1 bg-gradient-to-r from-green-500 to-emerald-600 rounded scale-x-75 sm:scale-x-100"></span>
           </span>
         </h2>
@@ -262,15 +268,15 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="flex gap-1.5 sm:gap-2">
             <!-- ADD POST -->
             <button onclick="$('#modalAddFolder').removeClass('hidden');"
-                    class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg hover:bg-green-50 hover:text-green-700  flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md text-green-600 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-300">
-              <i class="fas fa-plus"></i>
+            class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg flex items-center justify-center text-green-600 text-sm sm:text-base focus:outline-none">
+            <i class="fas fa-plus"></i>
             </button>
 
             <!-- ARCHIVE -->
             <button onclick="openArchivedFolders();"
-                    class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg hover:bg-yellow-50 hover:text-yellow-700  flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md text-yellow-500 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-yellow-300">
-              <i class="fas fa-archive"></i>
-            </button>
+            class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg flex items-center justify-center text-yellow-500 text-sm sm:text-base focus:outline-none">
+            <i class="fas fa-archive"></i>
+          </button>
           </div>
 
         </div>

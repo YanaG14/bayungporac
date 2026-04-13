@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 if(isset($_POST['reg'])){
-
+ 
     $user_name = mysqli_real_escape_string($conn,$_POST['name']);
     $user_email = mysqli_real_escape_string($conn,$_POST['admin_user']);
     $user_password_raw = $_POST['admin_password'];
