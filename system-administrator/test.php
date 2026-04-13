@@ -10,14 +10,15 @@ if (!isset($_SESSION['admin_user'])) {
     exit();
 }
 
+
 $adminName = $_SESSION['admin_name'];
 
 /* =========================
    HANDLE SLIDES
 ========================= */
 if(isset($_POST['add_slide'])){
-    $caption = mysqli_real_escape_string($conn, $_POST['caption']);
-    $desc = mysqli_real_escape_string($conn, $_POST['description']);
+    $caption = $_POST['caption'];
+$description = $_POST['description'];
 
     $img = $_FILES['image']['name'];
     $tmp = $_FILES['image']['tmp_name'];
@@ -277,9 +278,7 @@ $aboutRow = mysqli_fetch_assoc($about);
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<style>
-.tab-btn.active { background: #16a34a; color: white; }
-</style>
+
 
 </head>
 
@@ -364,34 +363,34 @@ function confirmLogout() {
            hover:bg-gradient-to-r hover:from-green-100 hover:to-emerald-100 hover:shadow-2xl hover:-translate-y-1 hover:border-green-300/80
            transition-all duration-300 text-xs sm:text-sm lg:text-base backdrop-blur-sm">
            <i class="fas fa-home text-blue-500 group-hover:text-blue-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300 shadow-sm rounded p-0.5 bg-white/50"></i>
-           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate text-green-800">Home Page</span>
+           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate text-blue-800">Home Page</span>
         </a>
 
         <!-- Offices - Fixed -->
         <a href="department_management.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-purple-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-purple-200/50 backdrop-blur-sm">
-           <i class="fas fa-building text-gray-500 group-hover:text-green-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 shadow-sm rounded p-0.5 bg-white/50 transition-all duration-300"></i>
+           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-gray-200/50 backdrop-blur-sm">
+           <i class="fas fa-building text-gray-500 group-hover:text-gray-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 shadow-sm rounded p-0.5 bg-white/50 transition-all duration-300"></i>
            <span class="font-semibold tracking-wide flex-1 min-w-0 truncate text-gray-800">Offices</span>
         </a>
 
         <!--Employees-->
         <a href="view_user.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-indigo-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-indigo-200/50 backdrop-blur-sm">
-           <i class="fas fa-users text-gray-500 group-hover:text-indigo-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
+           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-gray-200/50 backdrop-blur-sm">
+           <i class="fas fa-users text-gray-500 group-hover:text-gray-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
            <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">Employees</span>
         </a>
 
         <!--Records Administrators-->
         <a href="view_admin.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-purple-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-purple-200/50 backdrop-blur-sm">
-           <i class="fas fa-user-shield text-gray-500 group-hover:text-purple-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
+           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-gray-200/50 backdrop-blur-sm">
+           <i class="fas fa-user-shield text-gray-500 group-hover:text-gray-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
            <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">Records Administrators</span>
         </a>
 
         <!--System Administrators-->
         <a href="system-administrator.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-indigo-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-indigo-200/50 backdrop-blur-sm">
-           <i class="fas fa-server text-gray-500 group-hover:text-indigo-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
+           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-gray-200/50 backdrop-blur-sm">
+           <i class="fas fa-server text-gray-500 group-hover:text-gray-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
            <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">System Administrators</span>
         </a>
       </nav>
@@ -658,13 +657,15 @@ function showTab(tabId) {
 
 
 
-  <!-- SLIDES -->
+  
+<!-- SLIDES -->
 <div id="slides" class="tab-content bg-white p-4 sm:p-6 rounded-2xl shadow-md flex flex-col h-[600px] overflow-hidden">
 
   <!-- Header -->
   <div class="flex justify-between items-center mb-4 border-b pb-2">
     <h2 class="font-semibold text-xl">Slides</h2>
 
+    <!-- Add Slide Button -->
     <button onclick="openComposer()" 
       class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 hover:text-white transition shadow">
       Add Slide
@@ -672,22 +673,20 @@ function showTab(tabId) {
   </div>
 
   <!-- SLIDE LIST -->
-  <div class="flex-1 overflow-y-auto flex flex-col gap-4 pr-2">
+  <div class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-4 pr-2">
 
     <?php while($row = mysqli_fetch_assoc($slides)) { ?>
       <div class="bg-gray-50 p-4 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col gap-2 relative">
 
-        <!-- Title & Menu -->
+        <!-- Title & Dropdown Button -->
         <div class="flex justify-between items-start">
           <div class="flex-1 min-w-0">
             <p class="font-semibold text-lg"><?php echo $row['caption']; ?></p>
-
-            <p class="text-gray-500 text-sm"
-               data-full="<?php echo htmlspecialchars($row['description']); ?>">
+            <p class="text-gray-500 text-sm truncate">
               <?php 
                 $desc = $row['description'];
-                if(strlen($desc) > 100){
-                  echo htmlspecialchars(substr($desc,0,100)) . '... ';
+                if(strlen($desc) > 100){ 
+                  echo htmlspecialchars(substr($desc,0,100)) . '... '; 
                   echo '<span class="text-blue-600 cursor-pointer" onclick="toggleDescription(this)">See more</span>';
                 } else {
                   echo htmlspecialchars($desc);
@@ -696,7 +695,7 @@ function showTab(tabId) {
             </p>
           </div>
 
-          <!-- 3 DOT MENU -->
+          <!-- Dropdown Button -->
           <div class="ml-2 relative">
             <button onclick="toggleSlideMenu(<?php echo $row['slide_id']; ?>)" 
                     class="p-2 rounded-lg hover:bg-gray-200">
@@ -722,9 +721,11 @@ function showTab(tabId) {
           </div>
         </div>
 
-        <!-- IMAGE -->
-        <img src="../uploads/slides/<?php echo $row['image']; ?>" 
-             class="w-full h-64 object-cover rounded-xl border mt-2">
+        <!-- Image -->
+        <div>
+          <img src="../uploads/slides/<?php echo $row['image']; ?>" 
+               class="w-full h-64 object-cover rounded-xl border mt-2">
+        </div>
 
       </div>
     <?php } ?>
@@ -732,161 +733,64 @@ function showTab(tabId) {
   </div>
 </div>
 
-
 <script>
-
-  // Slide Menu Toggle Function
-function toggleSlideMenu(slideId) {
-  const menu = document.getElementById(`slide-menu-${slideId}`);
-  const allMenus = document.querySelectorAll('.slide-menu');
-  
-  // Close all other menus first
-  allMenus.forEach(otherMenu => {
-    if (otherMenu.id !== `slide-menu-${slideId}`) {
-      otherMenu.classList.add('hidden', 'scale-95', 'opacity-0', 'translate-y-2');
-      otherMenu.classList.remove('scale-100', 'opacity-100', 'translate-y-0');
-    }
-  });
-  
-  // Toggle current menu
-  if (menu.classList.contains('hidden')) {
-    // Show menu with animation
-    menu.classList.remove('hidden');
-    // Force reflow
-    menu.offsetHeight;
-    // Trigger animation
-    menu.classList.remove('scale-95', 'opacity-0', 'translate-y-2');
-    menu.classList.add('scale-100', 'opacity-100', 'translate-y-0');
-  } else {
-    // Hide menu with animation
-    menu.classList.add('scale-95', 'opacity-0', 'translate-y-2');
-    setTimeout(() => {
-      menu.classList.add('hidden');
-    }, 250);
-  }
+function toggleDescription(el){
+  const parent = el.parentElement;
+  parent.textContent = parent.getAttribute('data-full') || parent.textContent;
 }
-
-// Delete Slide Function (Better UX)
-function deleteSlide(slideId) {
-  if (confirm('Are you sure you want to delete this slide? This action cannot be undone.')) {
-    // Redirect to delete
-    window.location.href = `homepage_management.php?delete_slide=${slideId}`;
-  }
-}
-
-// Close menus when clicking outside
-document.addEventListener('click', function(e) {
-  const menus = document.querySelectorAll('.slide-menu');
-  const buttons = document.querySelectorAll('[onclick^="toggleSlideMenu"]');
-  
-  let clickedInsideMenu = false;
-  let clickedButton = false;
-  
-  // Check if clicked inside any menu or button
-  menus.forEach(menu => {
-    if (menu.contains(e.target)) clickedInsideMenu = true;
-  });
-  
-  buttons.forEach(button => {
-    if (button.contains(e.target)) clickedButton = true;
-  });
-  
-  // Close all menus if clicked outside
-  if (!clickedInsideMenu && !clickedButton) {
-    menus.forEach(menu => {
-      menu.classList.add('hidden', 'scale-95', 'opacity-0', 'translate-y-2');
-      menu.classList.remove('scale-100', 'opacity-100', 'translate-y-0');
-    });
-  }
-});
-
-// ESC Key closes all menus
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    const menus = document.querySelectorAll('.slide-menu');
-    menus.forEach(menu => {
-      menu.classList.add('hidden', 'scale-95', 'opacity-0', 'translate-y-2');
-      menu.classList.remove('scale-100', 'opacity-100', 'translate-y-0');
-    });
-  }
-});
 </script>
 
-
-<!-- MODAL BACKDROP -->
-<div id="composer" class="fixed inset-0 hidden items-center justify-center z-50">
-
-  <!-- BLUR BACKGROUND -->
-  <div class="absolute inset-0 bg-black/30 backdrop-blur-md"></div>
-
-  <!-- MODAL BOX -->
-  <div class="relative w-[520px] bg-white rounded-xl shadow-2xl border flex flex-col overflow-hidden z-10">
-
+<!-- GMAIL STYLE COMPOSER -->
+<div id="composer" class="fixed bottom-6 right-6 w-[520px] bg-white rounded-xl shadow-2xl border flex flex-col overflow-hidden hidden z-50">
   <!-- Header -->
   <div class="flex justify-between items-center px-4 py-2 bg-gray-100 cursor-pointer"
        onclick="toggleMinimize()">
     <span class="font-medium text-sm">New Slide</span>
 
     <div class="flex gap-2">
-      
-
-<button onclick="event.stopPropagation(); closeComposer()" 
-        class="text-gray-500 hover:text-red-500"
-        title="Close">
-  <i class="fas fa-times"></i>
-</button>
+      <button onclick="event.stopPropagation(); minimizeComposer()" class="text-gray-500 hover:text-black">
+        <i class="fas fa-minus"></i>
+      </button>
+      <button onclick="event.stopPropagation(); closeComposer()" class="text-gray-500 hover:text-red-500">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
   </div>
 
-  <!-- MINIMIZED DOCK -->
-<div id="composerDock"
-     class="hidden fixed bottom-6 right-6 w-[260px] bg-white shadow-xl border rounded-lg px-3 py-2 cursor-pointer z-[9999]"
-     onclick="restoreComposer()">
-
-  <div class="flex justify-between items-center">
-    <span class="text-sm font-medium">New Slide</span>
-    <i class="fas fa-edit text-gray-500"></i>
-  </div>
-
-  <div id="dockPreview" class="text-xs text-gray-500 truncate"></div>
-</div>
-
   <!-- BODY -->
-<form method="POST" enctype="multipart/form-data" class="flex flex-col h-[420px]" id="composerBody">
-
-  <!-- SCROLLABLE AREA -->
-  <div class="flex-1 overflow-y-auto px-0">
+  <form method="POST" enctype="multipart/form-data" class="flex flex-col h-[420px]" id="composerBody">
 
     <!-- Caption -->
     <input 
       type="text" 
       name="caption" 
       placeholder="Caption"
-      class="w-full px-4 py-2 border-b focus:outline-none sticky top-0 bg-white z-10"
+      class="px-4 py-2 border-b focus:outline-none"
       required
     >
 
     <!-- Description (Rich Editor) -->
-    <div id="editor"
-      contenteditable="true"
-      class="min-h-[120px] px-4 py-3 focus:outline-none text-sm"
-      placeholder="Write your description...">
-    </div>
+<div id="editor"
+  contenteditable="true"
+  class="flex-1 px-4 py-3 focus:outline-none overflow-y-auto text-sm"
+  placeholder="Write your description...">
+</div>
+
+<input type="hidden" name="description" id="hiddenDescription">
 
     <!-- Image Preview -->
-    <div id="previewContainer" class="hidden px-4 pb-3">
-      <img id="previewImg" class="w-full h-auto rounded-lg border">
-    </div>
+    <div id="previewContainer" class="hidden px-4 pb-2">
+  <img id="previewImg" class="w-full h-auto rounded-lg border">
+  <img id="previewImg" class="w-full max-w-full h-auto rounded-lg border">
+</div>
 
-  </div>
+    <!-- Footer Toolbar -->
+<div class="flex flex-wrap items-center justify-start gap-2 px-3 py-2 border-t bg-gray-50 text-sm">
 
-  <!-- Hidden input -->
-  <input type="hidden" name="description" id="hiddenDescription">
+  <!-- LEFT: ALL TOOLS -->
+  <div class="flex flex-wrap items-center gap-2">
 
-  <!-- FOOTER (ALWAYS VISIBLE) -->
-  <div class="flex flex-wrap items-center gap-2 px-3 py-2 border-t bg-gray-50 text-sm shrink-0">
-
-    <!-- Upload -->
+    <!-- Upload Button (Oval, beside Undo) -->
     <button type="submit"
       name="add_slide"
       onclick="prepareSubmit()"
@@ -919,70 +823,43 @@ document.addEventListener('keydown', function(e) {
     </select>
 
     <!-- Bold / Italic / Underline -->
-    <button type="button" onclick="formatDoc('bold')" class="toolbar-btn"><b>B</b></button>
-    <button type="button" onclick="formatDoc('italic')" class="toolbar-btn"><i>I</i></button>
-    <button type="button" onclick="formatDoc('underline')" class="toolbar-btn"><u>U</u></button>
+    <button type="button" onclick="formatDoc('bold')" class="toolbar-btn" title="Bold"><b>B</b></button>
+    <button type="button" onclick="formatDoc('italic')" class="toolbar-btn" title="Italic"><i>I</i></button>
+    <button type="button" onclick="formatDoc('underline')" class="toolbar-btn" title="Underline"><u>U</u></button>
 
     <!-- Attach -->
-    <label class="toolbar-btn cursor-pointer">
+    <label class="toolbar-btn cursor-pointer" title="Attach Image">
       <i class="fas fa-paperclip"></i>
       <input type="file" name="image" class="hidden" onchange="previewImage(event)" required>
     </label>
 
     <!-- Cancel -->
-    <button type="button" onclick="clearComposer()" class="toolbar-btn text-red-500">
+    <button type="button" onclick="clearComposer()" class="toolbar-btn text-red-500" title="Cancel">
       <i class="fas fa-trash"></i>
     </button>
 
-
-    
-  </div>
-</form>
   </div>
 </div>
 
+
+
 <script>
-// Composer
 function openComposer(){
   document.getElementById('composer').classList.remove('hidden');
-  document.getElementById('composer').classList.add('flex');
 }
 
 function closeComposer(){
   document.getElementById('composer').classList.add('hidden');
-  document.getElementById('composerDock').classList.add('hidden');
 }
 
 function minimizeComposer(){
-  document.getElementById('composer').classList.add('hidden');
-  document.getElementById('composerDock').classList.remove('hidden');
-}
-
-function restoreComposer(){
-  // show modal again
-  document.getElementById('composer').classList.remove('hidden');
-  document.getElementById('composer').classList.add('flex');
-
-  // hide dock
-  document.getElementById('composerDock').classList.add('hidden');
+  document.getElementById('composerBody').classList.toggle('hidden');
 }
 
 function toggleMinimize(){
   minimizeComposer();
 }
 
-// Editor
-function formatDoc(command, value = null){
-  document.execCommand(command, false, value);
-}
-
-// Submit content
-function prepareSubmit(){
-  document.getElementById('hiddenDescription').value =
-    document.getElementById('editor').innerHTML;
-}
-
-// Image preview
 function previewImage(event){
   const file = event.target.files[0];
   const preview = document.getElementById('previewImg');
@@ -993,32 +870,97 @@ function previewImage(event){
     container.classList.remove('hidden');
   }
 }
+</script>
 
-// Clear composer
+<style>
+.toolbar-btn{
+  padding: 6px 8px;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+.toolbar-btn:hover{
+  background:#e5e7eb;
+}
+
+.toolbar-select{
+  border:1px solid #ddd;
+  border-radius:6px;
+  padding:3px 6px;
+  font-size:12px;
+}
+
+/* Oval Upload Button */
+button[name="add_slide"]{
+  border-radius: 9999px; /* oval */
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+button[name="add_slide"]:hover{
+  background-color: #2563eb; /* darker blue on hover */
+}
+</style>
+
+<script>
+// Formatting
+function formatDoc(command, value = null){
+  document.execCommand(command, false, value);
+}
+
+// Convert editor content before submit
+function prepareSubmit(){
+  document.getElementById('hiddenDescription').value =
+    document.getElementById('editor').innerHTML;
+}
+
+// Clear / Cancel
 function clearComposer(){
   document.getElementById('editor').innerHTML = "";
   document.querySelector('input[name="caption"]').value = "";
   document.getElementById('previewContainer').classList.add('hidden');
 }
 
-document.addEventListener("click", function(e){
-  const modal = document.querySelector("#composer > div.relative");
-  const overlay = document.getElementById("composer");
+</script>
 
-  if (!modal.contains(e.target) && overlay.contains(e.target)) {
-    closeComposer();
+<script>
+// Toggle the dropdown menu
+function toggleSlideMenu(id){
+  const menu = document.getElementById('slide-menu-' + id);
+
+  // Close all other menus
+  document.querySelectorAll('[id^="slide-menu-"]').forEach(el => {
+    if(el !== menu){
+      el.classList.add('hidden','scale-95','opacity-0');
+    }
+  });
+
+  // Toggle current menu
+  if(menu.classList.contains('hidden')){
+    menu.classList.remove('hidden');
+    setTimeout(() => {
+      menu.classList.remove('scale-95','opacity-0');
+      menu.classList.add('scale-100','opacity-100');
+    }, 10);
+  } else {
+    closeSlideMenu(menu);
   }
+}
+
+function closeSlideMenu(menu){
+  menu.classList.remove('scale-100','opacity-100');
+  menu.classList.add('scale-95','opacity-0');
+  setTimeout(() => menu.classList.add('hidden'), 200);
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', function(e){
+  document.querySelectorAll('[id^="slide-menu-"]').forEach(menu => {
+    const button = menu.previousElementSibling;
+    if (!menu.contains(e.target) && !button.contains(e.target)) closeSlideMenu(menu);
+  });
 });
 </script>
 
-
-<style>
-/* Optional: active tab highlight */
-.tab-btn.active {
-  background-color: #10B981; /* Tailwind green-500 */
-  color: white;
-}
-</style>
 
   <!-- PROFILES -->
   <div id="profiles" class="tab-content hidden bg-white p-6 rounded-2xl shadow-md flex flex-col flex-1 overflow-hidden">
@@ -1383,14 +1325,11 @@ document.addEventListener('click', function(e){
 
 <script>
 function showTab(tab){
-  document.querySelectorAll('.tab-content').forEach(el => {
-    el.classList.add('hidden');
-  });
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+  document.getElementById(tab).classList.remove('hidden');
 
-  const active = document.getElementById(tab);
-  if(active){
-    active.classList.remove('hidden');
-  }
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
 }
 
 function confirmLogout(){

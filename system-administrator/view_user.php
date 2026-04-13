@@ -229,16 +229,15 @@ table, table th, table td {
         
         <!--Home Page-->
         <a href="homepage_management.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-blue-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-blue-200/50 backdrop-blur-sm">
-           <i class="fas fa-home text-gray-500 group-hover:text-blue-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
+           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-blue-200/50 backdrop-blur-sm">
+           <i class="fas fa-home text-gray-500 group-hover:text-gray-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
            <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">Home Page</span>
         </a>
 
         <!-- Offices -->
         <a href="department_management.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-purple-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-purple-200/50 backdrop-blur-sm">
-           <i class="fas fa-building text-gray-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 shadow-sm rounded p-0.5 bg-white/50"></i>
-           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate text-dark-800">Offices</span>
+           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-gray-200/50 backdrop-blur-sm">
+<i class="fas fa-building text-gray-500 group-hover:text-gray-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 shadow-sm rounded p-0.5 bg-white/50 transition-all duration-300"></i>           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate text-dark-800">Offices</span>
         </a>
 
         <!-- Employees - Active style -->
@@ -248,20 +247,20 @@ table, table th, table td {
            hover:bg-gradient-to-r hover:from-green-100 hover:to-emerald-100 hover:shadow-2xl hover:-translate-y-1 hover:border-green-300/80
            transition-all duration-300 text-xs sm:text-sm lg:text-base backdrop-blur-sm">
            <i class="fas fa-users text-blue-500 group-hover:text-indigo-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
-           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">Employees</span>
+           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate text-blue-800">Employees</span>
         </a>
 
         <!--Records Administrators-->
         <a href="view_admin.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-purple-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-purple-200/50 backdrop-blur-sm">
-           <i class="fas fa-user-shield text-gray-500 group-hover:text-purple-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
+           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-gray-200/50 backdrop-blur-sm">
+           <i class="fas fa-user-shield text-gray-500 group-hover:text-gray-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
            <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">Records Administrators</span>
         </a>
 
         <!--System Administrators-->
         <a href="system-administrator.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-indigo-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-indigo-200/50 backdrop-blur-sm">
-           <i class="fas fa-server text-gray-500 group-hover:text-indigo-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
+           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-gray-200/50 backdrop-blur-sm">
+           <i class="fas fa-server text-gray-500 group-hover:text-gray-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
            <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">System Administrators</span>
         </a>
       </nav>
@@ -395,9 +394,13 @@ document.addEventListener('keydown', function(e) {
     <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-4 gap-4 lg:gap-0">
       
       <!-- Title -->
-      <h2 class="text-xl sm:text-2xl font-semibold text-gray-700 flex items-center gap-2 order-2 lg:order-1">
-        <i class="fas fa-user-shield text-green-600"></i> Add Record Admin
-      </h2>
+      <h2 class="text-lg sm:text-xl lg:text-2xl font-semibold flex items-center gap-2 text-center sm:text-left flex-1">
+          <i class="fas fa-building text-green-600"></i>
+          <span class="relative">
+            ADD RECORD ADMIN
+            <span class="absolute left-0 -bottom-1 w-full h-1 bg-gradient-to-r from-green-500 to-emerald-600 rounded scale-x-75 sm:scale-x-100"></span>
+          </span>
+        </h2>
 
       <!-- Button group -->
       <div class="flex flex-wrap items-center gap-2 lg:gap-4 order-1 lg:order-2 justify-center lg:justify-end">
@@ -413,17 +416,18 @@ document.addEventListener('keydown', function(e) {
       class="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2 
              focus:ring-2 focus:ring-blue-300 focus:outline-none">
     
+
   </div>
         <!-- Add Admin -->
         <button onclick="$('#modalAddAdmin').removeClass('hidden');" 
-                class="bg-gradient-to-r from-green-600 to-green-500 text-white px-3 sm:px-5 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300 text-sm sm:text-base whitespace-nowrap">
-          <i class="fas fa-user-plus"></i> Add User
+                class="text-green-600 hover:text-green-800 transition-colors duration-200 focus:outline-none">
+    <i class="fas fa-plus text-lg"></i>
         </button>
 
         <!-- Archived Admins -->
         <button onclick="$('#modalArchivedAdmins').removeClass('hidden');" 
-                class="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white px-3 sm:px-5 py-2 rounded-xl hover:scale-105 hover:shadow-lg flex items-center gap-2 transition-all duration-300 text-sm sm:text-base whitespace-nowrap">
-          <i class="fas fa-archive"></i> View Archived User
+                class="text-yellow-500 hover:text-yellow-700 transition-colors duration-200 focus:outline-none">
+    <i class="fas fa-archive text-lg"></i>
         </button>
  
       </div>
@@ -431,9 +435,9 @@ document.addEventListener('keydown', function(e) {
     </div>
 
     <!-- TABLE -->
-    <div class="max-h-[400px] lg:max-h-[450px] overflow-y-auto overflow-x-auto lg:overflow-x-hidden">
-      <table id="table3" class="w-full border border-gray-200 min-w-full lg:min-w-0">
-          <thead class="bg-green-700 text-white sticky top-0 z-10">
+    <div class="w-full h-[calc(100%-120px)] sm:h-[calc(100%-140px)] lg:h-[560px] overflow-hidden rounded-xl border shadow-sm overflow-x-auto overflow-y-auto custom-scrollbar">
+          <table id="dtable" class="min-w-[800px] w-full border-gray-200 table-auto">
+            <thead class="bg-gray-200 text-black uppercase text-xs sm:text-sm tracking-wider sticky top-0 z-10 shadow-sm">
             <tr>
               <th class="px-2 sm:px-4 py-2 text-xs sm:text-sm">Full Name</th>
               <th class="px-2 sm:px-4 py-2 text-xs sm:text-sm">Email Address</th>
@@ -442,6 +446,7 @@ document.addEventListener('keydown', function(e) {
             </tr>
           </thead>
           <tbody class="text-gray-700 divide-y divide-gray-200">
+            
            <?php
             $query="SELECT login_user.*, departments.department_name 
         FROM login_user 
@@ -460,7 +465,7 @@ document.addEventListener('keydown', function(e) {
               <td class="px-2 sm:px-4 py-3 text-xs sm:text-sm"><?php echo htmlspecialchars($rs['email_address']); ?></td>
               <td class="px-2 sm:px-4 py-3 text-center">
                 <?php if($rs['otp_verified'] == 1){ ?>
-                  <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 font-semibold">
+                  <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 font-semibold">
                     Verified
                   </span>
                 <?php } else { ?>
@@ -474,27 +479,26 @@ document.addEventListener('keydown', function(e) {
                   
                   <!-- 3 DOT BUTTON -->
                   <button onclick="toggleMenu(<?php echo $rs['id']; ?>)" 
-                          class="p-2 rounded-full hover:bg-gray-200 transition z-10 flex items-center justify-center w-10 h-10">
+                          class="text-gray-500 hover:text-gray-800 text-xl px-2">
                     <i class="fas fa-ellipsis-h text-sm"></i>
                   </button>
 
                   <!-- DROPDOWN MENU -->
                   <div id="menu<?php echo $rs['id']; ?>" 
-                       class="hidden absolute right-0 sm:right-full sm:mr-2 top-1/2 -translate-y-1/2
-                              bg-white shadow-lg rounded-xl py-2 w-32 sm:w-36
-                              opacity-0 scale-95 transition-all duration-200 border border-gray-200 z-20">
+                       class="hidden absolute top-full mt-1.5 right-0 w-28 sm:w-32 bg-white rounded-lg shadow-lg border border-gray-100 z-50
+                                transform scale-95 opacity-0 transition-all duration-200 origin-top-right">
                     
                     <!-- EDIT -->
                     <a href="view_user.php?id=<?php echo $rs['id']; ?>"
                        onclick="closeMenu(<?php echo $rs['id']; ?>)"
-                       class="flex items-center gap-2 w-full px-3 py-2 hover:bg-gray-100 text-blue-600 text-sm">
-                      <i class="fas fa-edit"></i> Edit
+                       class="w-full flex items-center gap-2 px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg transition-all duration-200">
+                    <i class="fas fa-edit text-blue-500 text-xs"></i> Edit
                     </a>
 
                     <!-- ARCHIVE -->
                     <button onclick="confirmArchiveAdmin(<?php echo $rs['status']; ?>); closeMenu(<?php echo $rs['id']; ?>)"
-                            class="flex items-center gap-2 w-full px-3 py-2 hover:bg-gray-100 text-red-600 text-sm">
-                      <i class="fas fa-archive"></i> Archive
+                            class="w-full flex items-center gap-2 px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg transition-all duration-200">
+                    <i class="fas fa-archive text-red-500 text-xs"></i> Archive
                     </button>
 
                     <!-- VERIFY OTP -->
@@ -503,8 +507,8 @@ document.addEventListener('keydown', function(e) {
                         <?php echo htmlspecialchars(json_encode($rs['email_address']), ENT_QUOTES, 'UTF-8'); ?>, 
                         <?php echo (int)$rs['otp_verified']; ?>
                       ); closeMenu(<?php echo $rs['id']; ?>)"
-                      class="flex items-center gap-2 w-full px-3 py-2 hover:bg-gray-100 text-yellow-600 text-sm">
-                      <i class="fas fa-check"></i> Verify
+                      class="w-full flex items-center gap-2 px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg transition-all duration-200">
+                      <i class="fas fa-check text-yellow-500 text-xs"></i> Verify
                     </button>
 
                   </div>
@@ -518,6 +522,17 @@ document.addEventListener('keydown', function(e) {
     </div>
   </div>
 </div>
+
+
+<style>
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: #f8fafc; border-radius: 3px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { 
+  background: linear-gradient(45deg, #6b7371); 
+  border-radius: 3px; 
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #059669; }
+</style>
 
 <script>
 function toggleMenu(id) {

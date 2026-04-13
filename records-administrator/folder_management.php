@@ -317,24 +317,24 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="flex justify-center relative">
                     <!-- 3 DOT BUTTON -->
                     <button onclick="toggleMenu(<?php echo $row['folder_id']; ?>)"
-                            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-green-400">
+                            class="text-gray-500 hover:text-gray-800 text-xl px-2">
                       <i class="fas fa-ellipsis-h text-sm"></i>
                     </button>
+
                     
+                    <!-- DROPDOWN MENU -->
                     <div id="menu-<?php echo $row['folder_id']; ?>"
                          class="hidden absolute top-full mt-1.5 right-0 w-28 sm:w-32 bg-white rounded-lg shadow-lg border border-gray-100 z-50
                                 transform scale-95 opacity-0 transition-all duration-200 origin-top-right">
                       
                       <button onclick="openEditModal(<?php echo $row['folder_id']; ?>);"
                               class="w-full flex items-center gap-2 px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg transition-all duration-200">
-                        <i class="fas fa-edit text-blue-500 text-xs"></i>
-                        Edit
+                        <i class="fas fa-edit text-blue-500 text-xs"></i>Edit
                       </button>
 
                       <button onclick="confirmArchive(<?php echo $row['folder_id']; ?>);"
                               class="w-full flex items-center gap-2 px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200">
-                        <i class="fas fa-archive text-yellow-500 text-xs"></i>
-                        Archive
+                        <i class="fas fa-archive text-yellow-500 text-xs"></i> Archive
                       </button>
 
                       <a href="download_folder.php?folder_id=<?php echo $row['folder_id']; ?>"
@@ -420,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function() {
 .custom-scrollbar::-webkit-scrollbar { width: 6px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: #f8fafc; border-radius: 3px; }
 .custom-scrollbar::-webkit-scrollbar-thumb { 
-  background: linear-gradient(45deg, #464948); 
+  background: linear-gradient(45deg, #6b7371); 
   border-radius: 3px; 
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #059669; }

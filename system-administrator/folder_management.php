@@ -10,6 +10,7 @@ if (!isset($_SESSION['admin_user'])) {
 $adminName = $_SESSION['admin_name'];
 require_once("../include/connection.php");
 
+
 // Fetch active folders
 $query = mysqli_query($conn,"
 SELECT 
