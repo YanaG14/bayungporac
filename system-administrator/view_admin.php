@@ -84,7 +84,7 @@ exit();
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <!-- TailwindCSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -161,21 +161,24 @@ exit();
 <!-- NAVBAR -->
 <nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
   <div class="flex justify-between items-center h-16 px-4 sm:px-6">
-    <!-- Left side: Mobile toggle + Logo + Title -->
+    
     <div class="flex items-center space-x-3 min-w-0">
-      <!-- Mobile Toggle Button -->
-      <button id="sidebarToggle" class="lg:hidden bg-transparent/0 backdrop-blur-sm p-2.5 rounded-lg shadow-md border-2 border-white/20 p-2.5 w-11 h-11 flex items-center justify-center shrink-0 z-10 outline-none focus:outline-none active:bg-transparent/0 transition-none hover:bg-transparent">
-  <i id="toggleIcon" class="fas fa-bars text-white/90 text-lg transition-none"></i>
+      
+      <!-- ✅ ONLY TOGGLE BUTTON -->
+      <button id="sidebarToggle"
+  class="bg-transparent p-2.5 w-11 h-11 flex items-center justify-center border-2 border-white/20 rounded-lg z-50">
+  <i id="toggleIcon" class="fas fa-bars text-white text-lg"></i>
 </button>
+
       <!-- Logo + Title -->
       <div class="flex items-center space-x-3 min-w-0 flex-1">
-        <img src="js/img/municipalLogo.png" class="w-9 h-9 object-contain flex-shrink-0">
-        <h1 class="text-white font-semibold text-base sm:text-lg truncate">Bayung Porac Archive</h1>
+        <img src="js/img/municipalLogo.png" class="w-9 h-9 object-contain">
+        <h1 class="text-white font-semibold text-base sm:text-lg truncate">
+          Bayung Porac Archive
+        </h1>
       </div>
-    </div>
 
-    <!-- Right side: Welcome + Logout -->
-    
+    </div>
   </div>
 </nav>
 
@@ -184,204 +187,168 @@ exit();
 
 
   <!-- SIDEBAR -->
- <aside id="sidebar" class="lg:w-1/4 w-72 lg:h-[650px] fixed lg:static inset-y-0 left-0 z-30 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out lg:flex lg:flex-col">
-  <!-- NO SHADOW behind + Ultra smooth desktop corners -->
-  <div class="bg-white/95 backdrop-blur-lg rounded-3xl lg:rounded-[3rem] shadow-2xl lg:shadow-2xl p-1 sm:p-3 lg:p-8 border border-gray-200/50 flex flex-col h-screen lg:h-[650px] items-center relative overflow-hidden">
-    
-    <!-- Mobile Close Button -->
-    <button onclick="toggleSidebar()" class="lg:hidden absolute top-1 right-1 text-gray-500 text-lg font-bold z-20 p-1 rounded-xl transition-none hover:bg-transparent">
-      <i class="fas fa-times"></i>
-    </button>
+<aside id="sidebar"
+  class="fixed inset-y-0 left-0 z-30 w-72 lg:w-1/4
+  transform -translate-x-full transition-transform duration-300 ease-in-out">
 
-    <!-- Logo & Menu Container -->
-    <div id="sidebarContent" class="flex flex-col w-full h-full pt-4 lg:pt-6 transition-all duration-500 ease-out">
-      
+  <div class="bg-white/95 backdrop-blur-lg rounded-3xl lg:rounded-[3rem] shadow-2xl p-3 lg:p-8 border flex flex-col h-screen lg:h-[790px] items-center">
+
+    <div id="sidebarContent" class="flex flex-col w-full h-full pt-12 space-y-4">
+
       <!-- LOGO -->
-      <div class="mb-2 lg:mb-8 w-full flex justify-center px-1">
+      <div class="mb-6 flex justify-center">
         <img src="img/adminLogo.png"
-             class="w-32 h-32 sm:w-36 sm:h-36 lg:w-40 lg:h-40 xl:w-44 xl:h-44 object-cover rounded-3xl transition-all duration-300 hover:scale-105 shadow-2xl border-4 border-white/90 mx-auto">
+          class="w-36 h-36 object-cover rounded-3xl shadow-2xl border-4 border-white">
       </div>
 
-      <!-- Welcome Section -->
-      <div class="w-full px-2 sm:px-4 mb-2 lg:mb-8 flex flex-col items-center gap-1.5 lg:gap-3 text-dark text-xs sm:text-sm lg:text-base font-medium">
-        
-        <!-- Admin Name -->
-        <span class="welcome-text text-center truncate max-w-[260px] sm:max-w-none bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent text-xs sm:text-sm lg:text-2xl font-bold tracking-wide leading-tight">
+      <!-- ADMIN -->
+      <div class="text-center mb-6">
+        <span class="font-bold text-lg block">
           <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?>
         </span>
-        
-        <!-- Logout Button -->
-        <a href="#" onclick="confirmLogout(this)" 
-           class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3.5 py-1 rounded-xl hover:from-green-600 hover:to-emerald-600 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 font-semibold text-xs whitespace-nowrap shadow-lg border-0 backdrop-blur-sm w-fit mx-auto hover:scale-105">
+
+        <a href="#" onclick="confirmLogout(this)"
+          class="mt-2 inline-block bg-green-500 text-white px-4 py-1 rounded-xl">
           Log out
         </a>
       </div>
 
-      <!-- Menu - NO SCROLLBAR desktop + All content visible -->
-      <nav class="w-full flex-1 px-2 sm:px-3 space-y-1.5 lg:space-y-3 overflow-y-auto lg:overflow-visible scrollbar-thin scrollbar-thumb-gray-300/70 scrollbar-track-transparent lg:max-h-none max-h-[calc(100vh-240px)] lg:max-h-none">
-        
-        <!--Home Page-->
-        <a href="homepage_management.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-gray-200/50 backdrop-blur-sm">
-           <i class="fas fa-home text-gray-500 group-hover:text-gray-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
-           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">Home Page</span>
-        </a>
+      <!-- MENU -->
+      <nav class="w-full space-y-2 overflow-y-auto">
 
-        <!-- Offices - Fixed icon color -->
-        <a href="department_management.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-gray-200/50 backdrop-blur-sm">
-           <i class="fas fa-building text-gray-500 group-hover:text-gray-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 shadow-sm rounded p-0.5 bg-white/50 transition-all duration-300"></i>
-           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate text-gray-800">Offices</span>
-        </a>
+        <a href="homepage_management.php"
+  class="flex items-center gap-3 w-full px-4 py-3 rounded-2xl
+  transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
 
-        <!--Employees-->
-        <a href="view_user.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-gray-200/50 backdrop-blur-sm">
-           <i class="fas fa-users text-gray-500 group-hover:text-gray-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
-           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">Employees</span>
-        </a>
+  <i class="fas fa-house text-gray-500 w-4 h-4"></i>
+  <span class="font-medium text-gray-700 truncate"> Home Page</span>
+</a>
 
-        <!-- Records Administrators - Active style -->
-        <a href="view_admin.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl 
-           bg-gradient-to-r from-green-50 via-emerald-50 to-teal-50 shadow-md border border-green-200/60
-           hover:bg-gradient-to-r hover:from-green-100 hover:to-emerald-100 hover:shadow-2xl hover:-translate-y-1 hover:border-green-300/80
-           transition-all duration-300 text-xs sm:text-sm lg:text-base backdrop-blur-sm">
-           <i class="fas fa-user-shield text-blue-500 group-hover:text-blue-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
-<span class="font-semibold tracking-wide flex-1 min-w-0 truncate text-blue-800">Records Administrator</span>
-        </a>
 
-        <!--System Administrators-->
-        <a href="system-administrator.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-gray-200/50 backdrop-blur-sm">
-           <i class="fas fa-server text-gray-500 group-hover:text-gray-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
-           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">System Administrators</span>
-        </a>
+
+       <a href="department_management.php"
+  class="flex items-center gap-3 w-full px-4 py-3 rounded-2xl
+  transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+
+  <i class="fas fa-building text-gray-500 w-4 h-4"></i>
+  <span class="font-medium text-gray-700 truncate">Offices</span>
+</a>
+
+
+
+
+       <a href="view_user.php"
+   class="flex items-center gap-3 w-full px-4 py-3 rounded-2xl
+  transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl"">
+
+  <i class="fas fa-user text-gray-500 w-4 h-4"></i>
+  <span class="truncate">Employees</span>
+</a>
+
+
+
+
+      <a href="view_admin.php"
+  class="flex items-center gap-3 w-full px-4 py-3 rounded-2xl
+  bg-gradient-to-r from-indigo-500/10 to-blue-500/10
+  text-indigo-600 font-semibold
+  transition-all duration-300
+  shadow-sm hover:shadow-md">
+
+  <i class="fas fa-user-shield text-indigo-500 w-4 h-4"></i>
+  <span class="font-medium text-indigo-500 truncate"> Records Administrators</span>
+</a>
+
+
+<a href="system-administrator.php"
+  class="flex items-center gap-3 w-full px-4 py-3 rounded-2xl
+  transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+
+  <i class="fas fa-user-shield text-gray-500 w-4 h-4"></i>
+  <span class="font-medium text-gray-700 truncate"> System Administrators</span>
+</a>
+
+
       </nav>
     </div>
   </div>
 </aside>
 
-<style>
-/* Custom Scrollbar - Ultra Compact */
-#sidebar nav::-webkit-scrollbar {
-  width: 3px;
-}
-#sidebar nav::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 6px;
-}
-#sidebar nav::-webkit-scrollbar-thumb {
-  background: rgba(156, 163, 175, 0.8);
-  border-radius: 6px;
-}
-#sidebar nav::-webkit-scrollbar-thumb:hover {
-  background: rgba(107, 114, 128, 1);
-}
 
-/* Smooth scrolling */
-#sidebar nav {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(156, 163, 175, 0.8) transparent;
-}
-</style>
+<!-- OVERLAY -->
+<div id="sidebarOverlay"
+  class="fixed inset-0 bg-black/40 hidden z-20 lg:hidden">
+</div>
 
-<!-- Mobile Overlay -->
-<div id="sidebarOverlay" class="lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-20 hidden transition-all duration-300" onclick="toggleSidebar()"></div>
+
 
 <script>
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebarOverlay');
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const content = document.getElementById('sidebarContent');
-    const icon = toggleBtn?.querySelector('i');
-    
-    sidebar.classList.toggle('-translate-x-full');
-    
-    if (sidebar.classList.contains('-translate-x-full')) {
-        // Closing - move content back up
-        content.classList.remove('pt-[30vh]');
-        content.classList.add('pt-0');
-        overlay.classList.add('hidden');
-        document.body.classList.remove('overflow-hidden');
-        if (icon) {
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-        }
-        toggleBtn?.classList.remove('bg-green-50', 'ring-2', 'ring-green-300', 'scale-110');
-    } else {
-        // Opening - move content down 30%
-        content.classList.remove('pt-0');
-        content.classList.add('pt-[30vh]');
-        overlay.classList.remove('hidden');
-        document.body.classList.add('overflow-hidden');
-        if (icon) {
-            icon.classList.remove('fa-bars');
-            icon.classList.add('fa-times');
-        }
-        toggleBtn?.classList.add('bg-green-50', 'ring-2', 'ring-green-300', 'scale-110');
-    }
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebarOverlay');
+const toggleBtn = document.getElementById('sidebarToggle');
+const icon = document.getElementById('toggleIcon');
+
+function openSidebar() {
+  sidebar.classList.remove('-translate-x-full');
+  overlay.classList.remove('hidden');
+  document.body.classList.add('overflow-hidden');
+
+  icon.classList.remove('fa-bars');
+  icon.classList.add('fa-times');
 }
 
-// Initialize
-document.addEventListener('DOMContentLoaded', function() {
-    const toggleBtn = document.getElementById('sidebarToggle');
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            toggleSidebar();
-        });
-    }
+function closeSidebar() {
+  sidebar.classList.add('-translate-x-full');
+  overlay.classList.add('hidden');
+  document.body.classList.remove('overflow-hidden');
+
+  icon.classList.remove('fa-times');
+  icon.classList.add('fa-bars');
+}
+
+function toggleSidebar() {
+  if (sidebar.classList.contains('-translate-x-full')) {
+    openSidebar();
+  } else {
+    closeSidebar();
+  }
+}
+
+// Toggle button
+toggleBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  toggleSidebar();
 });
 
-// Auto-close on link click (mobile)
-document.addEventListener('click', function(e) {
-    if (window.innerWidth < 1024 && e.target.closest('#sidebar a')) {
-        setTimeout(toggleSidebar, 150);
-    }
+// Overlay click closes
+overlay.addEventListener('click', closeSidebar);
+
+// Auto close when clicking menu links
+document.querySelectorAll('#sidebar a').forEach(link => {
+  link.addEventListener('click', closeSidebar);
 });
 
-// Resize handler
-let resizeTimeout;
-window.addEventListener('resize', function() {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(function() {
-        if (window.innerWidth >= 1024) {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            const content = document.getElementById('sidebarContent');
-            const toggleBtn = document.getElementById('sidebarToggle');
-            const icon = toggleBtn?.querySelector('i');
-            
-            sidebar.classList.remove('-translate-x-full');
-            overlay.classList.add('hidden');
-            content.classList.remove('pt-[30vh]');
-            content.classList.add('pt-0');
-            document.body.classList.remove('overflow-hidden');
-            if (icon) {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-            toggleBtn?.classList.remove('bg-green-50', 'ring-2', 'ring-green-300', 'scale-110');
-        }
-    }, 250);
+// ESC key closes
+document.addEventListener('keydown', (e) => {
+  if (e.key === "Escape") closeSidebar();
 });
 
-// Escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        const sidebar = document.getElementById('sidebar');
-        if (!sidebar.classList.contains('-translate-x-full')) {
-            toggleSidebar();
-        }
-    }
+// Always start closed
+document.addEventListener('DOMContentLoaded', closeSidebar);
+
+// Safety fix on resize
+window.addEventListener('resize', () => {
+  if (window.innerWidth >= 1024) {
+    overlay.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
 });
 </script>
 
  <!-- MAIN CONTENT -->
 <div class="lg:w-3/4 w-full p-1 h-auto lg:h-[calc(79vh-2rem)] min-h-[500px]">
-  <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 h-auto lg:h-[650px] transition-all duration-300 hover:shadow-xl">
+  <div class="p-6 bg-gray-50 rounded-2xl shadow-xl flex flex-col 
+            w-full md:w-[1450px] h-[700px] mx-auto">
     
     <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-4 gap-4 lg:gap-0">
       

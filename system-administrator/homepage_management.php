@@ -280,7 +280,7 @@ $aboutRow = mysqli_fetch_assoc($about);
 <style>
 .tab-btn.active { background: #16a34a; color: white; }
 </style>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body class="bg-gray-100">
@@ -288,21 +288,24 @@ $aboutRow = mysqli_fetch_assoc($about);
 <!-- NAVBAR -->
 <nav class="fixed top-0 w-full bg-green-700 shadow-lg z-50">
   <div class="flex justify-between items-center h-16 px-4 sm:px-6">
-    <!-- Left side: Mobile toggle + Logo + Title -->
+    
     <div class="flex items-center space-x-3 min-w-0">
-      <!-- Mobile Toggle Button -->
-      <button id="sidebarToggle" class="lg:hidden bg-transparent/0 backdrop-blur-sm p-2.5 rounded-lg shadow-md border-2 border-white/20 p-2.5 w-11 h-11 flex items-center justify-center shrink-0 z-10 outline-none focus:outline-none active:bg-transparent/0 transition-none hover:bg-transparent">
-  <i id="toggleIcon" class="fas fa-bars text-white/90 text-lg transition-none"></i>
+      
+      <!-- ✅ ONLY TOGGLE BUTTON -->
+      <button id="sidebarToggle"
+  class="bg-transparent p-2.5 w-11 h-11 flex items-center justify-center border-2 border-white/20 rounded-lg z-50">
+  <i id="toggleIcon" class="fas fa-bars text-white text-lg"></i>
 </button>
+
       <!-- Logo + Title -->
       <div class="flex items-center space-x-3 min-w-0 flex-1">
-        <img src="js/img/municipalLogo.png" class="w-9 h-9 object-contain flex-shrink-0">
-        <h1 class="text-white font-semibold text-base sm:text-lg truncate">Bayung Porac Archive</h1>
+        <img src="js/img/municipalLogo.png" class="w-9 h-9 object-contain">
+        <h1 class="text-white font-semibold text-base sm:text-lg truncate">
+          Bayung Porac Archive
+        </h1>
       </div>
-    </div>
 
-    <!-- Right side: Welcome + Logout -->
-    
+    </div>
   </div>
 </nav>
 
@@ -321,207 +324,166 @@ function confirmLogout() {
 
 
 <!-- Sidebar -->
-<aside id="sidebar" class="lg:w-1/4 w-72 lg:h-[690px] fixed lg:static inset-y-0 left-0 z-30 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out lg:flex lg:flex-col">
-  <!-- NO SHADOW behind + Ultra smooth desktop corners -->
-  <div class="bg-white/95 backdrop-blur-lg rounded-3xl lg:rounded-[3rem] shadow-2xl lg:shadow-2xl p-1 sm:p-3 lg:p-8 border border-gray-200/50 flex flex-col h-screen lg:h-[690px] items-center relative overflow-hidden">
-    
-    <!-- Mobile Close Button -->
-    <button onclick="toggleSidebar()" class="lg:hidden absolute top-1 right-1 text-gray-500 text-lg font-bold z-20 p-1 rounded-xl transition-none hover:bg-transparent">
-      <i class="fas fa-times"></i>
-    </button>
+<aside id="sidebar"
+  class="fixed inset-y-0 left-0 z-30 w-72 lg:w-1/4
+  transform -translate-x-full transition-transform duration-300 ease-in-out">
 
-    <!-- Logo & Menu Container -->
-    <div id="sidebarContent" class="flex flex-col w-full h-full pt-4 lg:pt-6 transition-all duration-500 ease-out">
-      
+  <div class="bg-white/95 backdrop-blur-lg rounded-3xl lg:rounded-[3rem] shadow-2xl p-3 lg:p-8 border flex flex-col h-screen lg:h-[790px] items-center">
+
+    <div id="sidebarContent" class="flex flex-col w-full h-full pt-12 space-y-4">
+
       <!-- LOGO -->
-      <div class="mb-2 lg:mb-8 w-full flex justify-center px-1">
+      <div class="mb-6 flex justify-center">
         <img src="img/adminLogo.png"
-             class="w-32 h-32 sm:w-36 sm:h-36 lg:w-40 lg:h-40 xl:w-44 xl:h-44 object-cover rounded-3xl transition-all duration-300 hover:scale-105 shadow-2xl border-4 border-white/90 mx-auto">
+          class="w-36 h-36 object-cover rounded-3xl shadow-2xl border-4 border-white">
       </div>
 
-      <!-- Welcome Section -->
-      <div class="w-full px-2 sm:px-4 mb-2 lg:mb-8 flex flex-col items-center gap-1.5 lg:gap-3 text-dark text-xs sm:text-sm lg:text-base font-medium">
-        
-        <!-- Admin Name -->
-        <span class="welcome-text text-center truncate max-w-[260px] sm:max-w-none bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent text-xs sm:text-sm lg:text-2xl font-bold tracking-wide leading-tight">
+      <!-- ADMIN -->
+      <div class="text-center mb-6">
+        <span class="font-bold text-lg block">
           <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?>
         </span>
-        
-        <!-- Logout Button -->
-        <a href="#" onclick="confirmLogout(this)" 
-           class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3.5 py-1 rounded-xl hover:from-green-600 hover:to-emerald-600 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 font-semibold text-xs whitespace-nowrap shadow-lg border-0 backdrop-blur-sm w-fit mx-auto hover:scale-105">
+
+        <a href="#" onclick="confirmLogout(this)"
+          class="mt-2 inline-block bg-green-500 text-white px-4 py-1 rounded-xl">
           Log out
         </a>
       </div>
 
-      <!-- Menu - NO SCROLLBAR desktop + All content visible -->
-      <nav class="w-full flex-1 px-2 sm:px-3 space-y-1.5 lg:space-y-3 overflow-y-auto lg:overflow-visible scrollbar-thin scrollbar-thumb-gray-300/70 scrollbar-track-transparent lg:max-h-none max-h-[calc(100vh-240px)] lg:max-h-none">
-        
-        <!--Home Page - Active style -->
-        <a href="homepage_management.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl 
-           bg-gradient-to-r from-green-50 via-emerald-50 to-teal-50 shadow-md border border-green-200/60
-           hover:bg-gradient-to-r hover:from-green-100 hover:to-emerald-100 hover:shadow-2xl hover:-translate-y-1 hover:border-green-300/80
-           transition-all duration-300 text-xs sm:text-sm lg:text-base backdrop-blur-sm">
-           <i class="fas fa-home text-blue-500 group-hover:text-blue-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300 shadow-sm rounded p-0.5 bg-white/50"></i>
-           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate text-green-800">Home Page</span>
-        </a>
+      <!-- MENU -->
+      <nav class="w-full space-y-2 overflow-y-auto">
 
-        <!-- Offices - Fixed -->
-        <a href="department_management.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-purple-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-purple-200/50 backdrop-blur-sm">
-           <i class="fas fa-building text-gray-500 group-hover:text-green-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 shadow-sm rounded p-0.5 bg-white/50 transition-all duration-300"></i>
-           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate text-gray-800">Offices</span>
-        </a>
+        <a href="homepage_management.php"
+  class="flex items-center gap-3 w-full px-4 py-3 rounded-2xl
+  bg-gradient-to-r from-indigo-500/10 to-blue-500/10
+  text-indigo-600 font-semibold
+  transition-all duration-300
+  shadow-sm hover:shadow-md">
 
-        <!--Employees-->
-        <a href="view_user.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-indigo-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-indigo-200/50 backdrop-blur-sm">
-           <i class="fas fa-users text-gray-500 group-hover:text-indigo-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
-           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">Employees</span>
-        </a>
+  <i class="fas fa-house text-indigo-500 w-4 h-4"></i>
+  <span class="truncate">Home Page</span>
+</a>
 
-        <!--Records Administrators-->
-        <a href="view_admin.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-purple-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-purple-200/50 backdrop-blur-sm">
-           <i class="fas fa-user-shield text-gray-500 group-hover:text-purple-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
-           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">Records Administrators</span>
-        </a>
 
-        <!--System Administrators-->
-        <a href="system-administrator.php" 
-           class="group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-indigo-50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm lg:text-base border border-transparent hover:border-indigo-200/50 backdrop-blur-sm">
-           <i class="fas fa-server text-gray-500 group-hover:text-indigo-600 w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-all duration-300"></i>
-           <span class="font-semibold tracking-wide flex-1 min-w-0 truncate">System Administrators</span>
-        </a>
+       <a href="department_management.php"
+  class="flex items-center gap-3 w-full px-4 py-3 rounded-2xl
+  transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+
+  <i class="fas fa-building text-gray-500 w-4 h-4"></i>
+  <span class="font-medium text-gray-700 truncate">Offices</span>
+</a>
+
+
+       <a href="view_user.php"
+  class="flex items-center gap-3 w-full px-4 py-3 rounded-2xl
+  transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+
+  <i class="fas fa-user text-gray-500 w-4 h-4"></i>
+  <span class="font-medium text-gray-700 truncate">Employees</span>
+</a>
+
+
+      <a href="view_admin.php"
+  class="flex items-center gap-3 w-full px-4 py-3 rounded-2xl
+  transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+
+  <i class="fas fa-user-shield text-gray-500 w-4 h-4"></i>
+  <span class="font-medium text-gray-700 truncate"> Records Administrators</span>
+</a>
+
+
+<a href="system-administrator.php"
+  class="flex items-center gap-3 w-full px-4 py-3 rounded-2xl
+  transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+
+  <i class="fas fa-user-shield text-gray-500 w-4 h-4"></i>
+  <span class="font-medium text-gray-700 truncate"> System Administrators</span>
+</a>
+
+
       </nav>
     </div>
   </div>
 </aside>
 
 
-<style>
-/* Custom Scrollbar - Ultra Compact */
-#sidebar nav::-webkit-scrollbar {
-  width: 3px;
-}
-#sidebar nav::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 6px;
-}
-#sidebar nav::-webkit-scrollbar-thumb {
-  background: rgba(156, 163, 175, 0.8);
-  border-radius: 6px;
-}
-#sidebar nav::-webkit-scrollbar-thumb:hover {
-  background: rgba(107, 114, 128, 1);
-}
+<!-- OVERLAY -->
+<div id="sidebarOverlay"
+  class="fixed inset-0 bg-black/40 hidden z-20 lg:hidden">
+</div>
 
-/* Smooth scrolling */
-#sidebar nav {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(156, 163, 175, 0.8) transparent;
-}
-</style>
 
-<!-- Mobile Overlay -->
-<div id="sidebarOverlay" class="lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-20 hidden transition-all duration-300" onclick="toggleSidebar()"></div>
 
 <script>
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebarOverlay');
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const content = document.getElementById('sidebarContent');
-    const icon = toggleBtn?.querySelector('i');
-    
-    sidebar.classList.toggle('-translate-x-full');
-    
-    if (sidebar.classList.contains('-translate-x-full')) {
-        // Closing - move content back up
-        content.classList.remove('pt-[30vh]');
-        content.classList.add('pt-0');
-        overlay.classList.add('hidden');
-        document.body.classList.remove('overflow-hidden');
-        if (icon) {
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-        }
-        toggleBtn?.classList.remove('bg-green-50', 'ring-2', 'ring-green-300', 'scale-110');
-    } else {
-        // Opening - move content down 30%
-        content.classList.remove('pt-0');
-        content.classList.add('pt-[30vh]');
-        overlay.classList.remove('hidden');
-        document.body.classList.add('overflow-hidden');
-        if (icon) {
-            icon.classList.remove('fa-bars');
-            icon.classList.add('fa-times');
-        }
-        toggleBtn?.classList.add('bg-green-50', 'ring-2', 'ring-green-300', 'scale-110');
-    }
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebarOverlay');
+const toggleBtn = document.getElementById('sidebarToggle');
+const icon = document.getElementById('toggleIcon');
+
+function openSidebar() {
+  sidebar.classList.remove('-translate-x-full');
+  overlay.classList.remove('hidden');
+  document.body.classList.add('overflow-hidden');
+
+  icon.classList.remove('fa-bars');
+  icon.classList.add('fa-times');
 }
 
-// Initialize
-document.addEventListener('DOMContentLoaded', function() {
-    const toggleBtn = document.getElementById('sidebarToggle');
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            toggleSidebar();
-        });
-    }
+function closeSidebar() {
+  sidebar.classList.add('-translate-x-full');
+  overlay.classList.add('hidden');
+  document.body.classList.remove('overflow-hidden');
+
+  icon.classList.remove('fa-times');
+  icon.classList.add('fa-bars');
+}
+
+function toggleSidebar() {
+  if (sidebar.classList.contains('-translate-x-full')) {
+    openSidebar();
+  } else {
+    closeSidebar();
+  }
+}
+
+// Toggle button
+toggleBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  toggleSidebar();
 });
 
-// Auto-close on link click (mobile)
-document.addEventListener('click', function(e) {
-    if (window.innerWidth < 1024 && e.target.closest('#sidebar a')) {
-        setTimeout(toggleSidebar, 150);
-    }
+// Overlay click closes
+overlay.addEventListener('click', closeSidebar);
+
+// Auto close when clicking menu links
+document.querySelectorAll('#sidebar a').forEach(link => {
+  link.addEventListener('click', closeSidebar);
 });
 
-// Resize handler
-let resizeTimeout;
-window.addEventListener('resize', function() {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(function() {
-        if (window.innerWidth >= 1024) {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            const content = document.getElementById('sidebarContent');
-            const toggleBtn = document.getElementById('sidebarToggle');
-            const icon = toggleBtn?.querySelector('i');
-            
-            sidebar.classList.remove('-translate-x-full');
-            overlay.classList.add('hidden');
-            content.classList.remove('pt-[30vh]');
-            content.classList.add('pt-0');
-            document.body.classList.remove('overflow-hidden');
-            if (icon) {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-            toggleBtn?.classList.remove('bg-green-50', 'ring-2', 'ring-green-300', 'scale-110');
-        }
-    }, 250);
+// ESC key closes
+document.addEventListener('keydown', (e) => {
+  if (e.key === "Escape") closeSidebar();
 });
 
-// Escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        const sidebar = document.getElementById('sidebar');
-        if (!sidebar.classList.contains('-translate-x-full')) {
-            toggleSidebar();
-        }
-    }
+// Always start closed
+document.addEventListener('DOMContentLoaded', closeSidebar);
+
+// Safety fix on resize
+window.addEventListener('resize', () => {
+  if (window.innerWidth >= 1024) {
+    overlay.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
 });
 </script>
+
 
 <!-- MAIN CONTENT -->
 <div class="w-3/4 p-1 h-[calc(100vh-2rem)]">
 
   <!-- TABS -->
-  <div class="p-6 bg-gray-50 rounded-2xl shadow-xl h-full flex flex-col">
+  <div class="p-6 bg-gray-50 rounded-2xl shadow-xl flex flex-col 
+            w-full md:w-[1500px] h-[700px] mx-auto">
 
   <!-- Tab Buttons -->
   <!-- Mobile: Dropdown -->
@@ -1409,8 +1371,8 @@ function confirmLogout(){
 <script>
 function openEditSlide(data){
 Swal.fire({
-  title: '<span style="font-size:22px; font-weight:600;">Edit Slide</span>',
-  width: '700px',
+  title: '<span style="font-size:20px; font-weight:600; color:#111827;">Edit Slide</span>',
+  width: '720px',
   background: '#f9fafb',
   showClass: {
     popup: 'animate__animated animate__fadeInUp'
@@ -1418,54 +1380,103 @@ Swal.fire({
   hideClass: {
     popup: 'animate__animated animate__fadeOutDown'
   },
+
   html: `
     <form id="editSlideForm" enctype="multipart/form-data"
-      style="display:flex; flex-direction:column; gap:14px; text-align:left;">
+      style="display:flex; flex-direction:column; gap:16px; text-align:left;">
 
       <input type="hidden" name="id" value="${data.slide_id}">
 
       <!-- Caption -->
       <div>
-        <label style="font-size:13px; font-weight:500; color:#374151;">Caption</label>
+        <label style="font-size:13px; font-weight:500; color:#6b7280;">Caption</label>
         <input 
           name="caption" 
-          value="${data.caption}" 
-          class="swal2-input"
-          style="width:100%; margin-top:4px; border-radius:10px; padding:10px; border:1px solid #e5e7eb;"
+          value="${data.caption}"
+          placeholder="Enter caption..."
+          style="
+            width:100%;
+            margin-top:6px;
+            padding:12px 14px;
+            border-radius:12px;
+            border:1px solid #e5e7eb;
+            background:#fff;
+            outline:none;
+            font-size:14px;
+            transition:0.2s;
+          "
+          onfocus="this.style.borderColor='#6366f1'"
+          onblur="this.style.borderColor='#e5e7eb'"
         >
       </div>
 
       <!-- Description -->
       <div>
-        <label style="font-size:13px; font-weight:500; color:#374151;">Description</label>
+        <label style="font-size:13px; font-weight:500; color:#6b7280;">Description</label>
         <textarea 
           name="description"
-          style="width:100%; height:160px; margin-top:4px; border-radius:10px; padding:10px; border:1px solid #e5e7eb; resize:none;"
+          placeholder="Enter description..."
+          style="
+            width:100%;
+            margin-top:6px;
+            height:140px;
+            padding:12px 14px;
+            border-radius:12px;
+            border:1px solid #e5e7eb;
+            background:#fff;
+            resize:none;
+            outline:none;
+            font-size:14px;
+            transition:0.2s;
+          "
+          onfocus="this.style.borderColor='#6366f1'"
+          onblur="this.style.borderColor='#e5e7eb'"
         >${data.description}</textarea>
       </div>
 
-      <!-- Image Upload -->
+      <!-- Upload Card -->
       <div>
-        <label style="font-size:13px; font-weight:500; color:#374151;">Slide Image</label>
-        <input 
-          type="file" 
-          name="image"
-          class="swal2-input"
-          style="width:100%; margin-top:4px; border-radius:10px; padding:8px; border:1px solid #e5e7eb; background:white;"
-        >
+        <label style="font-size:13px; font-weight:500; color:#6b7280;">Slide Image</label>
+
+        <div style="
+          margin-top:6px;
+          border:2px dashed #d1d5db;
+          border-radius:14px;
+          padding:18px;
+          text-align:center;
+          background:#fff;
+          transition:0.2s;
+        "
+        onmouseover="this.style.borderColor='#6366f1'"
+        onmouseout="this.style.borderColor='#d1d5db'">
+
+          <input 
+            type="file" 
+            name="image"
+            style="width:100%; font-size:13px;"
+          >
+
+          <p style="margin-top:8px; font-size:12px; color:#9ca3af;">
+            PNG, JPG up to 5MB
+          </p>
+        </div>
       </div>
 
     </form>
   `,
+
   showCancelButton: true,
-  confirmButtonText: 'Update',
+  confirmButtonText: 'Update Slide',
   cancelButtonText: 'Cancel',
-  confirmButtonColor: '#16a34a',
-  cancelButtonColor: '#6b7280',
+
+  confirmButtonColor: '#6366f1',
+  cancelButtonColor: '#9ca3af',
 
   customClass: {
     popup: 'rounded-2xl shadow-2xl'
   },
+
+  buttonsStyling: true,
 
   preConfirm: () => {
     const form = document.getElementById('editSlideForm');
@@ -1482,8 +1493,8 @@ Swal.fire({
 
 function openEditProfile(data){
 Swal.fire({
-  title: '<span style="font-size:22px; font-weight:600;">Edit Profile</span>',
-  width: '650px',
+  title: '<span style="font-size:20px; font-weight:600; color:#111827;">Edit Profile</span>',
+  width: '680px',
   background: '#f9fafb',
   showClass: {
     popup: 'animate__animated animate__fadeInUp'
@@ -1491,52 +1502,96 @@ Swal.fire({
   hideClass: {
     popup: 'animate__animated animate__fadeOutDown'
   },
+
   html: `
     <form id="editProfileForm" enctype="multipart/form-data"
-      style="display:flex; flex-direction:column; gap:14px; text-align:left;">
+      style="display:flex; flex-direction:column; gap:16px; text-align:left;">
 
       <input type="hidden" name="id" value="${data.profile_id}">
 
       <!-- Name -->
       <div>
-        <label style="font-size:13px; font-weight:500; color:#374151;">Name</label>
+        <label style="font-size:13px; font-weight:500; color:#6b7280;">Name</label>
         <input 
-          name="name" 
-          value="${data.name}" 
-          class="swal2-input"
-          style="width:100%; margin-top:4px; border-radius:10px; padding:10px; border:1px solid #e5e7eb;"
+          name="name"
+          value="${data.name}"
+          placeholder="Enter full name"
+          style="
+            width:100%;
+            margin-top:6px;
+            padding:12px 14px;
+            border-radius:12px;
+            border:1px solid #e5e7eb;
+            background:#fff;
+            font-size:14px;
+            outline:none;
+            transition:0.2s;
+          "
+          onfocus="this.style.borderColor='#6366f1'"
+          onblur="this.style.borderColor='#e5e7eb'"
         >
       </div>
 
       <!-- Role -->
       <div>
-        <label style="font-size:13px; font-weight:500; color:#374151;">Role</label>
+        <label style="font-size:13px; font-weight:500; color:#6b7280;">Role</label>
         <input 
-          name="role" 
-          value="${data.role}" 
-          class="swal2-input"
-          style="width:100%; margin-top:4px; border-radius:10px; padding:10px; border:1px solid #e5e7eb;"
+          name="role"
+          value="${data.role}"
+          placeholder="Enter role"
+          style="
+            width:100%;
+            margin-top:6px;
+            padding:12px 14px;
+            border-radius:12px;
+            border:1px solid #e5e7eb;
+            background:#fff;
+            font-size:14px;
+            outline:none;
+            transition:0.2s;
+          "
+          onfocus="this.style.borderColor='#6366f1'"
+          onblur="this.style.borderColor='#e5e7eb'"
         >
       </div>
 
-      <!-- Image Upload -->
+      <!-- Upload Card -->
       <div>
-        <label style="font-size:13px; font-weight:500; color:#374151;">Profile Image</label>
-        <input 
-          type="file" 
-          name="image"
-          class="swal2-input"
-          style="width:100%; margin-top:4px; border-radius:10px; padding:8px; border:1px solid #e5e7eb; background:white;"
-        >
+        <label style="font-size:13px; font-weight:500; color:#6b7280;">Profile Image</label>
+
+        <div style="
+          margin-top:6px;
+          border:2px dashed #d1d5db;
+          border-radius:14px;
+          padding:18px;
+          text-align:center;
+          background:#fff;
+          transition:0.2s;
+        "
+        onmouseover="this.style.borderColor='#6366f1'"
+        onmouseout="this.style.borderColor='#d1d5db'">
+
+          <input 
+            type="file" 
+            name="image"
+            style="width:100%; font-size:13px;"
+          >
+
+          <p style="margin-top:8px; font-size:12px; color:#9ca3af;">
+            PNG, JPG up to 5MB
+          </p>
+        </div>
       </div>
 
     </form>
   `,
+
   showCancelButton: true,
-  confirmButtonText: 'Update',
+  confirmButtonText: 'Update Profile',
   cancelButtonText: 'Cancel',
-  confirmButtonColor: '#16a34a',
-  cancelButtonColor: '#6b7280',
+
+  confirmButtonColor: '#6366f1',
+  cancelButtonColor: '#9ca3af',
 
   customClass: {
     popup: 'rounded-2xl shadow-2xl'
@@ -1557,8 +1612,8 @@ Swal.fire({
 
 function openEditFeatured(data){
 Swal.fire({
-  title: '<span style="font-size:22px; font-weight:600;">Edit Featured</span>',
-  width: '650px',
+  title: '<span style="font-size:20px; font-weight:600; color:#111827;">Edit Featured</span>',
+  width: '680px',
   background: '#f9fafb',
   showClass: {
     popup: 'animate__animated animate__fadeInUp'
@@ -1566,41 +1621,73 @@ Swal.fire({
   hideClass: {
     popup: 'animate__animated animate__fadeOutDown'
   },
+
   html: `
     <form id="editFeaturedForm" enctype="multipart/form-data"
-      style="display:flex; flex-direction:column; gap:14px; text-align:left;">
+      style="display:flex; flex-direction:column; gap:16px; text-align:left;">
 
       <input type="hidden" name="id" value="${data.featured_id}">
 
       <!-- Title -->
       <div>
-        <label style="font-size:13px; font-weight:500; color:#374151;">Title</label>
+        <label style="font-size:13px; font-weight:500; color:#6b7280;">Title</label>
         <input 
-          name="title" 
-          value="${data.title}" 
-          class="swal2-input"
-          style="width:100%; margin-top:4px; border-radius:10px; padding:10px; border:1px solid #e5e7eb;"
+          name="title"
+          value="${data.title}"
+          placeholder="Enter featured title"
+          style="
+            width:100%;
+            margin-top:6px;
+            padding:12px 14px;
+            border-radius:12px;
+            border:1px solid #e5e7eb;
+            background:#fff;
+            font-size:14px;
+            outline:none;
+            transition:0.2s;
+          "
+          onfocus="this.style.borderColor='#6366f1'"
+          onblur="this.style.borderColor='#e5e7eb'"
         >
       </div>
 
-      <!-- Image Upload -->
+      <!-- Upload Card -->
       <div>
-        <label style="font-size:13px; font-weight:500; color:#374151;">Featured Image</label>
-        <input 
-          type="file" 
-          name="image"
-          class="swal2-input"
-          style="width:100%; margin-top:4px; border-radius:10px; padding:8px; border:1px solid #e5e7eb; background:white;"
-        >
+        <label style="font-size:13px; font-weight:500; color:#6b7280;">Featured Image</label>
+
+        <div style="
+          margin-top:6px;
+          border:2px dashed #d1d5db;
+          border-radius:14px;
+          padding:18px;
+          text-align:center;
+          background:#fff;
+          transition:0.2s;
+        "
+        onmouseover="this.style.borderColor='#6366f1'"
+        onmouseout="this.style.borderColor='#d1d5db'">
+
+          <input 
+            type="file" 
+            name="image"
+            style="width:100%; font-size:13px;"
+          >
+
+          <p style="margin-top:8px; font-size:12px; color:#9ca3af;">
+            PNG, JPG up to 5MB
+          </p>
+        </div>
       </div>
 
     </form>
   `,
+
   showCancelButton: true,
-  confirmButtonText: 'Update',
+  confirmButtonText: 'Update Featured',
   cancelButtonText: 'Cancel',
-  confirmButtonColor: '#16a34a',
-  cancelButtonColor: '#6b7280',
+
+  confirmButtonColor: '#6366f1',
+  cancelButtonColor: '#9ca3af',
 
   customClass: {
     popup: 'rounded-2xl shadow-2xl'
@@ -1621,36 +1708,83 @@ Swal.fire({
 
 function openEditEvent(data){
 Swal.fire({
-  title: 'Edit Event',
-  width: '600px',
+  title: '<span style="font-size:20px; font-weight:600; color:#111827;">Edit Event</span>',
+  width: '700px',
+  background: '#f9fafb',
+  showClass: {
+    popup: 'animate__animated animate__fadeInUp'
+  },
+  hideClass: {
+    popup: 'animate__animated animate__fadeOutDown'
+  },
+
   html: `
-    <form id="editEventForm" style="display:flex; flex-direction:column; gap:12px;">
+    <form id="editEventForm"
+      style="display:flex; flex-direction:column; gap:16px; text-align:left;">
 
       <input type="hidden" name="id" value="${data.event_id}">
 
-      <!-- Title (wider / full width) -->
-      <input 
-        name="title" 
-        class="swal2-input" 
-        placeholder="Event Title"
-        value="${data.title}" 
-        style="width:100%; margin:0;"
-      >
+      <!-- Title -->
+      <div>
+        <label style="font-size:13px; font-weight:500; color:#6b7280;">Event Title</label>
+        <input 
+          name="title"
+          value="${data.title}"
+          placeholder="Enter event title"
+          style="
+            width:100%;
+            margin-top:6px;
+            padding:12px 14px;
+            border-radius:12px;
+            border:1px solid #e5e7eb;
+            background:#fff;
+            font-size:14px;
+            outline:none;
+            transition:0.2s;
+          "
+          onfocus="this.style.borderColor='#6366f1'"
+          onblur="this.style.borderColor='#e5e7eb'"
+        >
+      </div>
 
-      <!-- Description (larger textarea) -->
-      <textarea 
-        name="description" 
-        class="swal2-textarea" 
-        placeholder="Event Description"
-        style="width:100%; height:150px; resize:none; margin:0;"
-      >${data.description}</textarea>
+      <!-- Description -->
+      <div>
+        <label style="font-size:13px; font-weight:500; color:#6b7280;">Description</label>
+        <textarea 
+          name="description"
+          placeholder="Enter event description"
+          style="
+            width:100%;
+            height:160px;
+            margin-top:6px;
+            padding:12px 14px;
+            border-radius:12px;
+            border:1px solid #e5e7eb;
+            background:#fff;
+            resize:none;
+            font-size:14px;
+            outline:none;
+            transition:0.2s;
+          "
+          onfocus="this.style.borderColor='#6366f1'"
+          onblur="this.style.borderColor='#e5e7eb'"
+        >${data.description}</textarea>
+      </div>
 
     </form>
   `,
+
   showCancelButton: true,
-  confirmButtonText: 'Update',
+  confirmButtonText: 'Update Event',
   cancelButtonText: 'Cancel',
-  confirmButtonColor: '#16a34a',
+
+  confirmButtonColor: '#6366f1',
+  cancelButtonColor: '#9ca3af',
+
+  customClass: {
+    popup: 'rounded-2xl shadow-2xl'
+  },
+
   preConfirm: () => {
     const form = document.getElementById('editEventForm');
     const formData = new FormData(form);
