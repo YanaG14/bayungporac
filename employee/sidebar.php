@@ -12,14 +12,23 @@
 
         <!-- LOGO -->
         <div class="mb-6 flex justify-center">
-          <img src="img/adminLogo.png"
-               class="w-32 h-32 object-cover rounded-3xl shadow-xl border-4 border-white">
+        <?php
+$department_img = trim($department_img);
+$imgPath = "../records-administrator/department_images/" . $department_img;
+
+if(empty($department_img) || !file_exists($imgPath)){
+    $imgPath = "../records-administrator/department_images/default.png";
+}
+?>
+
+<img src="<?php echo $imgPath; ?>" 
+     class="w-32 h-32 object-contain rounded-3xl shadow-xl border-4 border-white">
         </div>
 
         <!-- ADMIN NAME -->
         <div class="text-center mb-6">
           <p class="font-bold text-lg text-gray-800">
-            <?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?>
+           <?php echo ucwords(htmlentities($name)); ?>
           </p>
 
           <a href="#" onclick="confirmLogout(this)" 
@@ -35,7 +44,7 @@
             <i class="fas fa-home"></i> Records Management
           </a>
 
-          <a href="communication_letters.php" class="sidebar-link">
+          <a href="home.php" class="sidebar-link">
             <i class="fas fa-building"></i> Communication Letters
           </a>
 

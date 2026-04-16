@@ -2,23 +2,39 @@
 <html lang="en">
 <?php
 session_start();
-if (!isset($_SESSION['admin_user'])) {
-    header('Location: index.php');
+if(!isset($_SESSION["email_address"])){
+    header("location:../login.php");
     exit();
 }
 
-$adminName = $_SESSION['admin_name'];
+$user_id = $_SESSION['user_no'];
+$user_department = $_SESSION['department_id'];
 require_once("../include/connection.php");
+// Get user name and department image
+$stmt = $conn->prepare("
+    SELECT login_user.name, departments.department_img
+    FROM login_user
+    JOIN departments 
+    ON login_user.department_id = departments.department_id
+    WHERE login_user.id = ?
+");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+$name = $row['name'];
+$department_img = $row['department_img'];
+
 
 // Fetch active folders
 $query = mysqli_query($conn,"
 SELECT 
-f.folder_id,
+f.folder_id, 
 f.folder_name,
 f.created_at,
 GROUP_CONCAT(DISTINCT d.department_name SEPARATOR ', ') as departments,
 
--- Include file-related searchable data
 GROUP_CONCAT(DISTINCT uf.name SEPARATOR ', ') as file_names,
 GROUP_CONCAT(DISTINCT al.name SEPARATOR ', ') as uploaders,
 GROUP_CONCAT(DISTINCT uf.timers SEPARATOR ', ') as file_dates
@@ -27,11 +43,12 @@ FROM folders f
 LEFT JOIN folder_departments fd ON f.folder_id = fd.folder_id
 LEFT JOIN departments d ON fd.department_id = d.department_id
 
--- Join files
 LEFT JOIN upload_files uf ON f.folder_id = uf.folder_id AND uf.status='Active'
-LEFT JOIN admin_login al ON uf.email = al.id
+LEFT JOIN login_user al ON uf.email = al.id
 
-WHERE f.folder_status='Active'
+WHERE 
+f.folder_status='Active'
+AND fd.department_id = '$user_department'  -- ✅ FILTER HERE
 
 GROUP BY f.folder_id
 ORDER BY f.folder_name ASC
@@ -102,7 +119,7 @@ $(document).ready(function(){
     <div class="flex items-center space-x-2 sm:space-x-4">
       <!-- Desktop Welcome -->
       <span class="hidden md:inline-block text-sm md:text-base text-white">
-  Welcome, <b><?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></b>!
+  Welcome, <b><?php echo ucwords(htmlentities($name)); ?></b>!
 </span>
       
       <!-- Mobile Menu Button -->
@@ -265,19 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
 
           <!-- Action Buttons (Mobile Stack) -->
-          <div class="flex gap-1.5 sm:gap-2">
-            <!-- ADD POST -->
-            <button onclick="$('#modalAddFolder').removeClass('hidden');"
-            class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg flex items-center justify-center text-green-600 text-sm sm:text-base focus:outline-none">
-            <i class="fas fa-plus"></i>
-            </button>
-
-            <!-- ARCHIVE -->
-            <button onclick="openArchivedFolders();"
-            class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg flex items-center justify-center text-yellow-500 text-sm sm:text-base focus:outline-none">
-            <i class="fas fa-archive"></i>
-          </button>
-          </div>
+        
 
         </div>
       </div>
@@ -331,17 +336,7 @@ document.addEventListener('DOMContentLoaded', function() {
                          class="hidden absolute top-full mt-1.5 right-0 w-28 sm:w-32 bg-white rounded-lg shadow-lg border border-gray-100 z-50
                                 transform scale-95 opacity-0 transition-all duration-200 origin-top-right">
                       
-                      <button onclick="openEditModal(<?php echo $row['folder_id']; ?>);"
-                              class="w-full flex items-center gap-2 px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg transition-all duration-200">
-                        <i class="fas fa-edit text-blue-500 text-xs"></i>
-                        Edit
-                      </button>
-
-                      <button onclick="confirmArchive(<?php echo $row['folder_id']; ?>);"
-                              class="w-full flex items-center gap-2 px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200">
-                        <i class="fas fa-archive text-yellow-500 text-xs"></i>
-                        Archive
-                      </button>
+                   
 
                       <a href="download_folder.php?folder_id=<?php echo $row['folder_id']; ?>"
                          class="w-full flex items-center gap-2 px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg transition-all duration-200 block">
@@ -354,60 +349,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
               </tr>
 
-              <!-- EDIT FOLDER MODAL (Responsive) -->
-              <div id="modalEditFolder<?php echo $row['folder_id']; ?>" 
-                   class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 p-4 sm:p-6">
-                <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-sm sm:max-w-md lg:max-w-lg p-4 sm:p-6 relative max-h-[90vh] overflow-y-auto">
-                  
-                  <!-- Close Button -->
-                  <button onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').addClass('hidden');" 
-                          class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold p-1 rounded-full hover:bg-gray-100 transition-all">
-                    &times;
-                  </button>
-
-                  <!-- Modal Title -->
-                  <h3 class="text-lg sm:text-xl lg:text-2xl font-semibold mb-5 sm:mb-6 flex items-center gap-2 text-gray-800 text-center sm:text-left">
-                    <i class="fas fa-edit text-blue-600"></i> Edit Folder
-                  </h3>
-
-                  <!-- Form -->
-                  <form method="POST" action="update_folder.php" class="flex flex-col gap-4">
-                    <input type="hidden" name="folder_id" value="<?php echo $row['folder_id']; ?>">
-
-                    <!-- Folder Name -->
-                    <input type="text" name="folder_name" value="<?php echo $row['folder_name']; ?>" placeholder="Folder Name" 
-                           class="w-full border border-gray-300 rounded-lg px-4 py-2.5 sm:py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all shadow-sm text-sm sm:text-base" required>
-
-                    <!-- Assign Departments -->
-                    <div>
-                      <label class="font-medium text-gray-700 mb-2 block text-sm sm:text-base">Assign Departments</label>
-                      <div class="flex flex-col gap-2.5 max-h-40 sm:max-h-48 overflow-y-auto p-3 sm:p-4 border rounded-lg shadow-sm">
-                        <?php
-                        $dept = mysqli_query($conn,"SELECT * FROM departments");
-                        while($d=mysqli_fetch_array($dept)){
-                          $check = mysqli_query($conn,"SELECT * FROM folder_departments WHERE folder_id='".$row['folder_id']."' AND department_id='".$d['department_id']."'");
-                          $checked = mysqli_num_rows($check)>0 ? "checked" : "";
-                        ?>
-                        <label class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-50 cursor-pointer transition-all text-sm">
-                          <input type="checkbox" name="departments[]" value="<?php echo $d['department_id']; ?>" class="w-4 h-4 accent-blue-600 rounded shadow-sm" <?php echo $checked; ?>>
-                          <span class="truncate"><?php echo $d['department_name']; ?></span>
-                        </label>
-                        <?php } ?>
-                      </div>
-                    </div>
-
-                    <!-- Buttons -->
-                    <div class="flex flex-col sm:flex-row justify-end gap-3 mt-4 pt-4 border-t border-gray-100">
-                      <button type="submit" name="update" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-6 py-2.5 sm:py-3 shadow-md transition-all duration-200 w-full sm:w-auto transform hover:scale-105 text-sm sm:text-base">
-                        Update Folder
-                      </button>
-                      <button type="button" onclick="$('#modalEditFolder<?php echo $row['folder_id']; ?>').addClass('hidden');" 
-                              class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg px-6 py-2.5 sm:py-3 transition-all duration-200 w-full sm:w-auto text-sm sm:text-base">
-                        Close
-                      </button>
-                    </div>
-                  </form>
-                </div>
+              
               </div>
 
               <?php } ?>
@@ -445,76 +387,10 @@ function toggleMenu(id) {
     setTimeout(() => menu.classList.add('scale-95', 'opacity-0'), 10);
   }
 }
-
-function openEditModal(id) {
-  $('#modalEditFolder' + id).removeClass('hidden');
-  document.body.classList.add('overflow-hidden');
-}
-
-document.addEventListener('click', function(e) {
-  document.querySelectorAll('[id^="menu-"]').forEach(menu => {
-    const btn = menu.previousElementSibling;
-    if (!menu.contains(e.target) && !btn?.contains(e.target)) {
-      menu.classList.add('hidden', 'scale-95', 'opacity-0');
-    }
-  });
-});
 </script>
 
 
 
-<!-- ADD POST MODAL -->
-<!-- Modal Background -->
-<div id="modalAddFolder" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm p-4">
-  <!-- Modal Card -->
-  <div class="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-lg p-4 sm:p-6 animate-fadeIn relative">
-
-    <!-- Close Button -->
-    <button onclick="closeModal('modalAddFolder')" 
-            class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
-
-    <!-- Modal Title -->
-    <h3 class="text-xl sm:text-2xl font-semibold mb-5 flex items-center gap-2 text-gray-800">
-      <i class="fas fa-plus text-green-600"></i> Add Post
-    </h3>
-
-    <!-- Form -->
-    <form id="addFolderForm" method="POST" class="flex flex-col gap-4">
-
-      <!-- Folder Name -->
-      <input type="text" name="folder_name" id="folder_name_input" placeholder="Folder Name" 
-             class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none transition w-full" required>
-      <p id="folderError" class="text-red-600 text-sm mt-1 hidden">Folder already exists!</p>
-
-      <!-- Assign Departments -->
-      <label class="font-medium text-gray-700">Assign Departments</label>
-      <div class="flex flex-col gap-2 max-h-40 overflow-y-auto p-2 border rounded-lg">
-        <?php
-        $dept = mysqli_query($conn,"SELECT * FROM departments");
-        while($d=mysqli_fetch_array($dept)){
-        ?>
-        <label class="flex items-center gap-2">
-          <input type="checkbox" name="departments[]" value="<?php echo $d['department_id']; ?>" class="accent-green-600">
-          <?php echo $d['department_name']; ?>
-        </label>
-        <?php } ?>
-      </div>
-
-      <!-- Buttons -->
-      <div class="flex flex-col sm:flex-row justify-end gap-3 mt-4">
-        <button type="submit" 
-                class="bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg px-5 py-2 shadow-md transition duration-200 w-full sm:w-auto">
-          Create Folder
-        </button>
-
-        <!-- <button type="button" onclick="closeModal('modalAddFolder')" 
-                class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg px-5 py-2 transition duration-200 w-full sm:w-auto">
-        </button> -->
-      </div>
-
-    </form>
-  </div>
-</div>
 
 <!-- Modal Script -->
 <script>
@@ -537,26 +413,7 @@ document.addEventListener('click', function(e) {
   }
 </style>
 
-<!-- ARCHIVED FOLDERS MODAL -->
-<div id="modalArchivedFolders" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
-  <!-- Modal Card -->
-  <div class="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-3/4 max-w-3xl max-h-[80vh] p-6 overflow-auto relative animate-fadeIn">
 
-    <!-- Close Button -->
-    <button onclick="document.getElementById('modalArchivedFolders').classList.add('hidden');" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
-
-    <!-- Modal Title -->
-    <h3 class="text-2xl font-semibold mb-5 flex items-center gap-2 text-gray-800">
-      <i class="fas fa-archive text-yellow-500"></i> Archived Folders
-    </h3>
-
-    <!-- Modal Content -->
-    <div id="archivedContent" class="overflow-auto max-h-[60vh]">
-      Loading archived folders...
-    </div>
-
-  </div>
-</div>
 
 <!-- Tailwind Keyframe Animation -->
 <style>

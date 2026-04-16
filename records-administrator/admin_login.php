@@ -2,148 +2,137 @@
 require_once("../include/connection.php");
 session_start();
 
-if(isset($_POST["adminlog"])){
+header('Content-Type: application/json');
 
-    date_default_timezone_set("Asia/Manila");
-    $date = date("M-d-Y h:i A");
+date_default_timezone_set("Asia/Manila");
+$date = date("M-d-Y h:i A");
 
-    $username = mysqli_real_escape_string($conn, $_POST["admin_user"]);  
-    $password = mysqli_real_escape_string($conn, $_POST["admin_password"]);
+$username = $_POST["admin_user"] ?? '';
+$password = $_POST["admin_password"] ?? '';
 
-    $error_msg = "Invalid Email Address or Password, Please try again!";
+$error_msg = "Invalid Email Address or Password";
 
-    // =========================
-    // 🔴 CHECK ADMIN FIRST
-    // =========================
-    $query = mysqli_query($conn, "SELECT * FROM admin_login WHERE admin_user = '$username'") 
-        or die(mysqli_error($conn));
+// =========================
+// 🔴 CHECK ADMIN FIRST
+// =========================
+$query = mysqli_query($conn, "SELECT * FROM admin_login WHERE admin_user = '$username'");
 
-    if(mysqli_num_rows($query) > 0){
+if(mysqli_num_rows($query) > 0){
 
-        $row = mysqli_fetch_array($query);
+    $row = mysqli_fetch_assoc($query);
 
-        if (!password_verify($password, $row["admin_password"])) {
-            $_SESSION['error_msg'] = $error_msg;
-            header("Location: index.php");
-            exit();
-        }
+    // ❌ WRONG PASSWORD
+    if (!password_verify($password, $row["admin_password"])) {
+        echo json_encode(["status" => "error"]);
+        exit();
+    }
 
-        if (strtolower($row['admin_status']) === 'archived') {
-            $_SESSION['error_msg'] = "Your account has been archived. Please contact your system administrator.";
-            header("Location: index.php");
-            exit();
-        }
-   //  OTP not verified
-  
-if ($row['otp_verified'] == 0) {
+    // ❌ ARCHIVED
+    if (strtolower($row['admin_status']) === 'archived') {
+        echo json_encode([
+            "status" => "error",
+            "message" => "Account archived"
+        ]);
+        exit();
+    }
 
-    $_SESSION['otp_email'] = $row['admin_user'];
-    $_SESSION['admin_otp_modal'] = true;
+    // 🔐 OTP NOT VERIFIED
+    if ($row['otp_verified'] == 0) {
+        echo json_encode([
+            "status" => "otp",
+            "email" => $row['admin_user']
+        ]);
+        exit();
+    }
 
-    header("Location: index.php");
+    // ✅ ADMIN LOGIN SUCCESS
+    $_SESSION['admin_user'] = $row['id'];
+    $_SESSION['admin_name'] = $row['name'];  
+    $_SESSION['admin_role'] = $row['role'];
+
+    // Log
+    $ip = $_SERVER["REMOTE_ADDR"];
+    $host = gethostbyaddr($ip);
+    $remarks = "Has LoggedIn the system at";
+
+    mysqli_query($conn, "INSERT INTO history_log1(id, admin_user, action, ip, host, login_time) 
+        VALUES('$row[id]', '$username', '$remarks', '$ip', '$host', '$date')");
+
+    // 🎯 ROLE RESPONSE
+    echo json_encode([
+        "status" => "success",
+        "role" => $row['role']
+    ]);
     exit();
 }
-        // ✅ ADMIN LOGIN SUCCESS
-        $_SESSION['admin_user'] = $row['id'];
-        $_SESSION['admin_name'] = $row['name'];  
-        $_SESSION['admin_role'] = $row['role'];
 
-        // Log
+
+// =========================
+// 🔵 IF NOT ADMIN → CHECK USER
+// =========================
+$stmt = $conn->prepare("SELECT id, name, email_address, user_password, user_status, department_id, otp_verified FROM login_user WHERE email_address = ? LIMIT 1");
+
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 1){
+
+    $user = $result->fetch_assoc();
+
+    // ❌ ARCHIVED USER
+    if (strtolower($user['user_status']) === 'archived') {
+        echo json_encode([
+            "status" => "error",
+            "message" => "Account archived"
+        ]);
+        exit();
+    }
+
+    // ✅ PASSWORD CHECK
+    if (password_verify($password, $user["user_password"])) {
+
+        // 🔐 OTP NOT VERIFIED
+        if ((int)$user['otp_verified'] === 0) {
+            echo json_encode([
+                "status" => "otp",
+                "email" => $user['email_address']
+            ]);
+            exit();
+        }
+
+        session_regenerate_id(true);
+
+        $_SESSION["user_no"] = $user["id"];
+        $_SESSION["email_address"] = $user["email_address"];
+        $_SESSION["department_id"] = $user["department_id"];
+
+        // Log user login
         $ip = $_SERVER["REMOTE_ADDR"];
         $host = gethostbyaddr($ip);
         $remarks = "Has LoggedIn the system at";
 
-        mysqli_query($conn, "INSERT INTO history_log1(id, admin_user, action, ip, host, login_time) 
-            VALUES('$row[id]', '$username', '$remarks', '$ip', '$host', '$date')")
-            or die(mysqli_error($conn));
+        $logStmt = $conn->prepare("INSERT INTO history_log (id, email_address, action, ip, host, login_time) VALUES (?, ?, ?, ?, ?, ?)");
 
-        // Role Redirect
-        if ($row['role'] === "Records Administrator") {
-            header("Location: folder_management.php");
-
-        } elseif ($row['role'] === "System Administrator") {
-            header("Location: ../system-administrator/homepage_management.php");
-        
-
-        } else {
-            $_SESSION['error_msg'] = "Unauthorized role access.";
-            header("Location: index.php");
+        if ($logStmt) {
+            $logStmt->bind_param("isssss", $user["id"], $user["email_address"], $remarks, $ip, $host, $date);
+            $logStmt->execute();
+            $logStmt->close();
         }
 
+        // ✅ SUCCESS (USER)
+        echo json_encode([
+            "status" => "user_success"
+        ]);
         exit();
-    }
-
-    // =========================
-    // 🔵 IF NOT ADMIN → CHECK USER
-    // =========================
-    $stmt = $conn->prepare("SELECT id, name, email_address, user_password, user_status, department_id, otp_verified FROM login_user WHERE email_address = ? LIMIT 1");
-
-    if (!$stmt) {
-        die("Prepare failed: " . $conn->error);
-    }
-
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows === 1){
-
-        $user = $result->fetch_assoc();
-
-        if (strtolower($user['user_status']) === 'archived') {
-            $_SESSION['error_msg'] = "User account is archived.";
-            header("Location: index.php");
-            exit();
-        }
-
-       if (password_verify($password, $user["user_password"])) {
-
-    // 🔴 ADD THIS OTP CHECK
-    if ((int)$user['otp_verified'] === 0) {
-
-        $_SESSION['otp_email'] = $user['email_address'];
-        $_SESSION['user_otp_modal'] = true;
-
-        header("Location: index.php");
-        exit();
-    }
-
-
-            session_regenerate_id(true);
-
-            $_SESSION["user_no"] = $user["id"];
-            $_SESSION["email_address"] = $user["email_address"];
-            $_SESSION["department_id"] = $user["department_id"];
-
-            // Log user login
-            $ip = $_SERVER["REMOTE_ADDR"];
-            $host = gethostbyaddr($ip);
-            $remarks = "Has LoggedIn the system at";
-
-            $logStmt = $conn->prepare("INSERT INTO history_log (id, email_address, action, ip, host, login_time) VALUES (?, ?, ?, ?, ?, ?)");
-
-            if ($logStmt) {
-                $logStmt->bind_param("isssss", $user["id"], $user["email_address"], $remarks, $ip, $host, $date);
-                $logStmt->execute();
-                $logStmt->close();
-            }
-// after login success
- unset($_SESSION['user_otp_modal']);
-    unset($_SESSION['otp_email']);
-            // ✅ REDIRECT TO USER SYSTEM
-            header("Location: ../employee/home.php");
-            exit();
-
-        } else {
-            $_SESSION['error_msg'] = $error_msg;
-            header("Location: index.php");
-            exit();
-        }
 
     } else {
-        $_SESSION['error_msg'] = $error_msg;
-        header("Location: index.php");
+        echo json_encode(["status" => "error"]);
         exit();
     }
+
+} else {
+    echo json_encode(["status" => "error"]);
+    exit();
 }
 ?>

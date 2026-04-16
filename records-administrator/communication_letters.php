@@ -18,9 +18,10 @@ SELECT
   l.sender,
   l.source,
   l.date_received,
+  l.file_type,
   l.status AS letter_status,
 
-  -- File info
+  -- File info 
   GROUP_CONCAT(DISTINCT uf.file_path SEPARATOR ', ') as file_paths,
   GROUP_CONCAT(DISTINCT uf.name SEPARATOR ', ') as file_names,
   GROUP_CONCAT(DISTINCT uf.status SEPARATOR ', ') as file_statuses,
@@ -40,6 +41,45 @@ LEFT JOIN admin_login al
 GROUP BY l.id
 ORDER BY l.date_received DESC
 ");
+$notif = mysqli_query($conn, "
+SELECT 
+  c.comment,
+  c.created_at,
+  l.id AS letter_id,
+  l.file_name,
+  u.name AS commenter
+FROM letter_comments c
+JOIN letters l ON c.letter_id = l.id
+JOIN login_user u ON c.user_id = u.id
+ORDER BY c.created_at DESC
+LIMIT 10
+");
+
+$notifications = [];
+
+while($n = mysqli_fetch_assoc($notif)) {
+
+    $time = strtotime($n['created_at']);
+    $diff = time() - $time;
+
+    if($diff < 60){
+        $timeText = "Just now";
+    } elseif($diff < 3600){
+        $timeText = floor($diff/60) . " mins ago";
+    } elseif($diff < 86400){
+        $timeText = floor($diff/3600) . " hrs ago";
+    } else {
+        $timeText = floor($diff/86400) . " days ago";
+    }
+
+    $notifications[] = [
+      
+        "text" => $n['commenter']." commented on \"".$n['file_name']."\"",
+        "time" => $timeText,
+        "letter_id" => $n['letter_id']   // ✅ ADD THIS LINE
+    ];
+}
+
 ?>
 <head>
 <meta charset="utf-8">
@@ -105,7 +145,36 @@ $(document).ready(function(){
       <span class="hidden md:inline-block text-sm md:text-base text-white">
   Welcome, <b><?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></b>!
 </span>
-      
+      <div class="flex items-center space-x-2 sm:space-x-4">
+
+  <!-- 🔔 NOTIFICATION ICON -->
+  <div class="relative">
+    <button onclick="toggleNotif()" 
+      class="relative p-2 rounded-full hover:bg-green-600 transition">
+
+      <i class="fas fa-bell text-white text-lg"></i>
+
+      <!-- 🔴 BADGE -->
+      <span id="notifCount"
+        class="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1.5 rounded-full hidden">
+        0
+      </span>
+    </button>
+
+    <!-- NOTIFICATION DROPDOWN -->
+    <div id="notifDropdown"
+      class="hidden absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-lg z-50 max-h-80 overflow-y-auto">
+
+      <div class="p-3 border-b font-semibold text-gray-700">
+        Notifications
+      </div>
+
+      <div id="notifList" class="divide-y text-sm text-gray-700">
+        <div class="p-3 text-gray-400 text-center">No notifications</div>
+      </div>
+
+    </div>
+  </div>
       <!-- Mobile Menu Button -->
       <button id="mobileMenuBtn" 
         class="md:hidden p-2 rounded-lg hover:bg-green-600 hover:bg-opacity-20 transition-all duration-200 group">
@@ -286,115 +355,111 @@ title="View Archived Letters">
            <!-- Responsive Table Container -->
 <div class="w-full h-[calc(100%-120px)] sm:h-[calc(100%-140px)] lg:h-[560px] overflow-hidden rounded-xl border shadow-sm">
   <div class="w-full h-full overflow-x-auto overflow-y-auto custom-scrollbar">
-  <table id="dtable" class="min-w-[1000px] w-full border-gray-200 table-auto">
-  <thead class="bg-gray-200 text-black uppercase text-xs sm:text-sm tracking-wider sticky top-0 z-10 shadow-sm">
-    <tr>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">ID</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Reference No</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Date Received</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Subject</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Sender</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Departments</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Source</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">File Name</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Status</th>
-      <th class="px-3 sm:px-4 py-2.5 text-center font-medium w-28 sm:w-32">Action</th>
-    </tr>
-  </thead>
-  <tbody class="text-gray-700 divide-y divide-gray-100">
-    <?php
-    $files = mysqli_query($conn, "SELECT * FROM letters WHERE letter_status= 'Active' ORDER BY created_at DESC");
-    while($file = mysqli_fetch_array($files)) { ?>
-    
-  <tr 
-  class="hover:bg-gray-50/50 transition-colors duration-150 border-b last:border-b-0 cursor-pointer"
-  onclick="openViewModal(
-    '<?php echo addslashes($file['file_name']); ?>',
-    '<?php echo addslashes($file['file_path']); ?>'
-  )"
->
-      <td class="px-3 sm:px-4 py-2"><?php echo $file['id']; ?></td>
-      <td class="px-3 sm:px-4 py-2"><?php echo $file['reference_no']; ?></td>
-      <td class="px-3 sm:px-4 py-2"><?php echo date('M j, Y', strtotime($file['date_received'])); ?></td>
-      <td class="px-3 sm:px-4 py-2"><?php echo htmlentities($file['subject']); ?></td>
-      <td class="px-3 sm:px-4 py-2"><?php echo htmlentities($file['sender']); ?></td>
-      <td class="px-3 sm:px-4 py-2 text-sm">
+  <div class="space-y-4 overflow-y-auto h-full pr-2">
+
 <?php
-$deptQuery = mysqli_query($conn, "
-    SELECT d.department_name
-    FROM letter_departments ld
-    JOIN departments d ON ld.department_id = d.department_id
-    WHERE ld.letter_id = '{$file['id']}'
+$files = mysqli_query($conn, "
+SELECT 
+  id,
+  reference_no,
+  subject,
+  sender,
+  source,
+  date_received,
+  created_at,
+  file_type,
+  status,
+  letter_status
+FROM letters
+WHERE letter_status='Active'
+ORDER BY created_at DESC
 ");
-
-$departments = [];
-
-while($row = mysqli_fetch_assoc($deptQuery)){
-    $departments[] = $row['department_name'];
-}
-
-if(count($departments) > 0){
-    echo '<span class="text-gray-700">'.implode(', ', $departments).'</span>';
-} else {
-    echo '<span class="text-gray-400 italic">No departments</span>';
-}
+while($file = mysqli_fetch_array($files)) {
 ?>
-</td>
-      <td class="px-3 sm:px-4 py-2"><?php echo htmlentities($file['source']); ?></td>
-      <td class="px-3 sm:px-4 py-2">
-        <a href="letter_files/<?php echo $file['file_path']; ?>" target="_blank" class="text-green-600 hover:underline">
-    <?php echo htmlentities($file['file_name']); ?>
-</a>
-      </td>
-      <td class="px-3 sm:px-4 py-2"><?php echo $file['status']; ?></td>
-            <td class="px-3 py-3 sm:px-4 sm:py-2">
-  <div class="flex justify-center relative">
-    <button onclick="toggleMenuFile(<?php echo $file['id']; ?>)" 
-            class="flex items-center justify-center w-9 h-9 rounded-full text-gray-600 
-                   hover:bg-gray-100 hover:text-gray-900 hover:shadow-md transition-all duration-200
-                   group-hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-200"
-            title="Actions">
-      <i class="fas fa-ellipsis-h text-sm"></i>
-    </button>
 
-    <div id="menu-file-<?php echo $file['id']; ?>"
-         class="hidden absolute top-full mt-1 right-0 w-44 sm:w-28 bg-white/95 backdrop-blur-sm 
-                rounded-xl shadow-lg border border-gray-100 z-50
-                transform scale-95 opacity-0 transition-all duration-200
-                sm:-left-2 sm:w-32 lg:w-28 lg:right-0">
+<div onclick="window.location.href='view_letter.php?id=<?php echo $file['id']; ?>'"
+     class="bg-white border rounded-xl shadow-sm p-4 hover:shadow-md transition cursor-pointer">
 
-      <a href="communication_downloads.php?file_id=<?php echo $file['id']; ?>"
-         class="block w-full flex items-center gap-2 px-3 py-2.5 text-xs sm:text-sm text-gray-700 
-                hover:bg-blue-50 hover:text-blue-700 rounded-t-xl border-b border-gray-50">
-        <i class="fa fa-download text-blue-500 w-4"></i><span>Download</span>
-      </a>
+  <!-- HEADER -->
+  <div class="flex justify-between items-start">
+    
+    <div>
+      <p class="text-xs text-gray-500">
+        Ref. No. <?php echo $file['reference_no']; ?>
+      </p>
 
-      <a href="letter_files/<?php echo $file['file_path']; ?>" target="_blank"
-         class="block w-full flex items-center gap-2 px-3 py-2.5 text-xs sm:text-sm text-gray-700 
-                hover:bg-indigo-50 hover:text-indigo-700 border-b border-gray-50">
-        <i class="fa fa-eye text-indigo-500 w-4"></i><span>View</span>
-      </a>
+      <h3 class="text-blue-600 font-semibold text-sm sm:text-base">
+        <?php echo htmlentities($file['sender']); ?>
+      </h3>
 
-      <a href="communication_archive.php?file_id=<?php echo $file['id']; ?>"
-         class="block w-full flex items-center gap-2 px-3 py-2.5 text-xs sm:text-sm text-gray-700 
-                hover:bg-red-50 hover:text-red-700 border-b border-gray-50">
-        <i class="fa fa-archive text-red-500 w-4"></i><span>Archive</span>
-      </a>
-
-   <!-- EDIT BUTTON -->
-<button onclick="openEditModal(<?php echo $file['id']; ?>, '<?php echo addslashes($file['file_name']); ?>')" 
-   class="block w-full text-left flex items-center gap-2 px-3 py-2.5 text-xs sm:text-sm text-gray-700 
-          hover:bg-yellow-50 hover:text-yellow-700 border-b border-gray-50">
-  <i class="fa fa-edit text-yellow-500 w-4"></i><span>Edit</span>
-</button>
-
+      <p class="text-sm text-gray-700">
+        <?php echo htmlentities($file['subject']); ?>
+      </p>
     </div>
+
+    <div class="text-xs text-gray-500 text-right">
+      <?php echo date('M d, Y h:i A', strtotime($file['created_at'])); ?>
+    </div>
+
   </div>
-</td>
-    </tr>
-    <?php } ?>
-  </tbody>
-</table>
+
+  <!-- TAGS -->
+  <div class="mt-3 flex gap-2 flex-wrap">
+
+    <span class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full">
+      <?php echo $file['source']; ?>
+    </span>
+
+    <span class="bg-blue-200 text-gray-700 text-xs px-2 py-1 rounded-full">
+      <?php echo $file['status']; ?>
+    </span>
+<span class="bg-blue-300 text-gray-700 text-xs px-2 py-1 rounded-full">
+      <?php echo !empty($file['file_type']) ? $file['file_type'] : 'No type'; ?>
+    </span>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="mt-3 flex justify-between items-center text-xs text-gray-500">
+
+    <div>
+  
+    </div>
+
+    <div class="flex gap-2">
+
+      <!-- VIEW -->
+<a href="#"
+   onclick="event.stopPropagation(); openEditModal(
+     <?php echo $file['id']; ?>,
+     '<?php echo addslashes($file['subject']); ?>',
+     '<?php echo addslashes($file['reference_no']); ?>'
+   );"
+   class="text-green-600 hover:underline">
+   Edit
+</a>
+      <!-- DOWNLOAD -->
+     <a href="communication_downloads.php?file_id=<?php echo $file['id']; ?>"
+   onclick="event.stopPropagation();"
+   class="text-green-600 hover:underline">
+   Download
+</a>
+
+      <!-- ARCHIVE -->
+   <a href="communication_archive.php?file_id=<?php echo $file['id']; ?>"
+   onclick="event.stopPropagation();"
+   class="text-red-600 hover:underline">
+   Archive
+</a>
+    </div>
+
+  </div>
+
+</div>
+
+<?php } ?>
+
+</div>
   </div>
 </div>
           </table>
@@ -479,47 +544,28 @@ if(count($departments) > 0){
 
 <!--END  ADD LETTER MODAL -->
 <div id="modalEditLetter"
-     class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+     class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
 
   <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
 
     <div class="flex justify-between items-center mb-4">
-      <h4 class="font-semibold text-lg">Edit File</h4>
+      <h4 class="font-semibold text-lg">Edit Letter</h4>
       <button onclick="closeModal('modalEditLetter')" class="text-xl">&times;</button>
     </div>
 
     <form method="POST" action="communication_edit.php">
 
       <input type="hidden" id="editLetterId" name="file_id">
-      <input type="hidden" id="editFileExtension" name="file_extension">
 
-      <label class="text-sm font-medium">File Name</label>
+      <!-- REFERENCE NO -->
+      <label class="text-sm font-medium">Reference No</label>
+      <input type="text" id="editReferenceNo" name="reference_no"
+             class="w-full border p-2 rounded mb-3" required>
 
-      <div class="flex gap-2 items-center">
-        <input type="text" id="editFileNameOnly" name="file_name_only"
-               class="w-full border p-2 rounded" required>
-
-        <span id="fileExtensionDisplay" class="text-gray-500"></span>
-      </div>
-
-<!-- DEPARTMENTS -->
-  <div class="mt-3 border p-3 rounded">
-    <label class="font-semibold text-sm block mb-2">
-      Departments
-    </label>
-
-    <?php
-    $dept = mysqli_query($conn, "SELECT * FROM departments WHERE department_status='Active'");
-    while($d = mysqli_fetch_assoc($dept)) {
-    ?>
-      <label class="flex items-center gap-2 text-sm">
-        <input type="checkbox" name="departments[]" value="<?php echo $d['department_id']; ?>">
-        <?php echo $d['department_name']; ?>
-      </label>
-    <?php } ?>
-  </div>
-
-
+      <!-- SUBJECT -->
+      <label class="text-sm font-medium">Subject</label>
+      <input type="text" id="editSubject" name="subject"
+             class="w-full border p-2 rounded" required>
 
       <div class="mt-5 flex justify-end gap-2">
         <button type="button" onclick="closeModal('modalEditLetter')"
@@ -745,6 +791,67 @@ function confirmLogout(el) {
     });
 }
 </script>
+
+<script>
+function toggleStatusMenu(id){
+  document.querySelectorAll('[id^="status-menu-"]').forEach(el => {
+    if(el.id !== 'status-menu-' + id){
+      el.classList.add('hidden');
+    }
+  });
+
+  const menu = document.getElementById('status-menu-' + id);
+  menu.classList.toggle('hidden');
+}
+
+function updateStatus(id, status){
+  $.post("update_letter_status.php", {
+    id: id,
+    status: status
+  }, function(){
+    
+    // UPDATE TEXT LIVE
+    document.getElementById('status-text-' + id).innerText = status;
+
+    Swal.fire({
+      toast: true,
+      position: 'top',
+      icon: 'success',
+      title: 'Status updated',
+      showConfirmButton: false,
+      timer: 1200
+    });
+
+    document.getElementById('status-menu-' + id).classList.add('hidden');
+  });
+}
+
+// close dropdown when clicking outside
+document.addEventListener('click', function(e){
+  if(!e.target.closest('[id^="status-menu-"]') && !e.target.closest('button')){
+    document.querySelectorAll('[id^="status-menu-"]').forEach(el => {
+      el.classList.add('hidden');
+    });
+  }
+});
+</script>
+
+<script>
+function toggleNotif() {
+  const box = document.getElementById('notifDropdown');
+  box.classList.toggle('hidden');
+}
+
+document.addEventListener('click', function (e) {
+  const notifBox = document.getElementById('notifDropdown');
+  const notifBtn = e.target.closest('button[onclick="toggleNotif()"]');
+
+  // if click is NOT inside notification box AND NOT the bell button
+  if (!notifBox.contains(e.target) && !notifBtn) {
+    notifBox.classList.add('hidden');
+  }
+});
+</script>
 <script>
 function confirmLogout(el) {
     Swal.fire({
@@ -773,6 +880,47 @@ function confirmLogout(el) {
     });
 }
 </script>
+<script>
+function loadNotifications(){
+  $.get("fetch_notifications_admin.php", function(res){
+
+    let data = JSON.parse(res);
+
+    let html = "";
+
+    if(data.length === 0){
+      html = `<div class="p-3 text-gray-400 text-center">No notifications</div>`;
+      $("#notifCount").addClass("hidden");
+    } else {
+      data.forEach(n => {
+        html += `
+  <a href="view_letter.php?id=${n.letter_id}&notif_id=${n.id}"
+     class="block p-3 hover:bg-gray-100 transition">
+
+            <div class="text-sm text-gray-800">
+              ${n.text}
+            </div>
+
+            <div class="text-xs text-gray-500">
+              ${n.time}
+            </div> 
+
+          </a>
+        `;
+      });
+
+      $("#notifCount").removeClass("hidden").text(data.length);
+    }
+
+    $("#notifList").html(html);
+  });
+}
+
+setInterval(loadNotifications, 1000);
+loadNotifications();
+</script>
+
+
 
 <script>
 function performSearch() {
@@ -872,39 +1020,13 @@ function openViewModal(fileName, filePath) {
   document.getElementById('modalViewLetter').classList.remove('hidden');
 }
 
-function openEditModal(id, fullFileName) {
-  const lastDot = fullFileName.lastIndexOf(".");
-  let nameOnly = fullFileName;
-  let extension = "";
-
-  if (lastDot !== -1) {
-    nameOnly = fullFileName.substring(0, lastDot);
-    extension = fullFileName.substring(lastDot);
-  }
-
+function openEditModal(id, subject, reference_no) {
   document.getElementById('editLetterId').value = id;
-  document.getElementById('editFileNameOnly').value = nameOnly;
-  document.getElementById('fileExtensionDisplay').textContent = extension;
-  document.getElementById('editFileExtension').value = extension;
-
-  // reset all checkboxes first
-  document.querySelectorAll('.dept-checkbox').forEach(cb => {
-    cb.checked = false;
-  });
-
-  // fetch assigned departments
-  fetch("get_letter_departments.php?letter_id=" + id)
-    .then(res => res.json())
-    .then(data => {
-      data.forEach(deptId => {
-        let cb = document.querySelector('.dept-checkbox[value="'+deptId+'"]');
-        if (cb) cb.checked = true;
-      });
-    });
+  document.getElementById('editSubject').value = subject;
+  document.getElementById('editReferenceNo').value = reference_no;
 
   document.getElementById('modalEditLetter').classList.remove('hidden');
 }
-
 function closeModal(id){
   document.getElementById(id).classList.add('hidden');
 }
