@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 13, 2026 at 09:39 AM
+-- Generation Time: Apr 16, 2026 at 08:24 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -185,11 +185,12 @@ CREATE TABLE `folder_departments` (
 INSERT INTO `folder_departments` (`id`, `folder_id`, `department_id`) VALUES
 (28, 29, 3),
 (40, 5, 2),
-(54, 10, 10),
 (56, 9, 3),
 (57, 38, 3),
 (58, 14, 3),
-(59, 4, 3);
+(59, 4, 3),
+(60, 10, 7),
+(61, 10, 10);
 
 -- --------------------------------------------------------
 
@@ -295,7 +296,12 @@ INSERT INTO `history_log` (`log_id`, `id`, `email_address`, `action`, `actions`,
 (0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-13-2026 12:28 PM', ''),
 (0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-13-2026 01:40 PM', ''),
 (0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-13-2026 02:33 PM', ''),
-(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-13-2026 02:35 PM', '');
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-13-2026 02:35 PM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 08:51 AM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 09:34 AM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 11:05 AM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 02:12 PM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 02:12 PM', '');
 
 -- --------------------------------------------------------
 
@@ -596,7 +602,12 @@ INSERT INTO `history_log1` (`log_id`, `id`, `admin_user`, `action`, `actions`, `
 (0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-13-2026 10:22 AM', ''),
 (0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-13-2026 11:25 AM', ''),
 (0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-13-2026 12:30 PM', ''),
-(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-13-2026 01:17 PM', '');
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-13-2026 01:17 PM', ''),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 08:50 AM', ''),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 09:07 AM', ''),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 09:07 AM', ''),
+(0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 09:49 AM', ''),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 10:00 AM', '');
 
 -- --------------------------------------------------------
 
@@ -728,17 +739,44 @@ CREATE TABLE `letters` (
   `status` enum('Open','Done') DEFAULT 'Open',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `department_id` int(11) NOT NULL,
-  `download` int(11) DEFAULT NULL,
-  `letter_status` varchar(100) NOT NULL DEFAULT 'Active'
+  `letter_status` varchar(100) NOT NULL DEFAULT 'Active',
+  `file_type` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `letters`
 --
 
-INSERT INTO `letters` (`id`, `reference_no`, `date_received`, `subject`, `sender`, `source`, `file_name`, `file_path`, `status`, `created_at`, `department_id`, `download`, `letter_status`) VALUES
-(15, '123432', '2026-04-13', 'TEST1', 'Joys Ann B. Calam', 'Internal', 'Ya (1).pdf', '1776057038_Ya (1).pdf', 'Open', '2026-04-13 05:10:38', 0, NULL, 'Active'),
-(16, '09876', '2026-04-13', 'TEST1', 'Joys Ann B. Calam', 'External', 'sample code.pdf', '1776057547_sample code.pdf', 'Open', '2026-04-13 05:19:07', 0, NULL, 'Active');
+INSERT INTO `letters` (`id`, `reference_no`, `date_received`, `subject`, `sender`, `source`, `file_name`, `file_path`, `status`, `created_at`, `department_id`, `letter_status`, `file_type`) VALUES
+(15, '00002', '2026-04-13', 'TEST SUBJECT 2', 'Joys Ann B. Calam', 'Internal', 'Ya (1).pdf', '1776057038_Ya (1).pdf', 'Open', '2026-04-13 05:10:38', 0, 'Active', 'PDF'),
+(16, '00001', '2026-04-13', 'TEST SUBJECT 1', 'Jelly Concepcion', 'External', '', '1776057547_sample code.pdf', 'Open', '2026-04-13 05:19:07', 0, 'Active', 'Letter');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `letter_comments`
+--
+
+CREATE TABLE `letter_comments` (
+  `id` int(11) NOT NULL,
+  `letter_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `comment` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `is_read` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `letter_comments`
+--
+
+INSERT INTO `letter_comments` (`id`, `letter_id`, `user_id`, `comment`, `created_at`, `is_read`) VALUES
+(1, 16, 3, 'Hello', '2026-04-16 00:51:44', 1),
+(2, 16, 3, 'helloi', '2026-04-16 00:55:43', 1),
+(3, 16, 3, 'hello', '2026-04-16 00:59:15', 1),
+(4, 15, 3, 'WOW', '2026-04-16 06:12:36', 1),
+(5, 15, 3, 'GGSESEG', '2026-04-16 06:12:51', 1),
+(6, 15, 3, 'ASD', '2026-04-16 06:14:14', 0);
 
 -- --------------------------------------------------------
 
@@ -761,10 +799,12 @@ INSERT INTO `letter_departments` (`id`, `letter_id`, `department_id`, `created_a
 (1, 14, 3, '2026-04-13 04:49:34'),
 (2, 14, 5, '2026-04-13 04:49:34'),
 (3, 8, 3, '2026-04-13 05:00:46'),
-(4, 15, 3, '2026-04-13 05:10:38'),
-(5, 15, 5, '2026-04-13 05:10:38'),
-(6, 16, 3, '2026-04-13 05:19:07'),
-(7, 16, 6, '2026-04-13 05:19:07');
+(41, 15, 3, '2026-04-16 06:15:53'),
+(42, 15, 6, '2026-04-16 06:15:53'),
+(43, 15, 7, '2026-04-16 06:15:53'),
+(44, 15, 8, '2026-04-16 06:15:53'),
+(45, 15, 9, '2026-04-16 06:15:53'),
+(46, 15, 10, '2026-04-16 06:15:53');
 
 -- --------------------------------------------------------
 
@@ -916,6 +956,12 @@ ALTER TABLE `letters`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `letter_comments`
+--
+ALTER TABLE `letter_comments`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `letter_departments`
 --
 ALTER TABLE `letter_departments`
@@ -967,7 +1013,7 @@ ALTER TABLE `folders`
 -- AUTO_INCREMENT for table `folder_departments`
 --
 ALTER TABLE `folder_departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `homepage_about`
@@ -1006,10 +1052,16 @@ ALTER TABLE `letters`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
+-- AUTO_INCREMENT for table `letter_comments`
+--
+ALTER TABLE `letter_comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT for table `letter_departments`
 --
 ALTER TABLE `letter_departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `login_user`

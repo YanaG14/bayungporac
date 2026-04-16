@@ -260,175 +260,120 @@ document.addEventListener('DOMContentLoaded', function() {
 <?php include 'sidebar.php'; ?>
 
   <!-- MAIN CONTENT -->
-  <div class="w-full lg:w-3/4 flex-1 h-[600px] sm:h-[620px] lg:h-[655px]">
- 
-    <div class="bg-white rounded-2xl shadow-lg p-3 sm:p-4 lg:p-6 h-full transition-all duration-300 hover:shadow-xl">
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+  <?php
+$letter_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-        <!-- HEADER (Responsive) -->
-        <h2 class="text-lg sm:text-xl lg:text-2xl font-semibold flex items-center gap-2 text-center sm:text-left flex-1">
-          <i class="fas fa-layer-group text-green-500 text-sm sm:text-base"></i>
-          <span class="relative">
-            LETTER COMMUNICATION
-            <span class="absolute left-0 -bottom-1 w-full h-1 bg-gradient-to-r from-green-500 to-emerald-600 rounded scale-x-75 sm:scale-x-100"></span>
-          </span>
-        </h2>
+$letter = null;
 
-        <!-- Action Buttons (Responsive Stack) -->
-        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto items-center sm:items-end">
-
-          <!-- SEARCH BAR (Full Width Mobile) -->
-          <div class="w-full sm:w-64 lg:w-80 flex-shrink-0">
-            <div class="relative">
-              <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm z-10"></i>
-              <input type="text" id="globalSearch" 
-                     placeholder="Search folders..."
-                     oninput="performSearch()"
-                     class="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2.5 sm:py-2.5 
-                            focus:ring-2 focus:ring-green-300 focus:outline-none transition-all duration-200 shadow-sm">
-            </div> 
-          </div>
-
-        </div>
-      </div>
-           <!-- Responsive Table Container -->
-<div class="w-full h-[calc(100%-120px)] sm:h-[calc(100%-140px)] lg:h-[560px] overflow-hidden rounded-xl border shadow-sm">
-  <div class="w-full h-full overflow-x-auto overflow-y-auto custom-scrollbar">
-  <table id="dtable" class="min-w-[1000px] w-full border-gray-200 table-auto">
-  <thead class="bg-gray-200 text-black uppercase text-xs sm:text-sm tracking-wider sticky top-0 z-10 shadow-sm">
-    <tr>
-
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Reference No</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Date Received</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Subject</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Sender</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Departments</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Source</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">File Name</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Status</th>
-      <th class="px-3 sm:px-4 py-2.5 text-center font-medium w-28 sm:w-32">Action</th>
-    </tr>
-  </thead>
-  <tbody class="text-gray-700 divide-y divide-gray-100">
-    <?php
-   $files = mysqli_query($conn, "
-SELECT DISTINCT l.*
-FROM letters l
-INNER JOIN letter_departments ld 
-    ON l.id = ld.letter_id
-WHERE l.letter_status = 'Active'
-AND ld.department_id = '$user_department'
-ORDER BY l.created_at DESC
-");
-    while($file = mysqli_fetch_array($files)) { ?>
-    
- <tr class="hover:bg-gray-50/50 transition-colors duration-150 border-b last:border-b-0">
-     <td class="px-3 sm:px-4 py-2">
-  <a href="view_letter.php?id=<?php echo $file['id']; ?>" class="block">
-    <?php echo $file['reference_no']; ?>
-  </a>
-</td>
-     <td class="px-3 sm:px-4 py-2">
-  <a href="view_letter.php?id=<?php echo $file['id']; ?>" class="block">
-    <?php echo date('M j, Y', strtotime($file['date_received'])); ?>
-  </a>
-</td>
-    <td class="px-3 sm:px-4 py-2">
-  <a href="view_letter.php?id=<?php echo $file['id']; ?>" class="block">
-    <?php echo htmlentities($file['subject']); ?>
-  </a>
-</td>
-    <td class="px-3 sm:px-4 py-2">
-  <a href="view_letter.php?id=<?php echo $file['id']; ?>" class="block">
-    <?php echo htmlentities($file['sender']); ?>
-  </a>
-</td>
-     <td class="px-3 sm:px-4 py-2 text-sm">
-  <a href="view_letter.php?id=<?php echo $file['id']; ?>" class="block">
-    <?php
-    $deptQuery = mysqli_query($conn, "
-        SELECT d.department_name
-        FROM letter_departments ld
-        JOIN departments d ON ld.department_id = d.department_id
-        WHERE ld.letter_id = '{$file['id']}'
-    ");
-
-    $departments = [];
-
-    while($row = mysqli_fetch_assoc($deptQuery)){
-        $departments[] = $row['department_name'];
-    }
-
-    echo count($departments) > 0
-        ? '<span class="text-gray-700">'.implode(', ', $departments).'</span>'
-        : '<span class="text-gray-400 italic">No departments</span>';
-    ?>
-  </a>
-</td>
-      <td class="px-3 sm:px-4 py-2"><?php echo htmlentities($file['source']); ?></td>
-      <td class="px-3 sm:px-4 py-2">
-        <a href="letter_files/<?php echo $file['file_path']; ?>" target="_blank" class="text-green-600 hover:underline">
-    <?php echo htmlentities($file['file_name']); ?>
-</a>
-      </td>
-      <td class="px-3 sm:px-4 py-2"><?php echo $file['status']; ?></td>
-            <td class="px-3 py-3 sm:px-4 sm:py-2">
-  <div class="flex justify-center relative">
-    <button onclick="toggleMenuFile(<?php echo $file['id']; ?>)" 
-            class="flex items-center justify-center w-9 h-9 rounded-full text-gray-600 
-                   hover:bg-gray-100 hover:text-gray-900 hover:shadow-md transition-all duration-200
-                   group-hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-200"
-            title="Actions">
-      <i class="fas fa-ellipsis-h text-sm"></i>
-    </button>
-
-    <div id="menu-file-<?php echo $file['id']; ?>"
-         class="hidden absolute top-full mt-1 right-0 w-44 sm:w-28 bg-white/95 backdrop-blur-sm 
-                rounded-xl shadow-lg border border-gray-100 z-50
-                transform scale-95 opacity-0 transition-all duration-200
-                sm:-left-2 sm:w-32 lg:w-28 lg:right-0">
-
-      <a href="communication_downloads.php?file_id=<?php echo $file['id']; ?>"
-         class="block w-full flex items-center gap-2 px-3 py-2.5 text-xs sm:text-sm text-gray-700 
-                hover:bg-blue-50 hover:text-blue-700 rounded-t-xl border-b border-gray-50">
-        <i class="fa fa-download text-blue-500 w-4"></i><span>Download</span>
-      </a>
-
-      <a href="../records-administrator/letter_files/<?php echo $file['file_path']; ?>" target="_blank"
-         class="block w-full flex items-center gap-2 px-3 py-2.5 text-xs sm:text-sm text-gray-700 
-                hover:bg-indigo-50 hover:text-indigo-700 border-b border-gray-50">
-        <i class="fa fa-eye text-indigo-500 w-4"></i><span>View</span>
-      </a>
-
-    </div>
-  </div>
-</td>
-    </tr>
-    <?php } ?> 
-  </tbody>
-</table>
-  </div>
-</div>
-          </table>
-        </div>
-      </div>
-      <!-- SEARCH RESULTS -->
-      <div id="searchResults" class="mt-6 p-4 rounded-xl bg-blue-50 border border-blue-200 hidden"></div>
-    </div>
-  </div>
-</div>
-
-<style>
-.custom-scrollbar::-webkit-scrollbar { width: 6px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: #f8fafc; border-radius: 3px; }
-.custom-scrollbar::-webkit-scrollbar-thumb { 
-  background: linear-gradient(45deg, #464948); 
-  border-radius: 3px; 
+if($letter_id > 0){
+    $stmt = $conn->prepare("SELECT * FROM letters WHERE id=?");
+    $stmt->bind_param("i", $letter_id);
+    $stmt->execute();
+    $letter = $stmt->get_result()->fetch_assoc();
 }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #059669; }
-</style>
+?>
 
+<div class="w-full lg:w-3/4 flex-1">
 
+<?php if($letter): ?>
+
+<div class="bg-white rounded-2xl shadow-lg p-6">
+<div class="mb-4">
+    <a href="javascript:history.back()" 
+       class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm transition">
+        ← Back
+    </a>
+</div>
+    <!-- HEADER -->
+    <h2 class="text-2xl font-bold text-gray-800">
+        <?= htmlspecialchars($letter['subject']) ?>
+    </h2>
+
+    <p class="text-gray-500 mt-1">
+        Reference No: <?= $letter['reference_no'] ?>
+    </p>
+
+    <p class="text-gray-500 mb-4">
+        Sender: <?= htmlspecialchars($letter['sender']) ?>
+    </p>
+
+    <!-- FILE PREVIEW -->
+<!-- FILE PREVIEW -->
+<div class="border rounded-xl h-[190px] overflow-hidden bg-gray-50">
+
+<?php
+$file = $letter['file_path'] ?? '';
+$ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+// FIX PATH HERE (IMPORTANT)
+$filePath = "../records-administrator/letter_files/" . $file;
+?>
+
+<?php if(!empty($file) && file_exists($filePath)) { ?> 
+
+    <?php if($ext == "pdf"){ ?>
+        <iframe src="<?= $filePath ?>#toolbar=0"
+                class="w-full h-full"></iframe>
+
+    <?php } elseif(in_array($ext, ['jpg','jpeg','png','gif','webp'])) { ?>
+        <img src="<?= $filePath ?>"
+             class="w-full h-full object-contain">
+
+    <?php } else { ?>
+        <div class="flex items-center justify-center h-full text-gray-500">
+            File type not supported for preview
+        </div>
+    <?php } ?> 
+
+<?php } else { ?>
+    <div class="flex items-center justify-center h-full text-gray-500">
+        No file found or wrong path
+    </div>
+<?php } ?>
+
+</div>
+
+    <!-- COMMENTS -->
+    <div class="mt-6 border-t pt-4">
+
+        <h3 class="font-semibold text-gray-700 mb-2">Comments</h3>
+
+        <div id="commentList"
+             class="h-32 overflow-y-auto bg-gray-50 p-3 rounded mb-3 text-sm">
+            Loading comments...
+        </div>
+
+        <div class="flex gap-2">
+            <input type="hidden" id="letterId" value="<?= $letter_id ?>">
+
+            <input type="text" id="commentInput"
+                   class="flex-1 border rounded px-3 py-2 text-sm"
+                   placeholder="Write a comment...">
+
+            <button onclick="addComment()"
+                    class="bg-blue-600 text-white px-4 rounded">
+                Send
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+<?php else: ?>
+
+<div class="bg-white p-6 rounded-xl shadow text-gray-500">
+    Select a letter to view.
+</div>
+
+<?php endif; ?>
+
+</div>
+
+      </div>
+      </div>
+      
+    
 <!-- Tailwind Keyframe Animation -->
 <style>
   @keyframes fadeIn {
@@ -501,104 +446,38 @@ function confirmLogout(el) {
 </script>
 
 <script>
-function performSearch() {
-    let keyword = document.getElementById("globalSearch").value.toLowerCase();
+function loadComments(){
+    let id = $("#letterId").val();
+    if(!id) return;
 
-    // FILTER TABLE ROWS (FOLDERS)
-    let table = document.getElementById("dtable");
-    let rows = table.getElementsByTagName("tr");
-
-    for (let i = 1; i < rows.length; i++) {
-        let rowText = rows[i].innerText.toLowerCase();
-
-        if (rowText.includes(keyword)) {
-            rows[i].style.display = "";
-        } else {
-            rows[i].style.display = "none";
-        }
-    }
-
-    // AJAX SEARCH FOR FILES (UNCHANGED)
-    $.ajax({
-        url: "search_files_folders.php",
-        type: "POST",
-        data: { keyword: keyword },
-        success: function(response) {
-            $("#searchResults").html(response);
-        }
+    $.get("load_comments.php", {letter_id: id}, function(data){
+        $("#commentList").html(data);
     });
 }
-</script>
 
-<!-- ACTION BUTTON -->
-<script>
-function toggleMenuFile(id) {
-  const menu = document.getElementById('menu-file-' + id);
+function addComment(){
+    let id = $("#letterId").val();
+    let comment = $("#commentInput").val();
 
-  // Close all other menus first
-  document.querySelectorAll('[id^="menu-file-"]').forEach(el => {
-    if (el.id !== 'menu-file-' + id) {
-      el.classList.add('hidden', 'scale-95', 'opacity-0');
-    }
-  });
+    if(comment.trim() === "") return;
 
-  // Toggle current menu
-  if (menu.classList.contains('hidden')) {
-    menu.classList.remove('hidden');
-    // Force reflow
-    menu.offsetHeight;
-    menu.classList.remove('scale-95', 'opacity-0');
-    menu.classList.add('scale-100', 'opacity-100');
-  } else {
-    closeMenuFile(id);
-  }
-}
-
-function closeMenuFile(id) {
-  const menu = document.getElementById('menu-file-' + id);
-  if (menu) {
-    menu.classList.add('scale-95', 'opacity-0');
-    setTimeout(() => {
-      menu.classList.add('hidden');
-    }, 150);
-  }
-}
-
-
-function closeModal(id){
-  document.getElementById(id).classList.add('hidden');
-}
-</script>
- <!-- END ACTION BUTTON-->
-
-  <!-- ARCHIVE-->
-<script>
-function openModal(id){
-  document.getElementById(id).classList.remove('hidden');
-}
-
-function closeModal(id){
-  document.getElementById(id).classList.add('hidden');
-}
-
-// Restore archived letter
-function confirmUnarchiveLetter(id){
-    Swal.fire({
-        title: 'Restore Letter?',
-        html: '<p style="font-size:0.9rem;margin:0;">This letter will be restored.</p>',
-        showCancelButton: true,
-        confirmButtonText: 'Restore',
-        cancelButtonText: 'Cancel',
-        confirmButtonColor: '#16a34a',
-        cancelButtonColor: '#6b7280'
-    }).then((result) => {
-        if(result.isConfirmed){
-            window.location = "communication_unarchive.php?letter_id=" + id;
-        }
+    $.post("save_comment.php", {
+        letter_id: id,
+        comment: comment
+    }, function(){
+        $("#commentInput").val("");
+        loadComments();
     });
 }
+
+loadComments();
 </script>
- <!-- END ARCHINVE-->
+
+
+
+
+
+
 
 <!-- Footer -->
 <footer class="mt-10 text-center text-gray-600">

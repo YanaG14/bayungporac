@@ -52,7 +52,18 @@ transform:translateY(0);
 .login-card{
 animation:fadeFloat 1.2s ease-out;
 }
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+  100% { transform: translateX(0); }
+}
 
+.shake {
+  animation: shake 0.4s;
+}
 </style>
 
 </head>
@@ -93,7 +104,7 @@ MUNICIPALITY OF PORAC
 
         <!-- Inline PHP Error Message -->
     
-        <form action="admin_login.php" method="POST">
+       <form id="loginForm">
 
             <!-- Email -->
             <div class="mb-5">
@@ -132,17 +143,22 @@ class="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300"
 
 
   <!-- Inline Error Message Above Button -->
-      <?php if(isset($_SESSION['error_msg']) && $_SESSION['error_msg'] !== ""): ?>
-        <div class="bg-red-100 text-red-600 p-3 rounded mb-4 text-center">
-          <?php echo $_SESSION['error_msg']; unset($_SESSION['error_msg']); ?>
-        </div>
-      <?php endif; ?>
-      <?php
-if(isset($_SESSION['error_msg']) && $_SESSION['error_msg'] !== ""){
-    echo '<div class="bg-red-100 text-red-600 p-3 rounded mb-4 text-center">'.$_SESSION['error_msg'].'</div>';
-    unset($_SESSION['error_msg']);
-}
-?>
+  <?php if(isset($_SESSION['error_msg'])): ?>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+    const email = document.getElementById("materialFormCardEmailEx");
+    const pass = document.getElementById("materialFormCardPasswordEx");
+
+    email.classList.add("border-red-500","shake");
+    pass.classList.add("border-red-500","shake");
+
+    setTimeout(()=>{
+        email.classList.remove("shake");
+        pass.classList.remove("shake");
+    },400);
+});
+</script>
+<?php unset($_SESSION['error_msg']); endif; ?>
 <?php if(isset($_SESSION['admin_otp_modal']) || isset($_SESSION['user_otp_modal'])): ?>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
@@ -158,7 +174,6 @@ unset($_SESSION['user_otp_modal']);
 endif; ?>
             <button
                 type="submit"
-                name="adminlog"
                 id="login"
                 class="w-full bg-yellow-500/90 hover:bg-yellow-400 text-white font-semibold py-3 rounded-lg border border-white-300 transition duration-300 shadow-md">
                 Log in
@@ -475,46 +490,76 @@ document.getElementById('resetPasswordForm').addEventListener('submit', function
 
 <script>
 
-$("#login").on("click", function(){
+document.getElementById("loginForm").addEventListener("submit", function(e){
+    e.preventDefault(); // 🚨 STOP PAGE REFRESH
 
-uservalidate();
-passvalidate();
+    const email = document.getElementById("materialFormCardEmailEx");
+    const pass = document.getElementById("materialFormCardPasswordEx");
 
-if(uservalidate()===true && passvalidate()===true){}
+    let hasError = false;
 
+    // EMPTY VALIDATION
+    if(email.value === ""){
+        email.classList.add("border-red-500","shake");
+        setTimeout(()=>email.classList.remove("shake"),400);
+        hasError = true;
+    }
+
+    if(pass.value === ""){
+        pass.classList.add("border-red-500","shake");
+        setTimeout(()=>pass.classList.remove("shake"),400);
+        hasError = true;
+    }
+
+    if(hasError) return;
+
+    const formData = new FormData(this);
+
+    fetch("admin_login.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        if(data.status === "error"){
+            // ❌ WRONG LOGIN
+            email.classList.add("border-red-500","shake");
+            pass.classList.add("border-red-500","shake");
+
+            setTimeout(()=>{
+                email.classList.remove("shake");
+                pass.classList.remove("shake");
+            },400);
+        }
+
+        else if(data.status === "otp"){
+            // 🔐 SHOW OTP MODAL
+            otpEmail = data.email;
+            document.getElementById('otpModal').classList.remove('hidden');
+        }
+
+        else if(data.status === "success"){
+            // ✅ ADMIN REDIRECT
+            if(data.role === "Records Administrator"){
+                window.location.href = "folder_management.php";
+            }else{
+                window.location.href = "../system-administrator/homepage_management.php";
+            }
+        }
+
+        else if(data.status === "user_success"){
+            // ✅ USER REDIRECT
+            window.location.href = "../employee/home.php";
+        }
+
+    })
+    .catch(() => {
+        alert("Something went wrong");
+    });
 });
 
-function uservalidate(){
 
-if($('#materialFormCardEmailEx').val()===''){
-
-$('#materialFormCardEmailEx').addClass("border-red-500");
-return false;
-
-}else{
-
-$('#materialFormCardEmailEx').removeClass("border-red-500").addClass("border-green-500");
-return true;
-
-}
-
-}
-
-function passvalidate(){
-
-if($('#materialFormCardPasswordEx').val()===''){
-
-$('#materialFormCardPasswordEx').addClass("border-red-500");
-return false;
-
-}else{
-
-$('#materialFormCardPasswordEx').removeClass("border-red-500").addClass("border-green-500");
-return true;
-
-}
-
-}
 
 $(window).on('load', function(){
 

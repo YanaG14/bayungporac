@@ -281,9 +281,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         </div>
       </div>
-
+ 
       <!-- Responsive Table Container -->
-      <div class="w-full h-[calc(100%-120px)] sm:h-[calc(100%-140px)] lg:h-[560px] overflow-hidden rounded-xl border shadow-sm">
+     <div id="folderTableContainer" class="w-full h-[calc(100%-120px)] sm:h-[calc(100%-140px)] lg:h-[560px] overflow-hidden rounded-xl border shadow-sm">
         <div class="w-full h-full overflow-x-auto overflow-y-auto custom-scrollbar">
           <table id="dtable" class="min-w-[800px] w-full border-gray-200 table-auto">
             <thead class="bg-gray-200 text-black uppercase text-xs sm:text-sm tracking-wider sticky top-0 z-10 shadow-sm">
@@ -326,7 +326,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             class="text-gray-500 hover:text-gray-800 text-xl px-2">
                       <i class="fas fa-ellipsis-h text-sm"></i>
                     </button>
-
+                    
                     
                     <!-- DROPDOWN MENU -->
                     <div id="menu-<?php echo $row['folder_id']; ?>"
@@ -416,6 +416,10 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
       </div>
 
+
+
+
+      
       <!-- SEARCH RESULTS -->
       <div id="searchResults" class="mt-6 p-4 rounded-xl bg-blue-50 border border-blue-200 hidden"></div>
     </div>
@@ -426,7 +430,7 @@ document.addEventListener('DOMContentLoaded', function() {
 .custom-scrollbar::-webkit-scrollbar { width: 6px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: #f8fafc; border-radius: 3px; }
 .custom-scrollbar::-webkit-scrollbar-thumb { 
-  background: linear-gradient(45deg, #6b7371); 
+  background: linear-gradient(45deg, #464948); 
   border-radius: 3px; 
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #059669; }
@@ -722,6 +726,20 @@ function confirmLogout(el) {
 </script>
 
 <script>
+function toggleMenuFileSearch(id){
+    document.querySelectorAll('[id^="menu-file-search-"]').forEach(el => {
+        if(el.id !== 'menu-file-search-' + id){
+            el.classList.add('hidden');
+        }
+    });
+
+    const menu = document.getElementById('menu-file-search-' + id);
+    if(menu){
+        menu.classList.toggle('hidden');
+    }
+}
+
+
 function toggleFiles(folder_id) {
     const row = document.getElementById('files-' + folder_id);
     const container = document.getElementById('files-content-' + folder_id);
@@ -752,29 +770,15 @@ function toggleFiles(folder_id) {
 
 <script>
 function performSearch() {
-    let keyword = document.getElementById("globalSearch").value.toLowerCase();
+    let keyword = $("#globalSearch").val().trim();
 
-    // FILTER TABLE ROWS (FOLDERS)
-    let table = document.getElementById("dtable");
-    let rows = table.getElementsByTagName("tr");
-
-    for (let i = 1; i < rows.length; i++) {
-        let rowText = rows[i].innerText.toLowerCase();
-
-        if (rowText.includes(keyword)) {
-            rows[i].style.display = "";
-        } else {
-            rows[i].style.display = "none";
-        }
-    }
-
-    // AJAX SEARCH FOR FILES (UNCHANGED)
     $.ajax({
         url: "search_files_folders.php",
         type: "POST",
         data: { keyword: keyword },
         success: function(response) {
-            $("#searchResults").html(response);
+            // Replace table rows instead of separate div
+            $("#dtable tbody").html(response);
         }
     });
 }

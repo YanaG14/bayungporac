@@ -3,13 +3,31 @@
 
 <?php
 session_start();
-if (!isset($_SESSION['admin_user'])) {
-    header('Location: index.php');
+if(!isset($_SESSION["email_address"])){
+    header("location:../login.php");
     exit();
 }
 
-$adminName = $_SESSION['admin_name'];
 require_once("../include/connection.php");
+
+$user_id = $_SESSION['user_no'];
+$user_department = $_SESSION['department_id'];
+
+// Get user name and department image
+$stmt = $conn->prepare("
+    SELECT login_user.name, departments.department_img
+    FROM login_user
+    JOIN departments 
+    ON login_user.department_id = departments.department_id
+    WHERE login_user.id = ?
+");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+$name = $row['name'];
+$department_img = $row['department_img'];
 
 if(!isset($_GET['folder_id'])){
     header("Location: folder_management.php");
@@ -36,7 +54,7 @@ LEFT JOIN departments d ON fd.department_id = d.department_id
 
 -- Join files
 LEFT JOIN upload_files uf ON f.folder_id = uf.folder_id AND uf.status='Active'
-LEFT JOIN admin_login al ON uf.email = al.id
+LEFT JOIN login_user al ON uf.email = al.id
 
 WHERE f.folder_status='Active'
 
@@ -151,7 +169,7 @@ $(document).ready(function(){
     <div class="flex items-center space-x-2 sm:space-x-4">
       <!-- Desktop Welcome -->
       <span class="hidden md:inline-block text-sm md:text-base text-white">
-  Welcome, <b><?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></b>!
+  Welcome, <b><?php echo ucwords(htmlentities($name)); ?></b>!
 </span>
       
       <!-- Mobile Menu Button -->
@@ -181,7 +199,7 @@ $(document).ready(function(){
     <!-- Mobile Welcome -->
     <div class="text-center">
       <p class="text-sm font-medium text-gray-600">Welcome,</p>
-      <p class="font-bold text-xl text-gray-900"><?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></p>
+      <p class="font-bold text-xl text-gray-900"><?php echo ucwords(htmlentities($name)); ?></p>
     </div>
     
     <!-- Mobile Logout -->
@@ -321,22 +339,7 @@ class="inline-block mb-4 bg-white px-4 py-2 rounded-xl shadow hover:bg-green-100
       </div>
     </div>
 
-    <!-- ACTION BUTTONS (STACK MOBILE) -->
-    <div class="flex gap-1 sm:gap-2 flex-shrink-0">
-      <!-- UPLOAD -->
-      <button onclick="openModal('uploadModal')" 
-        class="flex items-center justify-center w-11 h-11 rounded-full text-green-600 focus:outline-none"
-        title="Upload File">
-      <i class="fas fa-file-upload text-lg"></i>
-      </button>
-
-      <!-- ARCHIVE -->
-      <button onclick="openArchivedFiles()"
-        class="flex items-center justify-center w-11 h-11 rounded-full text-yellow-500 focus:outline-none"
-        title="View Archived">
-        <i class="fas fa-archive text-lg"></i>
-      </button>
-    </div>
+  
   </div>
 </div>
 
