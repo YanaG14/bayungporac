@@ -19,6 +19,7 @@ SELECT
   l.source,
   l.date_received,
   l.file_type,
+  l.file_name,
   l.status AS letter_status,
 
   -- File info 
@@ -113,7 +114,7 @@ $(document).ready(function(){
     $('#dtable').DataTable({
     paging: false,        // ❌ remove pagination (Previous/Next)
     info: false,          // ❌ remove "Showing 1 to X of X"
-    lengthChange: false   // ❌ removes "Show entries"
+    lengthChange: false,  // ❌ removes "Show entries"
     searching: false // ❗ disable DataTables search box
 });
     $(window).on('load', function(){ $('#loader').fadeOut('slow'); });
@@ -327,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="relative">
               <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm z-10"></i>
               <input type="text" id="globalSearch" 
-                     placeholder="Search folders..."
+                     placeholder="Search letters..."
                      oninput="performSearch()"
                      class="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2.5 sm:py-2.5 
                             focus:ring-2 focus:ring-green-300 focus:outline-none transition-all duration-200 shadow-sm">
@@ -355,7 +356,7 @@ title="View Archived Letters">
            <!-- Responsive Table Container -->
 <div class="w-full h-[calc(100%-120px)] sm:h-[calc(100%-140px)] lg:h-[560px] overflow-hidden rounded-xl border shadow-sm">
   <div class="w-full h-full overflow-x-auto overflow-y-auto custom-scrollbar">
-  <div class="space-y-4 overflow-y-auto h-full pr-2">
+  <div id="letterContainer" class="space-y-4 overflow-y-auto h-full pr-2">
 
 <?php
 $files = mysqli_query($conn, "
@@ -368,6 +369,7 @@ SELECT
   date_received,
   created_at,
   file_type,
+  file_name,
   status,
   letter_status
 FROM letters
@@ -378,7 +380,9 @@ while($file = mysqli_fetch_array($files)) {
 ?>
 
 <div onclick="window.location.href='view_letter.php?id=<?php echo $file['id']; ?>'"
-     class="bg-white border rounded-xl shadow-sm p-4 hover:shadow-md transition cursor-pointer">
+     class="letter-card bg-white border rounded-xl shadow-sm p-4 hover:shadow-md transition cursor-pointer"
+     data-filetype="<?php echo strtolower($file['file_type']); ?>"
+     data-filename="<?php echo strtolower($file['file_name']); ?>">
 
   <!-- HEADER -->
   <div class="flex justify-between items-start">
@@ -926,27 +930,22 @@ loadNotifications();
 function performSearch() {
     let keyword = document.getElementById("globalSearch").value.toLowerCase();
 
-    // FILTER TABLE ROWS (FOLDERS)
-    let table = document.getElementById("dtable");
-    let rows = table.getElementsByTagName("tr");
+    let cards = document.querySelectorAll(".letter-card");
 
-    for (let i = 1; i < rows.length; i++) {
-        let rowText = rows[i].innerText.toLowerCase();
+    cards.forEach(card => {
 
-        if (rowText.includes(keyword)) {
-            rows[i].style.display = "";
+        let text = card.innerText.toLowerCase();
+        let fileType = card.getAttribute("data-filetype") || "";
+        let fileName = card.getAttribute("data-filename") || "";
+
+        if (
+            text.includes(keyword) ||
+            fileType.includes(keyword) ||
+            fileName.includes(keyword)
+        ) {
+            card.style.display = "";
         } else {
-            rows[i].style.display = "none";
-        }
-    }
-
-    // AJAX SEARCH FOR FILES (UNCHANGED)
-    $.ajax({
-        url: "search_files_folders.php",
-        type: "POST",
-        data: { keyword: keyword },
-        success: function(response) {
-            $("#searchResults").html(response);
+            card.style.display = "none";
         }
     });
 }
@@ -1039,9 +1038,7 @@ function openModal(id){
   document.getElementById(id).classList.remove('hidden');
 }
 
-function closeModal(id){
-  document.getElementById(id).classList.add('hidden');
-}
+
 
 // Restore archived letter
 function confirmUnarchiveLetter(id){
