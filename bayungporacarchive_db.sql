@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 16, 2026 at 08:24 AM
+-- Generation Time: Apr 19, 2026 at 10:42 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -105,23 +105,18 @@ CREATE TABLE `file_departments` (
 --
 
 INSERT INTO `file_departments` (`id`, `file_id`, `department_id`) VALUES
-(5, 13, 3),
-(6, 13, 5),
-(7, 14, 3),
-(8, 14, 5),
-(9, 15, 3),
-(10, 15, 13),
-(11, 16, 2),
-(14, 19, 3),
-(15, 19, 5),
-(16, 19, 6),
-(17, 20, 3),
-(18, 20, 5),
-(19, 20, 6),
-(20, 22, 3),
-(21, 23, 3),
-(22, 24, 3),
-(23, 25, 3);
+(46, 26, 3),
+(47, 26, 6),
+(48, 27, 3),
+(49, 27, 6),
+(50, 28, 3),
+(51, 28, 6),
+(52, 29, 6),
+(54, 31, 3),
+(55, 32, 3),
+(58, 30, 3),
+(59, 30, 6),
+(60, 30, 7);
 
 -- --------------------------------------------------------
 
@@ -141,30 +136,8 @@ CREATE TABLE `folders` (
 --
 
 INSERT INTO `folders` (`folder_id`, `folder_name`, `folder_status`, `created_at`) VALUES
-(4, 'Letters', 'Active', '2026-03-10 05:45:53'),
-(5, 'Certifications', 'Active', '2026-03-10 05:47:28'),
-(9, 'Business Permit and Licensing Office', 'Active', '2026-03-11 02:57:54'),
-(10, 'DILG', 'Active', '2026-03-11 02:59:33'),
-(11, 'ECO Protect', 'Active', '2026-03-11 03:00:02'),
-(12, 'Executive Order', 'Active', '2026-03-11 03:00:38'),
-(13, 'General Service Office', 'Active', '2026-03-11 03:01:02'),
-(14, 'Joint Inspection Team', 'Active', '2026-03-11 03:01:49'),
-(15, 'Lucky South 99', 'Active', '2026-03-11 03:03:46'),
-(16, 'LYDO', 'Active', '2026-03-11 03:04:00'),
-(17, 'MCRO', 'Active', '2026-03-11 03:04:15'),
-(18, 'Memorandum', 'Active', '2026-03-11 03:04:34'),
-(19, 'MENRO', 'Active', '2026-03-11 03:04:49'),
-(20, 'MMT', 'Active', '2026-03-11 03:05:36'),
-(21, 'MPDO', 'Active', '2026-03-11 03:05:48'),
-(22, 'MSWDO', 'Active', '2026-03-11 03:06:12'),
-(23, 'MUNICIPAL ENGINEERING OFFICE', 'Active', '2026-03-11 03:06:45'),
-(24, 'OFFICE ORDER', 'Active', '2026-03-11 03:07:13'),
-(25, 'OTHER CORRESPONDENCES', 'Active', '2026-03-11 03:07:37'),
-(26, 'PRIME WASTE SOLUTION', 'Active', '2026-03-11 03:08:43'),
-(27, 'PUBLIC MARKET', 'Active', '2026-03-11 03:09:09'),
-(28, 'SB', 'Active', '2026-03-11 03:09:27'),
-(29, 'Municipal Health Office', 'Active', '2026-03-12 05:54:35'),
-(38, 'Crystal', 'Active', '2026-03-17 01:29:13');
+(39, 'TEST FOLDER 1', 'Active', '2026-04-18 10:07:54'),
+(40, 'TEST FOLDER 2', 'Active', '2026-04-18 10:08:11');
 
 -- --------------------------------------------------------
 
@@ -183,14 +156,11 @@ CREATE TABLE `folder_departments` (
 --
 
 INSERT INTO `folder_departments` (`id`, `folder_id`, `department_id`) VALUES
-(28, 29, 3),
-(40, 5, 2),
-(56, 9, 3),
-(57, 38, 3),
-(58, 14, 3),
-(59, 4, 3),
-(60, 10, 7),
-(61, 10, 10);
+(63, 40, 2),
+(64, 40, 3),
+(65, 40, 6),
+(69, 39, 1),
+(70, 39, 3);
 
 -- --------------------------------------------------------
 
@@ -301,7 +271,11 @@ INSERT INTO `history_log` (`log_id`, `id`, `email_address`, `action`, `actions`,
 (0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 09:34 AM', ''),
 (0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 11:05 AM', ''),
 (0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 02:12 PM', ''),
-(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 02:12 PM', '');
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 02:12 PM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'DESKTOP-2H7DQ36', 'Apr-18-2026 01:26 PM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'DESKTOP-2H7DQ36', 'Apr-18-2026 06:09 PM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'DESKTOP-2H7DQ36', 'Apr-19-2026 02:12 PM', ''),
+(0, 3, 'luigi@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'DESKTOP-2H7DQ36', 'Apr-19-2026 04:18 PM', '');
 
 -- --------------------------------------------------------
 
@@ -607,7 +581,11 @@ INSERT INTO `history_log1` (`log_id`, `id`, `admin_user`, `action`, `actions`, `
 (0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 09:07 AM', ''),
 (0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 09:07 AM', ''),
 (0, 3, 'joys@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 09:49 AM', ''),
-(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 10:00 AM', '');
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'ADMInterns', 'Apr-16-2026 10:00 AM', ''),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'DESKTOP-2H7DQ36', 'Apr-18-2026 01:22 PM', ''),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'DESKTOP-2H7DQ36', 'Apr-18-2026 01:24 PM', ''),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'DESKTOP-2H7DQ36', 'Apr-18-2026 06:02 PM', ''),
+(0, 1, 'jelly@gmail.com', 'Has LoggedIn the system at', 'Has LoggedOut the system at', '::1', 'DESKTOP-2H7DQ36', 'Apr-19-2026 02:09 PM', '');
 
 -- --------------------------------------------------------
 
@@ -748,8 +726,10 @@ CREATE TABLE `letters` (
 --
 
 INSERT INTO `letters` (`id`, `reference_no`, `date_received`, `subject`, `sender`, `source`, `file_name`, `file_path`, `status`, `created_at`, `department_id`, `letter_status`, `file_type`) VALUES
-(15, '00002', '2026-04-13', 'TEST SUBJECT 2', 'Joys Ann B. Calam', 'Internal', 'Ya (1).pdf', '1776057038_Ya (1).pdf', 'Open', '2026-04-13 05:10:38', 0, 'Active', 'PDF'),
-(16, '00001', '2026-04-13', 'TEST SUBJECT 1', 'Jelly Concepcion', 'External', '', '1776057547_sample code.pdf', 'Open', '2026-04-13 05:19:07', 0, 'Active', 'Letter');
+(24, '0001', '2026-04-18', 'TEST SUBJECT 1', 'Jelly Concepcion', 'External', '', NULL, 'Open', '2026-04-18 06:07:29', 0, 'Active', NULL),
+(25, '0002', '2026-04-18', 'TEST SUBJECT 2', 'Jelly Concepcion', 'Internal', '', NULL, 'Open', '2026-04-18 07:15:35', 0, 'Active', NULL),
+(26, '0003', '2026-04-18', 'TEST SUBJECT 3', 'Jelly Concepcion', 'External', '', NULL, 'Open', '2026-04-18 07:16:55', 0, 'Active', NULL),
+(27, '0004', '2026-04-18', 'TEST SUBJECT 4', 'Jelly Concepcion', 'External', '', NULL, 'Done', '2026-04-18 07:18:04', 0, 'Active', 'Endorsement');
 
 -- --------------------------------------------------------
 
@@ -776,7 +756,10 @@ INSERT INTO `letter_comments` (`id`, `letter_id`, `user_id`, `comment`, `created
 (3, 16, 3, 'hello', '2026-04-16 00:59:15', 1),
 (4, 15, 3, 'WOW', '2026-04-16 06:12:36', 1),
 (5, 15, 3, 'GGSESEG', '2026-04-16 06:12:51', 1),
-(6, 15, 3, 'ASD', '2026-04-16 06:14:14', 0);
+(6, 15, 3, 'ASD', '2026-04-16 06:14:14', 0),
+(7, 27, 3, 'nice', '2026-04-18 07:24:57', 0),
+(8, 27, 3, 'noted', '2026-04-19 08:05:35', 0),
+(9, 27, 3, 'Okay', '2026-04-19 08:19:57', 0);
 
 -- --------------------------------------------------------
 
@@ -804,7 +787,50 @@ INSERT INTO `letter_departments` (`id`, `letter_id`, `department_id`, `created_a
 (43, 15, 7, '2026-04-16 06:15:53'),
 (44, 15, 8, '2026-04-16 06:15:53'),
 (45, 15, 9, '2026-04-16 06:15:53'),
-(46, 15, 10, '2026-04-16 06:15:53');
+(46, 15, 10, '2026-04-16 06:15:53'),
+(47, 17, 3, '2026-04-18 05:27:13'),
+(48, 17, 6, '2026-04-18 05:27:13'),
+(49, 24, 3, '2026-04-18 06:07:29'),
+(50, 24, 6, '2026-04-18 06:07:29'),
+(51, 25, 3, '2026-04-18 07:15:35'),
+(52, 25, 6, '2026-04-18 07:15:35'),
+(53, 26, 3, '2026-04-18 07:16:55'),
+(54, 26, 6, '2026-04-18 07:16:55'),
+(55, 27, 3, '2026-04-18 07:18:04'),
+(56, 27, 6, '2026-04-18 07:18:04');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `letter_files`
+--
+
+CREATE TABLE `letter_files` (
+  `file_id` int(11) NOT NULL,
+  `letter_id` int(11) NOT NULL,
+  `file_name` varchar(255) NOT NULL,
+  `file_path` varchar(255) NOT NULL,
+  `file_type` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `letter_files`
+--
+
+INSERT INTO `letter_files` (`file_id`, `letter_id`, `file_name`, `file_path`, `file_type`, `created_at`) VALUES
+(1, 24, 'INTRODUCTION.pdf', '1776492449_INTRODUCTION.pdf', NULL, '2026-04-18 06:07:29'),
+(4, 24, 'CLAS_POSTER.pdf', '1776496046_2876_CLAS_POSTER.pdf', NULL, '2026-04-18 07:07:26'),
+(5, 24, 'twd.pdf', '1776496172_9769_twd.pdf', NULL, '2026-04-18 07:09:32'),
+(6, 25, 'piceui.pdf', '1776496535_piceui.pdf', NULL, '2026-04-18 07:15:35'),
+(8, 26, 'INTERNSHIP-AGREEMENT-FORM.pdf', '1776496615_INTERNSHIP-AGREEMENT-FORM.pdf', NULL, '2026-04-18 07:16:55'),
+(9, 26, 'CERTIFICATION-FORM.pdf', '1776496615_CERTIFICATION-FORM.pdf', NULL, '2026-04-18 07:16:55'),
+(10, 26, 'Doc1.pdf', '1776496615_Doc1.pdf', NULL, '2026-04-18 07:16:55'),
+(12, 27, 'snow.pdf', '1776496684_snow.pdf', NULL, '2026-04-18 07:18:04'),
+(13, 27, 'piceui.pdf', '1776496684_piceui.pdf', NULL, '2026-04-18 07:18:04'),
+(14, 27, 'CERTIFICATION-FORM (1).pdf', '1776507269_5028_CERTIFICATION-FORM (1).pdf', NULL, '2026-04-18 10:14:29'),
+(15, 27, '1ST-ENDORSEMENT-FORM (1).pdf', '1776507269_1623_1ST-ENDORSEMENT-FORM (1).pdf', NULL, '2026-04-18 10:14:29'),
+(16, 27, 'INTERNSHIP-AGREEMENT-FORM (1).pdf', '1776507269_3077_INTERNSHIP-AGREEMENT-FORM (1).pdf', NULL, '2026-04-18 10:14:29');
 
 -- --------------------------------------------------------
 
@@ -867,17 +893,13 @@ CREATE TABLE `upload_files` (
 --
 
 INSERT INTO `upload_files` (`id`, `folder_id`, `name`, `file_path`, `size`, `download`, `timers`, `admin_status`, `email`, `status`) VALUES
-(13, 9, 'Sample 2.pdf', '1773915712_Sample 2.pdf', '12817', 2, 'Mar-19-2026 11:21 AM', 'Admin', '1', 'Active'),
-(14, 9, 'Sample 1.pdf', '1773915712_Sample 1.pdf', '12594', 5, 'Mar-19-2026 11:21 AM', 'Admin', '1', 'Active'),
-(15, 29, 'Sample 4.pdf', '1774249540_Sample 4.pdf', '12716', 1, 'Mar-23-2026 08:05 AM', 'Admin', '1', 'Active'),
-(16, 9, 'letter for soft copy photos (officials).docx', '1774926993_letter for soft copy photos (officials).docx', '7125', 1, 'Mar-31-2026 05:16 AM', 'Admin', '1', 'Active'),
-(19, 9, 'Sample docs.docx', '1775547061_Sample docs.docx', '6505', 0, 'Apr-07-2026 09:31 AM', 'Admin', '1', 'Active'),
-(20, 9, 'Sample pdf.pdf', '1775547061_Sample pdf.pdf', '13088', 0, 'Apr-07-2026 09:31 AM', 'Admin', '1', 'Active'),
-(21, 9, 'Untitled spreadsheet.xlsx', '1775547454_Untitled spreadsheet.xlsx', '5053', 0, 'Apr-07-2026 09:37 AM', 'Admin', '1', 'Active'),
-(22, 9, 'simple_excel.xlsx', '1775547646_simple_excel.xlsx', '4857', 0, 'Apr-07-2026 09:40 AM', 'Admin', '1', 'Active'),
-(23, 9, 'BSIT 2A FINAL REQUIREMENTS.xlsx', '1775548198_BSIT 2A FINAL REQUIREMENTS.xlsx', '23793', 1, 'Apr-07-2026 09:49 AM', 'Admin', '1', 'Active'),
-(24, 9, 'sample code docs.docx', '1775548871_sample code docs.docx', '10985', 0, 'Apr-07-2026 10:01 AM', 'Admin', '1', 'Active'),
-(25, 9, 'sample code.pdf', '1775548871_sample code.pdf', '80103', 1, 'Apr-07-2026 10:01 AM', 'Admin', '1', 'Active');
+(26, 39, 'procurement office quotation.docx', '1776506924_procurement office quotation.docx', '32967', 0, 'Apr-18-2026 12:08 PM', 'Admin', '1', 'Active'),
+(27, 39, 'notice of award.docx', '1776506924_notice of award.docx', '38055', 2, 'Apr-18-2026 12:08 PM', 'Admin', '1', 'Active'),
+(28, 39, 'PURCHASE ORDER.docx', '1776506924_PURCHASE ORDER.docx', '32361', 0, 'Apr-18-2026 12:08 PM', 'Admin', '1', 'Active'),
+(29, 40, 'INTRODUCTION.pdf', '1776506986_INTRODUCTION.pdf', '319495', 0, 'Apr-18-2026 12:09 PM', 'Admin', '1', 'Active'),
+(30, 40, 'Evaluation Instrument (ISO_IEC 25010).pdf', '1776506998_Evaluation Instrument (ISO_IEC 25010).pdf', '288412', 0, 'Apr-18-2026 12:09 PM', 'Admin', '1', 'Active'),
+(31, 40, 'Evaluation Instrument (ISO_IEC 25010).docx', '1776506998_Evaluation Instrument (ISO_IEC 25010).docx', '3471990', 0, 'Apr-18-2026 12:09 PM', 'Admin', '1', 'Archived'),
+(32, 40, 'INTRODUCTION.pdf', '1776506998_INTRODUCTION.pdf', '319495', 0, 'Apr-18-2026 12:09 PM', 'Admin', '1', 'Active');
 
 --
 -- Indexes for dumped tables
@@ -968,6 +990,13 @@ ALTER TABLE `letter_departments`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `letter_files`
+--
+ALTER TABLE `letter_files`
+  ADD PRIMARY KEY (`file_id`),
+  ADD KEY `letter_id` (`letter_id`);
+
+--
 -- Indexes for table `login_user`
 --
 ALTER TABLE `login_user`
@@ -1001,19 +1030,19 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `file_departments`
 --
 ALTER TABLE `file_departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `folders`
 --
 ALTER TABLE `folders`
-  MODIFY `folder_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `folder_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `folder_departments`
 --
 ALTER TABLE `folder_departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `homepage_about`
@@ -1049,19 +1078,25 @@ ALTER TABLE `homepage_slides`
 -- AUTO_INCREMENT for table `letters`
 --
 ALTER TABLE `letters`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `letter_comments`
 --
 ALTER TABLE `letter_comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `letter_departments`
 --
 ALTER TABLE `letter_departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+
+--
+-- AUTO_INCREMENT for table `letter_files`
+--
+ALTER TABLE `letter_files`
+  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `login_user`
@@ -1073,7 +1108,7 @@ ALTER TABLE `login_user`
 -- AUTO_INCREMENT for table `upload_files`
 --
 ALTER TABLE `upload_files`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- Constraints for dumped tables
