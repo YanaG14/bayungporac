@@ -6,14 +6,14 @@ if (!isset($_SESSION['admin_user'])) {
     header('Location: index.php');
     exit();
 }
-
+ 
 $adminName = $_SESSION['admin_name'];
 require_once("../include/connection.php");
 
 // Fetch active folders
 $query = mysqli_query($conn,"
 SELECT 
-f.folder_id,
+f.folder_id, 
 f.folder_name,
 f.created_at,
 GROUP_CONCAT(DISTINCT d.department_name SEPARATOR ', ') as departments,
@@ -36,6 +36,47 @@ WHERE f.folder_status='Active'
 GROUP BY f.folder_id
 ORDER BY f.folder_name ASC
 ");
+
+$notif = mysqli_query($conn, "
+SELECT 
+  c.comment,
+  c.created_at,
+  l.id AS letter_id,
+  l.file_name,
+  u.name AS commenter
+FROM letter_comments c
+JOIN letters l ON c.letter_id = l.id
+JOIN login_user u ON c.user_id = u.id
+ORDER BY c.created_at DESC
+LIMIT 10
+");
+
+$notifications = [];
+
+while($n = mysqli_fetch_assoc($notif)) {
+
+    $time = strtotime($n['created_at']);
+    $diff = time() - $time;
+
+    if($diff < 60){
+        $timeText = "Just now";
+    } elseif($diff < 3600){
+        $timeText = floor($diff/60) . " mins ago";
+    } elseif($diff < 86400){
+        $timeText = floor($diff/3600) . " hrs ago";
+    } else {
+        $timeText = floor($diff/86400) . " days ago";
+    }
+
+    $notifications[] = [
+      
+        "text" => $n['commenter']." commented on \"".$n['file_name']."\"",
+        "time" => $timeText,
+        "letter_id" => $n['letter_id']   // ✅ ADD THIS LINE
+    ];
+}
+
+
 ?>
 
 <head>
@@ -104,7 +145,7 @@ $(document).ready(function(){
       <span class="hidden md:inline-block text-sm md:text-base text-white">
   Welcome, <b><?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></b>!
 </span>
-      
+      <?php include 'notification.php'; ?>
       <!-- Mobile Menu Button -->
       <button id="mobileMenuBtn" 
         class="md:hidden p-2 rounded-lg hover:bg-green-600 hover:bg-opacity-20 transition-all duration-200 group">
@@ -411,6 +452,28 @@ document.addEventListener('DOMContentLoaded', function() {
               </div>
 
               <?php } ?>
+
+
+              <!-- FILE SEARCH RESULTS TABLE -->
+<div id="fileTableContainer" class="hidden mt-6 w-full overflow-auto rounded-xl border shadow-sm">
+  <table class="min-w-full table-auto">
+    
+  <thead id="fileTableHead" class="bg-blue-100 text-black text-sm hidden">
+      <tr>
+        <th class="px-4 py-2 text-left">File Name</th>
+        <th class="px-4 py-2 text-left">Departments</th>
+        <th class="px-4 py-2 text-left">Uploader</th>
+        <th class="px-4 py-2 text-left">Date Uploaded</th>
+        <th class="px-4 py-2 text-center">Action</th>
+      </tr>
+    </thead>
+
+    <tbody id="fileResultsBody">
+      <!-- AJAX FILE RESULTS GO HERE -->
+    </tbody>
+
+  </table>
+</div>
             </tbody>
           </table>
         </div>
@@ -562,6 +625,73 @@ document.addEventListener('click', function(e) {
   </div>
 </div>
 
+
+
+
+   <!-- EDIT FILE MODAL -->
+
+
+   <!-- EDIT FILE MODAL -->
+<div id="modalEditFile" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+
+  <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl p-6 relative">
+
+    <!-- Close -->
+    <button onclick="closeFileModal()"
+      class="absolute top-3 right-4 text-gray-400 hover:text-gray-700 text-2xl">
+      &times;
+    </button>
+
+    <!-- Title -->
+    <h2 class="text-xl font-semibold mb-5 flex items-center gap-2">
+      <i class="fas fa-edit text-blue-600"></i> Edit File
+    </h2>
+
+    <form method="POST" action="search_update_file.php" class="flex flex-col gap-4">
+
+      <!-- hidden ID -->
+      <input type="hidden" name="file_id" id="edit_file_id">
+
+      <!-- FILE NAME + EXTENSION STYLE -->
+      <div>
+        <label class="text-sm text-gray-600 font-medium">File Name</label>
+
+        <div class="flex items-center border rounded-lg overflow-hidden mt-1 focus-within:ring-2 focus-within:ring-blue-400">
+          
+          <input type="text" 
+                 name="file_name" 
+                 id="edit_file_name"
+                 class="w-full px-4 py-2 outline-none"
+                 placeholder="File Name"
+                 required>
+        </div>
+      </div>
+
+
+      <!-- BUTTONS -->
+      <div class="flex justify-end gap-3 pt-4 border-t">
+
+        <button type="button" 
+                onclick="closeFileModal()"
+                class="px-5 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700">
+          Cancel
+        </button>
+
+        <button type="submit"
+                class="px-5 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold shadow">
+          Save Changes
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+</div>
+   <!-- EDIT FILE MODAL -->
+
+
+
 <!-- Tailwind Keyframe Animation -->
 <style>
   @keyframes fadeIn {
@@ -574,6 +704,46 @@ document.addEventListener('click', function(e) {
 </style>
 
 <script>
+  function openEditFileModal(id) {
+
+    // show modal
+    document.getElementById("modalEditFile").classList.remove("hidden");
+
+    // fetch file data via AJAX
+    $.ajax({
+        url: "search_get_file.php",
+        type: "GET",
+        data: { id: id },
+        dataType: "json",
+        success: function(res) {
+
+            $("#edit_file_id").val(res.id);
+            $("#edit_file_name").val(res.name);
+            $("#edit_file_departments").val(res.departments);
+
+        }
+    });
+}
+function confirmArchiveFile(id){
+    Swal.fire({
+        title: "Archive this file?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, archive"
+    }).then((result) => {
+        if(result.isConfirmed){
+            $.post("search_archive_file.php", {id:id}, function(res){
+                if(res === "success"){
+                    Swal.fire("Archived!", "", "success");
+                    location.reload();
+                }
+            });
+        }
+    });
+}
+function closeFileModal() {
+    document.getElementById("modalEditFile").classList.add("hidden");
+}
 function openArchivedFolders() {
     // Show modal
     $('#modalArchivedFolders').removeClass('hidden');
@@ -772,18 +942,65 @@ function toggleFiles(folder_id) {
 function performSearch() {
     let keyword = $("#globalSearch").val().trim();
 
+    if (keyword === "") {
+        // ❌ hide header
+        $("#fileTableHead").css("display", "none");
+
+        $("#fileResultsBody").html("");
+        return;
+    }
+
+    // ✅ FORCE show header (overrides Tailwind hidden)
+    $("#fileTableHead").css("display", "table-header-group");
+
     $.ajax({
         url: "search_files_folders.php",
         type: "POST",
+        dataType: "json",
         data: { keyword: keyword },
-        success: function(response) {
-            // Replace table rows instead of separate div
-            $("#dtable tbody").html(response);
+        success: function(res) {
+
+            $("#fileResultsBody").html(res.files || `
+                <tr>
+                    <td colspan="5" class="text-center py-4 text-gray-500">
+                        No files found
+                    </td>
+                </tr>
+            `);
         }
     });
 }
-</script>
 
+</script>
+<script>
+function toggleFolderMenu(id) {
+    const menu = document.getElementById('folder-menu-' + id);
+
+    document.querySelectorAll('[id^="folder-menu-"]').forEach(el => {
+        if (el !== menu) el.classList.add('hidden');
+    });
+
+    menu.classList.toggle('hidden');
+}
+
+function toggleFileMenu(id) {
+    const menu = document.getElementById('file-menu-' + id);
+
+    document.querySelectorAll('[id^="file-menu-"]').forEach(el => {
+        if (el !== menu) el.classList.add('hidden');
+    });
+
+    menu.classList.toggle('hidden');
+}
+
+// close menus when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.relative')) {
+        document.querySelectorAll('[id^="folder-menu-"], [id^="file-menu-"]')
+            .forEach(el => el.classList.add('hidden'));
+    }
+});
+</script>
 <!-- Footer -->
 <footer class="mt-10 text-center text-gray-600">
   <p>All right Reserved &copy; <?php echo date('Y');?> Created By: PSU IT Interns</p>

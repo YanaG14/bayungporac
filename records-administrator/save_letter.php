@@ -8,17 +8,12 @@ $ref = $_POST['reference_no'] ?? '';
 $date = $_POST['date_received'] ?? '';
 $subject = $_POST['subject'] ?? '';
 $source = $_POST['source'] ?? '';
+$file_type = $_POST['file_type'] ?? '';
 
 // AUTO sender
 $sender = $_SESSION['admin_name'];
 
-if(isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-
-    $file = $_FILES['file']['name'];
-    $tmp = $_FILES['file']['tmp_name'];
-
-    $originalFileName = $file;
-    $newFileName = time() . "_" . $file;
+if(isset($_FILES['files'])) {
 
     $uploadDir = "letter_files/";
 
@@ -26,56 +21,58 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
         mkdir($uploadDir, 0777, true);
     }
 
-    $destPath = $uploadDir . $newFileName;
+    // ✅ INSERT LETTER FIRST (ONLY ONCE)
+    $stmt = $conn->prepare("
+        INSERT INTO letters 
+        (reference_no, date_received, subject, sender, source,file_type) 
+        VALUES (?, ?, ?, ?, ?, ?)
+    ");
 
-    if(move_uploaded_file($tmp, $destPath)){
+    $stmt->bind_param("ssssss", $ref, $date, $subject, $sender, $source, $file_type);
+    $stmt->execute();
 
-        // ✅ 1. INSERT LETTER FIRST
-        $stmt = $conn->prepare("
-            INSERT INTO letters 
-            (reference_no, date_received, subject, sender, source, file_name, file_path) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ");
+    $letter_id = $stmt->insert_id;
 
-        $stmt->bind_param(
-            "sssssss",
-            $ref,
-            $date,
-            $subject,
-            $sender,
-            $source,
-            $originalFileName,
-            $newFileName
-        );
+    // ✅ LOOP ALL FILES
+    foreach ($_FILES['files']['name'] as $key => $fileName) {
 
-        $stmt->execute();
+        if ($_FILES['files']['error'][$key] === UPLOAD_ERR_OK) {
 
-        // ✅ 2. GET INSERTED LETTER ID
-        $letter_id = $stmt->insert_id;
+            $tmp = $_FILES['files']['tmp_name'][$key];
 
-        // ✅ 3. SAVE DEPARTMENTS (THIS WAS MISSING)
-        if (!empty($_POST['departments'])) {
+            $newFileName = time() . "_" . $fileName;
+            $destPath = $uploadDir . $newFileName;
 
-            foreach ($_POST['departments'] as $dept_id) {
+            if(move_uploaded_file($tmp, $destPath)) {
 
+                // ✅ SAVE EACH FILE IN upload_files TABLE
                 $stmt2 = $conn->prepare("
-                    INSERT INTO letter_departments (letter_id, department_id)
-                    VALUES (?, ?)
-                ");
+    INSERT INTO letter_files (letter_id, file_name, file_path)
+    VALUES (?, ?, ?)
+");
 
-                $stmt2->bind_param("ii", $letter_id, $dept_id);
-                $stmt2->execute();
+$stmt2->bind_param("iss", $letter_id, $fileName, $newFileName);
+$stmt2->execute();
             }
         }
+    }
 
-        header("Location: communication_letters.php");
-        exit();
+    // ✅ SAVE DEPARTMENTS
+    if (!empty($_POST['departments'])) {
+        foreach ($_POST['departments'] as $dept_id) {
+            $stmt3 = $conn->prepare("
+                INSERT INTO letter_departments (letter_id, department_id)
+                VALUES (?, ?)
+            ");
+            $stmt3->bind_param("ii", $letter_id, $dept_id);
+            $stmt3->execute();
+        }
+    }
 
-    } else {
+    header("Location: communication_letters.php");
+    exit();
+} else {
         die("Error moving uploaded file.");
     }
 
-} else {
-    die("No file uploaded or upload error.");
-}
 ?>

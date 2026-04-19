@@ -4,93 +4,185 @@ require_once("../include/connection.php");
 
 $user_department = $_SESSION['department_id'];
 
-if(isset($_POST['keyword'])){
-    $keyword = mysqli_real_escape_string($conn, $_POST['keyword']);
+$keyword = mysqli_real_escape_string($conn, $_POST['keyword'] ?? '');
 
-    // Query only files assigned to the employee's department
-    $query = mysqli_query($conn, "
-        SELECT uf.*, f.folder_name, al.name AS uploader_name,
-               GROUP_CONCAT(DISTINCT d.department_name SEPARATOR ', ') as departments
-        FROM upload_files uf
-        LEFT JOIN folders f ON uf.folder_id = f.folder_id
-        LEFT JOIN login_user al ON uf.email = al.id
-        LEFT JOIN file_departments fd ON uf.id = fd.file_id
-        LEFT JOIN departments d ON fd.department_id = d.department_id
-        WHERE uf.status='Active'
-        AND fd.department_id = '$user_department'
-        AND (
-            uf.name LIKE '%$keyword%'
-            OR f.folder_name LIKE '%$keyword%'
-            OR al.name LIKE '%$keyword%'
-            OR uf.timers LIKE '%$keyword%'
-            OR d.department_name LIKE '%$keyword%'
-        )
-        GROUP BY uf.id
-        ORDER BY uf.id DESC
-    ");
+$output = "";
 
-    echo '<div class="container mx-auto px-4 py-6">';
-    
-    if(mysqli_num_rows($query) > 0){
+/* =========================
+   FOLDER SEARCH
+========================= */
+$folder_output = "";
 
-        echo '<div class="bg-white rounded-2xl shadow-lg p-6 mt-6 overflow-hidden">';
+$folders = mysqli_query($conn, "
+SELECT 
+    f.folder_id, 
+    f.folder_name,
+    f.created_at,
+    GROUP_CONCAT(DISTINCT d.department_name SEPARATOR ', ') AS departments
+FROM folders f
+LEFT JOIN folder_departments fd ON f.folder_id = fd.folder_id
+LEFT JOIN departments d ON fd.department_id = d.department_id
+WHERE f.folder_status='Active'
+AND (
+    f.folder_name LIKE '%$keyword%'
+    OR d.department_name LIKE '%$keyword%'
+    OR f.created_at LIKE '%$keyword%'
+)
+GROUP BY f.folder_id
+");
+/* =========================
+   FILE SEARCH
+========================= */
+$file_output = "";
 
-        echo '<div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold text-gray-800">Files Search Results</h3>
-              </div>';
+$files = mysqli_query($conn, "
+SELECT 
+    uf.id,
+    uf.name,
+    uf.timers,
+    f.folder_name,
+    GROUP_CONCAT(DISTINCT d.department_name SEPARATOR ', ') AS departments,
+    al.name AS uploader
+FROM upload_files uf
+LEFT JOIN folders f ON uf.folder_id = f.folder_id
+LEFT JOIN folder_departments fd ON f.folder_id = fd.folder_id
+LEFT JOIN departments d ON fd.department_id = d.department_id
+LEFT JOIN admin_login al ON uf.email = al.id
+WHERE uf.status='Active'
+AND (
+    uf.name LIKE '%$keyword%'
+    OR al.name LIKE '%$keyword%'
+    OR uf.timers LIKE '%$keyword%'
+    OR d.department_name LIKE '%$keyword%'
+)
+GROUP BY uf.id
+");
 
-        echo '<div class="overflow-x-auto rounded-xl border">';
-        echo '<table class="min-w-full text-sm text-left text-gray-600">';
+/* =========================
+   FOLDER ROWS
+========================= */
 
-        // HEADER
-        echo '<thead class="bg-gray-100 text-gray-700 uppercase text-xs tracking-wider sticky top-0">
-                <tr>
-                    <th class="px-4 py-3">Filename</th>
-                    <th class="px-4 py-3">Folder</th>
-                    <th class="px-4 py-3">Departments</th>
-                    <th class="px-4 py-3">Uploader</th>
-                    <th class="px-4 py-3">Date</th>
-                    <th class="px-4 py-3 text-center">Action</th>
-                </tr>
-              </thead>';
 
-        echo '<tbody class="divide-y divide-gray-100">';
+while($f = mysqli_fetch_assoc($folders)){
+    $folder_output .= "
+    <tr class='hover:bg-gray-50'>
+        <td class='px-3 py-2'>📁 <b>{$f['folder_name']}</b></td>
+        <td>{$f['departments']}</td>
+        <td>{$f['created_at']}</td>
+   <td class='text-center relative'>
 
-        while($row = mysqli_fetch_array($query)){
-            $id = $row['id'];
-            $filepath = "../uploads/".$row['file_path'];
+    <button onclick='toggleFolderMenu({$f['folder_id']})'
+        class='text-gray-500 hover:text-gray-800 text-lg px-2'>
+        <i class='fas fa-ellipsis-h'></i>
+    </button>
 
-            echo "<tr class='hover:bg-gray-50 transition'>";
+    <!-- DROPDOWN -->
+    <div id='folder-menu-{$f['folder_id']}'
+         class='hidden absolute right-0 mt-2 w-32 bg-white border rounded-lg shadow-lg z-50'>
 
-            echo "<td class='px-4 py-3 font-medium text-gray-800'>".htmlentities($row['name'])."</td>";
-            echo "<td class='px-4 py-3'>".htmlentities($row['folder_name'])."</td>";
-            echo "<td class='px-4 py-3'>".htmlentities($row['departments'])."</td>";
-            echo "<td class='px-4 py-3'>".htmlentities($row['uploader_name'])."</td>";
-            echo "<td class='px-4 py-3 whitespace-nowrap'>".htmlentities($row['timers'])."</td>";
+        <!-- EDIT -->
+        <button onclick='openEditModal({$f['folder_id']})'
+            class='block w-full text-left px-3 py-2 text-sm hover:bg-gray-100'>
+            Edit
+        </button>
 
-            // ACTION
-            echo "<td class='px-4 py-3 text-center'>
-                    <div class='flex justify-center gap-2'>
-                        <a href='downloads.php?file_id=$id'
-                           class='bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-2 rounded-xl shadow hover:scale-105 transition duration-300'
-                           title='Download'><i class='fas fa-download'></i></a>
-                        <a href='$filepath' target='_blank'
-                           class='bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-3 py-2 rounded-xl shadow hover:scale-105 transition duration-300'
-                           title='View'><i class='fas fa-eye'></i></a>
-                    </div>
-                  </td>";
+        <!-- ARCHIVE -->
+        <button onclick='confirmArchive({$f['folder_id']})'
+            class='block w-full text-left px-3 py-2 text-sm hover:bg-gray-100'>
+            Archive
+        </button>
 
-            echo "</tr>";
-        }
+        <!-- DOWNLOAD -->
+        <a href='download_folder.php?folder_id={$f['folder_id']}'
+            class='block px-3 py-2 text-sm hover:bg-gray-100'>
+            Download
+        </a>
 
-        echo '</tbody></table>';
-        echo '</div>'; // overflow
-        echo '</div>'; // card
+    </div>
 
-    } else {
-        echo "<div class='mt-6 text-center text-gray-500'>No files found.</div>";
-    }
-
-    echo '</div>'; // container
+</td>
+    </tr>";
 }
+/* =========================
+   FILE ROWS
+========================= */
+
+while($file = mysqli_fetch_assoc($files)){
+    $file_output .= "
+    <tr class='hover:bg-gray-50 border-b'>
+
+        <!-- FILE NAME -->
+        <td class='px-3 py-3'>
+            <div class='flex flex-col'>
+                <span class='flex items-center gap-2'>
+                    <i class='fas fa-file text-blue-500'></i>
+                    {$file['name']}
+                </span>
+
+                <span class='text-xs text-gray-500 ml-6'>
+                    Folder: {$file['folder_name']}
+                </span>
+            </div>
+        </td>
+
+        <!-- DEPARTMENTS -->
+        <td class='hidden md:table-cell'>
+            {$file['departments']}
+        </td>
+
+        <!-- UPLOADER -->
+        <td>
+            {$file['uploader']}
+        </td>
+
+        <!-- DATE -->
+        <td>
+            {$file['timers']}
+        </td>
+
+        <!-- ACTION -->
+     <td class='text-center relative'>
+
+    <button onclick='toggleFileMenu({$file['id']})'
+        class='text-gray-500 hover:text-gray-800 text-lg px-2'>
+        <i class='fas fa-ellipsis-h'></i>
+    </button>
+
+    <div id='file-menu-{$file['id']}'
+         class='hidden absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-50'>
+
+        <!-- VIEW -->
+        <a href='view_file.php?id={$file['id']}'
+           class='block px-3 py-2 text-sm hover:bg-gray-100'>
+            View
+        </a>
+
+        <!-- DOWNLOAD -->
+        <a href='search_download_file.php?id={$file['id']}'
+           class='block px-3 py-2 text-sm hover:bg-gray-100'>
+            Download
+        </a>
+
+        <!-- EDIT -->
+        <button onclick='openEditFileModal({$file['id']})'
+            class='block w-full text-left px-3 py-2 text-sm hover:bg-gray-100'>
+            Edit
+        </button>
+
+        <!-- ARCHIVE -->
+        <button onclick='confirmArchiveFile({$file['id']})'
+            class='block w-full text-left px-3 py-2 text-sm hover:bg-gray-100'>
+            Archive
+        </button>
+
+    </div>
+
+</td>
+    </tr>";
+}
+
+echo json_encode([
+    "folders" => $folder_output,
+    "files" => $file_output
+]);
 ?>

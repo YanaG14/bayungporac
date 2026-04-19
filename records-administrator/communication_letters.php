@@ -5,7 +5,7 @@ session_start();
 if (!isset($_SESSION['admin_user'])) {
     header('Location: index.php');
     exit();
-}
+} 
 
 $adminName = $_SESSION['admin_name'];
 require_once("../include/connection.php");
@@ -413,10 +413,21 @@ while($file = mysqli_fetch_array($files)) {
     <span class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full">
       <?php echo $file['source']; ?>
     </span>
+<?php if(strtolower($file['status']) == 'open'){ ?>
+  <span class="bg-red-200 text-red-700 text-xs px-2 py-1 rounded-full">
+    <?php echo $file['status']; ?>
+  </span>
 
-    <span class="bg-blue-200 text-gray-700 text-xs px-2 py-1 rounded-full">
-      <?php echo $file['status']; ?>
-    </span>
+<?php } elseif(strtolower($file['status']) == 'done'){ ?>
+  <span class="bg-green-200 text-green-700 text-xs px-2 py-1 rounded-full">
+    <?php echo $file['status']; ?>
+  </span>
+
+<?php } else { ?>
+  <span class="bg-blue-200 text-gray-700 text-xs px-2 py-1 rounded-full">
+    <?php echo $file['status']; ?>
+  </span>
+<?php } ?>
 <span class="bg-blue-300 text-gray-700 text-xs px-2 py-1 rounded-full">
       <?php echo !empty($file['file_type']) ? $file['file_type'] : 'No type'; ?>
     </span>
@@ -431,7 +442,7 @@ while($file = mysqli_fetch_array($files)) {
     </div>
 
     <div class="flex gap-2">
-
+ 
       <!-- VIEW -->
 <a href="#"
    onclick="event.stopPropagation(); openEditModal(
@@ -503,11 +514,17 @@ while($file = mysqli_fetch_array($files)) {
 
     <!-- Form -->
 <form action="save_letter.php" method="POST" enctype="multipart/form-data" class="flex flex-col gap-3">
-
+ <label class="text-sm font-medium">Reference Number</label>
 <input type="text" name="reference_no" placeholder="Reference No" required>
+ <label class="text-sm font-medium">Date Received</label>
 <input type="date" name="date_received" required>
+ <label class="text-sm font-medium">Subject</label>
 <input type="text" name="subject" placeholder="Subject" required>
-
+ <label class="text-sm font-medium">Type of File</label>
+      <input type="text" name="file_type"
+             value="<?= $letter['file_type'] ?? '' ?>"
+             class="w-full border rounded px-3 py-2 mb-4"
+             placeholder="e.g. Letter, Endorsement, Report">
 <select name="source" required>
   <option value="">Select Source</option>
   <option value="Internal">Internal</option>
@@ -515,7 +532,7 @@ while($file = mysqli_fetch_array($files)) {
 </select>
 
 <!-- FILE -->
-<input type="file" name="file" accept=".pdf,image/*" required>
+<input type="file" name="files[]" multiple accept=".pdf,image/*" required>
 
 <!-- ✅ DEPARTMENT TAGGING -->
 <div class="border rounded-lg p-3">

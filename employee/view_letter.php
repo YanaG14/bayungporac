@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> 
 <?php 
 session_start();
 if(!isset($_SESSION["email_address"])){
@@ -275,105 +275,452 @@ if($letter_id > 0){
 
 <div class="w-full lg:w-3/4 flex-1">
 
+<div class="w-full lg:w-3/4 flex-1">
+
 <?php if($letter): ?>
 
-<div class="bg-white rounded-2xl shadow-lg p-6">
-<div class="mb-4">
+<div class="bg-white rounded-2xl shadow-lg p-6 space-y-5">
+
+  <!-- BACK + ACTION -->
+  <div class="flex justify-between items-center">
     <a href="javascript:history.back()" 
-       class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm transition">
-        ← Back
+       class="text-sm text-gray-500 hover:underline">
+      ← Go back to list
     </a>
-</div>
-    <!-- HEADER -->
-    <h2 class="text-2xl font-bold text-gray-800">
-        <?= htmlspecialchars($letter['subject']) ?>
+
+  </div>
+
+  <!-- POST HEADER -->
+  <div>
+    <h2 class="font-semibold text-lg text-gray-800">
+      <?= htmlspecialchars($letter['sender']) ?>
     </h2>
 
-    <p class="text-gray-500 mt-1">
-        Reference No: <?= $letter['reference_no'] ?>
+    <p class="text-sm text-gray-600 mt-1">
+      <b>Ref. No. <?= $letter['reference_no'] ?></b><br>
+      <?= htmlspecialchars($letter['subject']) ?>
     </p>
 
-    <p class="text-gray-500 mb-4">
-        Sender: <?= htmlspecialchars($letter['sender']) ?>
+    <p class="text-xs text-gray-400 mt-2">
+      Created at: <?= date('M d, Y h:i A', strtotime($letter['created_at'])) ?>
     </p>
+  </div>
 
-    <!-- FILE PREVIEW -->
-<!-- FILE PREVIEW -->
-<div class="border rounded-xl h-[190px] overflow-hidden bg-gray-50">
-
+  <!-- ATTACHMENTS -->
 <?php
-$file = $letter['file_path'] ?? '';
-$ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-
-// FIX PATH HERE (IMPORTANT)
-$filePath = "../records-administrator/letter_files/" . $file;
+/* ===============================
+   ATTACHMENTS SECTION (UPDATED)
+   =============================== */
 ?>
 
-<?php if(!empty($file) && file_exists($filePath)) { ?> 
+<div class="border rounded-xl p-4">
 
-    <?php if($ext == "pdf"){ ?>
-        <iframe src="<?= $filePath ?>#toolbar=0"
-                class="w-full h-full"></iframe>
+  <div class="flex justify-between items-center mb-2">
+    <h3 class="font-semibold text-gray-700">📎 Attachments</h3>
+<!--
+    <button onclick="openAttachmentModal()"
+            class="text-xs border border-green-600 text-green-600 px-3 py-1 rounded hover:bg-green-500 hover:text-white">
+      Manage Attachments
+    </button> -->
+  </div>
 
-    <?php } elseif(in_array($ext, ['jpg','jpeg','png','gif','webp'])) { ?>
-        <img src="<?= $filePath ?>"
-             class="w-full h-full object-contain">
+<?php
+$files = mysqli_query($conn, "
+  SELECT * FROM letter_files 
+  WHERE letter_id='{$letter['id']}'
+");
 
-    <?php } else { ?>
-        <div class="flex items-center justify-center h-full text-gray-500">
-            File type not supported for preview
-        </div>
-    <?php } ?> 
+if(mysqli_num_rows($files) > 0){
+    while($f = mysqli_fetch_assoc($files)){
+?>
+    <div class="bg-gray-100 p-3 rounded flex justify-between items-center mb-2">
+     <span 
+  class="text-blue-600 cursor-pointer hover:underline"
+  onclick="openFileModal('<?= $f['file_path'] ?>')">
+  <?= htmlspecialchars($f['file_name']) ?>
+</span>
 
-<?php } else { ?>
-    <div class="flex items-center justify-center h-full text-gray-500">
-        No file found or wrong path
+      <div class="flex gap-3 text-gray-600">
+        <!--
+        <a href="../records-administrator/letter_files/<?= $f['file_path'] ?>" target="_blank">
+          <i class="fas fa-eye"></i>
+        </a>
+ -->
+        <a href="communication_downloads.php?file_id=<?= $f['file_id'] ?>">
+          <i class="fas fa-download"></i>
+        </a>
+      </div>
     </div>
+<?php } } else { ?>
+  <p class="text-sm text-gray-500">No attachments found.</p>
 <?php } ?>
 
 </div>
 
-    <!-- COMMENTS -->
-    <div class="mt-6 border-t pt-4">
 
-        <h3 class="font-semibold text-gray-700 mb-2">Comments</h3>
 
-        <div id="commentList"
-             class="h-32 overflow-y-auto bg-gray-50 p-3 rounded mb-3 text-sm">
-            Loading comments...
-        </div>
 
-        <div class="flex gap-2">
-            <input type="hidden" id="letterId" value="<?= $letter_id ?>">
+<div id="attachmentModal"
+     class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
 
-            <input type="text" id="commentInput"
-                   class="flex-1 border rounded px-3 py-2 text-sm"
-                   placeholder="Write a comment...">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
 
-            <button onclick="addComment()"
-                    class="bg-blue-600 text-white px-4 rounded">
-                Send
-            </button>
-        </div>
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-semibold">Manage Attachments</h3>
+      <button onclick="closeAttachmentModal()" class="text-xl">&times;</button>
+    </div>
+
+    <!-- UPLOAD NEW FILE -->
+    <form action="letter_edit_upload.php" method="POST" enctype="multipart/form-data" class="mb-4">
+
+      <input type="hidden" name="letter_id" value="<?= $letter['id'] ?>">
+<input type="file" id="fileInput" multiple class="w-full border p-2 rounded mb-3" hidden required>
+<button type="button"
+        onclick="document.getElementById('fileInput').click()"
+        class="w-full bg-gray-200 py-2 rounded mb-3">
+    Add More Files
+</button>
+<div id="fileList"></div>
+     <button type="button"
+        onclick="uploadFiles()"
+        class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+    Upload File
+</button>
+
+    </form>
+
+    <!-- EXISTING FILES -->
+    <div class="max-h-60 overflow-y-auto space-y-2">
+
+<?php
+$files = mysqli_query($conn, "
+  SELECT * FROM letter_files 
+  WHERE letter_id='{$letter['id']}'
+");
+
+while($f = mysqli_fetch_assoc($files)){
+?>
+      <div class="flex justify-between items-center bg-gray-100 p-2 rounded">
+        <span class="text-sm"><?= htmlspecialchars($f['file_name']) ?></span>
+
+        <form action="delete_attachment.php" method="POST">
+          <input type="hidden" name="file_id" value="<?= $f['file_id'] ?>">
+         <button type="button"
+        onclick="deleteFile(<?= $f['file_id'] ?>)"
+        class="text-red-600 text-sm hover:underline">
+    Remove
+</button>
+        </form>
+      </div>
+<?php } ?>
 
     </div>
 
+  </div>
 </div>
+
+
+
+<script>
+function openAttachmentModal(){
+  document.getElementById('attachmentModal').classList.remove('hidden');
+}
+
+function closeAttachmentModal(){
+  document.getElementById('attachmentModal').classList.add('hidden');
+}
+</script>
+
+
+<script>
+let fileArray = [];
+
+document.getElementById('fileInput').addEventListener('change', function(e) {
+    let newFiles = Array.from(e.target.files);
+
+    fileArray = fileArray.concat(newFiles);
+
+    renderFiles();
+
+    // reset input so same file can be re-added if needed
+    this.value = "";
+});
+
+function renderFiles() {
+    let list = document.getElementById('fileList');
+    list.innerHTML = '';
+
+    fileArray.forEach((file, index) => {
+        let div = document.createElement('div');
+        div.className = "flex justify-between bg-gray-100 p-2 rounded";
+        div.innerHTML = `
+            <span>${file.name}</span>
+            <button onclick="removeFile(${index})" class="text-red-500">x</button>
+        `;
+        list.appendChild(div);
+    });
+}
+
+function removeFile(index) {
+    fileArray.splice(index, 1);
+    renderFiles();
+}
+</script>
+
+
+
+
+
+  
+  <!-- TAGS -->
+  <div class="border rounded-xl p-4">
+    <div class="flex justify-between items-center mb-2">
+  <h3 class="font-semibold text-gray-700">🏷️ Tags</h3>
+ <!--
+  <button onclick="openTagModal()"
+          class="text-xs border border-green-600 text-green-600 px-3 py-1 rounded hover:bg-green-500 hover:text-white">
+    Manage Tags
+  </button> -->
+</div>
+
+    <div class="flex gap-2 flex-wrap">
+      <span class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full">
+        <?= $letter['source'] ?>
+      </span>
+
+    <?php
+$status = strtolower($letter['status']);
+
+$color = 'bg-gray-200 text-gray-700';
+
+if ($status == 'open') {
+    $color = 'bg-red-200 text-red-700';
+} elseif ($status == 'done') {
+    $color = 'bg-green-200 text-green-700';
+}
+?>
+
+<span class="text-xs px-2 py-1 rounded-full <?= $color ?>">
+  <?= htmlspecialchars($letter['status']) ?>
+</span>
+        <span class="bg-blue-300 text-gray-700 text-xs px-2 py-1 rounded-full">
+        <?= $letter['file_type'] ?>
+      </span>
+    </div>
+  </div>
+
+  <!-- FORWARDED -->
+  <div class="border rounded-xl p-4">
+    <div class="flex justify-between items-center mb-2">
+  <h3 class="font-semibold text-gray-700 mb-2">📨 Tagged Departments</h3>
+<!--
+  <button onclick="openDeptModal()"
+          class="text-xs border border-green-600 text-green-600 px-3 py-1 rounded hover:bg-green-500 hover:text-white">
+    Manage Departments
+  </button>-->
+</div>
+   <?php
+$deptQuery = mysqli_query($conn, "
+  SELECT d.department_name
+  FROM letter_departments ld
+  JOIN departments d ON ld.department_id = d.department_id
+  WHERE ld.letter_id = '{$letter['id']}'
+");
+
+$departments = [];
+while($row = mysqli_fetch_assoc($deptQuery)){
+    $departments[] = $row['department_name'];
+}
+
+$total = count($departments);
+$limit = 3;
+?>
+
+<div id="deptList">
+<?php
+foreach($departments as $index => $dept){
+    $hiddenClass = ($index >= $limit) ? 'hidden extra-dept' : '';
+?>
+    <div class="bg-gray-50 border rounded p-3 mb-2 <?= $hiddenClass ?>">
+        <?= $dept ?>
+    </div>
+<?php } ?>
+</div>
+
+<?php if($total > $limit): ?>
+<div class="text-center mt-2">
+    <button onclick="toggleDepartments()" 
+            id="toggleDeptBtn"
+            class="text-blue-600 text-sm hover:underline">
+        See more
+    </button>
+</div>
+<?php endif; ?>
+  </div>
+
+  <!-- COMMENTS -->
+     <div class="border rounded-xl p-4">
+ 
+    <h3 class="font-semibold text-gray-700 mb-2">💬 Comments</h3>
+      <div class="flex gap-2">
+      <input type="hidden" id="letterId" value="<?= $letter_id ?>">
+
+      <input type="text" id="commentInput"
+             class="flex-1 border rounded px-3 py-2 text-sm"
+             placeholder="Write a comment...">
+
+      <button onclick="addComment()"
+              class="bg-blue-600 text-white px-4 rounded">
+        Send
+      </button>
+    </div>
+ <div class="border-t pt-4">
+    <div id="commentList"
+         class="h-32 overflow-y-auto bg-gray-50 p-3 rounded mb-3 text-sm">
+    </div>
+
+  
+  </div>
+
 
 <?php else: ?>
 
 <div class="bg-white p-6 rounded-xl shadow text-gray-500">
-    Select a letter to view.
+    Letter not found.
 </div>
 
 <?php endif; ?>
 
 </div>
+      
+
+
+<!-- TAG MODAL -->
+<div id="tagModal"
+     class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+
+  <div class="bg-white w-full max-w-md rounded-xl p-6 shadow-lg">
+
+    <h2 class="text-lg font-bold mb-4">Manage Tags</h2>
+
+    <form method="POST" action="update_tags.php">
+
+      <input type="hidden" name="letter_id" value="<?= $letter['id'] ?>">
+
+      <!-- SOURCE -->
+      <label class="text-sm font-medium">Source</label>
+      <select name="source" class="w-full border rounded px-3 py-2 mb-3">
+        <option value="Internal" <?= $letter['source']=='Internal'?'selected':'' ?>>Internal</option>
+        <option value="External" <?= $letter['source']=='External'?'selected':'' ?>>External</option>   
+      </select>
+
+      <!-- STATUS -->
+      <label class="text-sm font-medium">Status</label>
+      <select name="status" class="w-full border rounded px-3 py-2 mb-3">
+        <option value="Open" <?= $letter['status']=='Open'?'selected':'' ?>>Open</option>
+        <option value="Done" <?= $letter['status']=='Done'?'selected':'' ?>>Done</option>
+      </select>
+
+      <!-- TYPE OF FILE -->
+      <label class="text-sm font-medium">Type of File</label>
+      <input type="text" name="file_type"
+             value="<?= $letter['file_type'] ?? '' ?>"
+             class="w-full border rounded px-3 py-2 mb-4"
+             placeholder="e.g. Letter, Endorsement, Report">
+
+      <!-- ACTIONS -->
+      <div class="flex justify-end gap-2">
+        <button type="button" onclick="closeTagModal()"
+                class="px-4 py-2 bg-gray-300 rounded">
+          Cancel
+        </button>
+
+        <button type="submit"
+                class="px-4 py-2 bg-green-600 text-white rounded">
+          Save
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+<!-- TAG MODAL END -->
+
+<!-- TAGGED DEPARMTMENTS MODAL -->
+
+<!-- DEPARTMENT TAG MODAL -->
+<div id="deptModal"
+     class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-semibold">Manage Tagged Departments</h3>
+      <button onclick="closeDeptModal()" class="text-xl">&times;</button>
+    </div>
+
+    <form method="POST" action="update_letter_departments.php">
+
+      <input type="hidden" name="letter_id" value="<?= $letter['id'] ?>">
+
+      <div class="max-h-64 overflow-y-auto space-y-2 border p-3 rounded">
+
+        <?php
+        $allDept = mysqli_query($conn, "SELECT * FROM departments WHERE department_status='Active'");
+
+        // get assigned departments first
+        $assigned = [];
+        $q = mysqli_query($conn, "SELECT department_id FROM letter_departments WHERE letter_id='{$letter['id']}'");
+        while($a = mysqli_fetch_assoc($q)){
+          $assigned[] = $a['department_id'];
+        }
+
+        while($d = mysqli_fetch_assoc($allDept)){
+        ?>
+          <label class="flex items-center gap-2 text-sm">
+            <input type="checkbox"
+                   name="departments[]"
+                   value="<?= $d['department_id'] ?>"
+                   <?= in_array($d['department_id'], $assigned) ? 'checked' : '' ?>>
+            <?= $d['department_name'] ?>
+          </label>
+        <?php } ?>
 
       </div>
+
+      <div class="flex justify-end gap-2 mt-4">
+        <button type="button"
+                onclick="closeDeptModal()"
+                class="px-4 py-2 bg-gray-300 rounded">
+          Cancel
+        </button>
+
+        <button type="submit"
+                class="px-4 py-2 bg-green-600 text-white rounded">
+          Save
+        </button>
       </div>
-      
-    
+
+    </form>
+  </div>
+</div>
+
+    <div id="fileModal" 
+     class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+
+  <div class="bg-white w-full max-w-4xl h-[80vh] rounded-xl overflow-hidden relative">
+
+    <!-- Close Button -->
+    <button onclick="closeFileModal()" 
+            class="absolute top-2 right-3 text-xl text-gray-700">&times;</button>
+
+    <!-- File Viewer -->
+    <iframe id="fileViewer" 
+            class="w-full h-full"
+            frameborder="0"></iframe>
+
+  </div>
+</div>
 <!-- Tailwind Keyframe Animation -->
 <style>
   @keyframes fadeIn {
@@ -390,6 +737,34 @@ $filePath = "../records-administrator/letter_files/" . $file;
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+function openFileModal(filePath) {
+    let viewer = document.getElementById('fileViewer');
+
+    // Detect file type
+    let ext = filePath.split('.').pop().toLowerCase();
+
+    if (ext === "pdf") {
+        viewer.src = "../records-administrator/letter_files/" + filePath;
+    } else if (ext === "jpg" || ext === "jpeg" || ext === "png") {
+        viewer.src = "../records-administrator/letter_files/" + filePath;
+    } else {
+        // fallback for unsupported files (docx, xlsx, etc.)
+        viewer.src = "https://docs.google.com/gview?url=" 
+            + window.location.origin 
+            + "/records-administrator/letter_files/" 
+            + filePath + "&embedded=true";
+    }
+
+    document.getElementById('fileModal').classList.remove('hidden');
+}
+
+function closeFileModal() {
+    document.getElementById('fileModal').classList.add('hidden');
+    document.getElementById('fileViewer').src = "";
+}
+</script>
+
 <script>
 <?php if(isset($_SESSION['success'])): ?>
 Swal.fire({

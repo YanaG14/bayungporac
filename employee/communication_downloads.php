@@ -5,20 +5,18 @@ if(isset($_GET['file_id'])){
 
     $id = intval($_GET['file_id']);
 
-    // Fetch the letter file
-    $query = mysqli_query($conn,"SELECT * FROM letters WHERE id='$id'");
+    // ✅ FIXED: correct table
+    $query = mysqli_query($conn,"SELECT * FROM letter_files WHERE file_id='$id'");
     $file = mysqli_fetch_assoc($query);
 
     if(!$file){
         die("File not found.");
     }
 
-    // Full path to the file (adjust relative path if needed)
     $filepath = "../records-administrator/letter_files/" . $file['file_path'];
 
     if(file_exists($filepath)){
 
-        // Force download headers
         header('Content-Description: File Transfer');
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename="'.basename($file['file_name']).'"');

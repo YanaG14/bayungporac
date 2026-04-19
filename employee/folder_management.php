@@ -123,7 +123,7 @@ $(document).ready(function(){
 </span>
       
       <!-- Mobile Menu Button -->
-      <button id="mobileMenuBtn" 
+      <button id="mobileMenuBtn"   
         class="md:hidden p-2 rounded-lg hover:bg-green-600 hover:bg-opacity-20 transition-all duration-200 group">
         <svg class="w-5 h-5 text-white transition-transform duration-200 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" id="menuIcon">
           <!-- Hamburger (3 lines) -->
@@ -353,6 +353,31 @@ document.addEventListener('DOMContentLoaded', function() {
               </div>
 
               <?php } ?>
+
+<div id="fileTableContainer" class="hidden mt-6 w-full overflow-auto rounded-xl border shadow-sm">
+  <table class="min-w-full table-auto">
+    
+  <thead id="fileTableHead" class="bg-blue-100 text-black text-sm hidden">
+      <tr>
+        <th class="px-4 py-2 text-left">File Name</th>
+        <th class="px-4 py-2 text-left">Departments</th>
+        <th class="px-4 py-2 text-left">Uploader</th>
+        <th class="px-4 py-2 text-left">Date Uploaded</th>
+        <th class="px-4 py-2 text-center">Action</th>
+      </tr>
+    </thead>
+
+    <tbody id="fileResultsBody">
+      <!-- AJAX FILE RESULTS GO HERE -->
+    </tbody>
+
+  </table>
+</div>
+
+
+
+
+
             </tbody>
           </table>
         </div>
@@ -609,32 +634,37 @@ function toggleFiles(folder_id) {
 
 <script>
 function performSearch() {
-    let keyword = document.getElementById("globalSearch").value.toLowerCase();
+    let keyword = $("#globalSearch").val().trim();
 
-    // FILTER TABLE ROWS (FOLDERS)
-    let table = document.getElementById("dtable");
-    let rows = table.getElementsByTagName("tr");
+    if (keyword === "") {
+        // ❌ hide header
+        $("#fileTableHead").css("display", "none");
 
-    for (let i = 1; i < rows.length; i++) {
-        let rowText = rows[i].innerText.toLowerCase();
-
-        if (rowText.includes(keyword)) {
-            rows[i].style.display = "";
-        } else {
-            rows[i].style.display = "none";
-        }
+        $("#fileResultsBody").html("");
+        return;
     }
 
-    // AJAX SEARCH FOR FILES (UNCHANGED)
+    // ✅ FORCE show header (overrides Tailwind hidden)
+    $("#fileTableHead").css("display", "table-header-group");
+
     $.ajax({
         url: "search_files_folders.php",
         type: "POST",
+        dataType: "json",
         data: { keyword: keyword },
-        success: function(response) {
-            $("#searchResults").html(response);
+        success: function(res) {
+
+            $("#fileResultsBody").html(res.files || `
+                <tr>
+                    <td colspan="5" class="text-center py-4 text-gray-500">
+                        No files found
+                    </td>
+                </tr>
+            `);
         }
     });
 }
+
 </script>
 
 <!-- Footer -->

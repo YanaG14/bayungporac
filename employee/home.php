@@ -14,7 +14,7 @@ require_once("../include/connection.php");
 $user_id = $_SESSION['user_no'];
 $user_department = $_SESSION['department_id'];
 
-// Get user name and department image
+// Get user name and department image 
 $stmt = $conn->prepare("
     SELECT login_user.name, departments.department_img
     FROM login_user
@@ -282,11 +282,28 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="relative">
               <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm z-10"></i>
               <input type="text" id="globalSearch" 
-                     placeholder="Search folders..."
+                     placeholder="Search letters..."
                      oninput="performSearch()"
                      class="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2.5 sm:py-2.5 
                             focus:ring-2 focus:ring-green-300 focus:outline-none transition-all duration-200 shadow-sm">
             </div> 
+          </div>
+
+          <!-- Action Buttons (Mobile Stack) -->
+          <div class="flex gap-1.5 sm:gap-2">
+            <!-- ADD LETTER 
+            <button onclick="$('#modalAddFolder').removeClass('hidden');"
+            class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg flex items-center justify-center text-green-600 text-sm sm:text-base focus:outline-none">
+            <i class="fas fa-plus"></i>
+            </button>
+-->
+            <!-- ARCHIVED LETTERS 
+<button onclick="openModal('modalArchivedLetters')"
+class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg flex items-center justify-center text-red-600 text-sm sm:text-base focus:outline-none"
+title="View Archived Letters">
+  <i class="fas fa-archive"></i>
+</button>
+-->
           </div>
 
         </div>
@@ -294,119 +311,127 @@ document.addEventListener('DOMContentLoaded', function() {
            <!-- Responsive Table Container -->
 <div class="w-full h-[calc(100%-120px)] sm:h-[calc(100%-140px)] lg:h-[560px] overflow-hidden rounded-xl border shadow-sm">
   <div class="w-full h-full overflow-x-auto overflow-y-auto custom-scrollbar">
-  <table id="dtable" class="min-w-[1000px] w-full border-gray-200 table-auto">
-  <thead class="bg-gray-200 text-black uppercase text-xs sm:text-sm tracking-wider sticky top-0 z-10 shadow-sm">
-    <tr>
+  <div id="letterContainer" class="space-y-4 overflow-y-auto h-full pr-2">
 
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Reference No</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Date Received</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Subject</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Sender</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Departments</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Source</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">File Name</th>
-      <th class="px-3 sm:px-4 py-2.5 text-left font-medium">Status</th>
-      <th class="px-3 sm:px-4 py-2.5 text-center font-medium w-28 sm:w-32">Action</th>
-    </tr>
-  </thead>
-  <tbody class="text-gray-700 divide-y divide-gray-100">
-    <?php
-   $files = mysqli_query($conn, "
-SELECT DISTINCT l.*
-FROM letters l
-INNER JOIN letter_departments ld 
-    ON l.id = ld.letter_id
-WHERE l.letter_status = 'Active'
-AND ld.department_id = '$user_department'
-ORDER BY l.created_at DESC
+<?php
+$files = mysqli_query($conn, "
+SELECT 
+  id,
+  reference_no,
+  subject,
+  sender,
+  source,
+  date_received,
+  created_at,
+  file_type,
+  file_name,
+  status,
+  letter_status
+FROM letters
+WHERE letter_status='Active'
+ORDER BY created_at DESC
 ");
-    while($file = mysqli_fetch_array($files)) { ?>
+while($file = mysqli_fetch_array($files)) {
+?>
+
+<div onclick="window.location.href='view_letter.php?id=<?php echo $file['id']; ?>'"
+     class="letter-card bg-white border rounded-xl shadow-sm p-4 hover:shadow-md transition cursor-pointer"
+     data-filetype="<?php echo strtolower($file['file_type']); ?>"
+     data-filename="<?php echo strtolower($file['file_name']); ?>">
+
+  <!-- HEADER -->
+  <div class="flex justify-between items-start">
     
- <tr class="hover:bg-gray-50/50 transition-colors duration-150 border-b last:border-b-0">
-     <td class="px-3 sm:px-4 py-2">
-  <a href="view_letter.php?id=<?php echo $file['id']; ?>" class="block">
-    <?php echo $file['reference_no']; ?>
-  </a>
-</td>
-     <td class="px-3 sm:px-4 py-2">
-  <a href="view_letter.php?id=<?php echo $file['id']; ?>" class="block">
-    <?php echo date('M j, Y', strtotime($file['date_received'])); ?>
-  </a>
-</td>
-    <td class="px-3 sm:px-4 py-2">
-  <a href="view_letter.php?id=<?php echo $file['id']; ?>" class="block">
-    <?php echo htmlentities($file['subject']); ?>
-  </a>
-</td>
-    <td class="px-3 sm:px-4 py-2">
-  <a href="view_letter.php?id=<?php echo $file['id']; ?>" class="block">
-    <?php echo htmlentities($file['sender']); ?>
-  </a>
-</td>
-     <td class="px-3 sm:px-4 py-2 text-sm">
-  <a href="view_letter.php?id=<?php echo $file['id']; ?>" class="block">
-    <?php
-    $deptQuery = mysqli_query($conn, "
-        SELECT d.department_name
-        FROM letter_departments ld
-        JOIN departments d ON ld.department_id = d.department_id
-        WHERE ld.letter_id = '{$file['id']}'
-    ");
+    <div>
+      <p class="text-xs text-gray-500">
+        Ref. No. <?php echo $file['reference_no']; ?>
+      </p>
 
-    $departments = [];
+      <h3 class="text-blue-600 font-semibold text-sm sm:text-base">
+        <?php echo htmlentities($file['sender']); ?>
+      </h3>
 
-    while($row = mysqli_fetch_assoc($deptQuery)){
-        $departments[] = $row['department_name'];
-    }
-
-    echo count($departments) > 0
-        ? '<span class="text-gray-700">'.implode(', ', $departments).'</span>'
-        : '<span class="text-gray-400 italic">No departments</span>';
-    ?>
-  </a>
-</td>
-      <td class="px-3 sm:px-4 py-2"><?php echo htmlentities($file['source']); ?></td>
-      <td class="px-3 sm:px-4 py-2">
-        <a href="letter_files/<?php echo $file['file_path']; ?>" target="_blank" class="text-green-600 hover:underline">
-    <?php echo htmlentities($file['file_name']); ?>
-</a>
-      </td>
-      <td class="px-3 sm:px-4 py-2"><?php echo $file['status']; ?></td>
-            <td class="px-3 py-3 sm:px-4 sm:py-2">
-  <div class="flex justify-center relative">
-    <button onclick="toggleMenuFile(<?php echo $file['id']; ?>)" 
-            class="flex items-center justify-center w-9 h-9 rounded-full text-gray-600 
-                   hover:bg-gray-100 hover:text-gray-900 hover:shadow-md transition-all duration-200
-                   group-hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-200"
-            title="Actions">
-      <i class="fas fa-ellipsis-h text-sm"></i>
-    </button>
-
-    <div id="menu-file-<?php echo $file['id']; ?>"
-         class="hidden absolute top-full mt-1 right-0 w-44 sm:w-28 bg-white/95 backdrop-blur-sm 
-                rounded-xl shadow-lg border border-gray-100 z-50
-                transform scale-95 opacity-0 transition-all duration-200
-                sm:-left-2 sm:w-32 lg:w-28 lg:right-0">
-
-      <a href="communication_downloads.php?file_id=<?php echo $file['id']; ?>"
-         class="block w-full flex items-center gap-2 px-3 py-2.5 text-xs sm:text-sm text-gray-700 
-                hover:bg-blue-50 hover:text-blue-700 rounded-t-xl border-b border-gray-50">
-        <i class="fa fa-download text-blue-500 w-4"></i><span>Download</span>
-      </a>
-
-      <a href="../records-administrator/letter_files/<?php echo $file['file_path']; ?>" target="_blank"
-         class="block w-full flex items-center gap-2 px-3 py-2.5 text-xs sm:text-sm text-gray-700 
-                hover:bg-indigo-50 hover:text-indigo-700 border-b border-gray-50">
-        <i class="fa fa-eye text-indigo-500 w-4"></i><span>View</span>
-      </a>
-
+      <p class="text-sm text-gray-700">
+        <?php echo htmlentities($file['subject']); ?>
+      </p>
     </div>
+
+    <div class="text-xs text-gray-500 text-right">
+      <?php echo date('M d, Y h:i A', strtotime($file['created_at'])); ?>
+    </div>
+
   </div>
-</td>
-    </tr>
-    <?php } ?> 
-  </tbody>
-</table>
+
+  <!-- TAGS -->
+  <div class="mt-3 flex gap-2 flex-wrap">
+
+    <span class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full">
+      <?php echo $file['source']; ?>
+    </span>
+<?php if(strtolower($file['status']) == 'open'){ ?>
+  <span class="bg-red-200 text-red-700 text-xs px-2 py-1 rounded-full">
+    <?php echo $file['status']; ?>
+  </span>
+
+<?php } elseif(strtolower($file['status']) == 'done'){ ?>
+  <span class="bg-green-200 text-green-700 text-xs px-2 py-1 rounded-full">
+    <?php echo $file['status']; ?>
+  </span>
+
+<?php } else { ?>
+  <span class="bg-blue-200 text-gray-700 text-xs px-2 py-1 rounded-full">
+    <?php echo $file['status']; ?>
+  </span>
+<?php } ?>
+<span class="bg-blue-300 text-gray-700 text-xs px-2 py-1 rounded-full">
+      <?php echo !empty($file['file_type']) ? $file['file_type'] : 'No type'; ?>
+    </span>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="mt-3 flex justify-between items-center text-xs text-gray-500">
+
+    <div>
+  
+    </div>
+
+    <div class="flex gap-2">
+ <!--
+     
+<a href="#"
+   onclick="event.stopPropagation(); openEditModal(
+     <?php echo $file['id']; ?>,
+     '<?php echo addslashes($file['subject']); ?>',
+     '<?php echo addslashes($file['reference_no']); ?>'
+   );"
+   class="text-green-600 hover:underline">
+   Edit
+</a>
+       DOWNLOAD -->
+       <!--
+     <a href="communication_downloads.php?file_id=<?php echo $file['id']; ?>"
+   onclick="event.stopPropagation();"
+   class="text-green-600 hover:underline">
+   Download
+</a>
+
+       ARCHIVE 
+   <a href="communication_archive.php?file_id=<?php echo $file['id']; ?>"
+   onclick="event.stopPropagation();"
+   class="text-red-600 hover:underline">
+   Archive
+</a>
+-->
+    </div>
+
+  </div>
+
+</div>
+
+<?php } ?>
+
+</div>
   </div>
 </div>
           </table>

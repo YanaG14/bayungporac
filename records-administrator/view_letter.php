@@ -50,6 +50,44 @@ LEFT JOIN login_user al
 GROUP BY l.id
 ORDER BY l.date_received DESC
 ");
+$notif = mysqli_query($conn, "
+SELECT 
+  c.comment,
+  c.created_at,
+  l.id AS letter_id,
+  l.file_name,
+  u.name AS commenter
+FROM letter_comments c
+JOIN letters l ON c.letter_id = l.id
+JOIN login_user u ON c.user_id = u.id
+ORDER BY c.created_at DESC
+LIMIT 10
+");
+
+$notifications = [];
+
+while($n = mysqli_fetch_assoc($notif)) {
+
+    $time = strtotime($n['created_at']);
+    $diff = time() - $time;
+
+    if($diff < 60){
+        $timeText = "Just now";
+    } elseif($diff < 3600){
+        $timeText = floor($diff/60) . " mins ago";
+    } elseif($diff < 86400){
+        $timeText = floor($diff/3600) . " hrs ago";
+    } else {
+        $timeText = floor($diff/86400) . " days ago";
+    }
+
+    $notifications[] = [
+      
+        "text" => $n['commenter']." commented on \"".$n['file_name']."\"",
+        "time" => $timeText,
+        "letter_id" => $n['letter_id']   // ✅ ADD THIS LINE
+    ];
+}
 
 ?>
 <head>
@@ -116,7 +154,7 @@ $(document).ready(function(){
       <span class="hidden md:inline-block text-sm md:text-base text-white">
   Welcome, <b><?php echo ucwords(htmlentities($_SESSION['admin_name'])); ?></b>!
 </span>
-      
+      <?php include 'notification.php'; ?>
       <!-- Mobile Menu Button -->
       <button id="mobileMenuBtn" 
         class="md:hidden p-2 rounded-lg hover:bg-green-600 hover:bg-opacity-20 transition-all duration-200 group">
@@ -294,41 +332,166 @@ if($letter_id > 0){
   </div>
 
   <!-- ATTACHMENTS -->
-  <div class="border rounded-xl p-4">
-    <div class="flex justify-between items-center mb-2">
-      <h3 class="font-semibold text-gray-700">📎 Attachments</h3>
-    </div>
+<?php
+/* ===============================
+   ATTACHMENTS SECTION (UPDATED)
+   =============================== */
+?>
 
-    <?php
-    $files = mysqli_query($conn, "
-      SELECT * FROM upload_files 
-      WHERE id='{$letter['id']}' AND status='Active'
-    ");
+<div class="border rounded-xl p-4">
 
-    if(mysqli_num_rows($files) > 0){
-      while($f = mysqli_fetch_assoc($files)){
-    ?>
-        <div class="bg-gray-100 p-3 rounded flex justify-between items-center mb-2">
-          <span><?= $f['name'] ?></span>
+  <div class="flex justify-between items-center mb-2">
+    <h3 class="font-semibold text-gray-700">📎 Attachments</h3>
 
-          <div class="flex gap-3 text-gray-600">
-            <a href="../records-administrator/letter_files/<?= $f['file_path'] ?>" target="_blank">
-              <i class="fas fa-eye"></i>
-            </a>
-
-            <a href="communication_downloads.php?file_id=<?= $letter['id'] ?>">
-              <i class="fas fa-download"></i>
-            </a>
-          </div>
-        </div>
-    <?php 
-      }
-    } else {
-      echo '<p class="text-gray-400 text-sm">No attachments</p>';
-    }
-    ?>
+    <button onclick="openAttachmentModal()"
+            class="text-xs border border-green-600 text-green-600 px-3 py-1 rounded hover:bg-green-500 hover:text-white">
+      Manage Attachments
+    </button>
   </div>
 
+<?php
+$files = mysqli_query($conn, "
+  SELECT * FROM letter_files 
+  WHERE letter_id='{$letter['id']}'
+");
+
+if(mysqli_num_rows($files) > 0){
+    while($f = mysqli_fetch_assoc($files)){
+?>
+    <div class="bg-gray-100 p-3 rounded flex justify-between items-center mb-2">
+      <span><?= htmlspecialchars($f['file_name']) ?></span>
+
+      <div class="flex gap-3 text-gray-600">
+        <a href="../records-administrator/letter_files/<?= $f['file_path'] ?>" target="_blank">
+          <i class="fas fa-eye"></i>
+        </a>
+
+        <a href="communication_downloads.php?file_id=<?= $f['file_id'] ?>">
+          <i class="fas fa-download"></i>
+        </a>
+      </div>
+    </div>
+<?php } } else { ?>
+  <p class="text-sm text-gray-500">No attachments found.</p>
+<?php } ?>
+
+</div>
+
+
+
+
+<div id="attachmentModal"
+     class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-semibold">Manage Attachments</h3>
+      <button onclick="closeAttachmentModal()" class="text-xl">&times;</button>
+    </div>
+
+    <!-- UPLOAD NEW FILE -->
+    <form action="letter_edit_upload.php" method="POST" enctype="multipart/form-data" class="mb-4">
+
+      <input type="hidden" name="letter_id" value="<?= $letter['id'] ?>">
+<input type="file" id="fileInput" multiple class="w-full border p-2 rounded mb-3" hidden required>
+<button type="button"
+        onclick="document.getElementById('fileInput').click()"
+        class="w-full bg-gray-200 py-2 rounded mb-3">
+    Add More Files
+</button>
+<div id="fileList"></div>
+     <button type="button"
+        onclick="uploadFiles()"
+        class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+    Upload File
+</button>
+
+    </form>
+
+    <!-- EXISTING FILES -->
+    <div class="max-h-60 overflow-y-auto space-y-2">
+
+<?php
+$files = mysqli_query($conn, "
+  SELECT * FROM letter_files 
+  WHERE letter_id='{$letter['id']}'
+");
+
+while($f = mysqli_fetch_assoc($files)){
+?>
+      <div class="flex justify-between items-center bg-gray-100 p-2 rounded">
+        <span class="text-sm"><?= htmlspecialchars($f['file_name']) ?></span>
+
+        <form action="delete_attachment.php" method="POST">
+          <input type="hidden" name="file_id" value="<?= $f['file_id'] ?>">
+         <button type="button"
+        onclick="deleteFile(<?= $f['file_id'] ?>)"
+        class="text-red-600 text-sm hover:underline">
+    Remove
+</button>
+        </form>
+      </div>
+<?php } ?>
+
+    </div>
+
+  </div>
+</div>
+
+
+
+<script>
+function openAttachmentModal(){
+  document.getElementById('attachmentModal').classList.remove('hidden');
+}
+
+function closeAttachmentModal(){
+  document.getElementById('attachmentModal').classList.add('hidden');
+}
+</script>
+
+
+<script>
+let fileArray = [];
+
+document.getElementById('fileInput').addEventListener('change', function(e) {
+    let newFiles = Array.from(e.target.files);
+
+    fileArray = fileArray.concat(newFiles);
+
+    renderFiles();
+
+    // reset input so same file can be re-added if needed
+    this.value = "";
+});
+
+function renderFiles() {
+    let list = document.getElementById('fileList');
+    list.innerHTML = '';
+
+    fileArray.forEach((file, index) => {
+        let div = document.createElement('div');
+        div.className = "flex justify-between bg-gray-100 p-2 rounded";
+        div.innerHTML = `
+            <span>${file.name}</span>
+            <button onclick="removeFile(${index})" class="text-red-500">x</button>
+        `;
+        list.appendChild(div);
+    });
+}
+
+function removeFile(index) {
+    fileArray.splice(index, 1);
+    renderFiles();
+}
+</script>
+
+
+
+
+
+  
   <!-- TAGS -->
   <div class="border rounded-xl p-4">
     <div class="flex justify-between items-center mb-2">
@@ -345,10 +508,22 @@ if($letter_id > 0){
         <?= $letter['source'] ?>
       </span>
 
-      <span class="bg-green-200 text-gray-700 text-xs px-2 py-1 rounded-full">
-        <?= $letter['status'] ?>
-      </span>
-        <span class="bg-green-300 text-gray-700 text-xs px-2 py-1 rounded-full">
+    <?php
+$status = strtolower($letter['status']);
+
+$color = 'bg-gray-200 text-gray-700';
+
+if ($status == 'open') {
+    $color = 'bg-red-200 text-red-700';
+} elseif ($status == 'done') {
+    $color = 'bg-green-200 text-green-700';
+}
+?>
+
+<span class="text-xs px-2 py-1 rounded-full <?= $color ?>">
+  <?= htmlspecialchars($letter['status']) ?>
+</span>
+        <span class="bg-blue-300 text-gray-700 text-xs px-2 py-1 rounded-full">
         <?= $letter['file_type'] ?>
       </span>
     </div>
@@ -697,7 +872,44 @@ loadComments();
 </script>
 
 
+<script>
+function uploadFiles() {
+    let formData = new FormData();
 
+    formData.append("letter_id", document.querySelector("input[name='letter_id']").value);
+
+    fileArray.forEach(file => {
+        formData.append("files[]", file);
+    });
+
+    $.ajax({
+        url: "letter_edit_upload.php",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(res) {
+            alert("Uploaded!");
+            location.reload();
+        }
+    });
+}
+</script>
+
+
+<script>
+function deleteFile(fileId){
+
+    if(!confirm("Remove this file?")) return;
+
+    $.post("delete_attachment.php", { file_id: fileId }, function(){
+
+        // reload attachments or just refresh page
+        location.reload();
+
+    });
+}
+</script>
 
 
 
